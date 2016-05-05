@@ -1,0 +1,348 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load url %}
+{% load staticfiles %}
+{% block extra_css %}
+    <link href="{% static 'css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet">
+{% endblock %}
+{% block extra_js %}
+    <script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+{% endblock %}
+{% block extra_scripts %}
+    <script type="application/javascript">
+        $( document ).ready(function() {
+            $('#right_nav').affix({
+                offset: {
+                    top: 100,
+                    bottom: function () {
+                        return (this.bottom = $('.footer').outerHeight(true))
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}
+{% block content %}
+    <ol class="breadcrumb">
+        <li><a href="{% url 'telephone:clients' %}">{% trans 'Clients' %}</a></li>
+        <li><a href="{% url 'telephone:clients' %}?command=add_form"><i class="fa fa-user-plus"></i></a></li>
+        <li class="active">Data</li>
+    </ol>
+    {% if 'uid' in request.GET %}
+        <ol class="breadcrumb" id="user_info" style="z-index: 2000">
+            <li class="active"><i class="fa fa-user fa-2x"></i> <a href="{% url 'telephone:clients' %}?uid={{ user.id }}">{{ user.login }}</a> (UID: {{ user.id }})</li>
+        </ol>
+        <div class="row">
+            <div class="col-md-10">
+                <div class="panel panel-primary">
+                    <div class="panel-heading text-center">
+                        <i class="fa fa-cog"></i> {% trans 'Bills' %}
+                    </div>
+                    <form class="form-horizontal" method="post" name="bills_form">{% csrf_token %}
+                        <div class="panel-body">
+                            {# col 1 #}
+                            <div class="col-md-4">
+                                <div class="form-group form-group-sm">
+                                    <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Deposit' %}</label>
+                                    <div class="col-sm-8">
+                                        <span class="badge form-control-static" >{{ user.deposit|floatformat:4 }}</span>
+                                    </div>
+                                </div>
+                                <div class="form-group form-group-sm">
+                                    <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'District' %}</label>
+                                    <div class="col-sm-8">
+                                        {{ form.district }}
+                                    </div>
+                                </div>
+                                <div class="form-group form-group-sm">
+                                    <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Kv' %}</label>
+                                    <div class="col-sm-8">
+                                        {{ form.kv }}
+                                    </div>
+                                </div>
+                            </div>
+                            {# col 2 #}
+                            <div class="col-md-4">
+                                <div class="form-group form-group-sm">
+                                    <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'FIO' %}</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="" placeholder="{% trans 'FIO' %}" value="{{ user.fio }}">
+                                    </div>
+                                </div>
+                                <div class="form-group form-group-sm">
+                                    <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Street' %}</label>
+                                    <div class="col-sm-8">
+                                        {{ form.street }}
+                                    </div>
+                                </div>
+                            </div>
+                            {# col 3 #}
+                            <div class="col-md-4">
+                                <div class="form-group form-group-sm">
+                                    <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Juridic' %}</label>
+                                    <div class="col-sm-8">
+                                        {% if user.ur == True %}
+                                            <input id="disable" type="checkbox" name="disable" value="1" checked onclick="changeValueCheckbox(this)">
+                                        {% else %}
+                                            <input id="disable" type="checkbox" name="disable" onclick="changeValueCheckbox(this)">
+                                        {% endif %}
+                                        <input type="text" class="form-control hidden" id="reason" name="reason">
+                                        <script type="application/javascript">
+                                            function changeValueCheckbox(element){
+                                                if(element.checked){
+                                                    element.value='1';
+                                                }else{
+                                                    element.value='0';
+                                                }
+                                                if (element.value == 1){
+                                                    var reason = prompt('{% trans 'Reason' %}')
+                                                    if (reason != null){
+                                                        $('#reason').removeClass('hidden');
+                                                        $('#reason').val(reason);
+                                                    } else {
+                                                        element.value = '0';
+                                                        $(element).removeAttr('checked')
+                                                    }
+                                                } else {
+                                                    $('#reason').addClass('hidden');
+                                                    element.value = '0';
+                                                }
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                                <div class="form-group form-group-sm">
+                                    <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'House' %}</label>
+                                    <div class="col-sm-8">
+                                        {{ form.house }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-footer"><input type="submit" class="btn btn-default center-block btn-sm" value="{% trans 'Change' %}"></div>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="list-group" id="right_nav">
+                  <a href="{% url 'core:payments' %}?uid={{ user.id }}" class="list-group-item">
+                      <i class="fa fa-credit-card"></i> {% trans 'Payments' %}
+                  </a>
+                  <a href="{% url 'core:fees' %}?uid={{ user.id }}" class="list-group-item"><i class="fa fa-credit-card-alt"></i> {% trans 'Fees' %}</a>
+                  <a href="#" class="list-group-item">Morbi leo risus</a>
+                  <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+                  <a href="#" class="list-group-item">Vestibulum at eros</a>
+                </div>
+            </div>
+        </div>
+    {% elif add %}
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="panel panel-primary">
+                    <div class="panel-heading text-center">
+                        <i class="fa fa-cog"></i> {% trans 'Bills' %}
+                    </div>
+                    <div class="panel-body">
+                        <form class="form-horizontal" method="post">{% csrf_token %}
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-2 control-label">{% trans 'FIO' %}</label>
+                                <div class="col-sm-10">
+                                    {{ form.fio }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-2 control-label">{% trans 'District' %}</label>
+                                <div class="col-sm-10">
+                                    {{ form.district }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-2 control-label">{% trans 'Street' %}</label>
+                                <div class="col-sm-10">
+                                    {{ form.street }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-2 control-label">{% trans 'House' %}</label>
+                                <div class="col-sm-10">
+                                    {{ form.house }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-2 control-label">{% trans 'Kv' %}</label>
+                                <div class="col-sm-10">
+                                    {{ form.kv }}
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <div class="checkbox">
+                                        <label>
+                                        <input type="checkbox" name="ur"> {% trans 'Ur' %}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-primary btn-sm" name="add_client">{% trans 'Add' %}</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    {% else %}
+        <div class="pag-nav">
+            <nav class="center-block">
+                <ul class="pagination pagination-sm">
+                    {% if users.has_previous %}
+                        <li>
+                            <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
+                                <span aria-hidden="true">1</span>
+                            </a>
+                        </li>
+                        {% if users.number > 2 %}
+                            <li class="disabled">
+                                <a href="#" aria-label="Previous">
+                                    <span aria-hidden="true">...</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                    {% for p in page_list %}
+                        {% if users.number == p %}
+                            <li class="active">
+                                <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                            </li>
+                        {% else %}
+                            <li class="">
+                                <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if users.has_next %}
+                        <li class="disabled">
+                            <a href="#" aria-label="Previous">
+                                <span aria-hidden="true">...</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
+                                <span aria-hidden="true">{{ users.paginator.num_pages }}</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="disabled">
+                            <a href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        <table class="table table-hover table-striped table-condensed">
+            <thead>
+                <tr class="info">
+                    <th>{% trans 'ID' %}</th>
+                    <th>{% trans 'FIO' %}</th>
+                    <th>{% trans 'Deposit' %}</th>
+                    <th>{% trans 'City' %}</th>
+                    <th>{% trans 'Street' %}</th>
+                    <th>{% trans 'House' %}</th>
+                    <th>{% trans 'Flat' %}</th>
+                    <th>{% trans 'Ur' %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for client in clients %}
+                <tr>
+                    <td><a href="{% url 'telephone:clients' %}?uid={{ client.id }}">{{ client.id }}</a></td>
+                    <td>{{ client.fio }}</td>
+                    {% if client.deposit < 0 %}
+                        <td><span style="color: red">{{ client.deposit }}</span></td>
+                    {% else %}
+                        <td>{{ client.deposit }}</td>
+                    {% endif %}
+                    <td><span style="">{{ client.district.name }}</span></td>
+                    <td><span style="">{{ client.street.name }}</span></td>
+                    <td><span style="">{{ client.house.number }}</span></td>
+                    <td><span style="">{{ client.kv }}</span></td>
+                    <td><span style="">{{ client.ur }}</span></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="pag-nav">
+            <nav class="center-block">
+                <ul class="pagination pagination-sm">
+                    {% if users.has_previous %}
+                        <li>
+                            <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
+                                <span aria-hidden="true">1</span>
+                            </a>
+                        </li>
+                        {% if users.number > 2 %}
+                            <li class="disabled">
+                                <a href="#" aria-label="Previous">
+                                    <span aria-hidden="true">...</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                    {% for p in page_list %}
+                        {% if users.number == p %}
+                            <li class="active">
+                                <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                            </li>
+                        {% else %}
+                            <li class="">
+                                <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if users.has_next %}
+                        <li class="disabled">
+                            <a href="#" aria-label="Previous">
+                                <span aria-hidden="true">...</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
+                                <span aria-hidden="true">{{ users.paginator.num_pages }}</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="disabled">
+                            <a href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <span class="badge">{{ all }}</span>
+                {% trans 'All' %}
+            </li>
+            <li class="list-group-item">
+                <span class="badge">{{ end }}</span>
+                {% trans 'End' %}
+            </li>
+            <li class="list-group-item">
+                <span class="badge">{{ disabled }}</span>
+                {% trans 'Disabled' %}
+            </li>
+            <li class="list-group-item">
+                <span class="badge">{{ deleted }}</span>
+                {% trans 'Deleted' %}
+            </li>
+        </ul>
+    {% endif %}
+{% endblock %}

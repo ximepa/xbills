@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load url %}
+{% load i18n %}
+{% block content %}
+    <ol class="breadcrumb">
+        <li class="active"><i class="fa fa-user"></i> <a href="{% url 'core:user_edit' user.id %}">{{ user.login }}</a> (UID: {{ user.id }})</li>
+    </ol>
+    <div class="row">
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">{% trans 'Payments' %}</div>
+                <div class="panel-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox"> Remember me
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button type="submit" class="btn btn-default">Sign in</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 table-custom">
+            <table class="table table-hover table-striped table-condensed">
+                <thead>
+                    <tr class="info">
+                        <th><a href="?{% url_replace request 'order_by' 'id' %}">{% trans 'Number' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'uid' %}">{% trans 'Login' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'date' %}">{% trans 'Date' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'dsc' %}">{% trans 'Description' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'sum' %}">{% trans 'Sum' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'last_deposit' %}">{% trans 'Deposit' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'method' %}">{% trans 'Payments type' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'aid__login' %}">{% trans 'Administrator' %}</a></th>
+                        <th>UID</th>
+                        <th>-</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for f in fees %}
+                    <tr>
+                        <td>{{ f.id }}</td>
+                        <td>{{ f.uid.login }}</td>
+                        <td>{{ f.date }}</td>
+                        <td>{{ f.dsc }}</td>
+                        <td>{{ f.sum }}</td>
+                        <td>{{ f.last_deposit }}</td>
+                        <td>{{ f.method.name }}</td>
+                        <td>{{ f.aid.login }}</td>
+                        <td>{{ f.uid.id }}</td>
+                        <td><a href="{% url 'core:payments' %}?del={{ f.id }}&uid={{ f.uid.id }}&return_url={{ request.get_full_path }}"><i class="fa fa-remove"></i></a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="pag-nav">
+                <nav class="center-block">
+                    <ul class="pagination pagination-sm">
+                        {% if fees.has_previous %}
+                            <li>
+                                <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
+                                    <span aria-hidden="true">1</span>
+                                </a>
+                            </li>
+                            {% if fees.number > 2 %}
+                                <li class="disabled">
+                                    <a href="#" aria-label="Previous">
+                                        <span aria-hidden="true">...</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                        {% for p in page_list %}
+                            {% if fees.number == p %}
+                                <li class="active">
+                                    <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                </li>
+                            {% else %}
+                                <li class="">
+                                    <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if fees.has_next %}
+                            <li class="disabled">
+                                <a href="#" aria-label="Previous">
+                                    <span aria-hidden="true">...</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="?{% url_replace_page request 'page' fees.paginator.num_pages %}" aria-label="Next">
+                                    <span aria-hidden="true">{{ fees.paginator.num_pages }}</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="disabled">
+                                <a href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+{% endblock %}
