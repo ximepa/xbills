@@ -83,7 +83,8 @@ def search(request):
 
 
 def client(request, uid):
-    if 'dv_form' in request.POST:
+    print request.POST
+    if 'dv_submit' in request.POST:
         print 'yes'
     else:
         user = User.objects.get(id=uid)
