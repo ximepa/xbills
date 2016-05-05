@@ -4,7 +4,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from .auth_backend import AuthBackend
-from .models import User, Payment, Bill, Fees, Iptv, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip
+from .models import User, Payment, Bill, Fees, Iptv, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip, UserPi
 from django.contrib import messages
 #from olltv.api import olltv_auth, olltv_users_list, oll_user_check, oll_user_add, oll_user_bind, oll_user_unbind, oll_user_info, oll_check_bundle, oll_get_device, oll_dev_check, oll_dev_add, oll_disable_bundle, oll_dev_remove, oll_add_bundle, olltv_change_email, olltv_change_userinfo, oll_account_check
 #from olltv.forms import TypeForm, DeviceRemoveForm, DeviceAddForm
@@ -88,13 +88,13 @@ def client(request, uid):
         print 'yes'
     else:
         user = User.objects.get(id=uid)
+        user_pi = UserPi.objects.get(id=uid)
         bill = Bill.objects.get(uid=uid)
         if 'show_password' in request.GET:
             user_password = user.get_hash_password
         dv = Dv.objects.get(user=uid)
         ip = num_to_ip(dv.ip)
         netmask = num_to_ip(dv.netmask)
-
     return render(request, 'user_edit.html', locals())
 
 
