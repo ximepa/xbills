@@ -15,7 +15,7 @@
         <li class="active"><i class="fa fa-user fa-2x"></i> <a href="{% url 'core:client' uid %}">{{ user.login }}</a> (UID: {{ user.id }})</li>
     </ol>
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-10">
+        <div class="col-xs-12 col-sm-12 col-md-5">
             <div class="panel panel-primary">
                 <div class="panel-heading text-center">
                     <a data-toggle="collapse" href="#bill-panel" style="color: white">
@@ -239,7 +239,31 @@
                     </form>
                 </div>
             </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-5">
             {% include 'dv.html' with dv=dv %}
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-2">
+            <div class="list-group" id="right_nav">
+                <a href="{% url 'core:client_payments' user.id %}" class="list-group-item">
+                    {% trans 'Payments' %}
+                </a>
+                <a href="{% url 'core:client_fees' user.id %}" class="list-group-item">{% trans 'Fees' %}</a>
+                <a href="#" class="list-group-item"><i class="fa fa-television fa-fw"></i> {% trans 'OLLTV' %}</a>
+                <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+                <a href="#" class="list-group-item">Vestibulum at eros</a>
+                <a href="{% url 'core:client_fees' user.id %}" class="list-group-item">{% trans 'Fees' %}</a>
+                <a href="#" class="list-group-item"><i class="fa fa-television fa-fw"></i> {% trans 'OLLTV' %}</a>
+                <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+                <a href="#" class="list-group-item">Vestibulum at eros</a>
+                <a href="{% url 'core:client_fees' user.id %}" class="list-group-item">{% trans 'Fees' %}</a>
+                <a href="#" class="list-group-item"><i class="fa fa-television fa-fw"></i> {% trans 'OLLTV' %}</a>
+                <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+                <a href="#" class="list-group-item">Vestibulum at eros</a>
+
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-10">
             <div class="panel panel-primary">
                 <div class="panel-heading text-center">
                     <a data-toggle="collapse" href="#user-info-panel" style="color: white">
@@ -323,17 +347,6 @@
                         <div class="panel-footer"><input type="submit" name="dv_submit" class="btn btn-default btn-xs center-block" value="{% trans 'Change' %}"></div>
                     </form>
                 </div>
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-2">
-            <div class="list-group" id="right_nav">
-                <a href="{% url 'core:client_payments' user.id %}" class="list-group-item">
-                    {% trans 'Payments' %}
-                </a>
-                <a href="{% url 'core:client_fees' user.id %}" class="list-group-item">{% trans 'Fees' %}</a>
-                <a href="#" class="list-group-item"><i class="fa fa-television fa-fw"></i> {% trans 'OLLTV' %}</a>
-                <a href="#" class="list-group-item">Porta ac consectetur ac</a>
-                <a href="#" class="list-group-item">Vestibulum at eros</a>
             </div>
         </div>
     </div>
