@@ -22,4 +22,6 @@ $(document).ready(function() {
             var wrapper = parent.find('.panel-wrapper');
             wrapper.collapse('toggle');
         });
-    }(jQuery, window, document));});
+    }(jQuery, window, document));
+
+});
