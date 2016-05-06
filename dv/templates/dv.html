@@ -1,76 +1,78 @@
 {% load i18n %}
 <div class="panel panel-primary">
     <div class="panel-heading text-center">
-        <a href="#" data-perform="panel-collapse" style="color: white">
+        <a data-toggle="collapse" href="#dv-panel" style="color: white">
             <i class="fa fa-cog"></i> {% trans 'Dv module' %}
         </a>
     </div>
-    <form class="form-horizontal" method="post" name="dv_form">{% csrf_token %}
-        <div class="panel-body">
-            <div class="col-md-4">
-                <div class="form-group form-group-sm">
-                    <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Tarif Plans:' %}</label>
-                    <div class="col-sm-8">
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="{% trans 'Tarif Plans' %}" aria-describedby="tarif_plans" disabled value="{{ dv.tp.name }}">
-                            <span class="input-group-addon" id="tarif_plans">
-{#                            <a href="{% url 'core:user_group' user.id %}">#}
-                            <i class="fa fa-edit fa-fw"></i>
-{#                            </a>#}
-                            </span>
+    <div id="dv-panel" class="panel-collapse collapse in">
+        <form class="form-horizontal" method="post" name="dv_form">{% csrf_token %}
+            <div class="panel-body">
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Tarif Plans:' %}</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="{% trans 'Tarif Plans' %}" aria-describedby="tarif_plans" disabled value="{{ dv.tp.name }}">
+                                <span class="input-group-addon" id="tarif_plans">
+    {#                            <a href="{% url 'core:user_group' user.id %}">#}
+                                <i class="fa fa-edit fa-fw"></i>
+    {#                            </a>#}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label for="inputEmail3" class="col-sm-4 control-label">IP:</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" id="ip" name="ip" placeholder="IP" value="{{ ip }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Netmask:' %}</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" id="netmask" name="netmask" placeholder={% trans 'netmask' %} value="{{ netmask }}">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label for="inputEmail3" class="col-sm-4 control-label">CID ( ;):</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="cid" name="cid" placeholder="cid" value='{{ dv.cid }}'>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Speed:' %}</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="speed" name="speed" placeholder={% trans 'speed' %} value='{{ dv.speed }}'>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Filter for radius:' %}</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="filter" name="filter" placeholder={% trans 'FilterId' %} value='{{ dv.filter_id }}'>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group form-group-sm">
+                        <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'At the same time:' %}</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" id="conn" name="conn" placeholder="{% trans 'At the same time' %}" value="{{ dv.logins }}">
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="form-group form-group-sm">
-                    <label for="inputEmail3" class="col-sm-4 control-label">IP:</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" id="ip" name="ip" placeholder="IP" value="{{ ip }}">
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group form-group-sm">
-                    <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Netmask:' %}</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" pattern="\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}" id="netmask" name="netmask" placeholder={% trans 'netmask' %} value="{{ netmask }}">
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group form-group-sm">
-                    <label for="inputEmail3" class="col-sm-4 control-label">CID ( ;):</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" id="cid" name="cid" placeholder="cid" value='{{ dv.cid }}'>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group form-group-sm">
-                    <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Speed:' %}</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" id="speed" name="speed" placeholder={% trans 'speed' %} value='{{ dv.speed }}'>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group form-group-sm">
-                    <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Filter for radius:' %}</label>
-                    <div class="col-sm-8">
-                        <input type="text" class="form-control" id="filter" name="filter" placeholder={% trans 'FilterId' %} value='{{ dv.filter_id }}'>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="form-group form-group-sm">
-                    <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'At the same time:' %}</label>
-                    <div class="col-sm-8">
-                        <input type="number" class="form-control" id="conn" name="conn" placeholder="{% trans 'At the same time' %}" value="{{ dv.logins }}">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="panel-footer"><input type="submit" name="dv_submit" class="btn btn-default btn-sm center-block" value="{% trans 'Change' %}"></div>
-    </form>
+            <div class="panel-footer"><input type="submit" name="dv_submit" class="btn btn-default btn-sm center-block" value="{% trans 'Change' %}"></div>
+        </form>
+    </div>
 </div>
