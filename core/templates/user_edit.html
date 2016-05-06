@@ -265,26 +265,6 @@
                                 <div class="form-group form-group-sm">
                                     <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Districts:' %}</label>
                                     <div class="col-sm-8">
-                                        <script>
-                                            var carsAndModels = {};
-                                            console.log(carsAndModels);
-                                            function ChangeDistrictList() {
-                                                var districtList = document.getElementById("district");
-                                                var streetList = document.getElementById("location");
-                                                var selCar = districtList.options[districtList.selectedIndex].value;
-                                                while (streetList.options.length) {
-                                                    streetList.remove(0);
-                                                }
-                                                var cars = carsAndModels[selCar];
-                                                if (cars) {
-                                                    var i;
-                                                    for (i = 0; i < cars.length; i++) {
-                                                        var car = new Option(cars[i], i);
-                                                        streetList.options.add(car);
-                                                    }
-                                                }
-                                            }
-                                        </script>
                                         <select class="form-control" id="district" onchange="ChangeDistrictList()">
                                             {% for item in district %}
                                                 <option value="{{ item.id }}">{{ item }}</option>
