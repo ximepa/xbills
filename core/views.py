@@ -85,6 +85,8 @@ def search(request):
 def client(request, uid):
     print request.POST
     user = User.objects.get(id=uid)
+    #bill = Bill.objects.get(company_id=user.company)
+    #print bill
     streets = Street.objects.all()
     houses = House.objects.all()
     district = District.objects.all()
