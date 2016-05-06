@@ -8,18 +8,7 @@
     <script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
 {% endblock %}
 {% block extra_scripts %}
-    <script type="application/javascript">
-        $( document ).ready(function() {
-            $('#right_nav').affix({
-                offset: {
-                    top: 0,
-                    bottom: function () {
-                        return (this.bottom = $('.footer').outerHeight(true))
-                    }
-                }
-            });
-        });
-    </script>
+
 {% endblock %}
 {% block content %}
     <ol class="breadcrumb" id="user_info" style="z-index: 2000">
