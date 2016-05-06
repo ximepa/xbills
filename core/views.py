@@ -84,20 +84,21 @@ def search(request):
 
 def client(request, uid):
     print request.POST
+    user = User.objects.get(id=uid)
+    user_pi = UserPi.objects.get(id=uid)
+    streets = Street.objects.all()
+    houses = House.objects.all()
+    district = District.objects.all()
+    bill = Bill.objects.get(uid=uid)
+    if 'show_password' in request.GET:
+        user_password = user.get_hash_password
+    dv = Dv.objects.get(user=uid)
+    ip = num_to_ip(dv.ip)
+    netmask = num_to_ip(dv.netmask)
     if 'dv_submit' in request.POST:
         print 'yes'
     else:
-        user = User.objects.get(id=uid)
-        user_pi = UserPi.objects.get(id=uid)
-        streets = Street.objects.all()
-        houses = House.objects.all()
-        district = District.objects.all()
-        bill = Bill.objects.get(uid=uid)
-        if 'show_password' in request.GET:
-            user_password = user.get_hash_password
-        dv = Dv.objects.get(user=uid)
-        ip = num_to_ip(dv.ip)
-        netmask = num_to_ip(dv.netmask)
+        print 'no'
     return render(request, 'user_edit.html', locals())
 
 
