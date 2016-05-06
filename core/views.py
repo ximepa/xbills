@@ -92,6 +92,8 @@ def client(request, uid):
     district = District.objects.all()
     if 'show_password' in request.GET:
         user_password = user.get_hash_password
+    else:
+        user_password = ''
     dv = Dv.objects.get(user=uid)
     ip = num_to_ip(dv.ip)
     netmask = num_to_ip(dv.netmask)
