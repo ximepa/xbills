@@ -109,9 +109,14 @@ class User(models.Model):
     @property
     def bill(self):
         try:
-            return Bill.objects.get(uid=self.id)
-        except Bill.DoesNotExist:
-            return None
+            c = Company.objects.get(id=self.company.id)
+            return Bill.objects.get(company_id=c.id)
+        except Company.DoesNotExist:
+            try:
+                return Bill.objects.get(uid=self.id)
+            except Bill.DoesNotExist:
+                return None
+
 
     @property
     def pi(self):
