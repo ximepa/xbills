@@ -47,7 +47,7 @@
                                 <div class="form-group form-group-sm">
                                     <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Deposit' %}</label>
                                     <div class="col-sm-8">
-                                        <span class="badge form-control-static" >{{ bill.deposit|floatformat:4 }}</span>
+                                        <span class="badge form-control-static" >{{ user.bill.deposit|floatformat:4 }}</span>
                                         <div class="pull-right">
                                             <a href="{% url 'core:client_payments' uid %}" class="btn btn-default btn-xs"><i class="fa fa-plus-circle"></i></a>
                                             <a href="{% url 'core:client_fees' uid %}" class="btn btn-default btn-xs"><i class="fa fa-minus-circle"></i></a>
@@ -235,7 +235,7 @@
                                 <div class="form-group form-group-sm">
                                     <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'FIO:' %}</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Firstname, Lastname" value="{{ user_pi.fio }}">
+                                        <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Firstname, Lastname" value="{{ user.pi.fio }}">
                                     </div>
                                 </div>
                             </div>
@@ -243,7 +243,7 @@
                                 <div class="form-group form-group-sm">
                                     <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Phone:' %}</label>
                                     <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="phone" name="phone" placeholder="{% trans 'phone' %}" value="{{ user_pi.phone }}">
+                                        <input type="text" class="form-control" id="phone" name="phone" placeholder="{% trans 'phone' %}" value="{{ user.pi.phone }}">
                                     </div>
                                 </div>
                             </div>
