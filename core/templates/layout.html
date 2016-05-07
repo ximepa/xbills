@@ -4,7 +4,7 @@
 {% load staticfiles %}
 {% block layout %}
     <ol class="breadcrumb" id="user_info" style="z-index: 2000">
-        <li class="active"><i class="fa fa-user fa-2x"></i> <a href="{% url 'core:client' uid %}">{{ user.login }}</a> (UID: {{ user.id }})</li>
+        <li class="active"><i class="fa fa-user fa-2x"></i> <a href="{% url 'core:client' user.id %}">{{ user.login }}</a> (UID: {{ user.id }})</li>
     </ol>
     <div class="col-xs-12 col-sm-12 col-md-12">
         <div class="panel with-nav-tabs panel-default">
