@@ -14,7 +14,15 @@ from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
 from django.core import serializers
+import os
+try:
+    olltv_module_path = os.path.join(settings.BASE_DIR,  'olltv')
+except:
+    olltv_module_path = None
 modules = settings.INSTALLED_APPS
+
+if 'olltv' in modules and os.path.exists(olltv_module_path):
+    from olltv.models import IptvDevice
 
 def custom_redirect(url_name, *args, **kwargs):
     from django.core.urlresolvers import reverse
@@ -90,6 +98,8 @@ def client(request, uid):
     streets = Street.objects.all()
     houses = House.objects.all()
     district = District.objects.all()
+    if 'olltv' in modules and os.path.exists(olltv_module_path):
+        user_olltv = True
     if 'show_password' in request.GET:
         user_password = user.get_hash_password
     else:
