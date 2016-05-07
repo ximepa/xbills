@@ -6,14 +6,15 @@ from django.core.urlresolvers import reverse
 from .auth_backend import AuthBackend
 from .models import User, Payment, Bill, Fees, Iptv, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip, UserPi, Street, House, District
 from django.contrib import messages
-#from olltv.api import olltv_auth, olltv_users_list, oll_user_check, oll_user_add, oll_user_bind, oll_user_unbind, oll_user_info, oll_check_bundle, oll_get_device, oll_dev_check, oll_dev_add, oll_disable_bundle, oll_dev_remove, oll_add_bundle, olltv_change_email, olltv_change_userinfo, oll_account_check
-#from olltv.forms import TypeForm, DeviceRemoveForm, DeviceAddForm
-#from olltv.commands import make_conversion
-#from olltv.models import IptvDeviceType, IptvDevice
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
 from django.core import serializers
+import os
+try:
+    olltv_module_path = os.path.join(settings.BASE_DIR,  'olltv')
+except:
+    olltv_module_path = None
 modules = settings.INSTALLED_APPS
 
 def custom_redirect(url_name, *args, **kwargs):
@@ -90,6 +91,8 @@ def client(request, uid):
     streets = Street.objects.all()
     houses = House.objects.all()
     district = District.objects.all()
+    if 'olltv' in modules and os.path.exists(olltv_module_path):
+        user_olltv = True
     if 'show_password' in request.GET:
         user_password = user.get_hash_password
     else:

@@ -365,3 +365,6 @@ hr {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+.label {
+    font-size: 90%;
+}
