@@ -232,12 +232,14 @@
         <input type="submit" class="btn btn-primary btn-xs center-block" value="{% trans 'Change' %}">
         <hr/>
     </form>
-    {% include 'dv.html' with dv=dv %}
 {% endblock %}
 {% block extra_content %}
     <div class="well well-sm">
+        {% include 'dv.html' with dv=dv %}
+    </div>
+    <div class="well well-sm">
         <div class="page-header text-center">
-            <h3>{% trans 'User info' %}</h3>
+            <h4>{% trans 'User info' %}</h4>
         </div>
         <form class="form-horizontal" method="post" name="user_form">{% csrf_token %}
             <div class="row">
