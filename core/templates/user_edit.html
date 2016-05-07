@@ -11,251 +11,238 @@
 
 {% endblock %}
 {% block content %}
-    <div class="panel-body">
-        <div class="tab-content">
-            <form class="form-horizontal" method="post" name="bills_form">{% csrf_token %}
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group form-group-sm">
-                            <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Deposit:' %}</label>
-                            <div class="col-sm-8">
-                                <span class="badge form-control-static" >{{ user.bill.deposit|floatformat:4 }}</span>
-                                <div class="pull-right">
-                                    <a href="{% url 'core:client_payments' uid %}" class="btn btn-default btn-xs"><i class="fa fa-plus-circle"></i></a>
-                                    <a href="{% url 'core:client_fees' uid %}" class="btn btn-default btn-xs"><i class="fa fa-minus-circle"></i></a>
-                                    <a class="btn btn-default btn-xs"><i class="fa fa-print"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group form-group-sm">
-                            <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Credit' %}</label>
-                            <div class="col-sm-8">
-                                <input type="number" class="form-control" id="credit" name="credit" placeholder="{% trans 'Credit' %}" value="{{ user.credit }}">
-                            </div>
+    <form class="form-horizontal" method="post" name="bills_form">{% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group form-group-sm">
+                    <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Deposit:' %}</label>
+                    <div class="col-sm-8">
+                        <span class="badge form-control-static" >{{ user.bill.deposit|floatformat:4 }}</span>
+                        <div class="pull-right">
+                            <a href="{% url 'core:client_payments' uid %}" class="btn btn-default btn-xs"><i class="fa fa-plus-circle"></i></a>
+                            <a href="{% url 'core:client_fees' uid %}" class="btn btn-default btn-xs"><i class="fa fa-minus-circle"></i></a>
+                            <a class="btn btn-default btn-xs"><i class="fa fa-print"></i></a>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group form-group-sm">
-                            <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Company:' %}</label>
-                            <div class="col-sm-8">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="{% trans 'Company' %}" aria-describedby="group" disabled value="{{ user.company }}">
-                                    <span class="input-group-addon" id="group">
-                                        <a href="{% url 'core:user_company' uid %}">
-                                            {% if user.company != 0 %}
-                                                <i class="fa fa-edit fa-fw"></i>
-                                            {% else %}
-                                                <i class="fa fa-plus fa-fw"></i>
-                                            {% endif %}
-                                        </a>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group form-group-sm">
-                            <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Credit date' %}</label>
-                            <div class="col-sm-8">
-                                <div id="credit_date-datepicker" class="">
-                                    <div class="input-group">
-                                        <input data-format="yyyy-MM-dd" type="date" class="form-control" id="credit_date" aria-describedby="credit-date" name="credit_date" placeholder="{% trans 'Credit date' %}" value="{{ user.credit_date|default:"0000-00-00" }}">
-                                        <span class="input-group-addon add-on" id="credit-date">
-                                            <i class="fa fa-calendar" data-time-icon="icon-time" data-date-icon="fa-calendar"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                                <script type="text/javascript">
-                                    $(function() {
-                                        $('#credit_date-datepicker').datetimepicker({
-                                            pickTime: false
-                                        });
-                                    });
-                                </script>
-                            </div>
-                        </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group form-group-sm">
+                    <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Credit' %}</label>
+                    <div class="col-sm-8">
+                        <input type="number" class="form-control" id="credit" name="credit" placeholder="{% trans 'Credit' %}" value="{{ user.credit }}">
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group form-group-sm">
-                            <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Group' %}</label>
-                            <div class="col-sm-8">
-                                <div class="input-group">
-                                  <input type="text" class="form-control" placeholder="{% trans 'Group' %}" aria-describedby="group" disabled value="{{ user.gid }}">
-                                  <span class="input-group-addon" id="group">
-                                      <a href="{% url 'core:user_group' user.id %}">
-                                          <i class="fa fa-edit fa-fw"></i>
-                                      </a>
-                                  </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group form-group-sm">
-                            <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Cash account' %}</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="" placeholder="{% trans 'Cash account' %}" disabled value="{{ bill.id }}">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group form-group-sm">
-                            <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Reduction' %}</label>
-                            <div class="col-sm-8">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" placeholder="{% trans 'Reduction' %}" aria-describedby="group" value="{{ user.reduction }}">
-                                    <span class="input-group-addon" id="reduction"><i class="fa fa-percent fa-fw"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group form-group-sm">
-                            <label for="" class="col-sm-4 control-label">{% trans 'Reduction date' %}</label>
-                            <div class="col-sm-8">
-                                <div id="reduction_date-datepicker" class="">
-                                    <div class="input-group">
-                                        <input data-format="yyyy-MM-dd" type="date" class="form-control" id="reduction_date" aria-describedby="reduction-date" name="reduction_date" placeholder="{% trans 'Reduction date' %}" value="{{ user.reduction_date|default:"0000-00-00" }}">
-                                        <span class="input-group-addon add-on" id="reduction-date">
-                                            <i class="fa fa-calendar" data-time-icon="icon-time" data-date-icon="fa-calendar"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                                <script type="text/javascript">
-                                    $(function() {
-                                        $('#reduction_date-datepicker').datetimepicker({
-                                            pickTime: false
-                                        });
-                                    });
-                                </script>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group form-group-sm">
-                            <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Disable' %}</label>
-                            <div class="col-sm-8">
-                                {% if user.disabled == True %}
-                                    <input id="disable" type="checkbox" name="disable" value="1" checked onclick="changeValueCheckbox(this)">
-                                {% else %}
-                                    <input id="disable" type="checkbox" name="disable" onclick="changeValueCheckbox(this)">
-                                {% endif %}
-                                <input type="text" class="form-control hidden" id="reason" name="reason">
-                                <script type="application/javascript">
-                                    function changeValueCheckbox(element){
-                                        if(element.checked){
-                                            element.value='1';
-                                        }else{
-                                            element.value='0';
-                                        }
-                                        if (element.value == 1){
-                                            var reason = prompt('{% trans 'Reason' %}')
-                                            if (reason != null){
-                                                $('#reason').removeClass('hidden');
-                                                $('#reason').val(reason);
-                                            } else {
-                                                element.value = '0';
-                                                $(element).removeAttr('checked')
-                                            }
-                                        } else {
-                                            $('#reason').addClass('hidden');
-                                            element.value = '0';
-                                        }
-                                    }
-                                </script>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group form-group-sm">
-                            <label for="" class="col-sm-4 control-label">{% trans 'Activation' %}</label>
-                            <div class="col-sm-8">
-                                <div id="activation-datepicker" class="">
-                                    <div class="input-group">
-                                        <input data-format="yyyy-MM-dd" type="date" class="form-control" id="activation" aria-describedby="activation-date" name="activation" placeholder="{% trans 'Activation' %}" value="{{ user.activate|default:"0000-00-00" }}">
-                                        <span class="input-group-addon add-on" id="activation-date">
-                                            <i class="fa fa-calendar" data-time-icon="icon-time" data-date-icon="fa-calendar"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                                <script type="text/javascript">
-                                    $(function() {
-                                        $('#activation-datepicker').datetimepicker({
-                                            pickTime: false
-                                        });
-                                    });
-                                </script>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group form-group-sm">
-                            <label for="registration" class="col-sm-4 control-label">{% trans 'Registration' %}</label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="registration" name="registration" placeholder="" disabled value="{{ bill.registration }}">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group form-group-sm">
-                            <label for="" class="col-sm-4 control-label">{% trans 'Expire' %}</label>
-                            <div class="col-sm-8">
-                                <div id="expire-datepicker" class="">
-                                    <div class="input-group">
-                                        <input data-format="yyyy-MM-dd" type="date" class="form-control" id="expire" name="expire" placeholder="{% trans 'Expire' %}" value="{{ user.expire|default:"0000-00-00" }}">
-                                        <span class="input-group-addon add-on" id="expire-date">
-                                            <i class="fa fa-calendar" data-time-icon="icon-time" data-date-icon="fa-calendar"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                                <script type="text/javascript">
-                                    $(function() {
-                                        $('#expire-datepicker').datetimepicker({
-                                            pickTime: false
-                                        });
-                                    });
-                                </script>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="span7 text-center">
-                            {% if user_password %}
-                                <span class="label label-success">{{ user_password }}</span>
-                            {% else %}
-                                <a class="btn btn-default btn-xs" href="{% url 'core:client' uid %}?show_password=1" role="button">{% trans 'Show password' %}</a>
-                            {% endif %}
-                            <button type="button" class="btn btn-default btn-xs">{% trans 'Change password' %}</button>
-                            <button type="button" class="btn btn-default btn-xs">{% trans 'Send password SMS' %}</button>
-                        </div>
-                    </div>
-                </div>
-                <hr/>
-                <input type="submit" class="btn btn-default btn-sm center-block" value="{% trans 'Change' %}">
-                <hr/>
-            </form>
+            </div>
         </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group form-group-sm">
+                    <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Company:' %}</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="{% trans 'Company' %}" aria-describedby="group" disabled value="{{ user.company }}">
+                            <span class="input-group-addon" id="group">
+                                <a href="{% url 'core:user_company' uid %}">
+                                    {% if user.company != 0 %}
+                                        <i class="fa fa-edit fa-fw"></i>
+                                    {% else %}
+                                        <i class="fa fa-plus fa-fw"></i>
+                                    {% endif %}
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group form-group-sm">
+                    <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Credit date' %}</label>
+                    <div class="col-sm-8">
+                        <div id="credit_date-datepicker" class="">
+                            <div class="input-group">
+                                <input data-format="yyyy-MM-dd" type="date" class="form-control" id="credit_date" aria-describedby="credit-date" name="credit_date" placeholder="{% trans 'Credit date' %}" value="{{ user.credit_date|default:"0000-00-00" }}">
+                                <span class="input-group-addon add-on" id="credit-date">
+                                    <i class="fa fa-calendar" data-time-icon="icon-time" data-date-icon="fa-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            $(function() {
+                                $('#credit_date-datepicker').datetimepicker({
+                                    pickTime: false
+                                });
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group form-group-sm">
+                    <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Group' %}</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                          <input type="text" class="form-control" placeholder="{% trans 'Group' %}" aria-describedby="group" disabled value="{{ user.gid }}">
+                          <span class="input-group-addon" id="group">
+                              <a href="{% url 'core:user_group' user.id %}">
+                                  <i class="fa fa-edit fa-fw"></i>
+                              </a>
+                          </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group form-group-sm">
+                    <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Cash account' %}</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="" placeholder="{% trans 'Cash account' %}" disabled value="{{ bill.id }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group form-group-sm">
+                    <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Reduction' %}</label>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="{% trans 'Reduction' %}" aria-describedby="group" value="{{ user.reduction }}">
+                            <span class="input-group-addon" id="reduction"><i class="fa fa-percent fa-fw"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group form-group-sm">
+                    <label for="" class="col-sm-4 control-label">{% trans 'Reduction date' %}</label>
+                    <div class="col-sm-8">
+                        <div id="reduction_date-datepicker" class="">
+                            <div class="input-group">
+                                <input data-format="yyyy-MM-dd" type="date" class="form-control" id="reduction_date" aria-describedby="reduction-date" name="reduction_date" placeholder="{% trans 'Reduction date' %}" value="{{ user.reduction_date|default:"0000-00-00" }}">
+                                <span class="input-group-addon add-on" id="reduction-date">
+                                    <i class="fa fa-calendar" data-time-icon="icon-time" data-date-icon="fa-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            $(function() {
+                                $('#reduction_date-datepicker').datetimepicker({
+                                    pickTime: false
+                                });
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group form-group-sm">
+                    <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Disable' %}</label>
+                    <div class="col-sm-8">
+                        {% if user.disabled == True %}
+                            <input id="disable" type="checkbox" name="disable" value="1" checked onclick="changeValueCheckbox(this)">
+                        {% else %}
+                            <input id="disable" type="checkbox" name="disable" onclick="changeValueCheckbox(this)">
+                        {% endif %}
+                        <input type="text" class="form-control hidden" id="reason" name="reason">
+                        <script type="application/javascript">
+                            function changeValueCheckbox(element){
+                                if(element.checked){
+                                    element.value='1';
+                                }else{
+                                    element.value='0';
+                                }
+                                if (element.value == 1){
+                                    var reason = prompt('{% trans 'Reason' %}')
+                                    if (reason != null){
+                                        $('#reason').removeClass('hidden');
+                                        $('#reason').val(reason);
+                                    } else {
+                                        element.value = '0';
+                                        $(element).removeAttr('checked')
+                                    }
+                                } else {
+                                    $('#reason').addClass('hidden');
+                                    element.value = '0';
+                                }
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group form-group-sm">
+                    <label for="" class="col-sm-4 control-label">{% trans 'Activation' %}</label>
+                    <div class="col-sm-8">
+                        <div id="activation-datepicker" class="">
+                            <div class="input-group">
+                                <input data-format="yyyy-MM-dd" type="date" class="form-control" id="activation" aria-describedby="activation-date" name="activation" placeholder="{% trans 'Activation' %}" value="{{ user.activate|default:"0000-00-00" }}">
+                                <span class="input-group-addon add-on" id="activation-date">
+                                    <i class="fa fa-calendar" data-time-icon="icon-time" data-date-icon="fa-calendar"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            $(function() {
+                                $('#activation-datepicker').datetimepicker({
+                                    pickTime: false
+                                });
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group form-group-sm">
+                    <label for="registration" class="col-sm-4 control-label">{% trans 'Registration' %}</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="registration" name="registration" placeholder="" disabled value="{{ bill.registration }}">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group form-group-sm">
+                    <label for="" class="col-sm-4 control-label">{% trans 'Expire' %}</label>
+                    <div class="col-sm-8">
+                        <input type="date" class="form-control" id="expire" name="expire" placeholder="{% trans 'Expire' %}" value="{{ user.expire|default:"0000-00-00" }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="span7 text-center">
+                    {% if user_password %}
+                        <span class="label label-success">{{ user_password }}</span>
+                    {% else %}
+                        <a class="btn btn-default btn-xs" href="{% url 'core:client' uid %}?show_password=1" role="button">{% trans 'Show password' %}</a>
+                    {% endif %}
+                    <button type="button" class="btn btn-default btn-xs">{% trans 'Change password' %}</button>
+                    <button type="button" class="btn btn-default btn-xs">{% trans 'Send password SMS' %}</button>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <input type="submit" class="btn btn-primary btn-xs center-block" value="{% trans 'Change' %}">
+        <hr/>
+    </form>
+{% endblock %}
+{% block extra_content %}
+    <div class="well well-sm">
+        {% include 'dv.html' with dv=dv %}
     </div>
-    {% include 'dv.html' with dv=dv %}
-         </div>
-    </div>
-    <div id="user-info-panel" class="panel-collapse collapse in">
+    <div class="well well-sm">
+        <div class="page-header text-center">
+            <h4>{% trans 'User info' %}</h4>
+        </div>
         <form class="form-horizontal" method="post" name="user_form">{% csrf_token %}
-            <div class="panel-body">
+            <div class="row">
                 <div class="col-md-4">
                     <div class="form-group form-group-sm">
                         <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'FIO:' %}</label>
@@ -327,7 +314,8 @@
                     </div>
                 </div>
             </div>
-            <div class="panel-footer"><input type="submit" name="dv_submit" class="btn btn-default btn-xs center-block" value="{% trans 'Change' %}"></div>
+            <hr/>
+            <input type="submit" name="dv_submit" class="btn btn-default btn-xs center-block" value="{% trans 'Change' %}">
         </form>
     </div>
 {% endblock %}
