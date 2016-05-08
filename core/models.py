@@ -292,7 +292,7 @@ class Tp(models.Model):
     id = models.AutoField(primary_key=True, db_column='id')
     name = models.CharField(max_length=120,unique=True)
     module = models.CharField(max_length=120)
-    #tp_id = models.IntegerField()
+    tp_id = models.IntegerField()
     cost = models.PositiveIntegerField(db_column='month_fee')
     gid = models.ForeignKey('TpGroups', db_column='gid')
 

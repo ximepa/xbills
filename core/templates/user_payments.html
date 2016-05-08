@@ -2,9 +2,6 @@
 {% load url %}
 {% load i18n %}
 {% block content %}
-    <ol class="breadcrumb">
-        <li class="active"><i class="fa fa-user"></i> <a href="{% url 'core:user_edit' user.id %}">{{ user.login }}</a> (UID: {{ user.id }})</li>
-    </ol>
     <div class="row">
         <div class="col-md-3">
         </div>

@@ -127,7 +127,8 @@ def user_change(request, uid):
 # user active
             try:
                 iptv = Iptv.objects.get(uid=user.id)
-                cur_tp = Tp.objects.get(id=iptv.tp_id)
+                print iptv.tp_id
+                cur_tp = Tp.objects.get(tp_id=iptv.tp_id)
             except Iptv.DoesNotExist:
                 iptv = False
                 if 'activate-user' in request.POST:

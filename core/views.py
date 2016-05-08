@@ -31,7 +31,7 @@ def index(request):
         index = request.GET.getlist('index')[0]
     else:
         return render(request, 'index.html', locals())
-    return render(request, 'layout.html', locals())
+    return render(request, 'layout_edit.html', locals())
 
 
 def search(request):
@@ -232,7 +232,7 @@ def client_fees(request, uid):
         user = User.objects.get(id=uid)
     except User.DoesNotExist:
         error = 'user not found'
-        return render(request, 'layout.html', locals())
+        return render(request, 'layout_edit.html', locals())
     fees_list = Fees.objects.filter(uid=user.id).order_by(order_by)
     paginator = Paginator(fees_list, settings.FEES_PER_PAGE)
     page = request.GET.get('page', 1)
