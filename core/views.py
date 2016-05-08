@@ -93,6 +93,8 @@ def client(request, uid):
     district = District.objects.all()
     if 'olltv' in modules and os.path.exists(olltv_module_path):
         user_olltv = True
+    else:
+        user_olltv = False
     if 'show_password' in request.GET:
         user_password = user.get_hash_password
     else:
