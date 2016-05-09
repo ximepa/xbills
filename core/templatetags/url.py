@@ -33,4 +33,8 @@ def convert_timestamp_to_time(timestamp):
     print timestamp
     print datetime.now()
     session_time = datetime.now() - timestamp
-    return str(session_time)
+    days, seconds = session_time.days, session_time.seconds
+    hours = days * 24 + seconds // 3600
+    minutes = (seconds % 3600) // 60
+    seconds = (seconds % 60)
+    return '%s:%s:%s' % (hours, minutes, seconds)
