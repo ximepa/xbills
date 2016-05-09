@@ -4,7 +4,7 @@
 {% load staticfiles %}
 {% block layout %}
     <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="well well-sm text-center">
+        <div class="well well-sm">
             <i class="fa fa-user fa-fw"></i> <a href="{% url 'core:client' user.id %}">{{ user.login }}</a> (UID: {{ user.id }})
         </div>
     </div>

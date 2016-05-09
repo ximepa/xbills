@@ -336,6 +336,45 @@ class Dv(models.Model):
     def __unicode__(self):
         return "%s - %s" % (self.user.login, self.tp.name)
 
+class Dv_calls(models.Model):
+    status = models.IntegerField(default=0, db_column='status')
+    user_name = models.CharField(max_length=32, db_column='user_name')
+    started = models.DateField(default='0000-00-00 00:00:00', db_column='started')
+    nas_ip_address = models.IntegerField(default=0, db_column='nas_ip_address')
+    nas_port_id = models.IntegerField(default=0, db_column='nas_port_id')
+    acct_session_id = models.CharField(max_length=25, db_column='acct_session_id')
+    acct_session_time = models.IntegerField(default=0, db_column='acct_session_time')
+    acct_input_octets = models.BigIntegerField(default=0, db_column='acct_input_octets')
+    acct_output_octets = models.BigIntegerField(default=0, db_column='acct_output_octets')
+    ex_input_octets = models.BigIntegerField(default=0, db_column='ex_input_octets')
+    ex_output_octets = models.BigIntegerField(default=0, db_column='ex_output_octets')
+    connect_term_reason = models.IntegerField(default=0, db_column='connect_term_reason')
+    framed_ip_address = models.IntegerField(default=0, db_column='framed_ip_address')
+    lupdated = models.IntegerField(default=0, db_column='lupdated')
+    sum = models.FloatField(default='0.0', db_column='sum')
+    CID = models.CharField(max_length=18, db_column='CID')
+    CONNECT_INFO = models.CharField(max_length=30, db_column='CONNECT_INFO')
+    tp_id = models.SmallIntegerField(default=0, db_column='tp_id')
+    nas_id = models.SmallIntegerField(default=0, db_column='nas_id')
+    acct_input_gigawords = models.SmallIntegerField(default=0, db_column='acct_input_gigawords')
+    acct_output_gigawords = models.SmallIntegerField(default=0, db_column='acct_output_gigawords')
+    ex_input_octets_gigawords = models.SmallIntegerField(default=0, db_column='ex_input_octets_gigawords')
+    ex_output_octets_gigawords = models.SmallIntegerField(default=0, db_column='ex_output_octets_gigawords')
+    uid = models.ForeignKey('User', db_column='uid')
+    join_service = models.IntegerField(default=0, db_column='join_service')
+    turbo_mode = models.CharField(max_length=30, db_column='turbo_mode')
+    guest = models.SmallIntegerField(default=0, db_column='guest')
+    framed_interface_id = models.BinaryField(db_column='framed_interface_id')
+    framed_ipv6_prefix = models.BinaryField(db_column='framed_ipv6_prefix')
+
+
+    class Meta:
+        db_table = 'dv_calls'
+        ordering = ['user_name']
+
+    def __unicode__(self):
+        return self.uid
+
 
 class TpGroups(models.Model):
 
