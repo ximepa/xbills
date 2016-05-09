@@ -30,4 +30,7 @@ def ip_convert(value):
 @register.simple_tag
 def convert_timestamp_to_time(timestamp):
     import time
-    return datetime.fromtimestamp(int(timestamp)).strftime('%H:%M:%S')
+    print timestamp
+    print datetime.now()
+    session_time = datetime.now() - timestamp
+    return str(session_time)
