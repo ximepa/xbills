@@ -4,7 +4,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from .auth_backend import AuthBackend
-from .models import User, Payment, Bill, Fees, Iptv, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip, UserPi, Street, House, District
+from .models import User, Payment, Bill, Fees, Iptv, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip, UserPi, Street, House, District, Dv_calls
 from django.contrib import messages
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -85,6 +85,8 @@ def client(request, uid):
     streets = Street.objects.all()
     houses = House.objects.all()
     district = District.objects.all()
+    dv_session = Dv_calls.objects.filter(uid=uid)
+    print dv_session
     if module_check.check(request, 'olltv'):
         olltv_module = True
     else:

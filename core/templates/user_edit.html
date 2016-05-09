@@ -1,6 +1,7 @@
 {% extends 'layout_edit.html' %}
 {% load i18n %}
 {% load staticfiles %}
+{% load url %}
 {% block extra_css %}
     <link href="{% static 'css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet">
 {% endblock %}
@@ -17,7 +18,15 @@
                 <div class="form-group form-group-sm">
                     <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Deposit:' %}</label>
                     <div class="col-sm-8">
-                        <span class="badge form-control-static" >{{ user.bill.deposit|floatformat:4 }}</span>
+                        {% if user.bill.deposit > 50 %}
+                            <span class="label label-success form-control-static" >{{ user.bill.deposit|floatformat:4 }}</span>
+                        {% elif user.bill.deposit < 50 and user.bill.deposit > 20 %}
+                            <span class="label label-primary form-control-static" >{{ user.bill.deposit|floatformat:4 }}</span>
+                        {% elif user.bill.deposit < 20 and user.bill.deposit > 2.50 %}
+                            <span class="label label-warning form-control-static" >{{ user.bill.deposit|floatformat:4 }}</span>
+                        {% else %}
+                            <span class="label label-danger form-control-static" >{{ user.bill.deposit|floatformat:4 }}</span>
+                        {% endif %}
                         <div class="pull-right">
                             <a href="{% url 'core:client_payments' uid %}" class="btn btn-default btn-xs"><i class="fa fa-plus-circle"></i></a>
                             <a href="{% url 'core:client_fees' uid %}" class="btn btn-default btn-xs"><i class="fa fa-minus-circle"></i></a>
@@ -248,6 +257,31 @@
         </div>
         <hr/>
         <input type="submit" class="btn btn-primary btn-xs center-block" value="{% trans 'Change' %}">
+        <hr/>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+            <table class="table">
+                {% for s in dv_session %}
+                    <tr>
+                        <td>
+                            {% ip_convert s.framed_ip_address %}
+                        </td>
+                        <td>
+                            {% convert_timestamp_to_time s.acct_session_time %}
+                        </td>
+                        <td>
+                            {{ s.acct_input_octets }}
+                        </td>
+                        <td>
+                            {{ s.acct_output_octets }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
     </form>
 {% endblock %}
 {% block extra_content %}
