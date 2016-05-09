@@ -10,12 +10,7 @@ from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
 from django.core import serializers
-import os
-try:
-    olltv_module_path = os.path.join(settings.BASE_DIR,  'olltv')
-except:
-    olltv_module_path = None
-modules = settings.INSTALLED_APPS
+import module_check
 
 def custom_redirect(url_name, *args, **kwargs):
     from django.core.urlresolvers import reverse
@@ -84,17 +79,16 @@ def search(request):
 
 
 def client(request, uid):
-    print request.POST
     user = User.objects.get(id=uid)
     #bill = Bill.objects.get(company_id=user.company)
     #print bill
     streets = Street.objects.all()
     houses = House.objects.all()
     district = District.objects.all()
-    if 'olltv' in modules and os.path.exists(olltv_module_path):
-        user_olltv = True
+    if module_check.check(request, 'olltv'):
+        olltv_module = True
     else:
-        user_olltv = False
+        olltv_module = False
     if 'show_password' in request.GET:
         user_password = user.get_hash_password
     else:
@@ -102,10 +96,10 @@ def client(request, uid):
     dv = Dv.objects.get(user=uid)
     ip = num_to_ip(dv.ip)
     netmask = num_to_ip(dv.netmask)
-    if 'dv_submit' in request.POST:
-        print 'yes'
-    else:
-        print 'no'
+    # if 'dv_submit' in request.POST:
+    #     print 'yes'
+    # else:
+    #     print 'no'
     return render(request, 'user_edit.html', locals())
 
 
@@ -203,6 +197,10 @@ def client_payments(request, uid):
     payments_list = Payment.objects.filter(uid=user.id).order_by(order_by)
     paginator = Paginator(payments_list, settings.PAYMENTS_PER_PAGE)
     page = request.GET.get('page', 1)
+    if module_check.check(request, 'olltv'):
+        olltv_module = True
+    else:
+        olltv_module = False
     try:
         payments = paginator.page(page)
     except PageNotAnInteger:
@@ -230,6 +228,10 @@ def client_payments(request, uid):
 
 def client_fees(request, uid):
     order_by = request.GET.get('order_by', '-date')
+    if module_check.check(request, 'olltv'):
+        olltv_module = True
+    else:
+        olltv_module = False
     try:
         user = User.objects.get(id=uid)
     except User.DoesNotExist:

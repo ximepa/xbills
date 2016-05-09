@@ -16,7 +16,7 @@ import datetime
 import dateutils
 from .commands import make_conversion
 from .api import olltv_auth, olltv_users_list, oll_user_check, oll_user_add, oll_user_bind, oll_user_unbind, oll_user_info, oll_check_bundle, oll_get_device, oll_dev_check, oll_dev_add, oll_disable_bundle, oll_dev_remove, oll_add_bundle, olltv_change_email, olltv_change_userinfo, oll_account_check
-
+from core import module_check
 
 modules = settings.INSTALLED_APPS
 
@@ -60,6 +60,10 @@ def index(request):
 
 @login_required(login_url='/login/')
 def user_change(request, uid):
+    if module_check.check(request, 'olltv'):
+        olltv_module = True
+    else:
+        olltv_module = False
     auth = olltv_auth()
     if auth['status'] != 0:
         error = auth
