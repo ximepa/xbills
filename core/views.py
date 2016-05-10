@@ -95,8 +95,6 @@ def client(request, uid):
     else:
         user_password = ''
     dv = Dv.objects.get(user=uid)
-    ip = num_to_ip(dv.ip)
-    netmask = num_to_ip(dv.netmask)
     # if 'dv_submit' in request.POST:
     #     print 'yes'
     # else:
@@ -133,7 +131,6 @@ def clients(request):
         page_list = p
     pre_end = users.paginator.num_pages - 2
     return render(request, 'users.html', locals())
-
 
 
 def payments(request):
