@@ -336,7 +336,7 @@ class Dv(models.Model):
     def __unicode__(self):
         return "%s - %s" % (self.user.login, self.tp.name)
 
-class nas(models.Model):
+class Nas(models.Model):
     id = models.SmallIntegerField(default=0, db_column='id', primary_key=True)
     name = models.CharField(max_length=30, db_column='name')
     nas_identifier = models.CharField(max_length=20, db_column='nas_identifier')
@@ -375,7 +375,7 @@ class Dv_calls(models.Model):
     started = models.DateField(default='0000-00-00 00:00:00', db_column='started')
     nas_ip_address = models.IntegerField(default=0, db_column='nas_ip_address')
     nas_port_id = models.IntegerField(default=0, db_column='nas_port_id')
-    nas_name = models.ForeignKey('nas', db_column='nas_id')
+    nas = models.ForeignKey('Nas', db_column='nas_id')
     acct_session_id = models.CharField(max_length=25, db_column='acct_session_id', primary_key=True)
     acct_session_time = models.IntegerField(default=0, db_column='acct_session_time')
     acct_input_octets = models.BigIntegerField(default=0, db_column='acct_input_octets')
