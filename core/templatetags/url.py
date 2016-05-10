@@ -1,6 +1,7 @@
 import datetime
 from datetime import datetime
 from django import template
+import math
 from core.models import num_to_ip
 
 register = template.Library()
@@ -33,11 +34,19 @@ def ip_convert(value):
 @register.simple_tag
 def convert_timestamp_to_time(timestamp):
     import time
-    print timestamp
-    print datetime.now()
     session_time = datetime.now() - timestamp
     days, seconds = session_time.days, session_time.seconds
     hours = days * 24 + seconds // 3600
     minutes = (seconds % 3600) // 60
     seconds = (seconds % 60)
     return '%s:%s:%s' % (hours, minutes, seconds)
+
+@register.simple_tag
+def convert_bytes(size):
+    if (size == 0):
+        return '0B'
+    size_name = ("KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+    i = int(math.floor(math.log(size,1024)))
+    p = math.pow(1024,i)
+    s = round(size/p,2)
+    return '%s %s' % (s,size_name[i])

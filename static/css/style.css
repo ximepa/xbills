@@ -368,3 +368,13 @@ hr {
 .label {
     font-size: 90%;
 }
+
+.border-color {
+    color: #337ab7;
+    background-color: #fff;
+}
+
+.center-col {
+    margin: 0 auto !important;
+    float: none !important;
+}
