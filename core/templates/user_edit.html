@@ -11,6 +11,7 @@
 {% endblock %}
 {% block extra_scripts %}
 <script>
+    $.webshims.activeLang('en');
     webshims.setOptions('forms-ext', {types: 'date'});
     webshims.polyfill('forms forms-ext');
     $.webshims.formcfg = {
@@ -22,8 +23,6 @@
                  }
             }
       };
-
-      $.webshims.activeLang('en');
 </script>
 {% endblock %}
 {% block content %}
