@@ -336,12 +336,46 @@ class Dv(models.Model):
     def __unicode__(self):
         return "%s - %s" % (self.user.login, self.tp.name)
 
+class nas(models.Model):
+    id = models.SmallIntegerField(default=0, db_column='id', primary_key=True)
+    name = models.CharField(max_length=30, db_column='name')
+    nas_identifier = models.CharField(max_length=20, db_column='nas_identifier')
+    descr = models.CharField(max_length=250, db_column='descr')
+    ip = models.CharField(max_length=15, db_column='ip')
+    nas_type = models.CharField(max_length=20, db_column='nas_type')
+    auth_type = models.SmallIntegerField(default=0, db_column='auth_type')
+    mng_host_port = models.CharField(max_length=25, db_column='mng_host_port')
+    mng_user = models.CharField(max_length=20, db_column='mng_user')
+    rad_pairs = models.TextField(db_column='rad_pairs')
+    alive = models.SmallIntegerField(default=0, db_column='alive')
+    disable = models.SmallIntegerField(default=0, db_column='disable')
+    ext_acct = models.SmallIntegerField(default=0, db_column='ext_acct')
+    domain_id = models.SmallIntegerField(default=0, db_column='domain_id')
+    address_street = models.CharField(max_length=100, db_column='address_street')
+    address_build = models.CharField(max_length=10, db_column='address_build')
+    address_flat = models.CharField(max_length=10, db_column='address_flat')
+    zip = models.CharField(max_length=7, db_column='zip')
+    city = models.CharField(max_length=20, db_column='city')
+    gid = models.SmallIntegerField(default=0, db_column='gid')
+    country = models.SmallIntegerField(default=0, db_column='country')
+    mac = models.CharField(max_length=17, db_column='mac')
+    changed = models.DateField(default='0000-00-00 00:00:00', db_column='changed')
+    location_id = models.IntegerField(default=0, db_column='location_id')
+
+    class Meta:
+        db_table = 'nas'
+        ordering = ['id']
+
+    def __unicode__(self):
+        return str(self.name)
+
 class Dv_calls(models.Model):
     status = models.IntegerField(default=0, db_column='status')
     user_name = models.CharField(max_length=32, db_column='user_name')
     started = models.DateField(default='0000-00-00 00:00:00', db_column='started')
     nas_ip_address = models.IntegerField(default=0, db_column='nas_ip_address')
     nas_port_id = models.IntegerField(default=0, db_column='nas_port_id')
+    nas_name = models.ForeignKey('nas', db_column='nas_id')
     acct_session_id = models.CharField(max_length=25, db_column='acct_session_id', primary_key=True)
     acct_session_time = models.IntegerField(default=0, db_column='acct_session_time')
     acct_input_octets = models.BigIntegerField(default=0, db_column='acct_input_octets')
@@ -355,7 +389,7 @@ class Dv_calls(models.Model):
     CID = models.CharField(max_length=18, db_column='CID')
     CONNECT_INFO = models.CharField(max_length=30, db_column='CONNECT_INFO')
     tp_id = models.SmallIntegerField(default=0, db_column='tp_id')
-    nas_id = models.SmallIntegerField(default=0, db_column='nas_id')
+    #nas_id = models.SmallIntegerField(default=0, db_column='nas_id')
     acct_input_gigawords = models.SmallIntegerField(default=0, db_column='acct_input_gigawords')
     acct_output_gigawords = models.SmallIntegerField(default=0, db_column='acct_output_gigawords')
     ex_input_octets_gigawords = models.SmallIntegerField(default=0, db_column='ex_input_octets_gigawords')
