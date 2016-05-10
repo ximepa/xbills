@@ -4,6 +4,10 @@
 {% load url %}
 {% block extra_js %}
     <script src="{% static 'js/polyfiller.js' %}"></script>
+    <script src="{% static 'js/chosen.jquery.min.js' %}"></script>
+{% endblock %}
+{% block extra_css %}
+    <link href="{% static 'css/chosen.min.css' %}" rel="stylesheet">
 {% endblock %}
 {% block extra_scripts %}
 <script>
@@ -130,7 +134,7 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group form-group-sm">
-                    <label for="" class="col-sm-4 control-label">{% trans 'Reduction date' %}</label>
+                    <label for="reduction-date" class="col-sm-4 control-label">{% trans 'Reduction date' %}</label>
                     <div class="col-sm-8">
                         <div id="reduction_date-datepicker" class="">
                             <div class="input-group">
@@ -163,7 +167,7 @@
                                     element.value='0';
                                 }
                                 if (element.value == 1){
-                                    var reason = prompt('{% trans 'Reason' %}')
+                                    var reason = prompt('{% trans 'Reason' %}');
                                     if (reason != null){
                                         $('#reason').removeClass('hidden');
                                         $('#reason').val(reason);
@@ -182,7 +186,7 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group form-group-sm">
-                    <label for="" class="col-sm-4 control-label">{% trans 'Activation' %}</label>
+                    <label for="activation-date" class="col-sm-4 control-label">{% trans 'Activation' %}</label>
                     <div class="col-sm-8">
                         <div id="activation-datepicker" class="">
                             <div class="input-group">
@@ -207,7 +211,7 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group form-group-sm">
-                    <label for="" class="col-sm-4 control-label">{% trans 'Expire' %}</label>
+                    <label for="expire-date" class="col-sm-4 control-label">{% trans 'Expire' %}</label>
                     <div class="col-sm-8">
                         <div id="expire-datepicker" class="">
                             <div class="input-group">
@@ -241,6 +245,7 @@
         <hr/>
         <input type="submit" class="btn btn-primary btn-xs center-block" value="{% trans 'Change' %}">
         <hr/>
+        {% if dv_session %}
         <div class="row">
             <div class="col-md-2"></div>
             <div class="col-md-6 center-col text-center">
@@ -287,6 +292,7 @@
             </div>
             <div class="col-md-2"></div>
         </div>
+        {% endif %}
     </form>
 {% endblock %}
 {% block extra_content %}
@@ -311,11 +317,14 @@
                     <div class="form-group form-group-sm">
                         <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Districts:' %}</label>
                         <div class="col-sm-8">
-                            <select class="form-control" id="district">
+                            <select class="form-control" name="districts" id="districts">
                                 {% for item in district %}
                                     <option value="{{ item.id }}">{{ item }}</option>
                                 {% endfor %}
                             </select>
+                            <script type="text/javascript">
+                                    $('#districts').chosen();
+                            </script>
                         </div>
                     </div>
                 </div>
@@ -332,12 +341,15 @@
                     <div class="form-group form-group-sm">
                         <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Street:' %}</label>
                         <div class="col-sm-8">
-                            <select class="form-control" id="location" name="location">
+                            <select class="form-control" name="street" id="street">
                             <option value="{{ user.pi.street_id }}">{{ user.pi.street }}</option>
                                 {% for item in streets %}
                                     <option value="{{ item.id }}">{{ item }}</option>
                                 {% endfor %}
                             </select>
+                            <script type="text/javascript">
+                                    $('#street').chosen();
+                            </script>
                         </div>
                     </div>
                 </div>
@@ -353,11 +365,14 @@
                     <div class="form-group form-group-sm">
                         <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Build:' %}</label>
                         <div class="col-sm-8">
-                            <select class="form-control" name="build">
+                            <select class="form-control" name="build" id="build">
                                 {% for item in houses %}
                                     <option value="{{ item.id }}">{{ item }}</option>
                                 {% endfor %}
                             </select>
+                            <script type="text/javascript">
+                                    $('#build').chosen();
+                            </script>
                         </div>
                     </div>
                 </div>
