@@ -1,5 +1,6 @@
 import datetime
 from datetime import datetime
+import binascii
 from django import template
 import math
 from core.models import num_to_ip
@@ -41,12 +42,15 @@ def convert_timestamp_to_time(timestamp):
     seconds = (seconds % 60)
     return '%s:%s:%s' % (hours, minutes, seconds)
 
+
 @register.simple_tag
-def convert_bytes(size):
-    if (size == 0):
-        return '0B'
-    size_name = ("KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
-    i = int(math.floor(math.log(size,1024)))
+def convert_bytes(value, giga):
+    if giga == 0:
+        value = value
+    else:
+        value = value + 4294967296 * giga
+    size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+    i = int(math.floor(math.log(value,1024)))
     p = math.pow(1024,i)
-    s = round(size/p,2)
-    return '%s %s' % (s,size_name[i])
+    s = round(value/p,2)
+    return '%s %s' % (s, size_name[i])

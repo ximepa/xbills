@@ -86,7 +86,6 @@ def client(request, uid):
     houses = House.objects.all()
     district = District.objects.all()
     dv_session = Dv_calls.objects.filter(uid=uid)
-    print dv_session
     if module_check.check(request, 'olltv'):
         olltv_module = True
     else:

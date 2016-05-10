@@ -282,10 +282,10 @@
                                     {% convert_timestamp_to_time s.started %}
                                 </td>
                                 <td>
-                                    {% convert_bytes  s.acct_input_octets %}
+                                    {% convert_bytes  s.acct_input_octets s.acct_input_gigawords%}
                                 </td>
                                 <td>
-                                    {{ s.acct_output_octets }}
+                                    {% convert_bytes s.acct_output_octets s.acct_output_gigawords%}
                                 </td>
                                 <td>
                                     <button type="button" class="btn btn-xs btn-link"><span style="margin-right: 5px" class="glyphicon glyphicon-remove"></span></button>
