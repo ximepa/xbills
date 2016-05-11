@@ -26,8 +26,6 @@
 </script>
 <script type="application/javascript">
     var SELF_URL = '{% url 'core:client' uid %}';
-
-    //CHOSEN INIT PARAMS
     var CHOSEN_PARAMS = {
         no_results_text: 'Не существует',
         allow_single_deselect: true,
@@ -218,7 +216,7 @@
                 <div class="form-group form-group-sm">
                     <label for="registration" class="col-sm-4 control-label">{% trans 'Registration' %}</label>
                     <div class="col-sm-8">
-                        <input type="text" class="form-control" id="registration" name="registration" placeholder="" disabled value="{{ bill.registration }}">
+                        <input type="text" class="form-control" id="registration" name="registration" placeholder="" disabled value="{{ user.pi.contract_date }}">
                     </div>
                 </div>
             </div>
@@ -339,15 +337,6 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
-                        <label for="inputEmail3" class="col-sm-4 control-label">E-mail:</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="e-mail" name="e-mail" placeholder="E-mail:" value="{{ user.pi.email }}">
-                        </div>
-                    </div>
-                </div>
-                <hr>
-                <div class="col-md-6">
-                    <div class="form-group form-group-sm">
                         <label for="STREET" class="col-sm-4 control-label">{% trans 'Street:' %}</label>
                         <div class="col-sm-8">
                             <select download-on-click='1' name='ADDRESS_STREET' id='STREET' class='form-control'>
@@ -358,9 +347,9 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
-                        <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Phone:' %}</label>
+                        <label for="inputEmail3" class="col-sm-4 control-label">E-mail:</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="phone" name="phone" placeholder="{% trans 'phone' %}" value="{{ user.pi.phone }}">
+                            <input type="text" class="form-control" id="e-mail" name="e-mail" placeholder="E-mail:" value="{{ user.pi.email }}">
                         </div>
                     </div>
                 </div>
@@ -375,6 +364,16 @@
                     </div>
                 </div>
                 <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Phone:' %}</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="phone" name="phone" placeholder="{% trans 'phone' %}" value="{{ user.pi.phone }}">
+                        </div>
+                    </div>
                 </div>
                 <div class="col-md-6">
                         <div class="form-group form-group-sm">

@@ -7,6 +7,7 @@ app_name = 'core'
 urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^clients/$', views.clients, name='clients'),
+    url(r'^nas/$', views.nas, name='nas'),
     url(r'^clients/(?P<uid>\d+)/$', views.client, name='client'),
     url(r'^search/$', views.search, name='search'),
     url(r'^login/$', views.user_login, name='login'),

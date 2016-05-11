@@ -241,6 +241,7 @@ class UserPi(models.Model):
     phone = models.CharField(max_length=100, db_column='phone')
     city = models.CharField(max_length=100, db_column='city')
     location = models.ForeignKey('House', db_column='location_id', related_name='location', blank=True, default='0')
+    contract_date = models.DateField(db_column='contract_date')
 
     def __unicode__(self):
         return '%s' % self.id

@@ -1,0 +1,76 @@
+{% extends 'layout.html' %}
+{% load i18n %}
+{% load url %}
+{% load staticfiles %}
+{% block extra_css %}
+    <link href="{% static 'css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet">
+{% endblock %}
+{% block extra_js %}
+
+{% endblock %}
+{% block extra_scripts %}
+{% endblock %}
+{% block content %}
+    <form class="form-horizontal" method="post" name="nas_form">{% csrf_token %}
+        <div class="panel panel-default table-responsive">
+            <div class="panel-heading hidden-print">
+                <div class="btn-group btn-group-xs" role="group">
+                </div>
+                <div class="btn-group pull-left"><a title="Добавить" class="hidden-print" href=""><span class="glyphicon glyphicon-plus"></span></a>
+                    <a title="Поиск" class="hidden-print" href=""><span class="glyphicon glyphicon-search"></span></a>
+                </div>
+    {#        <div class="btn-group btn-group-xs" role="group"></div>#}
+    {#        <div class="btn-group pull-right">#}
+    {#            <button class="btn btn-default btn-xs" data-toggle="collapse" aria-expanded="true" data-target="#p_NAS_LIST">#}
+    {#                <span class="glyphicon glyphicon-resize-small"></span>#}
+    {#            </button>#}
+    {#        </div>#}
+            </div>
+            <div class=" collapse in" id="p_NAS_LIST">
+                <table class="table table-bordered text-center table-striped table-hover table-condensed" id="NAS_LIST_">
+                    <thead>
+                    <tr>
+                        <th>
+                            <script>
+                                $( document ).ready(function() {
+                                    $('#checkAll').click(function () {
+                                        $('input:checkbox[id^="NAS_ID"]').not(this).prop('checked', this.checked);
+                                    })
+                                });
+                            </script>
+                            <input type='checkbox' id='checkAll'/>
+                        </th>
+                        <th class="text-center"><a title="ID" href="" >ID</a></th>
+                        <th class="text-center"><a title="Название" href="" >Название</a></th>
+                        <th class="text-center"><a title="NAS-Identifier" href="" >NAS-Identifier</a></th>
+                        <th class="text-center"><a title="ip" href="" >ip</a></th>
+                        <th class="text-center"><a title="Тип" href="" >Тип</a></th>
+                        <th class="text-center"><a title="Отключено" href="" >Отключено</a></th>
+                        <th class="text-center"><a title="Описание" href="" >Описание</a></th>
+                    </tr>
+                    </thead>
+                    {% for nas in nas_id %}
+                    <tr>
+                        <td><input type='checkbox' name='NAS_ID' value={{ nas.id }} ID='NAS_ID'/></td>
+                        <TD> {{ nas.id }} </TD>
+                        <TD> {{ nas.name }} </TD>
+                        <TD> {{ nas.nas_identifier }} </TD>
+                        <TD> {{ nas.ip }} </TD>
+                        <TD> {{ nas.nas_type }} </TD>
+                        {% if nas.disable == 0 %}
+                            <td><span class="label label-success">{% trans 'Active' %}</span></td>
+                        {% else %}
+                            <td><span class="label label-danger">{% trans 'Disabled' %}</span></td>
+                        {% endif %}
+                        <TD> {{ nas.descr }} </TD>
+                        <TD><a title="Пользователи" class='btn btn-default btn-xs' href="" >Пользователи</a></TD>
+                        <TD><a title="IP_Pool" class='btn btn-default btn-xs' href="" >IP_Pool</a></TD>
+                        <TD><a title="form_nas:change:nas_id" href="" ><span class='glyphicon glyphicon-pencil'></span></a></TD>
+                        <TD><a title="Удалить" class='hidden-print' href="#"  data-id='' data-toggle='modal' data-uix='Удалить 86?' data-target='#comments_add'><span class='glyphicon glyphicon-trash'></span></a></TD>
+                    </TR>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </form>
+{% endblock %}

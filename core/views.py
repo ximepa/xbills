@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from .auth_backend import AuthBackend
-from .models import User, Payment, Bill, Fees, Iptv, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip, UserPi, Street, House, District, Dv_calls
+from .models import User, Payment, Bill, Fees, Iptv, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip, UserPi, Street, House, District, Dv_calls, Nas
 from django.contrib import messages
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -28,6 +28,12 @@ def index(request):
     else:
         return render(request, 'index.html', locals())
     return render(request, 'layout_edit.html', locals())
+
+
+def nas(request):
+    nas_id = Nas.objects.all()
+    print nas_id
+    return render(request, 'nas.html', locals())
 
 
 def search(request):
@@ -85,7 +91,7 @@ def client(request, uid):
         district = District.objects.all()
         dict_resp= []
         for item  in district:
-            res = '<option value=' + str(item.id) + '>' + item.city + '</option>'
+            res = '<option value=' + str(item.id) + '>' + item.name + '</option>'
             dict_resp.append(res1 + res)
         return HttpResponse(dict_resp)
 
