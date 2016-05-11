@@ -158,7 +158,8 @@ class Group(models.Model):
 
 class District(models.Model):
 
-    name = models.CharField(max_length=120,unique=True)
+    id = models.SmallIntegerField(default=0, db_column='id', primary_key=True)
+    name = models.CharField(max_length=120,unique=True, db_column='name')
     zip = models.CharField(max_length=100)
     city = models.CharField(max_length=300)
 
@@ -173,8 +174,10 @@ class District(models.Model):
 
 class Street(models.Model):
 
-    name = models.CharField(max_length=120, unique=True, default='')
-    district = models.ForeignKey('District')
+    id = models.SmallIntegerField(default=0, db_column='id', primary_key=True)
+    district_id = models.SmallIntegerField(default=0, db_column='district_id')
+    name = models.CharField(max_length=120, unique=True, db_column='name')
+    # district = models.ForeignKey('District')
 
     def __unicode__(self):
         return self.name
@@ -187,7 +190,8 @@ class Street(models.Model):
 
 class House(models.Model):
 
-    number = models.CharField(max_length=120, blank=True, null=True, default='')
+    number = models.CharField(max_length=10, db_column='number')
+    street_id = models.SmallIntegerField(default=0, db_column='street_id')
 
     def __unicode__(self):
         return self.number

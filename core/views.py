@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+import json
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse, render_to_response, RequestContext, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
@@ -79,12 +80,36 @@ def search(request):
 
 
 def client(request, uid):
+    res1 = '<option selected="selected"></option>'
+    if 'district' in request.GET:
+        district = District.objects.all()
+        dict_resp= []
+        for item  in district:
+            res = '<option value=' + str(item.id) + '>' + item.city + '</option>'
+            dict_resp.append(res1 + res)
+        return HttpResponse(dict_resp)
+
+    if 'DISTRICT' in request.GET:
+        street = Street.objects.filter(district_id=request.GET['DISTRICT'])
+        dict_resp= []
+        for item  in street:
+            res = '<option value=' + str(item.id) + '>' + item.name + '</option>'
+            dict_resp.append(res1 + res)
+        return HttpResponse(dict_resp)
+
+    if 'STREET' in request.GET:
+        house = House.objects.filter(street_id=request.GET['STREET'])
+        dict_resp= []
+        for item in house:
+            res = '<option value=' + str(item.street_id) + '>' + item.number.encode('utf8') + '</option>'
+            dict_resp.append(res1 + res)
+        return HttpResponse(dict_resp)
+
     user = User.objects.get(id=uid)
     #bill = Bill.objects.get(company_id=user.company)
     #print bill
     streets = Street.objects.all()
     houses = House.objects.all()
-    district = District.objects.all()
     dv_session = Dv_calls.objects.filter(uid=uid)
     if module_check.check(request, 'olltv'):
         olltv_module = True

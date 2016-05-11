@@ -24,6 +24,20 @@
             }
       };
 </script>
+<script type="application/javascript">
+    var SELF_URL = '{% url 'core:client' uid %}';
+
+    //CHOSEN INIT PARAMS
+    var CHOSEN_PARAMS = {
+        no_results_text: 'Не существует',
+        allow_single_deselect: true,
+        placeholder_text: '--'
+    };
+
+    $(function () {
+        $('select:not(#type)').chosen(CHOSEN_PARAMS);
+    });
+</script>
 {% endblock %}
 {% block content %}
     <form class="form-horizontal" method="post" name="bills_form">{% csrf_token %}
@@ -314,17 +328,13 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
-                        <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Districts:' %}</label>
+                        <label for="DISTRICT" class="col-sm-4 control-label">{% trans 'Districts:' %}</label>
                         <div class="col-sm-8">
-                            <select class="form-control" name="districts" id="districts">
-                                {% for item in district %}
-                                    <option value="{{ item.id }}">{{ item }}</option>
-                                {% endfor %}
+                            <select download-on-click='1' name='ADDRESS_DISTRICT' id='DISTRICT' class='form-control'>
+                                <option value="{{ user.pi.city_id }}">{{ user.pi.city }}</option>
                             </select>
-                            <script type="text/javascript">
-                                    $('#districts').chosen();
-                            </script>
                         </div>
+                        <script src="{% static 'js/searchLocation.js' %}"></script>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -338,17 +348,11 @@
                 <hr>
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
-                        <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Street:' %}</label>
+                        <label for="STREET" class="col-sm-4 control-label">{% trans 'Street:' %}</label>
                         <div class="col-sm-8">
-                            <select class="form-control" name="street" id="street">
-                            <option value="{{ user.pi.street_id }}">{{ user.pi.street }}</option>
-                                {% for item in streets %}
-                                    <option value="{{ item.id }}">{{ item }}</option>
-                                {% endfor %}
+                            <select download-on-click='1' name='ADDRESS_STREET' id='STREET' class='form-control'>
+                                <option value="{{ user.pi.street_id }}">{{ user.pi.street }}</option>
                             </select>
-                            <script type="text/javascript">
-                                    $('#street').chosen();
-                            </script>
                         </div>
                     </div>
                 </div>
@@ -362,16 +366,11 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
-                        <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Build:' %}</label>
+                        <label for="BUILD" class="col-sm-4 control-label">{% trans 'Build:' %}</label>
                         <div class="col-sm-8">
-                            <select class="form-control" name="build" id="build">
-                                {% for item in houses %}
-                                    <option value="{{ item.id }}">{{ item }}</option>
-                                {% endfor %}
+                            <select download-on-click='1' name='ADDRESS_BUILD' id='BUILD' class='form-control'>
+                                <option value="{{ user.pi.location_id }}">{{ user.pi.location }}</option>
                             </select>
-                            <script type="text/javascript">
-                                    $('#build').chosen();
-                            </script>
                         </div>
                     </div>
                 </div>
