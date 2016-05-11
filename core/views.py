@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from .auth_backend import AuthBackend
-from .models import User, Payment, Bill, Fees, Iptv, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip, UserPi, Street, House, District, Dv_calls, Nas
+from .models import User, Payment, Bill, Fees, Iptv, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip, UserPi, Street, House, District, Dv_calls, Nas, Errors_log
 from django.contrib import messages
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -34,6 +34,12 @@ def nas(request):
     nas_id = Nas.objects.all()
     print nas_id
     return render(request, 'nas.html', locals())
+
+
+def error(request, uid):
+    messages = Errors_log.objects.get(user='koka')
+    print messages
+    return render(request, 'error.html', locals())
 
 
 def search(request):

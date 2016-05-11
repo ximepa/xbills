@@ -341,6 +341,22 @@ class Dv(models.Model):
     def __unicode__(self):
         return "%s - %s" % (self.user.login, self.tp.name)
 
+
+class Errors_log(models.Model):
+    date = models.DateField(db_column='data')
+    log_type = models.IntegerField(default=0, db_column='log_type')
+    user = models.CharField(max_length=20, db_column='user')
+    message = models.CharField(max_length=120, db_column='message')
+
+    class Meta:
+        db_table = 'errors_log'
+        ordering = ['user']
+
+    def __unicode__(self):
+        return str(self.message)
+
+
+
 class Nas(models.Model):
     id = models.SmallIntegerField(default=0, db_column='id', primary_key=True)
     name = models.CharField(max_length=30, db_column='name')
