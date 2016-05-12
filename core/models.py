@@ -342,9 +342,7 @@ class Dv(models.Model):
         return "%s - %s" % (self.user.login, self.tp.name)
 
 
-class Errors_log(models.Model):
-    date = models.DateField(db_column='data')
-    log_type = models.IntegerField(default=0, db_column='log_type')
+class ErrorsLog(models.Model):
     user = models.CharField(max_length=20, db_column='user')
     message = models.CharField(max_length=120, db_column='message')
 
