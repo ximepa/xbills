@@ -30,7 +30,8 @@
                     {% else %}
                         <li><a href="{% url 'core:client_fees' user.id %}">{% trans 'Fees' %}</a></li>
                     {% endif %}
-                    {% if olltv_module %}
+                    {% check_module 'olltv' as check_module_olltv %}
+                    {% if check_module_olltv %}
                         {% url 'olltv:user_change' user.id as user_olltv_url %}
                         {% if request.get_full_path == user_olltv_url %}
                             <li class="active"><a href="{% url 'olltv:user_change' user.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'OLLTV' %}</a></li>

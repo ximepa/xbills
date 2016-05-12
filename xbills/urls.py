@@ -2,8 +2,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 import os
-olltv_module_path = os.path.join(settings.BASE_DIR,  'olltv')
-modules = settings.INSTALLED_APPS
+from core.module_check import check
 
 urlpatterns = [
     url(r'^admin/', include('core.urls')),
@@ -12,7 +11,7 @@ urlpatterns = [
     #url(r'^admin/', include(admin.site.urls)),
 ]
 
-if 'olltv' in modules and os.path.exists(olltv_module_path):
+if check('olltv'):
     urlpatterns += url(r'^admin/olltv/', include('olltv.urls')),
 
 print urlpatterns

@@ -249,7 +249,6 @@ def oll_check_bundle(account, tp, hash):
         'hash': hash
     })
     get_bundle_status_json = response_get_bundle_status.json()
-    print get_bundle_status_json
     if get_bundle_status_json['status'] != 0:
         data.update(get_bundle_status_json)
         data.update({'mess': 'Error', 'mess_status': 'danger', 'module': 'Bundle'})

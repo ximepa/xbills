@@ -60,10 +60,6 @@ def index(request):
 
 @login_required(login_url='/login/')
 def user_change(request, uid):
-    if module_check.check(request, 'olltv'):
-        olltv_module = True
-    else:
-        olltv_module = False
     auth = olltv_auth()
     if auth['status'] != 0:
         error = auth
@@ -131,7 +127,6 @@ def user_change(request, uid):
 # user active
             try:
                 iptv = Iptv.objects.get(uid=user.id)
-                print iptv.tp_id
                 cur_tp = Tp.objects.get(tp_id=iptv.tp_id)
             except Iptv.DoesNotExist:
                 iptv = False
@@ -198,7 +193,6 @@ def user_change(request, uid):
             type_form = TypeForm()
             device_remove_form = DeviceRemoveForm()
             device_add_form = DeviceAddForm()
-            print request.POST
             if 'action' in request.POST:
                 auth = olltv_auth()
 # unbind-tp
@@ -268,8 +262,6 @@ def user_change(request, uid):
                             iptv.save()
                             bill.save()
                             return redirect('olltv:user_change', uid=user.id)
-                    else:
-                        print 'no post'
                 if request.POST['action'] == 'add-extra-screen':
 # add extra screen
                     if 'now' in request.POST:
@@ -376,7 +368,7 @@ def user_change(request, uid):
                         upi.email = request.POST['new_email']
                         upi.save()
                     except UserPi.DoesNotExist:
-                        print 'UserPi.DoesNotExist'
+                        pass
                     if settings.ABILLS_EMAIL_LOGS:
                         admin_log = AdminLog(
                             actions='Email changed from %s to %s (%s)' % (request.POST['email'], request.POST['new_email'], request.user.login),
@@ -424,21 +416,18 @@ def user_change(request, uid):
 def user_remove(request):
     user_add = UserRemoveForm()
     if request.method == 'POST':
-        print request.POST
         user_add = UserRemoveForm(request.POST)
         try:
             user = User.objects.get(account=request.POST['account'])
             if request.POST['login'] != user.login:
                 pass
             else:
-                print 'form error'
                 user_add = UserAddForm()
                 error = 'user with login %s already there' % request.POST['login']
                 return render(request, 'olltv/user_add.html', locals())
         except User.DoesNotExist:
             pass
         if user_add.is_valid():
-            print 'form valid'
             vehicle = user_add.save(commit=False)
             vehicle.author = request.user.get_full_name()
             vehicle.account = request.POST['account']
@@ -470,9 +459,7 @@ def get_all_users(request):
     get_user_list_json = response_get_user_list.json()
     get_user_list = get_user_list_json['data']
     num = 0
-    print get_user_list
     for i in get_user_list:
-        print str(num) + '. ' + i['account'] + ' ' + i['firstname'] + ' ' + i['lastname'] + ' ' + i['email']
         num = num + 1
         u = User(email=i['email'], account=i['account'], birth_date=i['birth_date'], gender=i['gender'], firstname=i['firstname'], lastname=i['lastname'], phone=i['phone'], region=i['region'], receive_news=i['receive_news'], index=['index'], status=i['active'], registration_date=i['reg_date'], oll_id=i['ID'])
         u.save()
@@ -493,12 +480,9 @@ def get_all_dev(request):
     get_user_list_json = response_get_user_list.json()
     get_user_list = get_user_list_json['data']
     num = 0
-    print get_user_list_json['data'][0]
     for i in get_user_list:
-        print str(num) + '. ' + i['USER']['account'] + ' ' + i['serial_number']
         num = num + 1
         u = User.objects.get(account=i['USER']['account'])
-        print u.account
         #d = Device(account_id=u.pk, mac=i['mac'], serial_number=i['serial_number'], status=1, date_added=i['date_added'], id=i['ID'])
         #d.save()
     return render(request, 'olltv/get_all_dev.html', locals())

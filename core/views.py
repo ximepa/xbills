@@ -33,7 +33,6 @@ def index(request):
 
 def nas(request):
     nas_id = Nas.objects.all()
-    print nas_id
     return render(request, 'nas.html', locals())
 
 
@@ -125,8 +124,7 @@ def client(request, uid):
     streets = Street.objects.all()
     houses = House.objects.all()
     dv_session = Dv_calls.objects.filter(uid=uid)
-    if module_check.check(request, 'olltv'):
-        olltv_module = True
+    if module_check.check('olltv'):
         from olltv.models import Iptv, IptvDevice, IptvDeviceType
         from olltv.api import oll_user_info, oll_check_bundle, olltv_auth
         try:
@@ -155,11 +153,8 @@ def client(request, uid):
                             get_bundle_status = check_bundle['data']
                             tp.update({'status': get_bundle_status})
                             tp_list.append(tp)
-                        print tp_list
         except Iptv.DoesNotExist:
             olltv_exist = False
-    else:
-        olltv_module = False
     if 'show_password' in request.GET:
         user_password = user.get_hash_password
     else:
@@ -265,7 +260,7 @@ def client_payments(request, uid):
     payments_list = Payment.objects.filter(uid=user.id).order_by(order_by)
     paginator = Paginator(payments_list, settings.PAYMENTS_PER_PAGE)
     page = request.GET.get('page', 1)
-    if module_check.check(request, 'olltv'):
+    if module_check.check('olltv'):
         olltv_module = True
     else:
         olltv_module = False
@@ -336,7 +331,6 @@ def client_fees(request, uid):
 def user_login(request):
     context = RequestContext(request)
     if request.method == 'POST':
-        print request.POST
         username = request.POST['username']
         password = request.POST['password']
         user = AuthBackend().authenticate(username=username, password=password)
