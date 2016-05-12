@@ -1,0 +1,139 @@
+{% extends 'layout_edit.html' %}
+{% load i18n %}
+{% load url %}
+{% load staticfiles %}
+{% block extra_css %}
+{% endblock %}
+{% block extra_js %}
+
+{% endblock %}
+{% block extra_scripts %}
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-12 table-custom">
+            <div class="pag-nav">
+                <nav class="center-block">
+                    <ul class="pagination pagination-sm">
+                        {% if errors.has_previous %}
+                            <li>
+                                <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
+                                    <span aria-hidden="true">1</span>
+                                </a>
+                            </li>
+                            {% if errors.number > 2 %}
+                                <li class="disabled">
+                                    <a href="#" aria-label="Previous">
+                                        <span aria-hidden="true">...</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                        {% for p in page_list %}
+                            {% if errors.number == p %}
+                                <li class="active">
+                                    <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                </li>
+                            {% else %}
+                                <li class="">
+                                    <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if errors.has_next %}
+                            <li class="disabled">
+                                <a href="#" aria-label="Previous">
+                                    <span aria-hidden="true">...</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="?{% url_replace_page request 'page' errors.paginator.num_pages %}" aria-label="Next">
+                                    <span aria-hidden="true">{{ errors.paginator.num_pages }}</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="disabled">
+                                <a href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+            <table class="table table-hover table-striped table-condensed">
+                <thead>
+                    <tr class="info">
+                        <th><a href="?{% url_replace request 'order_by' 'date' %}">{% trans 'Date' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'log_type' %}">{% trans 'Log type' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'action' %}">{% trans 'Action' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'user' %}">{% trans 'User' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'message' %}">{% trans 'Message' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'nas_id' %}">{% trans 'Nas ID' %}</a></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for e in errors %}
+                    <tr>
+                        <td>{{ e.date }}</td>
+                        <td>{{ e.log_type }}</td>
+                        <td>{{ e.action }}</td>
+                        <td>{{ e.user }}</td>
+                        <td>{{ e.message }}</td>
+                        <td>{{ e.nas_id }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="pag-nav">
+                <nav class="center-block">
+                    <ul class="pagination pagination-sm">
+                        {% if errors.has_previous %}
+                            <li>
+                                <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
+                                    <span aria-hidden="true">1</span>
+                                </a>
+                            </li>
+                            {% if errors.number > 2 %}
+                                <li class="disabled">
+                                    <a href="#" aria-label="Previous">
+                                        <span aria-hidden="true">...</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                        {% for p in page_list %}
+                            {% if errors.number == p %}
+                                <li class="active">
+                                    <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                </li>
+                            {% else %}
+                                <li class="">
+                                    <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                        {% if errors.has_next %}
+                            <li class="disabled">
+                                <a href="#" aria-label="Previous">
+                                    <span aria-hidden="true">...</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="?{% url_replace_page request 'page' errors.paginator.num_pages %}" aria-label="Next">
+                                    <span aria-hidden="true">{{ errors.paginator.num_pages }}</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="disabled">
+                                <a href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+{% endblock %}

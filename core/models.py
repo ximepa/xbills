@@ -343,8 +343,13 @@ class Dv(models.Model):
 
 
 class ErrorsLog(models.Model):
+    nas_id = models.IntegerField(max_length=25, primary_key=True, db_column='nas_id')
     user = models.CharField(max_length=20, db_column='user')
     message = models.CharField(max_length=120, db_column='message')
+    date = models.DateTimeField(db_column='date', null=False)
+    action = models.CharField(max_length=10, db_column='action', null=False)
+    log_type = models.SmallIntegerField(max_length=3, null=False, db_column='log_type')
+
 
     class Meta:
         db_table = 'errors_log'

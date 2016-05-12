@@ -36,12 +36,32 @@ def nas(request):
     return render(request, 'nas.html', locals())
 
 
-def error(request, uid):
-    messagess = ErrorsLog.objects.all()
-    for messs in messagess:
-        print messs
-
-    return render(request, 'error.html', locals())
+def client_errors(request, uid):
+    user = User.objects.get(id=uid)
+    user_errors = ErrorsLog.objects.filter(user=user.login)[:200]
+    paginator = Paginator(user_errors, settings.USER_ERRORS_PER_PAGE)
+    page = request.GET.get('page', 1)
+    try:
+        errors = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        errors = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        errors = paginator.page(paginator.num_pages)
+    if int(page) > 5:
+        start = str(int(page)-5)
+    else:
+        start = 1
+    if int(page) < paginator.num_pages-5:
+        end = str(int(page)+5+1)
+    else:
+        end = paginator.num_pages+1
+    page_range = range(int(start), int(end)),
+    for p in page_range:
+        page_list = p
+    pre_end = errors.paginator.num_pages - 2
+    return render(request, 'user_errors.html', locals())
 
 
 def search(request):

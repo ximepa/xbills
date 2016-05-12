@@ -8,7 +8,6 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^clients/$', views.clients, name='clients'),
     url(r'^nas/$', views.nas, name='nas'),
-    url(r'^error/(?P<uid>\d+)/$', views.error, name='error'),
     url(r'^clients/(?P<uid>\d+)/$', views.client, name='client'),
     url(r'^search/$', views.search, name='search'),
     url(r'^login/$', views.user_login, name='login'),
@@ -21,4 +20,5 @@ urlpatterns = [
     url(r'^fees/(?P<uid>\d+)/$', views.client_fees, name='client_fees'),
     url(r'^clients/(?P<uid>\d+)/group/$', views.user_group, name='user_group'),
     url(r'^clients/(?P<uid>\d+)/company/$', views.user_company, name='user_company'),
+    url(r'^clients/(?P<uid>\d+)/errors/$', views.client_errors, name='client_errors'),
 ]
