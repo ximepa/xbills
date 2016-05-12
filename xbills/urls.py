@@ -13,5 +13,3 @@ urlpatterns = [
 
 if check('olltv'):
     urlpatterns += url(r'^admin/olltv/', include('olltv.urls')),
-
-print urlpatterns
