@@ -144,7 +144,7 @@ def client(request, uid):
                 tp_count = user_info['tp_count']
                 tp_list = []
                 if tp_count < 1:
-                    tp_list = []
+                    tp_list = None
                 else:
                     for tp in tp_list_dict:
                         # check_bundle

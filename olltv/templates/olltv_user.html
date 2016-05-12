@@ -157,12 +157,9 @@
                                                     <i class="fa fa-plus fa-fw"></i> {% trans 'Add tarif plans' %}
                                                 </a>
                                             {% else %}
-                                                {% if cur_tp.tp_id == 66 %}
-                                                {% else %}
-                                                    <a type="button" class="btn btn-danger btn-xs" style="cursor: pointer" data-toggle="modal" data-target="#add-extra-screen" title="{% trans 'Add extra screen' %}">
-                                                        <i class="fa fa-plus fa-fw"></i> {% trans 'Add extra screen' %}
-                                                    </a>
-                                                {% endif %}
+                                                <a type="button" class="btn btn-danger btn-xs" style="cursor: pointer" data-toggle="modal" data-target="#add-extra-screen" title="{% trans 'Add extra screen' %}">
+                                                    <i class="fa fa-plus fa-fw"></i> {% trans 'Add extra screen' %}
+                                                </a>
                                             {% endif %}
                                         </div>
                                     </div>

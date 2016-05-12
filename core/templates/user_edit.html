@@ -237,35 +237,48 @@
         </div>
         {% if olltv_exist %}
             <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group form-group-sm">
-                        <label for="olltv_device" class="col-sm-4 control-label">{% trans 'Iptv device' %}:</label>
-                        <div class="col-sm-8">
-                            <ul class="list-group">
-                                {% for dev in user_olltv_dev %}
-                                    {% if dev.status == 1 %}
-                                        <li class="list-group-item disabled" data-toggle="tooltip" data-placement="top" title="{{ dev.date_added }} - {{ dev.status }}">{{ dev.id }} - {% trans 'MAC' %}: {{ dev.mac }} | {% trans 'Serial' %}: {{ dev.serial_num }}</li>
-                                    {% else %}
-                                        <li class="list-group-item" data-toggle="tooltip" data-placement="top" title="{{ dev.date_added }} - {{ dev.status }}">{{ dev.id }} - {% trans 'MAC' %}: {{ dev.mac }} | {% trans 'Serial' %}: {{ dev.serial_num }}</li>
-                                    {% endif %}
-                                {% endfor %}
-                            </ul>
+                {% if user_olltv.disable == 1 or user_olltv.disable == 2 %}
+                    <div class="col-md-12">
+                        <div class="form-group form-group-sm center-block">
+                            <label class="col-sm-6 control-label">{% trans 'Iptv status' %}:</label>
+                            <div class="col-sm-6">
+                                {{ iptv.mac }}
+                                <span class="label label-danger">{% trans 'Disabled' %}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group form-group-sm">
-                        <label for="expire-date" class="col-sm-4 control-label">{% trans 'Iptv tarif' %}:</label>
-                        <div class="col-sm-8">
-                            <ul class="list-group">
-                                {% for tp in tp_list %}
-                                    <li class="list-group-item" data-toggle="tooltip" data-placement="top" title="{{ tp.start_date }} - {{ tp.expiration_date }}">{% trans 'Name' %}: {{ tp.name }} | {% trans 'Binding code' %}: {{ tp.device_binding_code }}</li>
-                                {% endfor %}
-                            </ul>
+                {% else %}
+                    <div class="col-md-6">
+                        <div class="form-group form-group-sm">
+                            <label for="olltv_device" class="col-sm-4 control-label">{% trans 'Iptv device' %}:</label>
+                            <div class="col-sm-8">
+                                <ul class="list-group text-center">
+                                    {% for dev in user_olltv_dev %}
+                                        {% if dev.status == 1 %}
+                                            <li class="list-group-item disabled" data-toggle="tooltip" data-placement="top" title="{{ dev.date_added }} - {{ dev.status }}">{{ dev.id }} - {% trans 'MAC' %}: {{ dev.mac }} | {% trans 'Serial' %}: {{ dev.serial_num }}</li>
+                                        {% else %}
+                                            <li class="list-group-item" data-toggle="tooltip" data-placement="top" title="{{ dev.date_added }} - {{ dev.status }}">{{ dev.id }} - {% trans 'MAC' %}: {{ dev.mac }} | {% trans 'Serial' %}: {{ dev.serial_num }}</li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
-        {% else %}
+                    {% if tp_list %}
+                        <div class="col-md-6">
+                            <div class="form-group form-group-sm">
+                                <label for="expire-date" class="col-sm-4 control-label">{% trans 'Iptv tarif' %}:</label>
+                                <div class="col-sm-8">
+                                    <ul class="list-group text-center">
+                                        {% for tp in tp_list %}
+                                            <li class="list-group-item" data-toggle="tooltip" data-placement="top" title="{{ tp.start_date }} - {{ tp.expiration_date }}">{% trans 'Name' %}: {{ tp.name }} | {% trans 'Binding code' %}: {{ tp.device_binding_code }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endif %}
         {% endif %}
         <div class="row">
             <div class="col-md-12">
