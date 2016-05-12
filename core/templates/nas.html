@@ -82,36 +82,13 @@
                 <div class="panel panel-default panel-form">
                     <div class="panel-body">
                         <div class="form-group">
-                            <label for="NAS_IP" class="control-label col-md-6 required">IP</label>
-                            <div class="col-sm-6">
-
+                            <label class="control-label col-md-3 required" for="nas_ip">IP:</label>
+                            <div class="col-md-9">
+                                <input id="nas_ip" name="nas_ipT" value="" placeholder="{% trans 'Server IP' %}" class="form-control" type="text">
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="NAS_NAME" class="control-label col-md-3 required">Название (a-zA-Z0-9_)</label>
-                            <div class="col-md-6">
-                                <input class="form-control" id="NAS_NAME" placeholder="" name="nas_name" value="" required="" pattern="^\w*$" maxlength="30" type="text">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="nas_type" class="control-label col-md-3 required">Тип</label>
-                            <div class="col-sm-9" id="NAS-type-wrapper">
-                                <div class="col-md-10">
-                                    <select name="nas_type" id="nas_type" class="form-control">
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="nas_alive" class="control-label col-sm-3">Alive (sec.)</label>
-                            <div class="col-sm-9">
-                                <input class="form-control" id="nas_alive" placeholder="" name="NAS_ALIVE" value="">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="NAS_DISABLE" class="control-label col-sm-3">Отключено</label>
-                            <div class="col-sm-5">
-                                <input id="NAS_DISABLE" name="NAS_DISABLE" value="1" type="checkbox">
+                            <label class="control-label col-md-3" for="server_name">{% trans 'Server name' %}</label>
+                            <div class="col-md-9">
+                                <input id="server_name" name="server_name" value="" placeholder="{% trans 'Server name' %}" class="form-control" type="text">
                             </div>
                         </div>
                         <div class="form-group">
@@ -120,13 +97,13 @@
                             <div class="col-md-9">
                                 <input id="NAS_MNG_IP_PORT" name="NAS_MNG_IP_PORT" value="" placeholder="" class="form-control" type="text">
                             </div>
-                            <label class="control-label col-md-3" for="NAS_MNG_USER">Пользователь</label>
+                            <label class="control-label col-md-3" for="user_name">{% trans 'User name' %}:</label>
                             <div class="col-md-9">
-                                <input id="NAS_MNG_USER" name="NAS_MNG_USER" value="" placeholder="" class="form-control" type="text">
+                                <input id="user_name" name="user_name" value="" placeholder="{% trans 'User name' %}" class="form-control" type="text">
                             </div>
-                            <label class="control-label col-md-3" for="NAS_MNG_PASSWORD">Пароль</label>
+                            <label class="control-label col-md-3" for="nas_password">{% trans 'Password' %}:</label>
                             <div class="col-md-9">
-                                <input id="NAS_MNG_PASSWORD" name="NAS_MNG_PASSWORD" value="" placeholder="" class="form-control" type="password">
+                                <input id="nas_password" name="nas_password" value="" placeholder="{% trans 'Password' %}" class="form-control" type="password">
                             </div>
                         </div>
                     </div>
@@ -138,8 +115,7 @@
                     </div>
                     <hr>
                     <div class="row text-center">
-                        <input id="del_cols" name="del_cols" class="btn btn-default" value="Reset to default" type="submit">
-                        <input id="show_cols" name="show_cols" class="btn btn-primary" value="Save" type="submit">
+                        <input id="show_cols" name="show_cols" class="btn btn-primary" value="{% trans 'Add' %}" type="submit">
                     </div>
                 </div>
             </div>
