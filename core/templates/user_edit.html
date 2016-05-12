@@ -225,13 +225,11 @@
                 <div class="form-group form-group-sm">
                     <label for="expire-date" class="col-sm-4 control-label">{% trans 'Expire' %}</label>
                     <div class="col-sm-8">
-                        <div id="expire-datepicker" class="">
-                            <div class="input-group">
-                                <input data-format="yyyy-MM-dd" type="date" class="form-control" id="expire" name="expire" placeholder="{% trans 'Expire' %}" value="{{ user.expire|default:"0000-00-00" }}">
-                                <span class="input-group-addon add-on" id="expire-date">
-                                    <i class="fa fa-calendar" data-time-icon="icon-time" data-date-icon="fa-calendar"></i>
-                                </span>
-                            </div>
+                        <div class="input-group">
+                            <input data-format="yyyy-MM-dd" type="date" class="form-control" id="expire" name="expire" placeholder="{% trans 'Expire' %}" value="{{ user.expire|default:"0000-00-00" }}">
+                            <span class="input-group-addon add-on" id="expire-date">
+                                <i class="fa fa-calendar" data-time-icon="icon-time" data-date-icon="fa-calendar"></i>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -368,7 +366,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group form-group-sm">
-                        <label for="BUILD" class="col-sm-4 control-label">{% trans 'Build:' %}</label>
+                        <label for="BUILD" class="col-sm-4 control-label">{% trans 'Build' %}:</label>
                         <div class="col-sm-8">
                             <select download-on-click='1' name='ADDRESS_BUILD' id='BUILD' class='form-control'>
                                 <option value="{{ user.pi.location_id }}">{{ user.pi.location }}</option>
