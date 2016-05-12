@@ -291,10 +291,6 @@ def client_payments(request, uid):
 
 def client_fees(request, uid):
     order_by = request.GET.get('order_by', '-date')
-    if module_check.check(request, 'olltv'):
-        olltv_module = True
-    else:
-        olltv_module = False
     try:
         user = User.objects.get(id=uid)
     except User.DoesNotExist:
