@@ -378,7 +378,3 @@ hr {
     margin: 0 auto !important;
     float: none !important;
 }
-
-.ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td {
-    border-style: none;
-}
