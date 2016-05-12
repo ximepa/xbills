@@ -11,66 +11,138 @@
 {% block extra_scripts %}
 {% endblock %}
 {% block content %}
-    <form class="form-horizontal" method="post" name="nas_form">{% csrf_token %}
-        <div class="panel panel-default table-responsive">
-            <div class="panel-heading hidden-print">
-                <div class="btn-group btn-group-xs" role="group">
-                </div>
-                <div class="btn-group pull-left"><a title="Добавить" class="hidden-print" href=""><span class="glyphicon glyphicon-plus"></span></a>
-                    <a title="Поиск" class="hidden-print" href=""><span class="glyphicon glyphicon-search"></span></a>
-                </div>
-    {#        <div class="btn-group btn-group-xs" role="group"></div>#}
-    {#        <div class="btn-group pull-right">#}
-    {#            <button class="btn btn-default btn-xs" data-toggle="collapse" aria-expanded="true" data-target="#p_NAS_LIST">#}
-    {#                <span class="glyphicon glyphicon-resize-small"></span>#}
-    {#            </button>#}
-    {#        </div>#}
+    <div class="panel panel-default table-responsive">
+        <div class="panel-heading hidden-print">
+            <div class="btn-group btn-group-xs" role="group">
             </div>
-            <div class=" collapse in" id="p_NAS_LIST">
-                <table class="table table-bordered text-center table-striped table-hover table-condensed" id="NAS_LIST_">
-                    <thead>
-                    <tr>
-                        <th>
-                            <script>
-                                $( document ).ready(function() {
-                                    $('#checkAll').click(function () {
-                                        $('input:checkbox[id^="NAS_ID"]').not(this).prop('checked', this.checked);
-                                    })
-                                });
-                            </script>
-                            <input type='checkbox' id='checkAll'/>
-                        </th>
-                        <th class="text-center"><a title="ID" href="" >ID</a></th>
-                        <th class="text-center"><a title="Название" href="" >Название</a></th>
-                        <th class="text-center"><a title="NAS-Identifier" href="" >NAS-Identifier</a></th>
-                        <th class="text-center"><a title="ip" href="" >ip</a></th>
-                        <th class="text-center"><a title="Тип" href="" >Тип</a></th>
-                        <th class="text-center"><a title="Отключено" href="" >Отключено</a></th>
-                        <th class="text-center"><a title="Описание" href="" >Описание</a></th>
-                    </tr>
-                    </thead>
-                    {% for nas in nas_id %}
-                    <tr>
-                        <td><input type='checkbox' name='NAS_ID' value={{ nas.id }} ID='NAS_ID'/></td>
-                        <TD> {{ nas.id }} </TD>
-                        <TD> {{ nas.name }} </TD>
-                        <TD> {{ nas.nas_identifier }} </TD>
-                        <TD> {{ nas.ip }} </TD>
-                        <TD> {{ nas.nas_type }} </TD>
-                        {% if nas.disable == 0 %}
-                            <td><span class="label label-success">{% trans 'Active' %}</span></td>
-                        {% else %}
-                            <td><span class="label label-danger">{% trans 'Disabled' %}</span></td>
-                        {% endif %}
-                        <TD> {{ nas.descr }} </TD>
-                        <TD><a title="Пользователи" class='btn btn-default btn-xs' href="" >Пользователи</a></TD>
-                        <TD><a title="IP_Pool" class='btn btn-default btn-xs' href="" >IP_Pool</a></TD>
-                        <TD><a title="form_nas:change:nas_id" href="" ><span class='glyphicon glyphicon-pencil'></span></a></TD>
-                        <TD><a title="Удалить" class='hidden-print' href="#"  data-id='' data-toggle='modal' data-uix='Удалить 86?' data-target='#comments_add'><span class='glyphicon glyphicon-trash'></span></a></TD>
-                    </TR>
-                    {% endfor %}
-                </table>
+            <div class="btn-group pull-left">
+                <a title="Добавить" class="hidden-print" data-toggle="modal" data-target="#NAS_LISTModal" href=""><span class="glyphicon glyphicon-plus"></span></a>
+                <a title="Поиск" class="hidden-print" href=""><span class="glyphicon glyphicon-search"></span></a>
+            </div>
+{#        <div class="btn-group btn-group-xs" role="group"></div>#}
+{#        <div class="btn-group pull-right">#}
+{#            <button class="btn btn-default btn-xs" data-toggle="collapse" aria-expanded="true" data-target="#p_NAS_LIST">#}
+{#                <span class="glyphicon glyphicon-resize-small"></span>#}
+{#            </button>#}
+{#        </div>#}
+        </div>
+        <div class=" collapse in" id="p_NAS_LIST">
+            <table class="table table-bordered text-center table-striped table-hover table-condensed" id="NAS_LIST_">
+                <thead>
+                <tr>
+                    <th>
+                        <script>
+                            $( document ).ready(function() {
+                                $('#checkAll').click(function () {
+                                    $('input:checkbox[id^="NAS_ID"]').not(this).prop('checked', this.checked);
+                                })
+                            });
+                        </script>
+                        <input type='checkbox' id='checkAll'/>
+                    </th>
+                    <th class="text-center"><a title="ID" href="" >ID</a></th>
+                    <th class="text-center"><a title="Название" href="" >Название</a></th>
+                    <th class="text-center"><a title="NAS-Identifier" href="" >NAS-Identifier</a></th>
+                    <th class="text-center"><a title="ip" href="" >ip</a></th>
+                    <th class="text-center"><a title="Тип" href="" >Тип</a></th>
+                    <th class="text-center"><a title="Отключено" href="" >Отключено</a></th>
+                    <th class="text-center"><a title="Описание" href="" >Описание</a></th>
+                </tr>
+                </thead>
+                {% for nas in nas_id %}
+                <tr>
+                    <td><input type='checkbox' name='NAS_ID' value={{ nas.id }} ID='NAS_ID'/></td>
+                    <TD> {{ nas.id }} </TD>
+                    <TD> {{ nas.name }} </TD>
+                    <TD> {{ nas.nas_identifier }} </TD>
+                    <TD> {{ nas.ip }} </TD>
+                    <TD> {{ nas.nas_type }} </TD>
+                    {% if nas.disable == 0 %}
+                        <td><span class="label label-success">{% trans 'Active' %}</span></td>
+                    {% else %}
+                        <td><span class="label label-danger">{% trans 'Disabled' %}</span></td>
+                    {% endif %}
+                    <TD> {{ nas.descr }} </TD>
+                    <TD><a title="Пользователи" class='btn btn-default btn-xs' href="" >Пользователи</a></TD>
+                    <TD><a title="IP_Pool" class='btn btn-default btn-xs' href="" >IP_Pool</a></TD>
+                    <TD><a title="form_nas:change:nas_id" href="" ><span class='glyphicon glyphicon-pencil'></span></a></TD>
+                    <TD><a title="Удалить" class='hidden-print' href="#"  data-id='' data-toggle='modal' data-uix='Удалить 86?' data-target='#comments_add'><span class='glyphicon glyphicon-trash'></span></a></TD>
+                </TR>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <div class="modal fade" id="NAS_LISTModal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">Сервер доступа
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+                    </button>
+                </div>
+                <div class="panel panel-default panel-form">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="NAS_IP" class="control-label col-md-6 required">IP</label>
+                            <div class="col-sm-6">
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="NAS_NAME" class="control-label col-md-3 required">Название (a-zA-Z0-9_)</label>
+                            <div class="col-md-6">
+                                <input class="form-control" id="NAS_NAME" placeholder="" name="nas_name" value="" required="" pattern="^\w*$" maxlength="30" type="text">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="nas_type" class="control-label col-md-3 required">Тип</label>
+                            <div class="col-sm-9" id="NAS-type-wrapper">
+                                <div class="col-md-10">
+                                    <select name="nas_type" id="nas_type" class="form-control">
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="nas_alive" class="control-label col-sm-3">Alive (sec.)</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" id="nas_alive" placeholder="" name="NAS_ALIVE" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="NAS_DISABLE" class="control-label col-sm-3">Отключено</label>
+                            <div class="col-sm-5">
+                                <input id="NAS_DISABLE" name="NAS_DISABLE" value="1" type="checkbox">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-12 bg-primary">Управление</label>
+                            <label class="control-label col-md-3" for="NAS_MNG_IP_PORT">IP:PORT</label>
+                            <div class="col-md-9">
+                                <input id="NAS_MNG_IP_PORT" name="NAS_MNG_IP_PORT" value="" placeholder="" class="form-control" type="text">
+                            </div>
+                            <label class="control-label col-md-3" for="NAS_MNG_USER">Пользователь</label>
+                            <div class="col-md-9">
+                                <input id="NAS_MNG_USER" name="NAS_MNG_USER" value="" placeholder="" class="form-control" type="text">
+                            </div>
+                            <label class="control-label col-md-3" for="NAS_MNG_PASSWORD">Пароль</label>
+                            <div class="col-md-9">
+                                <input id="NAS_MNG_PASSWORD" name="NAS_MNG_PASSWORD" value="" placeholder="" class="form-control" type="password">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body text-left" id="nestedform">
+                    <div class="row">
+                        <div class="col-md-6">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row text-center">
+                        <input id="del_cols" name="del_cols" class="btn btn-default" value="Reset to default" type="submit">
+                        <input id="show_cols" name="show_cols" class="btn btn-primary" value="Save" type="submit">
+                    </div>
+                </div>
             </div>
         </div>
-    </form>
+    </div>
 {% endblock %}
