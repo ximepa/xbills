@@ -292,10 +292,6 @@
                     {% endif %}
                     <button type="button" class="btn btn-default btn-xs">{% trans 'Change password' %}</button>
                     <button type="button" class="btn btn-default btn-xs">{% trans 'Send password SMS' %}</button>
-                    {% if user_olltv %}
-                        <a class="btn btn-primary btn-xs" href="{% url 'olltv:user_change' uid %}" role="button">{% trans 'Olltv' %}</a>
-                    {% else %}
-                    {% endif %}
                 </div>
             </div>
         </div>
