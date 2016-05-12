@@ -45,7 +45,9 @@
                 <div class="form-group form-group-sm">
                     <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Deposit:' %}</label>
                     <div class="col-sm-8">
-                        {% if user.bill.deposit > 50 %}
+                        {% if user.credit > user.bill.deposit and user.credit > 0 %}
+                            <span class="label label-default form-control-static" >{{ user.bill.deposit|floatformat:4 }}</span>
+                        {% elif user.bill.deposit > 50 %}
                             <span class="label label-success form-control-static" >{{ user.bill.deposit|floatformat:4 }}</span>
                         {% elif user.bill.deposit < 50 and user.bill.deposit > 20 %}
                             <span class="label label-primary form-control-static" >{{ user.bill.deposit|floatformat:4 }}</span>

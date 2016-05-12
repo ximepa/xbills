@@ -61,42 +61,54 @@
                     </nav>
                 </div>
             {% endif %}
-            <table class="table table-hover table-striped table-condensed">
-                <thead>
-                    <tr class="info">
-                        <th>{% trans 'Number' %}</th>
-                        <th>{% trans 'Login' %}</th>
-                        <th>{% trans 'Date' %}</th>
-                        <th>{% trans 'Description' %}</th>
-                        <th>{% trans 'Sum' %}</th>
-                        <th>{% trans 'Deposit' %}</th>
-                        <th>{% trans 'Payments type' %}</th>
-                        <th>{% trans 'Administrator' %}</th>
-                        <th>UID</th>
-                        <th>-</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for f in fees %}
-                    <tr>
-                        <td>{{ f.id }}</td>
-                        <td><a href="{% url 'core:index' %}?index=clients&uid={{ f.uid.id }}">{{ f.uid.login }}</a></td>
-                        <td>{{ f.date }}</td>
-                        <td>{{ f.dsc }}</td>
-                        <td>{{ f.sum }}</td>
-                        {% if f.last_deposit < 0 %}
-                            <td><span style="color: red">{{ f.last_deposit }}</span></td>
-                        {% else %}
-                            <td>{{ f.last_deposit }}</td>
-                        {% endif %}
-                        <td>{{ f.method.name }}</td>
-                        <td>{{ f.aid.login }}</td>
-                        <td>{{ f.uid.id }}</td>
-                        <td><i class="fa fa-remove"></i></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="panel panel-default table-responsive">
+                <div class="panel-heading hidden-print">
+{#                    <div class="btn-group pull-left"><a title="" class="hidden-print" href=""><span class="glyphicon glyphicon-search"></span></a>#}
+{#                    </div>#}
+                    <div class="btn-group btn-group-xs" role="group">
+                    </div>
+{#                    <div class="btn-group pull-right">#}
+{#                        <button class="btn btn-default btn-xs" data-toggle="collapse" aria-expanded="true" data-target="#"><span class="glyphicon glyphicon-resize-small"></span>#}
+{#                        </button>#}
+{#                    </div>#}
+                </div>
+                <table class="table table-hover table-striped table-condensed" >
+                    <thead>
+                        <tr class="info">
+                            <th>{% trans 'Number' %}</th>
+                            <th>{% trans 'Login' %}</th>
+                            <th>{% trans 'Date' %}</th>
+                            <th>{% trans 'Description' %}</th>
+                            <th>{% trans 'Sum' %}</th>
+                            <th>{% trans 'Deposit' %}</th>
+                            <th>{% trans 'Payments type' %}</th>
+                            <th>{% trans 'Administrator' %}</th>
+                            <th>UID</th>
+                            <th>-</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for f in fees %}
+                        <tr>
+                            <td>{{ f.id }}</td>
+                            <td><a href="{% url 'core:index' %}?index=clients&uid={{ f.uid.id }}">{{ f.uid.login }}</a></td>
+                            <td>{{ f.date }}</td>
+                            <td>{{ f.dsc }}</td>
+                            <td>{{ f.sum }}</td>
+                            {% if f.last_deposit < 0 %}
+                                <td><span style="color: red">{{ f.last_deposit }}</span></td>
+                            {% else %}
+                                <td>{{ f.last_deposit }}</td>
+                            {% endif %}
+                            <td>{{ f.method.name }}</td>
+                            <td>{{ f.aid.login }}</td>
+                            <td>{{ f.uid.id }}</td>
+                            <td><i class="fa fa-remove"></i></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
             {% if fees.paginator.num_pages > 1 %}
                 <div class="pag-nav">
                     <nav class="center-block">
