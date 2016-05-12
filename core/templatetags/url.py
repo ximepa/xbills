@@ -4,8 +4,21 @@ import binascii
 from django import template
 import math
 from core.models import num_to_ip
+from django.conf import settings
+import os
 
 register = template.Library()
+
+
+@register.simple_tag
+def check_module(module):
+    modules = settings.INSTALLED_APPS
+    olltv_module_path = os.path.join(settings.BASE_DIR,  module)
+    if module in modules and os.path.exists(olltv_module_path):
+        return True
+    else:
+        return False
+
 
 @register.simple_tag
 def url_replace(request, field, value):

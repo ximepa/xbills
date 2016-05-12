@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load staticfiles %}
+{% load url %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -437,9 +438,11 @@
                                 <ul>
                                     <li class="dropdown-header"><i class="fa fa-users fa-fw"></i> {% trans 'Clients' %}</li>
                                     <li><a href="{% url 'core:clients' %}"><i class="fa fa-user fa-fw"></i> {% trans 'Logins' %}</a></li>
-                                    <li><a href="{% url 'olltv:index' %}"><i class="fa fa-television fa-fw"></i> {% trans 'OLLTV' %}</a></li>
+                                    {% check_module 'olltv' as check_module_olltv %}
+                                    {% if check_module_olltv %}
+                                        <li><a href="{% url 'olltv:index' %}"><i class="fa fa-television fa-fw"></i> {% trans 'OLLTV' %}</a></li>
+                                    {% endif %}
                                     <li class="disabled"><a href="#">How to use</a></li>
-                                    <li><a href="#">{% if 'olltv' in request.get_full_path %}true{% else %}false{% endif %}</a></li>
                                     <li class="divider"></li>
                                     <li class="dropdown-header">Dropdowns</li>
                                     <li><a href="#">Example</a></li>
