@@ -7,10 +7,10 @@ from django.http import HttpResponseNotFound
 from django.core.urlresolvers import reverse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
-from core.models import User, Tp, Iptv, Bill, Fees, Shedule, AdminLog, Admin, ip_to_num, UserPi, AbonTarifs, AbonUserList, TpGroups
+from core.models import User, Tp, Bill, Fees, Shedule, AdminLog, Admin, ip_to_num, UserPi, AbonTarifs, AbonUserList, TpGroups
 from .forms import UserFilterForm, DeviceAddForm, TypeForm, DeviceRemoveForm, GroupFilterForm
 from django.conf import settings
-from .models import IptvDeviceType, IptvDevice
+from .models import IptvDeviceType, IptvDevice, Iptv
 import requests
 import datetime
 import dateutils
@@ -132,7 +132,7 @@ def user_change(request, uid):
             try:
                 iptv = Iptv.objects.get(uid=user.id)
                 print iptv.tp_id
-                cur_tp = Tp.objects.get(tp_id=iptv.tp_id)
+                cur_tp = Tp.objects.get(id=iptv.tp_id)
             except Iptv.DoesNotExist:
                 iptv = False
                 if 'activate-user' in request.POST:
@@ -354,6 +354,7 @@ def user_change(request, uid):
                         try:
                             dev = IptvDevice.objects.get(mac=request.POST['mac'], serial_num=request.POST['serial_num'])
                             dev.status = 0
+                            dev.uid = user
                             dev.save()
                         except IptvDevice.DoesNotExist:
                             dev = IptvDevice.objects.create(

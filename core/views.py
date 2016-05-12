@@ -5,7 +5,8 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from .auth_backend import AuthBackend
-from .models import User, Payment, Bill, Fees, Iptv, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog
+from .models import User, Payment, Bill, Fees, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog
+
 from django.contrib import messages
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -118,7 +119,6 @@ def client(request, uid):
             res = '<option value=' + str(item.street_id) + '>' + item.number.encode('utf8') + '</option>'
             dict_resp.append(res1 + res)
         return HttpResponse(dict_resp)
-
     user = User.objects.get(id=uid)
     #bill = Bill.objects.get(company_id=user.company)
     #print bill
@@ -127,6 +127,37 @@ def client(request, uid):
     dv_session = Dv_calls.objects.filter(uid=uid)
     if module_check.check(request, 'olltv'):
         olltv_module = True
+        from olltv.models import Iptv, IptvDevice, IptvDeviceType
+        from olltv.api import oll_user_info, oll_check_bundle, olltv_auth
+        try:
+            user_olltv = Iptv.objects.get(uid=uid)
+            olltv_exist = True
+            user_olltv_dev = IptvDevice.objects.filter(uid=uid)
+            try:
+                auth = olltv_auth()
+            except:
+                auth = None
+            if auth != None:
+                user_info = oll_user_info(account=uid, hash=auth['hash'])
+                get_user_info = user_info['data']
+                tp_list_dict = user_info['data']['bought_subs']
+                tp_count = user_info['tp_count']
+                tp_list = []
+                if tp_count < 1:
+                    tp_list = []
+                else:
+                    for tp in tp_list_dict:
+                        # check_bundle
+                        check_bundle = oll_check_bundle(account=user.id, tp=tp['sub_id'], hash=auth['hash'])
+                        if check_bundle['mess'] == 'Error':
+                            messages.warning(request, check_bundle)
+                        else:
+                            get_bundle_status = check_bundle['data']
+                            tp.update({'status': get_bundle_status})
+                            tp_list.append(tp)
+                        print tp_list
+        except Iptv.DoesNotExist:
+            olltv_exist = False
     else:
         olltv_module = False
     if 'show_password' in request.GET:

@@ -235,9 +235,41 @@
                 </div>
             </div>
         </div>
+        {% if olltv_exist %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label for="olltv_device" class="col-sm-4 control-label">{% trans 'Iptv device' %}:</label>
+                        <div class="col-sm-8">
+                            <ul class="list-group">
+                                {% for dev in user_olltv_dev %}
+                                    {% if dev.status == 1 %}
+                                        <li class="list-group-item disabled" data-toggle="tooltip" data-placement="top" title="{{ dev.date_added }} - {{ dev.status }}">{{ dev.id }} - {% trans 'MAC' %}: {{ dev.mac }} | {% trans 'Serial' %}: {{ dev.serial_num }}</li>
+                                    {% else %}
+                                        <li class="list-group-item" data-toggle="tooltip" data-placement="top" title="{{ dev.date_added }} - {{ dev.status }}">{{ dev.id }} - {% trans 'MAC' %}: {{ dev.mac }} | {% trans 'Serial' %}: {{ dev.serial_num }}</li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group form-group-sm">
+                        <label for="expire-date" class="col-sm-4 control-label">{% trans 'Iptv tarif' %}:</label>
+                        <div class="col-sm-8">
+                            <ul class="list-group">
+                                {% for tp in tp_list %}
+                                    <li class="list-group-item" data-toggle="tooltip" data-placement="top" title="{{ tp.start_date }} - {{ tp.expiration_date }}">{% trans 'Name' %}: {{ tp.name }} | {% trans 'Binding code' %}: {{ tp.device_binding_code }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+        {% else %}
+        {% endif %}
         <div class="row">
             <div class="col-md-12">
-                <div class="span7 text-center">
+                <div class="text-center">
                     {% if user_password %}
                         <span class="label label-success">{{ user_password }}</span>
                     {% else %}

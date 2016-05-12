@@ -456,22 +456,6 @@ class AdminLog(models.Model):
         ordering = ['-datetime']
 
 
-class Iptv(models.Model):
-    uid = models.OneToOneField(User, db_column='uid', primary_key=True)
-    tp = models.ForeignKey(Tp, db_column='tp_id')
-    mac = models.CharField(max_length=120, db_column='cid')
-    disable = models.CharField(max_length=1, default=0, db_column='disable')
-    registration = models.DateField(db_column='registration')
-    serial = models.CharField(max_length=120, blank=True, db_column='pin')
-
-    class Meta:
-        db_table = 'iptv_main'
-        ordering = ['-registration']
-
-    def __unicode__(self):
-        return str(self.uid)
-
-
 class Fees(models.Model):
 
     date = models.DateTimeField(default=datetime.datetime.now)
