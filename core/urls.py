@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^clients/$', views.clients, name='clients'),
     url(r'^nas/$', views.nas, name='nas'),
+    url(r'^nas/(?P<id>\d+)/$', views.nas_edit, name='nas_edit'),
     url(r'^clients/(?P<uid>\d+)/$', views.client, name='client'),
     url(r'^search/$', views.search, name='search'),
     url(r'^login/$', views.user_login, name='login'),
