@@ -46,7 +46,8 @@
                             {% url 'core:clients' as core_clients_url %}
                             {% url 'olltv:index' as olltv_index_url %}
                             {% url 'core:nas' as core_nas_url %}
-                            {% if request.get_full_path == core_clients_url or request.get_full_path == olltv_index_url or request.get_full_path == core_nas_url %}
+                            {% url 'core:administrators' as core_administrators_url %}
+                            {% if request.get_full_path == core_clients_url or request.get_full_path == olltv_index_url or request.get_full_path == core_nas_url or request.get_full_path == core_administrators_url %}
                                 <a class="dropdown-toggle a-nav linked" data-toggle="dropdown" href="{% url 'core:clients' %}"><i class="fa fa-bars fa-2x" aria-hidden="true"></i><br/>{% trans 'Menu' %} <span class="fa fa-caret-down"></span></a>
                             {% else %}
                                 <a class="dropdown-toggle a-nav" data-toggle="dropdown" href="{% url 'core:clients' %}"><i class="fa fa-bars fa-2x" aria-hidden="true"></i><br/>{% trans 'Menu' %} <span class="fa fa-caret-down"></span></a>
@@ -56,16 +57,16 @@
                                     <ul>
                                         <li class="dropdown-header"><i class="fa fa-users fa-fw"></i> {% trans 'Clients' %}</li>
                                         {% if request.get_full_path == core_clients_url %}
-                                            <li><a href="{% url 'core:clients' %}" class="linked"><i class="fa fa-user fa-fw"></i> {% trans 'Logins' %}</a></li>
+                                            <li><a href="{% url 'core:clients' %}" class="linked"><i class="fa fa-user fa-fw"></i>{% trans 'Logins' %}</a></li>
                                         {% else %}
-                                            <li><a href="{% url 'core:clients' %}"><i class="fa fa-user fa-fw"></i> {% trans 'Logins' %}</a></li>
+                                            <li><a href="{% url 'core:clients' %}"><i class="fa fa-user fa-fw"></i>{% trans 'Logins' %}</a></li>
                                         {% endif %}
                                         {% check_module 'olltv' as check_module_olltv %}
                                         {% if check_module_olltv %}
                                             {% if request.get_full_path == olltv_index_url %}
-                                                <li><a href="{% url 'olltv:index' %}" class="linked"><i class="fa fa-television fa-fw"></i> {% trans 'OLLTV' %}</a></li>
+                                                <li><a href="{% url 'olltv:index' %}" class="linked"><i class="fa fa-television fa-fw"></i>{% trans 'OLLTV' %}</a></li>
                                             {% else %}
-                                                <li><a href="{% url 'olltv:index' %}"><i class="fa fa-television fa-fw"></i> {% trans 'OLLTV' %}</a></li>
+                                                <li><a href="{% url 'olltv:index' %}"><i class="fa fa-television fa-fw"></i>{% trans 'OLLTV' %}</a></li>
                                             {% endif %}
                                         {% endif %}
                                         <li class="disabled"><a href="#">How to use</a></li>
@@ -93,12 +94,16 @@
                                 <li class="col-sm-3">
                                     <ul>
                                         <li class="dropdown-header">{% trans 'Configuration' %}</li>
-                                        {% if request.get_full_path == core_nas_url %}
-                                            <li><a href="{% url 'core:nas' %}" class="linked"><i class="fa fa-server fa-fw"></i> {% trans 'Access servers' %}</a></li>
+                                        {% if request.get_full_path == core_administrators_url %}
+                                            <li><a href="{% url 'core:administrators' %}" class="linked"><i class="fa fa-users fa-fw"></i>{% trans 'Administrators' %}</a></li>
                                         {% else %}
-                                            <li><a href="{% url 'core:nas' %}"><i class="fa fa-server fa-fw"></i> {% trans 'Access servers' %}</a></li>
+                                            <li><a href="{% url 'core:administrators' %}"><i class="fa fa-users fa-fw"></i>{% trans 'Administrators' %}</a></li>
                                         {% endif %}
-                                        <li><a href="#">Sizing</a></li>
+                                        {% if request.get_full_path == core_nas_url %}
+                                            <li><a href="{% url 'core:nas' %}" class="linked"><i class="fa fa-server fa-fw"></i>{% trans 'Access servers' %}</a></li>
+                                        {% else %}
+                                            <li><a href="{% url 'core:nas' %}"><i class="fa fa-server fa-fw"></i>{% trans 'Access servers' %}</a></li>
+                                        {% endif %}
                                         <li><a href="#">Checkboxes and radio addons</a></li>
                                         <li class="divider"></li>
                                         <li class="dropdown-header">Navs</li>
