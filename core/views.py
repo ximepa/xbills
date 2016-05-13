@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from .auth_backend import AuthBackend
-from .models import User, Payment, Bill, Fees, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog
+from .models import User, Payment, Bill, Fees, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog, Dv_log
 
 from django.contrib import messages
 from django.conf import settings
@@ -63,6 +63,33 @@ def client_errors(request, uid):
         page_list = p
     pre_end = errors.paginator.num_pages - 2
     return render(request, 'user_errors.html', locals())
+
+
+def client_statistics(request, uid):
+    user_statistics = Dv_log.objects.filter(uid=uid)[:200]
+    paginator = Paginator(user_statistics, settings.USER_ERRORS_PER_PAGE)
+    page = request.GET.get('page', 1)
+    try:
+        statistics = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        statistics = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        statistics = paginator.page(paginator.num_pages)
+    if int(page) > 5:
+        start = str(int(page)-5)
+    else:
+        start = 1
+    if int(page) < paginator.num_pages-5:
+        end = str(int(page)+5+1)
+    else:
+        end = paginator.num_pages+1
+    page_range = range(int(start), int(end)),
+    for p in page_range:
+        page_list = p
+    pre_end = statistics.paginator.num_pages - 2
+    return render(request, 'user_statistics.html', locals())
 
 
 def search(request):

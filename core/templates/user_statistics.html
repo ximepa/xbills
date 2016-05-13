@@ -15,13 +15,13 @@
             <div class="pag-nav">
                 <nav class="center-block">
                     <ul class="pagination pagination-sm">
-                        {% if errors.has_previous %}
+                        {% if statistics.has_previous %}
                             <li>
                                 <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
                                     <span aria-hidden="true">1</span>
                                 </a>
                             </li>
-                            {% if errors.number > 2 %}
+                            {% if statistics.number > 2 %}
                                 <li class="disabled">
                                     <a href="#" aria-label="Previous">
                                         <span aria-hidden="true">...</span>
@@ -30,7 +30,7 @@
                             {% endif %}
                         {% endif %}
                         {% for p in page_list %}
-                            {% if errors.number == p %}
+                            {% if statistics.number == p %}
                                 <li class="active">
                                     <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
                                 </li>
@@ -40,15 +40,15 @@
                                 </li>
                             {% endif %}
                         {% endfor %}
-                        {% if errors.has_next %}
+                        {% if statistics.has_next %}
                             <li class="disabled">
                                 <a href="#" aria-label="Previous">
                                     <span aria-hidden="true">...</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="?{% url_replace_page request 'page' errors.paginator.num_pages %}" aria-label="Next">
-                                    <span aria-hidden="true">{{ errors.paginator.num_pages }}</span>
+                                <a href="?{% url_replace_page request 'page' statistics.paginator.num_pages %}" aria-label="Next">
+                                    <span aria-hidden="true">{{ statistics.paginator.num_pages }}</span>
                                 </a>
                             </li>
                         {% else %}
@@ -64,23 +64,29 @@
             <table class="table table-hover table-striped table-condensed">
                 <thead>
                     <tr class="info">
-                        <th><a href="?{% url_replace request 'order_by' 'date' %}">{% trans 'Date' %}</a></th>
-                        <th><a href="?{% url_replace request 'order_by' 'log_type' %}">{% trans 'Log type' %}</a></th>
-                        <th><a href="?{% url_replace request 'order_by' 'action' %}">{% trans 'Action' %}</a></th>
-                        <th><a href="?{% url_replace request 'order_by' 'user' %}">{% trans 'User' %}</a></th>
-                        <th><a href="?{% url_replace request 'order_by' 'message' %}">{% trans 'Message' %}</a></th>
-                        <th><a href="?{% url_replace request 'order_by' 'nas_id' %}">{% trans 'Nas ID' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'start_sessions' %}">{% trans 'Start Sessions' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'duration' %}">{% trans 'Duration' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'sent' %}">{% trans 'Sent' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'received' %}">{% trans 'Received' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'ip' %}">{% trans 'IP' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'cid' %}">{% trans 'CID' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'tarif_plan' %}">{% trans 'Tarif plan' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'sum' %}">{% trans 'Sum' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'nas' %}">{% trans 'Nas' %}</a></th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for e in errors %}
+                    {% for s in statistics %}
                     <tr>
-                        <td>{{ e.date }}</td>
-                        <td>{{ e.log_type }}</td>
-                        <td>{{ e.action }}</td>
-                        <td>{{ e.user }}</td>
-                        <td>{{ e.message }}</td>
-                        <td>{{ e.nas_id }}</td>
+                        <td>{{ s.start }}</td>
+                        <td>{{ s.duration }}</td>
+                        <td>{{ s.sent }}</td>
+                        <td>{{ s.recv }}</td>
+                        <td>{% ip_convert s.ip %}</td>
+                        <td>{{ s.CID }}</td>
+                        <td>{{ s.tp_id }}</td>
+                        <td>{{ s.sum }}</td>
+                        <td>{{ s.nas_id }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -88,13 +94,13 @@
             <div class="pag-nav">
                 <nav class="center-block">
                     <ul class="pagination pagination-sm">
-                        {% if errors.has_previous %}
+                        {% if statistics.has_previous %}
                             <li>
                                 <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
                                     <span aria-hidden="true">1</span>
                                 </a>
                             </li>
-                            {% if errors.number > 2 %}
+                            {% if statistics.number > 2 %}
                                 <li class="disabled">
                                     <a href="#" aria-label="Previous">
                                         <span aria-hidden="true">...</span>
@@ -103,7 +109,7 @@
                             {% endif %}
                         {% endif %}
                         {% for p in page_list %}
-                            {% if errors.number == p %}
+                            {% if statistics.number == p %}
                                 <li class="active">
                                     <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
                                 </li>
@@ -113,15 +119,15 @@
                                 </li>
                             {% endif %}
                         {% endfor %}
-                        {% if errors.has_next %}
+                        {% if statistics.has_next %}
                             <li class="disabled">
                                 <a href="#" aria-label="Previous">
                                     <span aria-hidden="true">...</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="?{% url_replace_page request 'page' errors.paginator.num_pages %}" aria-label="Next">
-                                    <span aria-hidden="true">{{ errors.paginator.num_pages }}</span>
+                                <a href="?{% url_replace_page request 'page' statistics.paginator.num_pages %}" aria-label="Next">
+                                    <span aria-hidden="true">{{ statistics.paginator.num_pages }}</span>
                                 </a>
                             </li>
                         {% else %}

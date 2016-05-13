@@ -393,6 +393,28 @@ class Nas(models.Model):
     def __unicode__(self):
         return str(self.name)
 
+class Dv_log(models.Model):
+    start = models.DateTimeField(default='0000-00-00 00:00:00', primary_key=True)
+    duration = models.IntegerField(max_length=11, default=0)
+    sent = models.IntegerField(max_length=10, default=0)
+    recv = models.IntegerField(max_length=10, default=0)
+    sum = models.FloatField(default='0.000000')
+    port_id = models.SmallIntegerField(default=0)
+    nas_id = models.SmallIntegerField(default=0)
+    ip = models.IntegerField(max_length=10, default=0)
+    uid = models.IntegerField(max_length=11)
+    tp_id = models.SmallIntegerField(max_length=5, default=0)
+    CID = models.CharField(max_length=18)
+
+
+
+    class Meta:
+        db_table = 'dv_log'
+        ordering = ['start']
+
+    def __unicode__(self):
+        return str(self.start)
+
 class Dv_calls(models.Model):
     status = models.IntegerField(default=0, db_column='status')
     user_name = models.CharField(max_length=32, db_column='user_name')
