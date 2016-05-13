@@ -17,7 +17,13 @@ def apiversion():
 
 @register.simple_tag
 def version():
-    if settings.SHOW_VERSION:
-        return str(settings.COMPANY_NAME) + ' ' + str(settings.PROJECT_VERSION)
+    header = ''
+    if hasattr(settings, 'COMPANY_NAME'):
+        header += settings.COMPANY_NAME
+    if hasattr(settings, 'SHOW_VERSION'):
+        if hasattr(settings, 'COMPANY_NAME'):
+            return header + ' ' + str(settings.PROJECT_VERSION)
+        else:
+            return str(settings.PROJECT_VERSION)
     else:
-        return str(settings.COMPANY_NAME)
+        return header
