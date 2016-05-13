@@ -17,10 +17,6 @@ def apiversion():
 
 @register.simple_tag
 def version():
-    try:
-        settings.SHOW_VERSION
-    except:
-        return ''
     if settings.SHOW_VERSION:
         return str(settings.COMPANY_NAME) + ' ' + str(settings.PROJECT_VERSION)
     else:
