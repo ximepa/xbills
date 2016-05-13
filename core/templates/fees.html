@@ -75,14 +75,18 @@
                 <table class="table table-hover table-striped table-condensed" >
                     <thead>
                         <tr class="info">
-                            <th>{% trans 'Number' %}</th>
+                            <th>
+                                <a href="?{% url_replace request 'order_by' 'id' %}">{% trans 'Number' %}</a>
+                            </th>
                             <th>{% trans 'Login' %}</th>
-                            <th>{% trans 'Date' %}</th>
-                            <th>{% trans 'Description' %}</th>
-                            <th>{% trans 'Sum' %}</th>
-                            <th>{% trans 'Deposit' %}</th>
-                            <th>{% trans 'Payments type' %}</th>
-                            <th>{% trans 'Administrator' %}</th>
+                            <th>
+                                <a href="?{% url_replace request 'order_by' 'date' %}">{% trans 'Date' %}</a>
+                            </th>
+                            <th><a href="?{% url_replace request 'order_by' 'dsc' %}">{% trans 'Description' %}</a></th>
+                            <th><a href="?{% url_replace request 'order_by' 'sum' %}">{% trans 'Sum' %}</a></th>
+                            <th><a href="?{% url_replace request 'order_by' 'last_deposit' %}">{% trans 'Deposit' %}</a></th>
+                            <th><a href="?{% url_replace request 'order_by' 'method' %}">{% trans 'Payments type' %}</a></th>
+                            <th><a href="?{% url_replace request 'order_by' 'aid' %}">{% trans 'Administrator' %}</a></th>
                             <th>UID</th>
                             <th>-</th>
                         </tr>
