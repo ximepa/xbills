@@ -71,8 +71,8 @@
                                 </li>
                                 <li class="col-sm-3">
                                     <ul>
-                                        <li class="dropdown-header">Input groups</li>
-                                        <li><a href="#">Basic example</a></li>
+                                        <li class="dropdown-header">{% trans 'Configuration' %}</li>
+                                        <li><a href="{% url 'core:nas' %}">{% trans 'Servers' %}</a></li>
                                         <li><a href="#">Sizing</a></li>
                                         <li><a href="#">Checkboxes and radio addons</a></li>
                                         <li class="divider"></li>
@@ -104,7 +104,7 @@
             </nav>
             <div class="container-fluid">
                 {% block layout %}
-                {% endblock %}
+                      {% endblock %}
             </div>
         </div>
     {% endblock %}
