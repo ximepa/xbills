@@ -8,11 +8,19 @@ register = template.Library()
 
 @register.simple_tag
 def apiversion():
+    try:
+        settings.OLLTVAPIVERSION
+    except:
+        return ''
     return settings.OLLTVAPIVERSION
 
 
 @register.simple_tag
 def version():
+    try:
+        settings.SHOW_VERSION
+    except:
+        return ''
     if settings.SHOW_VERSION:
         return str(settings.COMPANY_NAME) + ' ' + str(settings.PROJECT_VERSION)
     else:
