@@ -267,6 +267,7 @@
                                 </div>
                             {% endif %}
                         {% endif %}
+                    </div>
                 {% endif %}
                 <div class="row">
                     <div class="col-md-12">
@@ -285,52 +286,52 @@
                 <input type="submit" class="btn btn-primary btn-xs center-block" value="{% trans 'Change' %}">
                 <hr/>
                 {% if dv_session %}
-                <div class="row">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-6 center-col text-center">
-                        <table class="table table-striped table-hover table-condensed">
-                            <thead class="">
-                                <tr class="border-color">
-                                    <th class="text-center">IP</th>
-                                    <th class="text-center">Session time</th>
-                                    <th class="text-center">Trafic in</th>
-                                    <th class="text-center">Trafic out</th>
-                                    <th class="text-center">Server</th>
-                                    <th class="text-center">Zap</th>
-                                    <th class="text-center">Hangup</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for s in dv_session %}
-                                    <tr>
-                                        <td>
-                                            {% ip_convert s.framed_ip_address %}
-                                        </td>
-                                        <td>
-                                            {% convert_timestamp_to_time s.started %}
-                                        </td>
-                                        <td>
-                                            {% convert_bytes  s.acct_input_octets s.acct_input_gigawords%}
-                                        </td>
-                                        <td>
-                                            {% convert_bytes s.acct_output_octets s.acct_output_gigawords%}
-                                        </td>
-                                        <td>
-                                            {{ s.nas }}
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-xs btn-link"><span style="margin-right: 5px" class="glyphicon glyphicon-remove"></span></button>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-xs btn-link"><span style="margin-right: 5px" class="glyphicon glyphicon-off"></span></button>
-                                        </td>
+                    <div class="row">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8 text-center">
+                            <table class="table table-striped table-hover table-condensed">
+                                <thead class="">
+                                    <tr class="border-color">
+                                        <th class="text-center">IP</th>
+                                        <th class="text-center">Session time</th>
+                                        <th class="text-center">Trafic in</th>
+                                        <th class="text-center">Trafic out</th>
+                                        <th class="text-center">Server</th>
+                                        <th class="text-center">Zap</th>
+                                        <th class="text-center">Hangup</th>
                                     </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {% for s in dv_session %}
+                                        <tr>
+                                            <td>
+                                                {% ip_convert s.framed_ip_address %}
+                                            </td>
+                                            <td>
+                                                {% convert_timestamp_to_time s.started %}
+                                            </td>
+                                            <td>
+                                                {% convert_bytes  s.acct_input_octets s.acct_input_gigawords%}
+                                            </td>
+                                            <td>
+                                                {% convert_bytes s.acct_output_octets s.acct_output_gigawords%}
+                                            </td>
+                                            <td>
+                                                {{ s.nas }}
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-xs btn-link"><span style="margin-right: 5px" class="glyphicon glyphicon-remove"></span></button>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-xs btn-link"><span style="margin-right: 5px" class="glyphicon glyphicon-off"></span></button>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-2"></div>
                     </div>
-                    <div class="col-md-2"></div>
-                </div>
                 {% endif %}
             </form>
         </div>
