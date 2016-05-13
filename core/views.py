@@ -66,7 +66,10 @@ def client_errors(request, uid):
 
 
 def client_statistics(request, uid):
-    user_statistics = Dv_log.objects.filter(uid=uid)[:200]
+    order_by = request.GET.get('order_by', '-start')
+    print order_by
+    user = User.objects.get(id=uid)
+    user_statistics = Dv_log.objects.filter(uid=uid).order_by(order_by)
     paginator = Paginator(user_statistics, settings.USER_ERRORS_PER_PAGE)
     page = request.GET.get('page', 1)
     try:
