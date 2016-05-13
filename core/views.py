@@ -39,7 +39,7 @@ def nas(request):
 
 def client_errors(request, uid):
     user = User.objects.get(id=uid)
-    user_errors = ErrorsLog.objects.filter(user=user.login)[:200]
+    user_errors = ErrorsLog.objects.filter(user=user.login)
     paginator = Paginator(user_errors, settings.USER_ERRORS_PER_PAGE)
     page = request.GET.get('page', 1)
     try:

@@ -64,7 +64,7 @@
             <table class="table table-hover table-striped table-condensed">
                 <thead>
                     <tr class="info">
-                        <th><a href="?{% url_replace request 'order_by' 'start_sessions' %}">{% trans 'Start Sessions' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'start' %}">{% trans 'Start Sessions' %}</a></th>
                         <th><a href="?{% url_replace request 'order_by' 'duration' %}">{% trans 'Duration' %}</a></th>
                         <th><a href="?{% url_replace request 'order_by' 'sent' %}">{% trans 'Sent' %}</a></th>
                         <th><a href="?{% url_replace request 'order_by' 'received' %}">{% trans 'Received' %}</a></th>
@@ -80,8 +80,8 @@
                     <tr>
                         <td>{{ s.start }}</td>
                         <td>{{ s.duration }}</td>
-                        <td>{{ s.sent }}</td>
-                        <td>{{ s.recv }}</td>
+                        <td>{% sizify s.sent  %}</td>
+                        <td>{% sizify s.recv  %}</td>
                         <td>{% ip_convert s.ip %}</td>
                         <td>{{ s.CID }}</td>
                         <td>{{ s.tp_id }}</td>

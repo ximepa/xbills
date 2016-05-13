@@ -405,12 +405,13 @@ class Dv_log(models.Model):
     uid = models.IntegerField(max_length=11)
     tp_id = models.SmallIntegerField(max_length=5, default=0)
     CID = models.CharField(max_length=18)
-
+    acct_input_gigawords = models.SmallIntegerField(max_length=4, default=0, db_column='acct_input_gigawords')
+    acct_output_gigawords = models.SmallIntegerField(max_length=4, default=0, db_column='acct_output_gigawords')
 
 
     class Meta:
         db_table = 'dv_log'
-        ordering = ['start']
+        ordering = ['duration']
 
     def __unicode__(self):
         return str(self.start)
