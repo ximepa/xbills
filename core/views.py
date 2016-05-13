@@ -30,14 +30,9 @@ def index(request):
         return render(request, 'index.html', locals())
     return render(request, 'layout_edit.html', locals())
 
-def nas_edit(request, id):
-    print
-    nas_id = Nas.objects.all()
-    return render(request, 'nas.html', locals())
-
 
 def nas(request):
-    print
+    print request.POST
     nas_id = Nas.objects.all()
     return render(request, 'nas.html', locals())
 
