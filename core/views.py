@@ -5,7 +5,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from .auth_backend import AuthBackend
-from .models import User, Payment, Bill, Fees, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog
+from .models import User, Payment, Bill, Fees, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog, Admin
 
 from django.contrib import messages
 from django.conf import settings
@@ -391,3 +391,11 @@ def user_group(request, uid):
 def user_company(request, uid):
     user = User.objects.get(id=uid)
     return render(request, 'user_payments.html', locals())
+
+
+@login_required()
+def administrators(request):
+    admins = Admin.objects.all()
+    for admin in admins:
+        print admin
+    return render(request, 'administrators.html', locals())

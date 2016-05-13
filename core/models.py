@@ -25,13 +25,14 @@ class Admin(AbstractBaseUser):
     name = models.CharField(max_length=50, db_column='name')
     id = models.AutoField(unique=True, primary_key=True, db_column='aid')
     regdate = models.DateField(auto_now_add=True, db_column='regdate')
+    disable = models.BooleanField(default=0, db_column='disable')
     objects = BaseUserManager()
     #last_login = models.DateTimeField(blank=True, null=True, db_column='last_login')
     USERNAME_FIELD = 'id'
     REQUIRED_FIELDS = []
 
     def __unicode__(self):
-        return self.id
+        return str(self.id)
 
     @property
     def get_hash_password(self):
