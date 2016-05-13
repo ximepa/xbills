@@ -45,7 +45,8 @@
                         <li class="dropdown dropdown-large">
                             {% url 'core:clients' as core_clients_url %}
                             {% url 'olltv:index' as olltv_index_url %}
-                            {% if request.get_full_path == core_clients_url or request.get_full_path == olltv_index_url %}
+                            {% url 'core:nas' as core_nas_url %}
+                            {% if request.get_full_path == core_clients_url or request.get_full_path == olltv_index_url or request.get_full_path == core_nas_url %}
                                 <a class="dropdown-toggle a-nav linked" data-toggle="dropdown" href="{% url 'core:clients' %}"><i class="fa fa-bars fa-2x" aria-hidden="true"></i><br/>{% trans 'Menu' %} <span class="fa fa-caret-down"></span></a>
                             {% else %}
                                 <a class="dropdown-toggle a-nav" data-toggle="dropdown" href="{% url 'core:clients' %}"><i class="fa fa-bars fa-2x" aria-hidden="true"></i><br/>{% trans 'Menu' %} <span class="fa fa-caret-down"></span></a>
@@ -92,7 +93,11 @@
                                 <li class="col-sm-3">
                                     <ul>
                                         <li class="dropdown-header">{% trans 'Configuration' %}</li>
-                                        <li><a href="{% url 'core:nas' %}">{% trans 'Servers' %}</a></li>
+                                        {% if request.get_full_path == core_nas_url %}
+                                            <li><a href="{% url 'core:nas' %}" class="linked"><i class="fa fa-server fa-fw"></i> {% trans 'Access servers' %}</a></li>
+                                        {% else %}
+                                            <li><a href="{% url 'core:nas' %}"><i class="fa fa-server fa-fw"></i> {% trans 'Access servers' %}</a></li>
+                                        {% endif %}
                                         <li><a href="#">Sizing</a></li>
                                         <li><a href="#">Checkboxes and radio addons</a></li>
                                         <li class="divider"></li>
