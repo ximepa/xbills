@@ -17,7 +17,6 @@ urlpatterns = [
     url(r'^fees/$', views.fees, name='fees'),
     url(r'^settings/administrators/$', views.administrators, name='administrators'),
     url(r'^settings/nas/$', views.nas, name='nas'),
-    url(r'^settings/nas/(?P<id>\d+)/$', views.nas_edit, name='nas_edit'),
     url(r'^payments/(?P<uid>\d+)/$', views.client_payments, name='client_payments'),
     url(r'^fees/(?P<uid>\d+)/$', views.client_fees, name='client_fees'),
     url(r'^clients/(?P<uid>\d+)/group/$', views.user_group, name='user_group'),
