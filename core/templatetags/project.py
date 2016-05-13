@@ -5,6 +5,7 @@ from django.conf import settings
 
 register = template.Library()
 
+
 @register.simple_tag
 def apiversion():
     return settings.OLLTVAPIVERSION
@@ -12,4 +13,7 @@ def apiversion():
 
 @register.simple_tag
 def version():
-    return settings.PROJECTVERSION
+    if settings.SHOW_VERSION:
+        return str(settings.COMPANY_NAME) + ' ' + str(settings.PROJECT_VERSION)
+    else:
+        return str(settings.COMPANY_NAME)
