@@ -401,3 +401,18 @@ ol, ul {
     margin-top: 0;
     margin-bottom: 0;
 }
+.my-nav .a-nav{
+    text-align: center;
+    border-left: 1px solid #e7e7e7;
+}
+.fa-2x-new {
+    font-size: 1.4em;
+}
+.navbar-nav > li > .a-nav {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.linked{
+    border-bottom: 1px solid orange;
+    /*background-color: #e7e7e7 ;*/
+}

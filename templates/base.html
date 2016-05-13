@@ -34,18 +34,37 @@
                     <a class="navbar-brand" href="#">Xbills v0.0.4</a>
                 </div>
                 <div class="collapse navbar-collapse js-navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li><a href="{% url 'core:index' %}"><i class="fa fa-dashboard fa-fw"></i> {% trans 'Dashboard' %}</a></li>
+                    <ul class="nav navbar-nav my-nav">
+                        {% url 'core:index' as core_index_url %}
+                        {% if request.get_full_path == core_index_url %}
+                            <li><a href="{{ core_index_url }}" class="a-nav linked"><i class="fa fa-dashboard fa-2x"></i><br/>{% trans 'Dashboard' %}</a></li>
+                        {% else %}
+                            <li><a href="{{ core_index_url }}" class="a-nav"><i class="fa fa-dashboard fa-2x"></i><br/>{% trans 'Dashboard' %}</a></li>
+                        {% endif %}
                         <li class="dropdown dropdown-large">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="{% url 'core:clients' %}"><i class="fa fa-bars fa-fw" aria-hidden="true"></i> {% trans 'Menu' %} <span class="fa fa-caret-down"></span></a>
+                            {% url 'core:clients' as core_clients_url %}
+                            {% url 'olltv:index' as olltv_index_url %}
+                            {% if request.get_full_path == core_clients_url or request.get_full_path == olltv_index_url %}
+                                <a class="dropdown-toggle a-nav linked" data-toggle="dropdown" href="{% url 'core:clients' %}"><i class="fa fa-bars fa-2x" aria-hidden="true"></i><br/>{% trans 'Menu' %} <span class="fa fa-caret-down"></span></a>
+                            {% else %}
+                                <a class="dropdown-toggle a-nav" data-toggle="dropdown" href="{% url 'core:clients' %}"><i class="fa fa-bars fa-2x" aria-hidden="true"></i><br/>{% trans 'Menu' %} <span class="fa fa-caret-down"></span></a>
+                            {% endif %}
                             <ul class="dropdown-menu dropdown-menu-large row">
                                 <li class="col-sm-3">
                                     <ul>
                                         <li class="dropdown-header"><i class="fa fa-users fa-fw"></i> {% trans 'Clients' %}</li>
-                                        <li><a href="{% url 'core:clients' %}"><i class="fa fa-user fa-fw"></i> {% trans 'Logins' %}</a></li>
+                                        {% if request.get_full_path == core_clients_url %}
+                                            <li><a href="{% url 'core:clients' %}" class="linked"><i class="fa fa-user fa-fw"></i> {% trans 'Logins' %}</a></li>
+                                        {% else %}
+                                            <li><a href="{% url 'core:clients' %}"><i class="fa fa-user fa-fw"></i> {% trans 'Logins' %}</a></li>
+                                        {% endif %}
                                         {% check_module 'olltv' as check_module_olltv %}
                                         {% if check_module_olltv %}
-                                            <li><a href="{% url 'olltv:index' %}"><i class="fa fa-television fa-fw"></i> {% trans 'OLLTV' %}</a></li>
+                                            {% if request.get_full_path == olltv_index_url %}
+                                                <li><a href="{% url 'olltv:index' %}" class="linked"><i class="fa fa-television fa-fw"></i> {% trans 'OLLTV' %}</a></li>
+                                            {% else %}
+                                                <li><a href="{% url 'olltv:index' %}"><i class="fa fa-television fa-fw"></i> {% trans 'OLLTV' %}</a></li>
+                                            {% endif %}
                                         {% endif %}
                                         <li class="disabled"><a href="#">How to use</a></li>
                                         <li class="divider"></li>
