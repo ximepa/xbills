@@ -15,6 +15,7 @@ import module_check
 import platform
 import psutil
 
+
 def custom_redirect(url_name, *args, **kwargs):
     from django.core.urlresolvers import reverse
     import urllib

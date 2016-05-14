@@ -55,6 +55,16 @@ def convert_timestamp_to_time(timestamp):
     seconds = (seconds % 60)
     return '%s:%s:%s' % (hours, minutes, seconds)
 
+
+@register.simple_tag
+def sizeof_fmt(num, suffix='B'):
+    for unit in ['','Ki','Mi','Gi','Ti','Pi','Ei','Zi']:
+        if abs(num) < 1024.0:
+            return "%3.1f %s%s" % (num, unit, suffix)
+        num /= 1024.0
+    return "%.1f%s%s" % (num, 'Yi', suffix)
+
+
 @register.simple_tag
 def sizify(value):
     if value < 512000:

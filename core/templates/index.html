@@ -1,6 +1,7 @@
 {% extends 'layout.html' %}
 {% load i18n %}
 {% load staticfiles %}
+{% load url %}
 {% block content %}
     <div class="row">
         <div class="col-sm-12">
@@ -22,7 +23,7 @@
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="page-header text-center">
-                                        <h4>{% trans 'Disk' %}</h4>
+                                        <h4>{% trans 'Swap' %}</h4>
                                     </div>
                                 </div>
                             </div>
@@ -60,19 +61,19 @@
                                 <div class="col-sm-4">
                                     <div class="row">
                                         <div class="col-sm-4">{% trans 'Total' %}:</div>
-                                        <div class="col-sm-8 progress-margin">{{ memory.total }}</div>
+                                        <div class="col-sm-8 progress-margin">{% sizeof_fmt memory.total %}</div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-4">{% trans 'Used' %}:</div>
-                                        <div class="col-sm-8 progress-margin">{{ memory.used }}</div>
+                                        <div class="col-sm-8 progress-margin">{% sizeof_fmt memory.used %}</div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-4">{% trans 'Free' %}:</div>
-                                        <div class="col-sm-8 progress-margin">{{ memory.free }}</div>
+                                        <div class="col-sm-8 progress-margin">{% sizeof_fmt memory.free %}</div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-4">{% trans 'Cached' %}:</div>
-                                        <div class="col-sm-8 progress-margin">{{ memory.cached }}</div>
+                                        <div class="col-sm-8 progress-margin">{% sizeof_fmt memory.cached %}</div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-4">{% trans 'Load' %}:</div>
