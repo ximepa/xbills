@@ -79,7 +79,7 @@
                                         <div class="col-sm-8">
                                             <div class="progress">
                                                 {% if memory.percent > 80 %}
-                                                    <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="{{ memory.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ memory.percent }}%">
+                                                    <div class="progress-bar progress-bar-danger progress-bar-striped active 1" role="progressbar" aria-valuenow="{{ memory.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ memory.percent }}%">
                                                         {{ memory.percent }}%
                                                     </div>
                                                 {% elif memory.percent > 60 %}
