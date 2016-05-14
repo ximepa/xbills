@@ -96,10 +96,42 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-sm-4">
+                                    <div class="row">
+                                        <div class="col-sm-4">{% trans 'Total' %}:</div>
+                                        <div class="col-sm-8 progress-margin">{% sizeof_fmt swap.total %}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">{% trans 'Used' %}:</div>
+                                        <div class="col-sm-8 progress-margin">{% sizeof_fmt swap.used %}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">{% trans 'Free' %}:</div>
+                                        <div class="col-sm-8 progress-margin">{% sizeof_fmt swap.free %}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">{% trans 'Load' %}:</div>
+                                        <div class="col-sm-8">
+                                            <div class="progress">
+                                                {% if swap.percent > 80 %}
+                                                    <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="{{ swap.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ swap.percent }}%">
+                                                        {{ swap.percent }}%
+                                                    </div>
+                                                {% elif memory.percent > 60 %}
+                                                    <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="{{ swap.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ swap.percent }}%">
+                                                        {{ swap.percent }}%
+                                                    </div>
+                                                {% else %}
+                                                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{ swap.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ swap.percent }}%">
+                                                        {{ swap.percent }}%
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                     </div>
                 </div>
             </div>
