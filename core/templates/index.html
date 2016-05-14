@@ -16,15 +16,15 @@
                                 <div class="progress">
                                     {% if cpu > 80 %}
                                         <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="{{ cpu }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ cpu }}%">
-                                            <span class="sr-only">{{ cpu }}% Complete (success)</span>
+                                            {{ cpu }}%
                                         </div>
                                     {% elif cpu > 60 %}
                                         <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="{{ cpu }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ cpu }}%">
-                                            <span class="sr-only">{{ cpu }}% Complete (success)</span>
+                                            {{ cpu }}%
                                         </div>
                                     {% else %}
                                         <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{ cpu }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ cpu }}%">
-                                            <span class="sr-only">{{ cpu }}% Complete (success)</span>
+                                            {{ cpu }}%
                                         </div>
                                     {% endif %}
                                 </div>
