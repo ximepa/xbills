@@ -14,11 +14,11 @@
                             </div>
                             <div class="col-sm-8">
                                 <div class="progress">
-                                    {% if cpu > 20 %}
+                                    {% if cpu > 80 %}
                                         <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="{{ cpu }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ cpu }}%">
                                             <span class="sr-only">{{ cpu }}% Complete (success)</span>
                                         </div>
-                                    {% elif cpu > 10 %}
+                                    {% elif cpu > 60 %}
                                         <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="{{ cpu }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ cpu }}%">
                                             <span class="sr-only">{{ cpu }}% Complete (success)</span>
                                         </div>
