@@ -25,8 +25,14 @@ def custom_redirect(url_name, *args, **kwargs):
 
 @login_required()
 def index(request):
-    print psutil.cpu_times()
+    cpu_count = psutil.cpu_count()
     cpu_load_list = psutil.cpu_percent(interval=1, percpu=True)
+    memory = psutil.virtual_memory()
+    swap = psutil.swap_memory()
+    disks = psutil.disk_partitions()
+    print disks
+    root_disk_usage = psutil.disk_usage('/')
+    print root_disk_usage
     if 'index' in request.GET:
         index = request.GET.getlist('index')[0]
     else:

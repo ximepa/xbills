@@ -3,53 +3,127 @@
 {% load staticfiles %}
 {% block content %}
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-12">
             <div class="panel panel-default">
                 <div class="panel-heading">{% trans 'System info' %}</div>
                 <div class="panel-body">
-                    {% for cpu in cpu_load_list %}
-                        <div class="row">
-                            <div class="col-sm-4">
-                                {% trans 'CPU load' %}:
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="page-header text-center">
+                                        <h4>{% trans 'CPU' %}</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="page-header text-center">
+                                        <h4>{% trans 'Memory' %}</h4>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="page-header text-center">
+                                        <h4>{% trans 'Disk' %}</h4>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-sm-8">
-                                <div class="progress">
-                                    {% if cpu > 80 %}
-                                        <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="{{ cpu }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ cpu }}%">
-                                            {{ cpu }}%
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="row">
+                                        <div class="col-sm-4">{% trans 'CPU count' %}:</div>
+                                        <div class="col-sm-8 progress-margin">{{ cpu_count }}</div>
+                                    </div>
+                                    {% for cpu in cpu_load_list %}
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                {% trans 'CPU load' %}:
+                                            </div>
+                                            <div class="col-sm-8">
+                                                <div class="progress">
+                                                    {% if cpu > 80 %}
+                                                        <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="{{ cpu }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ cpu }}%">
+                                                            {{ cpu }}%
+                                                        </div>
+                                                    {% elif cpu > 60 %}
+                                                        <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="{{ cpu }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ cpu }}%">
+                                                            {{ cpu }}%
+                                                        </div>
+                                                    {% else %}
+                                                        <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{ cpu }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ cpu }}%">
+                                                            {{ cpu }}%
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
                                         </div>
-                                    {% elif cpu > 60 %}
-                                        <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="{{ cpu }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ cpu }}%">
-                                            {{ cpu }}%
+                                    {% endfor %}
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="row">
+                                        <div class="col-sm-4">{% trans 'Total' %}:</div>
+                                        <div class="col-sm-8 progress-margin">{{ memory.total }}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">{% trans 'Used' %}:</div>
+                                        <div class="col-sm-8 progress-margin">{{ memory.used }}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">{% trans 'Free' %}:</div>
+                                        <div class="col-sm-8 progress-margin">{{ memory.free }}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">{% trans 'Cached' %}:</div>
+                                        <div class="col-sm-8 progress-margin">{{ memory.cached }}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-4">{% trans 'Load' %}:</div>
+                                        <div class="col-sm-8">
+                                            <div class="progress">
+                                                {% if memory.percent > 80 %}
+                                                    <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="{{ memory.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ memory.percent }}%">
+                                                        {{ memory.percent }}%
+                                                    </div>
+                                                {% elif memory.percent > 60 %}
+                                                    <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="{{ memory.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ memory.percent }}%">
+                                                        {{ memory.percent }}%
+                                                    </div>
+                                                {% else %}
+                                                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{ memory.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ memory.percent }}%">
+                                                        {{ memory.percent }}%
+                                                    </div>
+                                                {% endif %}
+                                            </div>
                                         </div>
-                                    {% else %}
-                                        <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{ cpu }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ cpu }}%">
-                                            {{ cpu }}%
-                                        </div>
-                                    {% endif %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">Panel heading without title</div>
-                <div class="panel-body">
-                    Panel content
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">Panel heading without title</div>
-                <div class="panel-body">
-                    Panel content
+                    </div>
+                    <div class="row">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Panel heading without title</div>
+                        <div class="panel-body">
+                            Panel content
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Panel heading without title</div>
+                        <div class="panel-body">
+                            Panel content
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

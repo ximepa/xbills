@@ -432,3 +432,6 @@ ol, ul {
     line-height: 40px;
 }
 
+.progress, .progress-margin {
+    margin-bottom: 5px;
+}
