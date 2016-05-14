@@ -6,13 +6,14 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from .auth_backend import AuthBackend
 from .models import User, Payment, Bill, Fees, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog, Dv_log, Admin
-
 from django.contrib import messages
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
 from django.core import serializers
 import module_check
+import platform
+import psutil
 
 def custom_redirect(url_name, *args, **kwargs):
     from django.core.urlresolvers import reverse
@@ -24,6 +25,8 @@ def custom_redirect(url_name, *args, **kwargs):
 
 @login_required()
 def index(request):
+    print psutil.cpu_times()
+    cpu_load_list = psutil.cpu_percent(interval=1, percpu=True)
     if 'index' in request.GET:
         index = request.GET.getlist('index')[0]
     else:
@@ -32,7 +35,6 @@ def index(request):
 
 
 def nas(request):
-    print request.POST
     nas_id = Nas.objects.all()
     return render(request, 'nas.html', locals())
 
@@ -67,7 +69,6 @@ def client_errors(request, uid):
 
 def client_statistics(request, uid):
     order_by = request.GET.get('order_by', '-start')
-    print order_by
     user = User.objects.get(id=uid)
     user_statistics = Dv_log.objects.filter(uid=uid).order_by(order_by)
     paginator = Paginator(user_statistics, settings.USER_ERRORS_PER_PAGE)
@@ -105,8 +106,8 @@ def search(request):
             error = 'User not found'
             return render(request, 'search.html', locals())
     if 'login' in request.POST and request.POST['login'] != '':
-        login = request.GET['login']
-        user_list = User.objects.filter(login__icontains=request.GET['login']).order_by('id')
+        login = request.POST['login']
+        user_list = User.objects.filter(login__icontains=request.POST['login']).order_by('id')
         if user_list.count() == 0:
             error = 'User not found'
         elif user_list.count() == 1:
