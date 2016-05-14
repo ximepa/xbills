@@ -340,10 +340,10 @@
 {% block extra_content %}
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="well well-sm">
+            <div class="well well-sm text-center">
                 <ul class="list-inline">
-                    <li><a title="Статистика" href="{% url 'core:client_statistics' uid %}">Статистика</a></li>
-                    <li><a title="Ошибка" href="{% url 'core:client_errors' uid %}">Ошибка</a></li>
+                    <li><a title="{% trans 'Statistics' %}" href="{% url 'core:client_statistics' uid %}">{% trans 'Statistics' %}</a></li>
+                    <li><a title="{% trans 'Errors' %}" href="{% url 'core:client_errors' uid %}">{% trans 'Errors' %}</a></li>
                     <li><a title="Расписание" href="">Расписание</a></li>
                     <li><a title="Компенсация" href="">Компенсация</a></li>
                 </ul>

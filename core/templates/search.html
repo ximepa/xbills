@@ -1,12 +1,8 @@
-{% extends 'layout_edit.html' %}
+{% extends 'layout.html' %}
 {% load i18n %}
 {% load url %}
 {% load staticfiles %}
 {% block content %}
-    <ol class="breadcrumb">
-        <li class="active">{% trans 'Search' %}</li>
-        <li></li>
-    </ol>
     <div class="row">
         <div class="col-lg-12">
             {% if error %}
@@ -15,6 +11,10 @@
                     <p class="text-center">{{ error }}</p>
                 </div>
             {% endif %}
+            <div class="page-header text-center">
+                <h4><i class="fa fa-cog"></i> {% trans 'Search' %}</h4>
+            </div>
+            <br/>
             <div class="col-md-3"></div>
             <div class="col-md-6">
                 <form method="POST">{% csrf_token %}

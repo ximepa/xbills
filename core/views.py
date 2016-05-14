@@ -96,7 +96,6 @@ def client_statistics(request, uid):
 
 
 def search(request):
-    # search
     user_list = None
     if 'uid' in request.POST and request.POST['uid'] != '':
         try:

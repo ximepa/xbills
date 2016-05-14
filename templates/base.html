@@ -127,8 +127,13 @@
                                     </ul>
                                 </li>
                             </ul>
-
                         </li>
+                        {% url 'core:search' as core_search_url %}
+                        {% if request.get_full_path == core_search_url %}
+                            <li><a href="{{ core_search_url }}" class="a-nav linked"><i class="fa fa-search fa-2x"></i><br/>{% trans 'Search' %}</a></li>
+                        {% else %}
+                            <li><a href="{{ core_search_url }}" class="a-nav"><i class="fa fa-search fa-2x"></i><br/>{% trans 'Search' %}</a></li>
+                        {% endif %}
                     </ul>
                 </div><!-- /.nav-collapse -->
             </nav>
