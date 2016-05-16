@@ -31,9 +31,12 @@ def index(request):
     memory = psutil.virtual_memory()
     swap = psutil.swap_memory()
     disks = psutil.disk_partitions()
-    print disks
+    disks_dict = {}
+    for d in disks:
+        disks_dict.update(dict({'device': d.device, 'mountpoint': d.mountpoint, 'fstype': d.fstype, 'opts': d.opts, 'diskusage': psutil.disk_usage(d.mountpoint)}))
+        print disks_dict
+    disks_count = len(disks)
     root_disk_usage = psutil.disk_usage('/')
-    print root_disk_usage
     if 'index' in request.GET:
         index = request.GET.getlist('index')[0]
     else:
