@@ -2,6 +2,26 @@
 {% load i18n %}
 {% load url %}
 {% load staticfiles %}
+{% block extra_js %}
+    <script src="{% static 'js/chosen.jquery.min.js' %}"></script>
+{% endblock %}
+{% block extra_css %}
+    <link href="{% static 'css/chosen.min.css' %}" rel="stylesheet">
+{% endblock %}
+{% block extra_scripts %}
+<script type="application/javascript">
+    var SELF_URL = '{% url 'core:search' %}';
+    var CHOSEN_PARAMS = {
+        no_results_text: 'Не существует',
+        allow_single_deselect: true,
+        placeholder_text: '--'
+    };
+
+    $(function () {
+        $('select:not(#type)').chosen(CHOSEN_PARAMS);
+    });
+</script>
+{% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-lg-12">
@@ -63,6 +83,52 @@
                     </div>
                     <div class="col-sm-6">
                         <input type="hidden" name="index" value="search">
+                        <button type="submit" class="btn btn-default btn-sm">Send notifications to this email</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+        <div class="col-lg-12">
+            {% if error %}
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <p class="text-center">{{ error }}</p>
+                </div>
+            {% endif %}
+            <div class="page-header text-center">
+                <h4><i class="fa fa-search"></i> {% trans 'Search' %}</h4>
+            </div>
+            <br/>
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <form method="POST">{% csrf_token %}
+                    <hr>
+                    <div class="form-group col-lg-6">
+                    <label for="DISTRICT">{% trans 'Districts:' %}</label>
+                        <select download-on-click='1' name='ADDRESS_DISTRICT' id='DISTRICT' class='form-control'>
+                            <option value="{{ user.pi.city_id }}">{{ user.pi.city }}</option>
+                        </select>
+                        <script src="{% static 'js/searchLocation.js' %}"></script>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label for="STREET" class="control-label">{% trans 'Street:' %}</label>
+                        <select download-on-click='1' name='ADDRESS_STREET' id='STREET' class='form-control'>
+                            <option value="{{ user.pi.street_id }}">{{ user.pi.street }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label for="BUILD" class="control-label">{% trans 'Build' %}:</label>
+                        <select download-on-click='1' name='ADDRESS_BUILD' id='BUILD' class='form-control'>
+                            <option value="{{ user.pi.location_id }}">{{ user.pi.location }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label for="flat" class="control-label">Flat:</label>
+                        <input type="text" class="form-control" id="flat" name="flat" placeholder="Flat:" value="{{ user.pi.kv }}">
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="hidden" name="address" value="search_address">
                         <button type="submit" class="btn btn-default btn-sm">Send notifications to this email</button>
                     </div>
                 </form>
@@ -164,6 +230,171 @@
                                 {% endif %}
                                 <td><a href="{% url 'core:index' %}?index=payments&uid={{ user.id }}"><img src="{% static 'images/button_payments.png' %}" /></a></td>
                                 <td><a href="{% url 'core:fees' %}?uid={{ user.id }}"><img src="{% static 'images/button_fees.png' %}" /></a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="pag-nav">
+                        <nav class="center-block">
+                            <ul class="pagination pagination-sm">
+                                {% if users.has_previous %}
+                                    <li>
+                                        <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
+                                            <span aria-hidden="true">1</span>
+                                        </a>
+                                    </li>
+                                    {% if users.number > 2 %}
+                                        <li class="disabled">
+                                            <a href="#" aria-label="Previous">
+                                                <span aria-hidden="true">...</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+                                {% for p in page_list %}
+                                    {% if users.number == p %}
+                                        <li class="active">
+                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="">
+                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if users.has_next %}
+                                    <li class="disabled">
+                                        <a href="#" aria-label="Previous">
+                                            <span aria-hidden="true">...</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
+                                            <span aria-hidden="true">{{ users.paginator.num_pages }}</span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="disabled">
+                                        <a href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <span class="badge">{{ all }}</span>
+                            {% trans 'All' %}
+                        </li>
+                        <li class="list-group-item">
+                            <span class="badge">{{ end }}</span>
+                            {% trans 'End' %}
+                        </li>
+                        <li class="list-group-item">
+                            <span class="badge">{{ disabled }}</span>
+                            {% trans 'Disabled' %}
+                        </li>
+                        <li class="list-group-item">
+                            <span class="badge">{{ deleted }}</span>
+                            {% trans 'Deleted' %}
+                        </li>
+                    </ul>
+                {% endif %}
+            {% endif %}
+            {% if address %}
+                {% if error %}
+                {% else %}
+                    <div class="pag-nav">
+                        <nav class="center-block">
+                            <ul class="pagination pagination-sm">
+                                {% if users.has_previous %}
+                                    <li>
+                                        <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
+                                            <span aria-hidden="true">1</span>
+                                        </a>
+                                    </li>
+                                    {% if users.number > 2 %}
+                                        <li class="disabled">
+                                            <a href="#" aria-label="Previous">
+                                                <span aria-hidden="true">...</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+                                {% for p in page_list %}
+                                    {% if users.number == p %}
+                                        <li class="active">
+                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="">
+                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if users.has_next %}
+                                    <li class="disabled">
+                                        <a href="#" aria-label="Previous">
+                                            <span aria-hidden="true">...</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
+                                            <span aria-hidden="true">{{ users.paginator.num_pages }}</span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="disabled">
+                                        <a href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                    <table class="table table-hover table-striped table-condensed">
+                        <thead>
+                            <tr class="info">
+                                <th>{% trans 'Login' %}</th>
+                                <th>{% trans 'FIO' %}</th>
+                                <th>{% trans 'Deposit' %}</th>
+                                <th>{% trans 'Credit' %}</th>
+                                <th>{% trans 'Login status' %}</th>
+                                <th>{% trans 'Deleted' %}</th>
+                                <th>{% trans '-' %}</th>
+                                <th>{% trans '-' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for u in userpi %}
+                            <tr>
+                                <td><a href="{% url 'core:clients' %}{{ u.id_id }}">{{ u }}</a></td>
+                                <td>{{ u.fio }}</td>
+                                {% if u.pi.bill.deposit < 0 %}
+                                    <td><span style="color: red">{{ u.pi.bill.deposit }}</span></td>
+                                {% else %}
+                                    <td>{{ u.pi.bill.deposit }}</td>
+                                {% endif %}
+                                {% if u.pi.credit > 0 %}
+                                    <td><span style="color: green">{{ u.pi.credit }}</span></td>
+                                {% else %}
+                                    <td>{{ u.pi.credit }}</td>
+                                {% endif %}
+                                {% if u.pi.disabled %}
+                                    <td><span style="color: red">{% trans 'Disabled' %}</span></td>
+                                {% else %}
+                                    <td><span style="color: green">{% trans 'Active' %}</span></td>
+                                {% endif %}
+                                {% if u.deleted %}
+                                    <td><span style="color: red">{% trans 'Yes' %}</span></td>
+                                {% else %}
+                                    <td>{% trans 'No' %}</td>
+                                {% endif %}
+                                <td><a href="{% url 'core:payments' %}{{ u.id_id }}"><img src="{% static 'images/button_payments.png' %}" /></a></td>
+                                <td><a href="{% url 'core:fees' %}{{ u.id_id }}"><img src="{% static 'images/button_fees.png' %}" /></a></td>
                             </tr>
                             {% endfor %}
                         </tbody>

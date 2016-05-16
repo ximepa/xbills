@@ -1,5 +1,4 @@
 # -*- encoding: utf-8 -*-
-import json
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse, render_to_response, RequestContext, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
@@ -9,8 +8,6 @@ from .models import User, Payment, Bill, Fees, Tp, ip_to_num, AdminLog, AbonTari
 from django.contrib import messages
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-import datetime
-from django.core import serializers
 import module_check
 import platform
 import psutil
@@ -31,9 +28,8 @@ def index(request):
     memory = psutil.virtual_memory()
     swap = psutil.swap_memory()
     disks = psutil.disk_partitions()
-    print disks
+    print cpu_load_list
     root_disk_usage = psutil.disk_usage('/')
-    print root_disk_usage
     if 'index' in request.GET:
         index = request.GET.getlist('index')[0]
     else:
@@ -44,6 +40,11 @@ def index(request):
 def nas(request):
     nas_id = Nas.objects.all()
     return render(request, 'nas.html', locals())
+
+
+def static_pools(request):
+
+    return render(request, 'static_pools.html', locals())
 
 
 def client_errors(request, uid):
@@ -105,6 +106,48 @@ def client_statistics(request, uid):
 
 def search(request):
     user_list = None
+    if 'address' in request.POST:
+        try:
+            city = District.objects.get(id=request.POST['ADDRESS_DISTRICT'])
+            userpi = UserPi.objects.filter(city=city, street=request.POST['ADDRESS_STREET'], location=request.POST['ADDRESS_BUILD'], kv__icontains=request.POST['flat']).order_by('id')
+            if userpi.count() == 0:
+                error = 'User not found'
+            elif userpi.count() == 1:
+                print 'asd'
+                for u in userpi:
+                    return redirect('core:client', uid=u.id_id)
+            else:
+                address = request.POST['address']
+                all = userpi.count()
+                paginator = Paginator(userpi, 20)
+                page = request.GET.get('page', 1)
+                try:
+                    users = paginator.page(page)
+                except PageNotAnInteger:
+                    # If page is not an integer, deliver first page.
+                    users = paginator.page(1)
+                except EmptyPage:
+                    # If page is out of range (e.g. 9999), deliver last page of results.
+                    users = paginator.page(paginator.num_pages)
+                if int(page) > 5:
+                    start = str(int(page)-5)
+                else:
+                    start = 1
+                if int(page) < paginator.num_pages-5:
+                    end = str(int(page)+5+1)
+                else:
+                    end = paginator.num_pages+1
+                page_range = range(int(start), int(end)),
+                for p in page_range:
+                    page_list = p
+                pre_end = users.paginator.num_pages - 2
+
+            return render(request, 'search.html', locals())
+        except User.DoesNotExist:
+            error = 'User not found'
+            return render(request, 'search.html', locals())
+
+
     if 'uid' in request.POST and request.POST['uid'] != '':
         try:
             user = User.objects.get(id=request.POST['uid'])
@@ -148,6 +191,30 @@ def search(request):
                 page_list = p
             pre_end = users.paginator.num_pages - 2
         return render(request, 'search.html', locals())
+    res1 = '<option selected="selected"></option>'
+    if 'district' in request.GET:
+        district = District.objects.all()
+        dict_resp= []
+        for item  in district:
+            res = '<option value=' + str(item.id) + '>' + item.name + '</option>'
+            dict_resp.append(res1 + res)
+        return HttpResponse(dict_resp)
+
+    if 'DISTRICT' in request.GET:
+        street = Street.objects.filter(district_id=request.GET['DISTRICT'])
+        dict_resp= []
+        for item  in street:
+            res = '<option value=' + str(item.id) + '>' + item.name + '</option>'
+            dict_resp.append(res1 + res)
+        return HttpResponse(dict_resp)
+
+    if 'STREET' in request.GET:
+        house = House.objects.filter(street_id=request.GET['STREET'])
+        dict_resp= []
+        for item in house:
+            res = '<option value=' + str(item.id) + '>' + item.number.encode('utf8') + '</option>'
+            dict_resp.append(res1 + res)
+        return HttpResponse(dict_resp)
     return render(request, 'search.html', locals())
 
 
@@ -429,3 +496,4 @@ def user_company(request, uid):
 def administrators(request):
     admins = Admin.objects.all()
     return render(request, 'administrators.html', locals())
+

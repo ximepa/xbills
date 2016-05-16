@@ -191,6 +191,7 @@ class Street(models.Model):
 
 class House(models.Model):
 
+    id = models.AutoField(max_length=11, primary_key=True)
     number = models.CharField(max_length=10, db_column='number')
     street_id = models.SmallIntegerField(default=0, db_column='street_id')
 
@@ -243,6 +244,14 @@ class UserPi(models.Model):
     city = models.CharField(max_length=100, db_column='city')
     location = models.ForeignKey('House', db_column='location_id', related_name='location', blank=True, default='0')
     contract_date = models.DateField(db_column='contract_date')
+
+    @property
+    def pi(self):
+        try:
+            print User.objects.get(login=self)
+            return User.objects.get(login=self.id)
+        except User.DoesNotExist:
+            return None
 
     def __unicode__(self):
         return '%s' % self.id
