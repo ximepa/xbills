@@ -138,20 +138,50 @@
     </div>
     <div class="row">
         <div class="col-sm-12">
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Panel heading without title</div>
-                        <div class="panel-body">
-                            Panel content
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Panel heading without title</div>
-                        <div class="panel-body">
-                            Panel content
+            <div class="panel panel-default">
+                <div class="panel-heading">{% trans 'Disk info' %}</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                {% for disk in disks_dict %}
+                                    <div class="col-sm-4">
+                                        <div class="page-header text-center">
+                                            <h4>Dev: {{ disk.device }}</h4>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="row">
+                                {% for disk in disks_dict %}
+                                    <div class="col-sm-4">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                {% trans 'Mount point' %}:
+                                            </div>
+                                            <div class="col-sm-8">
+                                                {{ disk.mountpoint }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                {% trans 'fstype' %}:
+                                            </div>
+                                            <div class="col-sm-8">
+                                                {{ disk.fstype }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                {% trans 'Opts' %}:
+                                            </div>
+                                            <div class="col-sm-8">
+                                                {{ disk.opts }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>
