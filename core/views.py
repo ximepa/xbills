@@ -106,10 +106,11 @@ def client_statistics(request, uid):
 
 def search(request):
     user_list = None
+    print request.POST
     if 'address' in request.POST:
         try:
             city = District.objects.get(id=request.POST['ADDRESS_DISTRICT'])
-            userpi = UserPi.objects.filter(city=city, street=request.POST['ADDRESS_STREET'], location=request.POST['ADDRESS_BUILD'], kv__icontains=request.POST['flat']).order_by('id')
+            userpi = UserPi.objects.filter(city=city, street__id__icontains=request.POST['ADDRESS_STREET'], location__id__icontains=request.POST['ADDRESS_BUILD'], kv__icontains=request.POST['flat']).order_by('id')
             if userpi.count() == 0:
                 error = 'User not found'
             elif userpi.count() == 1:
