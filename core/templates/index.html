@@ -43,11 +43,11 @@
                                             </div>
                                             <div class="col-sm-8">
                                                 <div class="progress">
-                                                    {% if cpu > settings.CPU_DANGER_THRESHOLD %}
+                                                    {% if cpu >= settings.CPU_DANGER_THRESHOLD %}
                                                         <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="{{ cpu }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ cpu }}%">
                                                             {{ cpu }}%
                                                         </div>
-                                                    {% elif cpu > settings.CPU_WARNING_THRESHOLD %}
+                                                    {% elif cpu >= settings.CPU_WARNING_THRESHOLD %}
                                                         <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="{{ cpu }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ cpu }}%">
                                                             {{ cpu }}%
                                                         </div>
@@ -82,11 +82,11 @@
                                         <div class="col-sm-4">{% trans 'Load' %}:</div>
                                         <div class="col-sm-8">
                                             <div class="progress">
-                                                {% if memory.percent > settings.MEM_DANGER_THRESHOLD %}
+                                                {% if memory.percent >= settings.MEM_DANGER_THRESHOLD %}
                                                     <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="{{ memory.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ memory.percent }}%">
                                                         {{ memory.percent }}%
                                                     </div>
-                                                {% elif memory.percent > settings.MEM_WARNING_THRESHOLD %}
+                                                {% elif memory.percent >= settings.MEM_WARNING_THRESHOLD %}
                                                     <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="{{ memory.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ memory.percent }}%">
                                                         {{ memory.percent }}%
                                                     </div>
@@ -116,11 +116,11 @@
                                         <div class="col-sm-4">{% trans 'Load' %}:</div>
                                         <div class="col-sm-8">
                                             <div class="progress">
-                                                {% if swap.percent > settings.SWAP_DANGER_THRESHOLD %}
+                                                {% if swap.percent >= settings.SWAP_DANGER_THRESHOLD %}
                                                     <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="{{ swap.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ swap.percent }}%">
                                                         {{ swap.percent }}%
                                                     </div>
-                                                {% elif memory.percent > settings.SWAP_WARNING_THRESHOLD %}
+                                                {% elif memory.percent >= settings.SWAP_WARNING_THRESHOLD %}
                                                     <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="{{ swap.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ swap.percent }}%">
                                                         {{ swap.percent }}%
                                                     </div>
