@@ -8,9 +8,11 @@ from .models import User, Payment, Bill, Fees, Tp, ip_to_num, AdminLog, AbonTari
 from django.contrib import messages
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from .commands import strfdelta
 import module_check
 import platform
 import psutil
+import datetime
 
 
 def custom_redirect(url_name, *args, **kwargs):
@@ -22,19 +24,20 @@ def custom_redirect(url_name, *args, **kwargs):
 
 
 @login_required()
-def index(request):
+def index(request, settings=settings):
+    sys = platform.platform()
+    psutil.boot_time()
+    boot_time = datetime.datetime.fromtimestamp(psutil.boot_time())
+    d2 = datetime.datetime.now()
+    diff = abs((d2 - boot_time))
+    uptime = strfdelta(diff, settings.UPTIME_FORMAT)
     cpu_count = psutil.cpu_count()
     cpu_load_list = psutil.cpu_percent(interval=1, percpu=True)
     memory = psutil.virtual_memory()
     swap = psutil.swap_memory()
     disks = psutil.disk_partitions()
-    print cpu_load_list
     root_disk_usage = psutil.disk_usage('/')
-    if 'index' in request.GET:
-        index = request.GET.getlist('index')[0]
-    else:
-        return render(request, 'index.html', locals())
-    return render(request, 'layout_edit.html', locals())
+    return render(request, 'index.html', locals())
 
 
 def nas(request):

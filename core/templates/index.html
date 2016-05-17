@@ -6,7 +6,10 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="panel panel-default">
-                <div class="panel-heading">{% trans 'System info' %}</div>
+                <div class="panel-heading">
+                    {% trans 'System' %}: {{ sys }}
+                    <div class="pull-right">{% trans 'Uptime' %}: {{ uptime }}</div>
+                </div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-sm-12">
@@ -40,11 +43,11 @@
                                             </div>
                                             <div class="col-sm-8">
                                                 <div class="progress">
-                                                    {% if cpu > 80 %}
+                                                    {% if cpu > settings.CPU_DANGER_THRESHOLD %}
                                                         <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="{{ cpu }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ cpu }}%">
                                                             {{ cpu }}%
                                                         </div>
-                                                    {% elif cpu > 60 %}
+                                                    {% elif cpu > settings.CPU_WARNING_THRESHOLD %}
                                                         <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="{{ cpu }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ cpu }}%">
                                                             {{ cpu }}%
                                                         </div>
@@ -79,11 +82,11 @@
                                         <div class="col-sm-4">{% trans 'Load' %}:</div>
                                         <div class="col-sm-8">
                                             <div class="progress">
-                                                {% if memory.percent > 80 %}
+                                                {% if memory.percent > settings.MEM_DANGER_THRESHOLD %}
                                                     <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="{{ memory.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ memory.percent }}%">
                                                         {{ memory.percent }}%
                                                     </div>
-                                                {% elif memory.percent > 60 %}
+                                                {% elif memory.percent > settings.MEM_WARNING_THRESHOLD %}
                                                     <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="{{ memory.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ memory.percent }}%">
                                                         {{ memory.percent }}%
                                                     </div>
@@ -113,11 +116,11 @@
                                         <div class="col-sm-4">{% trans 'Load' %}:</div>
                                         <div class="col-sm-8">
                                             <div class="progress">
-                                                {% if swap.percent > 80 %}
+                                                {% if swap.percent > settings.SWAP_DANGER_THRESHOLD %}
                                                     <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="{{ swap.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ swap.percent }}%">
                                                         {{ swap.percent }}%
                                                     </div>
-                                                {% elif memory.percent > 60 %}
+                                                {% elif memory.percent > settings.SWAP_WARNING_THRESHOLD %}
                                                     <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="{{ swap.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ swap.percent }}%">
                                                         {{ swap.percent }}%
                                                     </div>
