@@ -23,397 +23,164 @@
     </script>
 {% endblock %}
 {% block content %}
-    {% if 'uid' in request.GET %}
-        <ol class="breadcrumb" id="user_info" style="z-index: 2000">
-            <li class="active"><i class="fa fa-user fa-2x"></i> <a href="{% url 'core:index' %}?index={{ index }}&uid={{ user.id }}">{{ user.login }}</a> (UID: {{ user.id }})</li>
-        </ol>
-        <div class="row">
-            <div class="col-md-10">
-                <div class="panel panel-primary">
-                    <div class="panel-heading text-center">
-                        <i class="fa fa-cog"></i> {% trans 'Bills' %}
-                        <div class="pull-right">
-                            {% if user_password %}
-                                {{ user_password }}
-                            {% else %}
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                        {% trans 'Actions' %}
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu pull-right" role="menu">
-                                        <li><a href="{{ request.get_full_path }}&show_password=1">{% trans 'Show password' %}</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">{% trans 'Change password' %}</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">{% trans 'Tariff plans' %}</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">{% trans 'Statistics' %}</a>
-                                        </li>
-                                        <li>
-                                            <a href="#">{% trans 'Errors' %}</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <form class="form-horizontal" method="post" name="bills_form">{% csrf_token %}
-                        <div class="panel-body">
-                            <div class="col-md-4">
-                                <div class="form-group form-group-sm">
-                                    <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Deposit' %}</label>
-                                    <div class="col-sm-8">
-                                        <span class="badge form-control-static" >{{ bill.deposit|floatformat:2 }}</span>
-                                        <div class="pull-right">
-                                            <a href="{% url 'core:index' %}?index=payments&uid={{ user.id }}" class="btn btn-default btn-xs"><i class="fa fa-plus-circle"></i></a>
-                                            <a href="{% url 'core:index' %}?index=fees&uid={{ user.id }}" class="btn btn-default btn-xs"><i class="fa fa-minus-circle"></i></a>
-                                            <a class="btn btn-default btn-xs"><i class="fa fa-print"></i></a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group form-group-sm">
-                                    <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Company' %}</label>
-                                    <div class="col-sm-8">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="{% trans 'Company' %}" aria-describedby="group" disabled value="{{ user.company }}">
-                                            <span class="input-group-addon" id="group">
-                                                <a href="#">
-                                                    {% if user.company == 0 %}
-                                                        <i class="fa fa-edit fa-fw"></i>
-                                                    {% else %}
-                                                        <i class="fa fa-plus fa-fw"></i>
-                                                    {% endif %}
-                                                </a>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group form-group-sm">
-                                    <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Reduction' %}</label>
-                                    <div class="col-sm-8">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="{% trans 'Reduction' %}" aria-describedby="group" value="{{ user.reduction }}">
-                                            <span class="input-group-addon" id="reduction"><i class="fa fa-percent fa-fw"></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group form-group-sm">
-                                    <label for="" class="col-sm-4 control-label">{% trans 'Activation' %}</label>
-                                    <div class="col-sm-8">
-                                        <div id="activation-datepicker" class="">
-                                            <div class="input-group">
-                                                <input data-format="yyyy-MM-dd" type="date" class="form-control" id="activation" aria-describedby="activation-date" name="activation" placeholder="{% trans 'Activation' %}" value="{{ user.activate|default:"0000-00-00" }}">
-                                                <span class="input-group-addon add-on" id="activation-date">
-                                                    <i class="fa fa-calendar" data-time-icon="icon-time" data-date-icon="fa-calendar"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <script type="text/javascript">
-                                            $(function() {
-                                                $('#activation-datepicker').datetimepicker({
-                                                    pickTime: false
-                                                });
-                                            });
-                                        </script>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group form-group-sm">
-                                    <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Cash account' %}</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="" placeholder="{% trans 'Cash account' %}" disabled value="{{ bill.id }}">
-                                    </div>
-                                </div>
-                                <div class="form-group form-group-sm">
-                                    <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Credit' %}</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="credit" name="credit" placeholder="{% trans 'Credit' %}" value="{{ user.credit }}">
-                                    </div>
-                                </div>
-                                <div class="form-group form-group-sm">
-                                    <label for="" class="col-sm-4 control-label">{% trans 'Reduction date' %}</label>
-                                    <div class="col-sm-8">
-                                        <div id="reduction_date-datepicker" class="">
-                                            <div class="input-group">
-                                                <input data-format="yyyy-MM-dd" type="date" class="form-control" id="reduction_date" aria-describedby="reduction-date" name="reduction_date" placeholder="{% trans 'Reduction date' %}" value="{{ user.reduction_date|default:"0000-00-00" }}">
-                                                <span class="input-group-addon add-on" id="reduction-date">
-                                                    <i class="fa fa-calendar" data-time-icon="icon-time" data-date-icon="fa-calendar"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <script type="text/javascript">
-                                            $(function() {
-                                                $('#reduction_date-datepicker').datetimepicker({
-                                                    pickTime: false
-                                                });
-                                            });
-                                        </script>
-                                    </div>
-                                </div>
-                                <div class="form-group form-group-sm">
-                                    <label for="" class="col-sm-4 control-label">{% trans 'Expire' %}</label>
-                                    <div class="col-sm-8">
-                                        <input type="date" class="form-control" id="expire" name="expire" placeholder="{% trans 'Expire' %}" value="{{ user.expire|default:"0000-00-00" }}">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group form-group-sm">
-                                    <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Group' %}</label>
-                                    <div class="col-sm-8">
-                                        <div class="input-group">
-                                          <input type="text" class="form-control" placeholder="{% trans 'Group' %}" aria-describedby="group" disabled value="{{ user.gid }}">
-                                          <span class="input-group-addon" id="group">
-                                              <a href="">
-                                                  <i class="fa fa-edit fa-fw"></i>
-                                              </a>
-                                          </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group form-group-sm">
-                                    <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Credit date' %}</label>
-                                    <div class="col-sm-8">
-                                        <div id="credit_date-datepicker" class="">
-                                            <div class="input-group">
-                                                <input data-format="yyyy-MM-dd" type="date" class="form-control" id="credit_date" aria-describedby="credit-date" name="credit_date" placeholder="{% trans 'Credit date' %}" value="{{ user.credit_date|default:"0000-00-00" }}">
-                                                <span class="input-group-addon add-on" id="credit-date">
-                                                    <i class="fa fa-calendar" data-time-icon="icon-time" data-date-icon="fa-calendar"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <script type="text/javascript">
-                                            $(function() {
-                                                $('#credit_date-datepicker').datetimepicker({
-                                                    pickTime: false
-                                                });
-                                            });
-                                        </script>
-                                    </div>
-                                </div>
-                                <div class="form-group form-group-sm">
-                                    <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Disable' %}</label>
-                                    <div class="col-sm-8">
-                                        {% if user.disabled == True %}
-                                            <input id="disable" type="checkbox" name="disable" value="1" checked onclick="changeValueCheckbox(this)">
-                                        {% else %}
-                                            <input id="disable" type="checkbox" name="disable" onclick="changeValueCheckbox(this)">
-                                        {% endif %}
-                                        <input type="text" class="form-control hidden" id="reason" name="reason">
-                                        <script type="application/javascript">
-                                            function changeValueCheckbox(element){
-                                                if(element.checked){
-                                                    element.value='1';
-                                                }else{
-                                                    element.value='0';
-                                                }
-                                                if (element.value == 1){
-                                                    var reason = prompt('{% trans 'Reason' %}')
-                                                    if (reason != null){
-                                                        $('#reason').removeClass('hidden');
-                                                        $('#reason').val(reason);
-                                                    } else {
-                                                        element.value = '0';
-                                                        $(element).removeAttr('checked')
-                                                    }
-                                                } else {
-                                                    $('#reason').addClass('hidden');
-                                                    element.value = '0';
-                                                }
-                                            }
-                                        </script>
-                                    </div>
-                                </div>
-                                <div class="form-group form-group-sm">
-                                    <label for="registration" class="col-sm-4 control-label">{% trans 'Registration' %}</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="registration" name="registration" placeholder="" disabled value="{{ bill.registration }}">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="panel-footer"><input type="submit" class="btn btn-default center-block btn-sm" value="{% trans 'Change' %}"></div>
-                    </form>
-                </div>
-                <hr/>
-            </div>
-            <div class="col-md-2">
-                <div class="list-group" id="right_nav">
-                  <a href="{% url 'core:payments' user.id %}" class="list-group-item">
-                      <i class="fa fa-credit-card"></i> {% trans 'Payments' %}
-                  </a>
-                  <a href="{% url 'core:fees' user.id %}" class="list-group-item"><i class="fa fa-credit-card-alt"></i> {% trans 'Fees' %}</a>
-                  <a href="{% url 'olltv:user_change' user.id %}" class="list-group-item"><i class="fa fa-television fa-fw"></i> {% trans 'Iptv' %}</a>
-                  <a href="#" class="list-group-item">Porta ac consectetur ac</a>
-                  <a href="#" class="list-group-item">Vestibulum at eros</a>
-                </div>
-            </div>
-        </div>
-    {% else %}
-        <div class="pag-nav">
-            <nav class="center-block">
-                <ul class="pagination pagination-sm">
-                    {% if users.has_previous %}
-                        <li>
-                            <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
-                                <span aria-hidden="true">1</span>
-                            </a>
-                        </li>
-                        {% if users.number > 2 %}
-                            <li class="disabled">
-                                <a href="#" aria-label="Previous">
-                                    <span aria-hidden="true">...</span>
-                                </a>
-                            </li>
-                        {% endif %}
-                    {% endif %}
-                    {% for p in page_list %}
-                        {% if users.number == p %}
-                            <li class="active">
-                                <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                            </li>
-                        {% else %}
-                            <li class="">
-                                <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                    {% if users.has_next %}
+    <div class="pag-nav">
+        <nav class="center-block">
+            <ul class="pagination pagination-sm">
+                {% if users.has_previous %}
+                    <li>
+                        <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
+                            <span aria-hidden="true">1</span>
+                        </a>
+                    </li>
+                    {% if users.number > 2 %}
                         <li class="disabled">
                             <a href="#" aria-label="Previous">
                                 <span aria-hidden="true">...</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
-                                <span aria-hidden="true">{{ users.paginator.num_pages }}</span>
-                            </a>
+                    {% endif %}
+                {% endif %}
+                {% for p in page_list %}
+                    {% if users.number == p %}
+                        <li class="active">
+                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
                         </li>
                     {% else %}
-                        <li class="disabled">
-                            <a href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
+                        <li class="">
+                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
                         </li>
                     {% endif %}
-                </ul>
-            </nav>
-        </div>
-        <table class="table table-hover table-striped table-condensed">
-            <thead>
-                <tr class="info">
-                    <th>{% trans 'Login' %}</th>
-                    <th>{% trans 'FIO' %}</th>
-                    <th>{% trans 'Deposit' %}</th>
-                    <th>{% trans 'Credit' %}</th>
-                    <th>{% trans 'Login status' %}</th>
-                    <th>{% trans 'Deleted' %}</th>
-                    <th>{% trans '-' %}</th>
-                    <th>{% trans '-' %}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr>
-                    <td><a href="{% url 'core:client' user.id %}">{{ user.login }}</a></td>
-                    <td>{{ user.user_pi.fio }}</td>
-                    {% if user.bill.deposit < 0 %}
-                        <td><span style="color: red">{{ user.bill.deposit }}</span></td>
-                    {% else %}
-                        <td>{{ user.bill.deposit }}</td>
-                    {% endif %}
-                    {% if user.credit > 0 %}
-                        <td><span style="color: green">{{ user.credit }}</span></td>
-                    {% else %}
-                        <td>{{ user.credit }}</td>
-                    {% endif %}
-                    {% if user.disabled %}
-                        <td><span style="color: red">{% trans 'Disabled' %}</span></td>
-                    {% else %}
-                        <td><span style="color: green">{% trans 'Active' %}</span></td>
-                    {% endif %}
-                    {% if user.deleted %}
-                        <td><span style="color: red">{% trans 'Yes' %}</span></td>
-                    {% else %}
-                        <td>{% trans 'No' %}</td>
-                    {% endif %}
-                    <td><a href="{% url 'core:client_payments' user.id %}"><img src="{% static 'images/button_payments.png' %}" /></a></td>
-                    <td><a href="{% url 'core:client_fees' user.id %}"><img src="{% static 'images/button_fees.png' %}" /></a></td>
-                </tr>
                 {% endfor %}
-            </tbody>
-        </table>
-        <div class="pag-nav">
-            <nav class="center-block">
-                <ul class="pagination pagination-sm">
-                    {% if users.has_previous %}
-                        <li>
-                            <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
-                                <span aria-hidden="true">1</span>
-                            </a>
-                        </li>
-                        {% if users.number > 2 %}
-                            <li class="disabled">
-                                <a href="#" aria-label="Previous">
-                                    <span aria-hidden="true">...</span>
-                                </a>
-                            </li>
-                        {% endif %}
-                    {% endif %}
-                    {% for p in page_list %}
-                        {% if users.number == p %}
-                            <li class="active">
-                                <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                            </li>
-                        {% else %}
-                            <li class="">
-                                <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                    {% if users.has_next %}
+                {% if users.has_next %}
+                    <li class="disabled">
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">...</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
+                            <span aria-hidden="true">{{ users.paginator.num_pages }}</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="disabled">
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    <table class="ui black table table-hover table-striped table-condensed">
+        <thead>
+            <tr class="">
+                <th>{% trans 'Login' %}</th>
+                <th>{% trans 'FIO' %}</th>
+                <th>{% trans 'Deposit' %}</th>
+                <th>{% trans 'Credit' %}</th>
+                <th>{% trans 'Login status' %}</th>
+                <th>{% trans 'Deleted' %}</th>
+                <th>{% trans '-' %}</th>
+                <th>{% trans '-' %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td><a href="{% url 'core:client' user.id %}">{{ user.login }}</a></td>
+                <td>{{ user.user_pi.fio }}</td>
+                {% if user.bill.deposit < 0 %}
+                    <td><span style="color: red">{{ user.bill.deposit }}</span></td>
+                {% else %}
+                    <td>{{ user.bill.deposit }}</td>
+                {% endif %}
+                {% if user.credit > 0 %}
+                    <td><span style="color: green">{{ user.credit }}</span></td>
+                {% else %}
+                    <td>{{ user.credit }}</td>
+                {% endif %}
+                {% if user.disabled %}
+                    <td><span style="color: red">{% trans 'Disabled' %}</span></td>
+                {% else %}
+                    <td><span style="color: green">{% trans 'Active' %}</span></td>
+                {% endif %}
+                {% if user.deleted %}
+                    <td><span style="color: red">{% trans 'Yes' %}</span></td>
+                {% else %}
+                    <td>{% trans 'No' %}</td>
+                {% endif %}
+                <td><a href="{% url 'core:client_payments' user.id %}"><img src="{% static 'images/button_payments.png' %}" /></a></td>
+                <td><a href="{% url 'core:client_fees' user.id %}"><img src="{% static 'images/button_fees.png' %}" /></a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="pag-nav">
+        <nav class="center-block">
+            <ul class="pagination pagination-sm">
+                {% if users.has_previous %}
+                    <li>
+                        <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
+                            <span aria-hidden="true">1</span>
+                        </a>
+                    </li>
+                    {% if users.number > 2 %}
                         <li class="disabled">
                             <a href="#" aria-label="Previous">
                                 <span aria-hidden="true">...</span>
                             </a>
                         </li>
-                        <li>
-                            <a href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
-                                <span aria-hidden="true">{{ users.paginator.num_pages }}</span>
-                            </a>
+                    {% endif %}
+                {% endif %}
+                {% for p in page_list %}
+                    {% if users.number == p %}
+                        <li class="active">
+                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
                         </li>
                     {% else %}
-                        <li class="disabled">
-                            <a href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
+                        <li class="">
+                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
                         </li>
                     {% endif %}
-                </ul>
-            </nav>
-        </div>
-        <ul class="list-group">
-            <li class="list-group-item">
-                <span class="badge">{{ all }}</span>
-                {% trans 'All' %}
-            </li>
-            <li class="list-group-item">
-                <span class="badge">{{ end }}</span>
-                {% trans 'End' %}
-            </li>
-            <li class="list-group-item">
-                <span class="badge">{{ disabled }}</span>
-                {% trans 'Disabled' %}
-            </li>
-            <li class="list-group-item">
-                <span class="badge">{{ deleted }}</span>
-                {% trans 'Deleted' %}
-            </li>
-        </ul>
-    {% endif %}
+                {% endfor %}
+                {% if users.has_next %}
+                    <li class="disabled">
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">...</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
+                            <span aria-hidden="true">{{ users.paginator.num_pages }}</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="disabled">
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <span class="badge">{{ all }}</span>
+            {% trans 'All' %}
+        </li>
+        <li class="list-group-item">
+            <span class="badge">{{ end }}</span>
+            {% trans 'End' %}
+        </li>
+        <li class="list-group-item">
+            <span class="badge">{{ disabled }}</span>
+            {% trans 'Disabled' %}
+        </li>
+        <li class="list-group-item">
+            <span class="badge">{{ deleted }}</span>
+            {% trans 'Deleted' %}
+        </li>
+    </ul>
 {% endblock %}

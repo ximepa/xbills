@@ -435,3 +435,47 @@ ol, ul {
 .progress, .progress-margin {
     margin-bottom: 5px;
 }
+.custom-head {
+    border-top: 1px solid black;
+}
+.ui.black.table {
+    border-top: .2em solid #1b1c1d;
+}
+.ui.table {
+    width: 100%;
+    background: #fff;
+    margin: 1em 0;
+    border: 1px solid rgba(34,36,38,.15);
+    box-shadow: none;
+    border-radius: .28571429rem;
+    text-align: left;
+    color: rgba(0,0,0,.87);
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.ui.table > thead > tr > th {
+    vertical-align: bottom;
+    border-bottom: 1px solid #ddd;
+}
+.ui.table thead tr:first-child > th:first-child {
+    border-radius: .28571429rem 0 0;
+}
+.ui.table thead th {
+    cursor: auto;
+    background: #f9fafb;
+    text-align: inherit;
+    color: rgba(0,0,0,.87);
+    padding: .72857143em .51428571em;
+    vertical-align: inherit;
+    font-style: none;
+    font-weight: 700;
+    text-transform: none;
+    border-bottom: 1px solid rgba(34,36,38,.1);
+    border-left: none;
+}
+.ui.table thead tr:first-child > th:first-child {
+    border-radius: .28571429rem 0 0;
+}
+.ui.table thead tr > th:first-child {
+    border-left: none;
+}

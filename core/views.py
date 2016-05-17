@@ -234,8 +234,8 @@ def client(request, uid):
 
     if 'DISTRICT' in request.GET:
         street = Street.objects.filter(district_id=request.GET['DISTRICT'])
-        dict_resp= []
-        for item  in street:
+        dict_resp = []
+        for item in street:
             res = '<option value=' + str(item.id) + '>' + item.name + '</option>'
             dict_resp.append(res1 + res)
         return HttpResponse(dict_resp)
