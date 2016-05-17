@@ -5,6 +5,11 @@
 {% block extra_js %}
     <script type="application/javascript">
         $( document ).ready(function() {
+            function clearjQueryCache(){
+                for (var x in jQuery.cache){
+                    delete jQuery.cache[x];
+                }
+            }
             function getSysInfo(dev){
                 var uptime="";
                 var memory_percent="";
@@ -55,6 +60,7 @@
                 $('#memory_used').text(getSysInfo("memory_used"));
                 $('#memory_free').text(getSysInfo("memory_free"));
                 $('#memory_cached').text(getSysInfo("memory_cached"));
+                clearjQueryCache();
             }, 1000);
         });
     </script>
