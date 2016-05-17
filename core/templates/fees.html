@@ -61,20 +61,10 @@
                     </nav>
                 </div>
             {% endif %}
-            <div class="panel panel-default table-responsive">
-                <div class="panel-heading hidden-print">
-{#                    <div class="btn-group pull-left"><a title="" class="hidden-print" href=""><span class="glyphicon glyphicon-search"></span></a>#}
-{#                    </div>#}
-                    <div class="btn-group btn-group-xs" role="group">
-                    </div>
-{#                    <div class="btn-group pull-right">#}
-{#                        <button class="btn btn-default btn-xs" data-toggle="collapse" aria-expanded="true" data-target="#"><span class="glyphicon glyphicon-resize-small"></span>#}
-{#                        </button>#}
-{#                    </div>#}
-                </div>
-                <table class="table table-hover table-striped table-condensed" >
+            {% if fees %}
+                <table class="ui black table table-hover table-striped table-condensed" >
                     <thead>
-                        <tr class="info">
+                        <tr class="">
                             <th>
                                 <a href="?{% url_replace request 'order_by' 'id' %}">{% trans 'Number' %}</a>
                             </th>
@@ -112,7 +102,9 @@
                         {% endfor %}
                     </tbody>
                 </table>
-            </div>
+            {% else %}
+                {% trans 'Fees not found' %}
+            {% endif %}
             {% if fees.paginator.num_pages > 1 %}
                 <div class="pag-nav">
                     <nav class="center-block">

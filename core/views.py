@@ -8,11 +8,12 @@ from .models import User, Payment, Bill, Fees, Tp, ip_to_num, AdminLog, AbonTari
 from django.contrib import messages
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .commands import strfdelta
+from .commands import strfdelta, sizeof_fmt
 import module_check
 import platform
 import psutil
 import datetime
+from django.http import JsonResponse
 
 
 def custom_redirect(url_name, *args, **kwargs):
@@ -24,7 +25,27 @@ def custom_redirect(url_name, *args, **kwargs):
 
 
 @login_required()
+def sysinfo(request, settings=settings):
+    if request.method == 'GET':
+        boot_time = datetime.datetime.fromtimestamp(psutil.boot_time())
+        d2 = datetime.datetime.now()
+        diff = abs((d2 - boot_time))
+        uptime = strfdelta(diff, settings.UPTIME_FORMAT)
+        memory = psutil.virtual_memory()
+        data = {
+            'uptime': uptime,
+            'memory_percent': memory.percent,
+            'memory_used': sizeof_fmt(memory.used),
+            'memory_free': sizeof_fmt(memory.free),
+            'memory_cached': sizeof_fmt(memory.cached)
+        }
+        return JsonResponse(data)
+
+
+@login_required()
 def index(request, settings=settings):
+    if request.method == 'GET':
+        print request.GET
     sys = platform.platform()
     psutil.boot_time()
     boot_time = datetime.datetime.fromtimestamp(psutil.boot_time())

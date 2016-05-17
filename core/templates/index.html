@@ -2,13 +2,70 @@
 {% load i18n %}
 {% load staticfiles %}
 {% load url %}
+{% block extra_js %}
+    <script type="application/javascript">
+        $( document ).ready(function() {
+            function getSysInfo(dev){
+                var uptime="";
+                var memory_percent="";
+                var memory_used="";
+                var memory_free="";
+                var memory_cached="";
+                $.ajax({
+                    type: "GET",
+                    url: "{% url 'core:sysinfo' %}",
+                    datatype: 'json',
+                    async: false,
+                    success: function(data){
+                        uptime = data.uptime;
+                        memory_percent = data.memory_percent;
+                        memory_used = data.memory_used;
+                        memory_free = data.memory_free;
+                        memory_cached = data.memory_cached;
+                    }
+                });
+
+                //alert(JSON.stringify(returnValue));
+                if (dev == 'uptime') {
+                    return uptime;
+                }
+                else if (dev == 'memory_percent') {
+                    return memory_percent;
+                }
+                else if (dev == 'memory_used') {
+                    return memory_used;
+                }
+                else if (dev == 'memory_free') {
+                    return memory_free;
+                }
+                else if (dev == 'memory_cached') {
+                    return memory_cached;
+                }
+            }
+            $('#uptime').text(getSysInfo("uptime"));
+            $('#memory_percent').text(getSysInfo("memory_percent") + '%');
+            $('#memory_percent').width(getSysInfo("memory_percent") + '%');
+            $('#memory_used').text(getSysInfo("memory_used"));
+            $('#memory_free').text(getSysInfo("memory_free"));
+            $('#memory_cached').text(getSysInfo("memory_cached"));
+            var timerId = setInterval(function() {
+                $('#uptime').text(getSysInfo("uptime"));
+                $('#memory_percent').text(getSysInfo("memory_percent") + '%');
+                $('#memory_percent').width(getSysInfo("memory_percent") + '%');
+                $('#memory_used').text(getSysInfo("memory_used"));
+                $('#memory_free').text(getSysInfo("memory_free"));
+                $('#memory_cached').text(getSysInfo("memory_cached"));
+            }, 1000);
+        });
+    </script>
+{% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-sm-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     {% trans 'System' %}: {{ sys }}
-                    <div class="pull-right">{% trans 'Uptime' %}: {{ uptime }}</div>
+                    <div class="pull-right">{% trans 'Uptime' %}: <span id="uptime"></span></div>
                 </div>
                 <div class="panel-body">
                     <div class="row">
@@ -68,30 +125,30 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-4">{% trans 'Used' %}:</div>
-                                        <div class="col-sm-8 progress-margin">{% sizeof_fmt memory.used %}</div>
+                                        <div class="col-sm-8 progress-margin" id="memory_used"></div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-4">{% trans 'Free' %}:</div>
-                                        <div class="col-sm-8 progress-margin">{% sizeof_fmt memory.free %}</div>
+                                        <div class="col-sm-8 progress-margin" id="memory_free"></div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-4">{% trans 'Cached' %}:</div>
-                                        <div class="col-sm-8 progress-margin">{% sizeof_fmt memory.cached %}</div>
+                                        <div class="col-sm-8 progress-margin" id="memory_cached"></div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-4">{% trans 'Load' %}:</div>
                                         <div class="col-sm-8">
                                             <div class="progress">
                                                 {% if memory.percent >= settings.MEM_DANGER_THRESHOLD %}
-                                                    <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="{{ memory.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ memory.percent }}%">
+                                                    <div id="memory_percent" class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="{{ memory.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ memory.percent }}%">
                                                         {{ memory.percent }}%
                                                     </div>
                                                 {% elif memory.percent >= settings.MEM_WARNING_THRESHOLD %}
-                                                    <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="{{ memory.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ memory.percent }}%">
+                                                    <div id="memory_percent" class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="{{ memory.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ memory.percent }}%">
                                                         {{ memory.percent }}%
                                                     </div>
                                                 {% else %}
-                                                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{ memory.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ memory.percent }}%">
+                                                    <div id="memory_percent" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{ memory.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ memory.percent }}%">
                                                         {{ memory.percent }}%
                                                     </div>
                                                 {% endif %}
