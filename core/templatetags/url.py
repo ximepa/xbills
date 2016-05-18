@@ -81,14 +81,18 @@ def sizify(value):
 
 @register.simple_tag
 def convert_bytes(value, giga):
-    print value
-    print giga
-    if giga == 0:
-        value = value
+    #print value
+    #print giga
+    if value != 0:
+        if giga == 0:
+            value = value
+        else:
+            value = value + 4294967296 * giga
+        size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
+        i = int(math.floor(math.log(value,1024)))
+        p = math.pow(1024,i)
+        s = round(value/p,2)
+        return '%s %s' % (s, size_name[i])
     else:
-        value = value + 4294967296 * giga
-    size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
-    i = int(math.floor(math.log(value,1024)))
-    p = math.pow(1024,i)
-    s = round(value/p,2)
-    return '%s %s' % (s, size_name[i])
+        print value
+        return '%s %s' % (str(value), 'B')

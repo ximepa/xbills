@@ -401,7 +401,7 @@ class Nas(models.Model):
         ordering = ['id']
 
     def __unicode__(self):
-        return str(self.name)
+        return str(self.id)
 
 class Dv_log(models.Model):
     start = models.DateTimeField(default='0000-00-00 00:00:00', primary_key=True)

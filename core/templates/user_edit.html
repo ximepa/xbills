@@ -311,13 +311,13 @@
                                                 {% convert_timestamp_to_time s.started %}
                                             </td>
                                             <td>
-                                                {% convert_bytes  s.acct_input_octets s.acct_input_gigawords%}
+                                                {% convert_bytes s.acct_input_octets s.acct_input_gigawords%}
                                             </td>
                                             <td>
                                                 {% convert_bytes s.acct_output_octets s.acct_output_gigawords%}
                                             </td>
                                             <td>
-                                                {{ s.nas }}
+                                                {{ s.nas.name }}
                                             </td>
                                             <td>
                                                 <a class="btn btn-xs btn-link" href="#"><span class="glyphicon glyphicon-remove"></span></a>
