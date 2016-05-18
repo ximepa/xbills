@@ -46,6 +46,9 @@
                 else if (dev == 'memory_cached') {
                     return memory_cached;
                 }
+                else if (dev == 'cpu_count') {
+                    return cpu_count;
+                }
             }
             $('#uptime').text(getSysInfo("uptime"));
             $('#memory_percent').text(getSysInfo("memory_percent") + '%');

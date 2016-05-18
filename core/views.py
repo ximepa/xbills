@@ -37,7 +37,7 @@ def sysinfo(request, settings=settings):
             'memory_percent': memory.percent,
             'memory_used': sizeof_fmt(memory.used),
             'memory_free': sizeof_fmt(memory.free),
-            'memory_cached': sizeof_fmt(memory.cached)
+            'memory_cached': sizeof_fmt(memory.cached),
         }
         return JsonResponse(data)
 
