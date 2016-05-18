@@ -67,12 +67,12 @@
                 </div>
                 <a title="Поиск" class="hidden-print" href=""><span class="glyphicon glyphicon-search"></span></a>
             </div>
-{#        <div class="btn-group btn-group-xs" role="group"></div>#}
-{#        <div class="btn-group pull-right">#}
-{#            <button class="btn btn-default btn-xs" data-toggle="collapse" aria-expanded="true" data-target="#p_NAS_LIST">#}
-{#                <span class="glyphicon glyphicon-resize-small"></span>#}
-{#            </button>#}
-{#        </div>#}
+            <div class="btn-group btn-group-xs" role="group"></div>
+            <div class="btn-group pull-right">
+                <button class="btn btn-default btn-xs" data-toggle="collapse" aria-expanded="true" data-target="#p_NAS_LIST">
+                    <span class="glyphicon glyphicon-resize-small"></span>
+                </button>
+            </div>
         </div>
         <div class=" collapse in" id="p_NAS_LIST">
             <table class="table table-bordered text-center table-striped table-hover table-condensed" id="NAS_LIST_">
@@ -227,6 +227,7 @@
                     <tr class="info">
                         <th>{% trans 'Login' %}</th>
                         <th>{% trans 'FIO' %}</th>
+                        <th>{% trans 'CID' %}</th>
                         <th>{% trans 'Deposit' %}</th>
                         <th>{% trans 'Credit' %}</th>
                         <th>{% trans 'Login status' %}</th>
@@ -240,25 +241,26 @@
                     <tr>
                         <td><a href="{% url 'core:clients' %}{{ session.uid.id }}">{{ session.user_name }}</a></td>
                         <td>{{ session.uid.pi.fio }}</td>
+                        <td>{{ session.CID }}</td>
                         {% if session.uid.bill.deposit < 0 %}
-                            <td><span style="color: red">{{ session.uid.bill.deposit }}</span></td>
+                            <td><span class="label label-danger">{{ session.uid.bill.deposit }}</span></td>
                         {% else %}
                             <td>{{ session.uid.bill.deposit }}</td>
                         {% endif %}
                         {% if user.credit > 0 %}
-                            <td><span style="color: green">{{ user.credit }}</span></td>
+                            <td><span class="label label-success">{{ user.credit }}</span></td>
                         {% else %}
                             <td>{{ user.credit }}</td>
                         {% endif %}
                         {% if user.disabled %}
-                            <td><span style="color: red">{% trans 'Disabled' %}</span></td>
+                            <td><span class="label label-danger">{% trans 'Disabled' %}</span></td>
                         {% else %}
-                            <td><span style="color: green">{% trans 'Active' %}</span></td>
+                            <td><span class="label label-success">{% trans 'Active' %}</span></td>
                         {% endif %}
                         {% if user.deleted %}
-                            <td><span style="color: red">{% trans 'Yes' %}</span></td>
+                            <td><span class="label label-danger">{% trans 'Yes' %}</span></td>
                         {% else %}
-                            <td>{% trans 'No' %}</td>
+                            <td><span class="label label-success">{% trans 'No' %}</span></td>
                         {% endif %}
                         <td><a href="{% url 'core:payments' %}{{ session.uid.id }}"><img src="{% static 'images/button_payments.png' %}" /></a></td>
                         <td><a href="{% url 'core:fees' %}{{ session.uid.id }}"><img src="{% static 'images/button_fees.png' %}" /></a></td>
