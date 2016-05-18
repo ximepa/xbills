@@ -6,7 +6,6 @@ app_name = 'core'
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^sysinfo/$', views.sysinfo, name='sysinfo'),
     url(r'^clients/$', views.clients, name='clients'),
     url(r'^clients/(?P<uid>\d+)/$', views.client, name='client'),
     url(r'^search/$', views.search, name='search'),

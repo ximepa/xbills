@@ -31,24 +31,6 @@ def custom_redirect(url_name, *args, **kwargs):
 
 
 @login_required()
-def sysinfo(request, settings=settings):
-    if request.method == 'GET':
-        boot_time = datetime.datetime.fromtimestamp(psutil.boot_time())
-        d2 = datetime.datetime.now()
-        diff = abs((d2 - boot_time))
-        uptime = strfdelta(diff, settings.UPTIME_FORMAT)
-        memory = psutil.virtual_memory()
-        data = {
-            'uptime': uptime,
-            'memory_percent': memory.percent,
-            'memory_used': sizeof_fmt(memory.used),
-            'memory_free': sizeof_fmt(memory.free),
-            'memory_cached': sizeof_fmt(memory.cached),
-        }
-        return JsonResponse(data)
-
-
-@login_required()
 def index(request, settings=settings):
     if request.method == 'GET':
         print request.GET
