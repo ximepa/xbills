@@ -52,8 +52,7 @@ def index(request, settings=settings):
 def nas(request):
     if 'sessions' in request.GET:
         sessions = request.GET['sessions']
-        order_by = request.GET.get('order_by', '-user_name')
-        session_list = Dv_calls.objects.filter(nas=request.GET['sessions']).order_by(order_by)
+        session_list = Dv_calls.objects.filter(nas=request.GET['sessions'])
         all = session_list.count()
         paginator = Paginator(session_list, 20)
         page = request.GET.get('page', 1)

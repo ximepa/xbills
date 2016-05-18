@@ -260,8 +260,8 @@
                         {% else %}
                             <td>{% trans 'No' %}</td>
                         {% endif %}
-                        <td><a href="{% url 'core:index' %}?index=payments&uid={{ user.id }}"><img src="{% static 'images/button_payments.png' %}" /></a></td>
-                        <td><a href="{% url 'core:fees' %}?uid={{ user.id }}"><img src="{% static 'images/button_fees.png' %}" /></a></td>
+                        <td><a href="{% url 'core:payments' %}{{ session.uid.id }}"><img src="{% static 'images/button_payments.png' %}" /></a></td>
+                        <td><a href="{% url 'core:fees' %}{{ session.uid.id }}"><img src="{% static 'images/button_fees.png' %}" /></a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -325,7 +325,7 @@
                     {% trans 'End' %}
                 </li>
                 <li class="list-group-item">
-                    <span class="badge">{{ disabled }}</span>
+                    <span class="badge">{{ sespage.uid.count }}</span>
                     {% trans 'Disabled' %}
                 </li>
                 <li class="list-group-item">
