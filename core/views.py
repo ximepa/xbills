@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 import pyrad
 import sys
-from pyrad.client import Client
+from pyrad.client import Client, packet
 from pyrad.dictionary import Dictionary
 from .auth_backend import AuthBackend
 from .models import User, Payment, Bill, Fees, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog, Dv_log, Admin
@@ -251,40 +251,18 @@ def search(request):
         return HttpResponse(dict_resp)
     return render(request, 'search.html', locals())
 
-def SendPacket(srv, req):
-    try:
-        srv.SendPacket(req)
-    except pyrad.client.Timeout:
-        print "RADIUS server does not reply"
-        sys.exit(1)
-    except socket.error, error:
-        print "Network error: " + error[1]
-        sys.exit(1)
-
 
 def client(request, uid):
-    # if 'hangup' in request.GET:
-    #     srv=Client(server="172.16.6.118:3799",
-    #     secret="radsecret",
-    #     dict=Dictionary("dictionary"))
-    #
-    #     req=srv.CreateAcctPacket(User_Name="koka")
-    #
-    #     # req["NAS-IP-Address"]="172.16.6.118"
-    #     # req["NAS-Port"]=0
-    #     # req["NAS-Identifier"]=""
-    #     # req["Called-Station-Id"]="00-04-5F-00-0F-D1"
-    #     # req["Calling-Station-Id"]="00-01-24-80-B3-9C"
-    #     # req["Framed-IP-Address"]="10.0.0.100"
-    #     #
-    #     # print "Sending accounting start packet"
-    #     # req["Acct-Status-Type"]="Start"
-    #     # SendPacket(srv, req)
-    #
-    #     print "Sending accounting stop packet"
-    #     req["Acct-Status-Type"]="Stop"
-    #     req["Acct-Session-Id"]="490331"
-    #     SendPacket(srv, req)
+    if 'hangup' in request.GET:
+        sclient = Client(server="172.16.6.118", secret="radsecret", acctport=3799, dict=Dictionary("dictionary"))
+        print sclient
+        req = sclient.CreateAcctPacket(code=pyrad.packet.DisconnectRequest)
+        print req
+
+        print "Sending accounting stop packet"
+        req["Acct-Session-Id"] = request.GET['acct_session_id']
+        print req
+        reply = sclient.SendPacket(req)
 
     res1 = '<option selected="selected"></option>'
     if 'district' in request.GET:
