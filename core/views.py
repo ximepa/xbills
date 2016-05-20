@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 import pyrad
 import sys
 from pyrad.client import Client, packet
+from pyrad import server
 from pyrad.dictionary import Dictionary
 from .auth_backend import AuthBackend
 from .models import User, Payment, Bill, Fees, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog, Dv_log, Admin
@@ -254,15 +255,42 @@ def search(request):
 
 def client(request, uid):
     if 'hangup' in request.GET:
-        sclient = Client(server="172.16.6.118", secret="radsecret", acctport=3799, dict=Dictionary("dictionary"))
-        print sclient
-        req = sclient.CreateAcctPacket(code=pyrad.packet.DisconnectRequest)
-        print req
+        # sclient = Client(server="172.16.6.118", secret="radsecret", acctport=3799, dict=Dictionary("dictionary"))
+        # print sclient
+        # req = sclient.CreateAcctPacket(code=pyrad.packet.DisconnectRequest)
+        # print req
+        #
+        # print "Sending accounting stop packet"
+        # req["Acct-Session-Id"] = request.GET['acct_session_id']
+        # print req
+        # reply = sclient.SendPacket(req)
 
-        print "Sending accounting stop packet"
-        req["Acct-Session-Id"] = request.GET['acct_session_id']
-        print req
-        reply = sclient.SendPacket(req)
+        srv = Client(server='172.16.6.118', secret='radsecret',
+                     dict=Dictionary("dictionary"))
+
+        try:
+            # req = srv.CreateAcctPacket()
+            # req['User-Name'] = '30b5.c234.d23f'
+            # req['Acct-Session-Id'] = '430957'
+            # req['Acct-Status-Type'] = 1  # Start
+            # print srv
+            # print req
+            #
+            # reply = srv.SendPacket(req)
+            # print '==========Response==========='
+            # print reply
+            # if not reply.code == pyrad.packet.AccountingResponse:
+            #     raise Exception("Unexpected response from RADIUS server")
+            #
+            # sys.stdout.write('.')
+            # sys.stdout.flush()
+
+            req = srv.CreateAcctPacket(code=pyrad.packet.StatusClient)
+            req['User-Name'] = "30b5.c234.d23f"
+            print srv.SendPacket(req).code
+            print '==========Response2==========='
+        except Exception as e:
+            print e.args
 
     res1 = '<option selected="selected"></option>'
     if 'district' in request.GET:
