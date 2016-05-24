@@ -6,7 +6,7 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>{% block title %}Xbills v0.1{% endblock %}</title>
+    <title>{% block title %}Xbills v0.0.6{% endblock %}</title>
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
     <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
@@ -38,9 +38,9 @@
                 </div>
                 <div class="collapse navbar-collapse js-navbar-collapse">
                     <ul class="nav navbar-nav my-nav">
-                        <li><a href="{% url 'core:index' %}" class="a-nav"><i class="fa fa-dashboard fa-2x"></i><br/>{% trans 'Dashboard' %}</a></li>
+                        <li><a href="{% url 'core:index' %}" class="a-nav"><i class="fa fa-dashboard fa-fw"></i>{% trans 'Dashboard' %}</a></li>
                         <li class="dropdown dropdown-large">
-                            <a id="client-menu" class="dropdown-toggle a-nav" data-toggle="dropdown" href="{% url 'core:clients' %}"><i class="fa fa-bars fa-2x" aria-hidden="true"></i><br/>{% trans 'Menu' %} <span class="fa fa-caret-down"></span></a>
+                            <a id="client-menu" class="dropdown-toggle a-nav" data-toggle="dropdown" href="{% url 'core:clients' %}"><i class="fa fa-bars fa-fw" aria-hidden="true"></i>{% trans 'Menu' %} <span class="fa fa-caret-down"></span></a>
                             <ul class="dropdown-menu dropdown-menu-large row">
                                 <li class="col-sm-3">
                                     <ul>
@@ -105,7 +105,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li><a href="{% url 'core:search' %}" class="a-nav"><i class="fa fa-search fa-2x"></i><br/>{% trans 'Search' %}</a></li>
+                        <li><a href="{% url 'core:search' %}" class="a-nav"><i class="fa fa-search fa-fw"></i>{% trans 'Search' %}</a></li>
                     </ul>
                 </div><!-- /.nav-collapse -->
             </nav>
