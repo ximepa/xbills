@@ -1,0 +1,56 @@
+{% extends 'layout_edit.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% load url %}
+{% block content %}
+    <div class="page-header text-center">
+        <h4><i class="fa fa-cog"></i> {% trans 'User Dhcp' %}</h4>
+    </div>
+    <form class="form-horizontal" method="post" name="dv_form">{% csrf_token %}
+        <div class="panel-body">
+
+        </div>
+        <hr/>
+        <input type="submit" name="dv_submit" class="btn btn-primary btn-xs center-block" value="{% trans 'Change' %}">
+    </form>
+    {% if host %}
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="well well-sm text-center">
+                        <div class="row">
+                            <div class="col-md-2"></div>
+                            <div class="col-md-8 text-center">
+                                <table class="table table-striped table-hover table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">ID</th>
+                                            <th class="text-center">Login</th>
+                                            <th class="text-center">IP</th>
+                                            <th class="text-center">Hostname</th>
+                                            <th class="text-center">netwirk_name</th>
+                                            <th class="text-center">MAC</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for s in host %}
+                                        <tr>
+                                            <td>{{ s.id }}</td>
+                                            <td></td>
+                                            <td>{% ip_convert s.ip %}</td>
+                                            <td>{{ s.hostname }}</td>
+                                            <td>{{ s.nas }}</td>
+                                            <td>{{ s.mac }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    {% endif %}
+{% endblock %}

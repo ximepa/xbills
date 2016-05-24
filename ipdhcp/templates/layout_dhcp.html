@@ -5,13 +5,6 @@
 {% block layout %}
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="well well-sm">
-                <i class="fa fa-user fa-fw"></i> <a href="{% url 'core:client' user.id %}">{{ user.login }}</a> (UID: {{ user.id }})
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="panel panel-default">
                 <ul class="nav nav-tabs">
                     {% url 'core:client' user.id as user_base_url %}

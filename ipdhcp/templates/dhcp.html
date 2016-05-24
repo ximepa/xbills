@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'layout_dhcp.html' %}
 {% load url %}
 {% load i18n %}
 {% block content %}
@@ -55,7 +55,6 @@
             </nav>
         </div>
     {% endif %}
-
     <table class="table table-bordered text-center table-striped table-hover table-condensed">
         <thead>
             <tr class="">
@@ -76,9 +75,9 @@
                 <td>{{ dhcp.name }}</td>
                 <td>{% ip_convert dhcp.network %}</td>
                 <td>{% ip_convert dhcp.mask %}</td>
-                <td>{{ dhcp.id }}</td>
-                <td>{{ dhcp.id }}</td>
-                <td>{{ dhcp.id }}</td>
+                <td>{% ip_convert dhcp.routers %}</td>
+                <td>{{ dhcp.dns }}</td>
+                <td>{{ dhcp.dns2 }}</td>
                 <td>{{ dhcp.id }}</td>
             </tr>
             {% endfor %}
