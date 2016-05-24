@@ -23,6 +23,10 @@ import datetime
 from django.http import JsonResponse
 
 
+def fsettings(request):
+    return render(request, 'settings.html', locals())
+
+
 def custom_redirect(url_name, *args, **kwargs):
     from django.core.urlresolvers import reverse
     import urllib
@@ -253,44 +257,28 @@ def search(request):
     return render(request, 'search.html', locals())
 
 
+def SendPacket(srv, req):
+    try:
+        srv.SendPacket(req)
+    except pyrad.client.Timeout:
+        print "RADIUS server does not reply"
+        sys.exit(1)
+    except socket.error, error:
+        print "Network error: " + error[1]
+        sys.exit(1)
+
+
 def client(request, uid):
     if 'hangup' in request.GET:
-        # sclient = Client(server="172.16.6.118", secret="radsecret", acctport=3799, dict=Dictionary("dictionary"))
-        # print sclient
-        # req = sclient.CreateAcctPacket(code=pyrad.packet.DisconnectRequest)
-        # print req
-        #
-        # print "Sending accounting stop packet"
-        # req["Acct-Session-Id"] = request.GET['acct_session_id']
-        # print req
-        # reply = sclient.SendPacket(req)
+        sclient = Client(server="172.16.6.118", secret="radsecret", acctport=3799, dict=Dictionary("dictionary"))
+        print sclient
+        req = sclient.CreateAcctPacket(code=pyrad.packet.DisconnectRequest)
+        print req
 
-        srv = Client(server='172.16.6.118', secret='radsecret',
-                     dict=Dictionary("dictionary"))
-
-        try:
-            # req = srv.CreateAcctPacket()
-            # req['User-Name'] = '30b5.c234.d23f'
-            # req['Acct-Session-Id'] = '430957'
-            # req['Acct-Status-Type'] = 1  # Start
-            # print srv
-            # print req
-            #
-            # reply = srv.SendPacket(req)
-            # print '==========Response==========='
-            # print reply
-            # if not reply.code == pyrad.packet.AccountingResponse:
-            #     raise Exception("Unexpected response from RADIUS server")
-            #
-            # sys.stdout.write('.')
-            # sys.stdout.flush()
-
-            req = srv.CreateAcctPacket(code=pyrad.packet.StatusClient)
-            req['User-Name'] = "30b5.c234.d23f"
-            print srv.SendPacket(req).code
-            print '==========Response2==========='
-        except Exception as e:
-            print e.args
+        print "Sending accounting stop packet"
+        req["Acct-Session-Id"] = request.GET['acct_session_id']
+        print req
+        reply = sclient.SendPacket(req)
 
     res1 = '<option selected="selected"></option>'
     if 'district' in request.GET:

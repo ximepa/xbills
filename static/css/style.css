@@ -424,13 +424,13 @@ ol, ul {
 .navbar-new {
     border-radius: 0 0 4px 4px;
 }
-.navbar-brand {
-    float: left;
-    height: 70px;
-    padding: 15px 15px;
-    font-size: 18px;
-    line-height: 40px;
-}
+/*.navbar-brand {*/
+    /*float: left;*/
+    /*height: 70px;*/
+    /*padding: 15px 15px;*/
+    /*font-size: 18px;*/
+    /*line-height: 40px;*/
+/*}*/
 
 .progress, .progress-margin {
     margin-bottom: 5px;

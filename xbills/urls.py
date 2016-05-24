@@ -11,6 +11,8 @@ urlpatterns = [
     #url(r'^admin/olltv/', include('olltv.urls')),
     #url(r'^admin/', include(admin.site.urls)),
 ]
-
+if check('ipdhcp'):
+    urlpatterns += url(r'^admin/dhcps/', include('ipdhcp.urls')),
 if check('olltv'):
     urlpatterns += url(r'^admin/olltv/', include('olltv.urls')),
+

@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'telephone',
     'olltv',
     'dv',
+    'ipdhcp',
 )
 
 AUTH_USER_MODEL = 'core.Admin'

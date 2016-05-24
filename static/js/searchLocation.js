@@ -24,7 +24,6 @@ $(document).ready(function () {
     var params = 'district=30&address=1';
     $.get(SELF_URL, params, function (data) {
         select.html(data);
-        console.log(data)
       })
       .done(function () {
         label.find('i.fa').remove();

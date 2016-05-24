@@ -65,7 +65,57 @@
                     <td> {{ nas.descr }} </td>
                     <td><a title="Пользователи" class='btn btn-default btn-xs' href="" >Пользователи</a></td>
                     <td><a title="IP_Pool" class='btn btn-default btn-xs' href="" >IP_Pool</a></td>
-                    <td><a data-toggle="modal" data-target="#edit_nas" title="{% trans '' %}"  href="{% url 'core:nas' %}{{ nas.id }}"><span class='glyphicon glyphicon-pencil'></span></a></td>
+                    <td>
+                        <a data-toggle="modal" data-target="#edit_nas-{{ nas.id }}" title="{% trans '' %}" href="#edit_nas-{{ nas.id }}"><span class='glyphicon glyphicon-pencil'></span></a>
+                        <div class="modal fade" id="edit_nas-{{ nas.id }}" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-title">
+                                <div class="modal-content">
+                                    <div class="modal-header">Сервер доступа
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    </div>
+                                    <div class="modal-body text-left" id="nestedform">
+                                        <form class="form-horizontal" method="post" name="form_nas">{% csrf_token %}
+                                            <div class="panel panel-default panel-form">
+                                                <div class="panel-body">
+                                                    <div class="form-group">
+                                                        <label class="control-label col-md-3 required" for="nas_ip">IP:</label>
+                                                        <div class="col-md-9">
+                                                            <input type="text" id="nas_ip" name="nas_ip" value="{{ nas.ip }}" placeholder="{% trans 'Server IP' %}" class="form-control">
+                                                        </div>
+                                                        <label class="control-label col-md-3" for="server_name"> {% trans 'Server name' %} </label>
+                                                        <div class="col-md-9">
+                                                            <input type="text" id="server_name" name="server_name" value="{{ nas.name }}" placeholder="{% trans 'Server name' %}" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-12 bg-info">Управление</label>
+                                                        <label class="control-label col-md-3" for="nas_ip_port">IP:PORT</label>
+                                                        <div class="col-md-9">
+                                                            <input type="text" id="nas_ip_port" name="nas_ip_port" value="{{ nas.mng_host_port }}" placeholder="" class="form-control">
+                                                        </div>
+                                                        <label class="control-label col-md-3" for="user">{% trans 'User' %}:</label>
+                                                        <div class="col-md-9">
+                                                            <input  type="text" id="user" name="user" value="{{ nas.mng_user }}" placeholder="{% trans 'User' %}" class="form-control">
+                                                        </div>
+                                                        <label class="control-label col-md-3" for="nas_password">{% trans 'Password' %}:</label>
+                                                        <div class="col-md-9">
+                                                            <input type="password" id="nas_password" name="nas_password" value="{{ nas.mng_password }}" placeholder="{% trans 'Password' %}" class="form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row text-center">
+                                                <input id="edit_nas-{{ nas.id }}" name="edit_nas-{{ nas.id }}" class="btn btn-primary" value="{% trans 'Edit' %}" type="submit">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
                     <td><a title="Удалить" class='hidden-print' href="#"  data-id='' data-toggle='modal' data-uix='Удалить 86?' data-target='#comments_add'><span class='glyphicon glyphicon-trash'></span></a></td>
                 </tr>
                 {% endfor %}
