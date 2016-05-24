@@ -2,10 +2,6 @@
  * Created by ximepa on 23.05.16.
  */
 $(document).ready(function(){
-    //console.log(location.pathname);
-    //$(function() {
-    //  $('nav a[href^="/' + location.pathname + '"]').addClass('linked');
-    //});
     $(function(){
         var current = location.pathname;
         $('.navbar a').each(function(){
@@ -19,21 +15,30 @@ $(document).ready(function(){
             $('#client-menu').addClass('linked');
         }
     });
-    //var body_class = $.cookie('linked');
-    //if(body_class) {
+    var body_class = $.cookie('body_class');
+    if(body_class) {
     //    console.log('class');
-    //    var currentPage = location.pathname;
-    //    $('a-nav').each(function() {
+        $('body').addClass(body_class);
     //        var currentHref = $(this).attr('href');
     //        if(currentHref == currentPage) {
     //            $(this).attr('class', body_class);
     //        }
     //    })
-    //} else {
-    //    console.log('no class');
-    //}
-    //$('.a-nav').on('click', function() {
-    //    $(this).toggleClass('linked');
-    //    $.cookie('linked', $('body').attr('class'));
-    //});
+    }
+    $('#hide-menu').on('click', function() {
+        //$('body').toggleClass('hidden-menu');
+        if ($('body').hasClass('hidden-menu')){
+            $.cookie('body_class', '');
+        } else {
+            $.cookie('body_class', 'hidden-menu');
+        }
+    });
+    $('.minifyme').on('click', function() {
+        //$('body').toggleClass('hidden-menu');
+        if ($('body').hasClass('minified')){
+            $.cookie('body_class', '');
+        } else {
+            $.cookie('body_class', 'minified');
+        }
+    });
 });
