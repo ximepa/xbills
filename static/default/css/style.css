@@ -479,3 +479,11 @@ ol, ul {
 .ui.table thead tr > th:first-child {
     border-left: none;
 }
+
+.nav .open > a, .nav .open > a:focus, .nav .open > a:hover {
+    background-color: #eee;
+    border-color: none;
+}
+body {
+    font-size: 12px;
+}

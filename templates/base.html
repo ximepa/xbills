@@ -1,4 +1,3 @@
-
 {% load i18n %}
 {% load staticfiles %}
 {% load url %}
@@ -11,26 +10,23 @@
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
     <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
-    <link href="{% static 'css/stylesheets.css' %}" rel="stylesheet">
     {% block extra_css %}
     {% endblock %}
     {% block jquery %}
         <script src="{% static 'js/jquery-1.12.3.min.js' %}"></script>
     {% endblock %}
+    <script src="{% static 'js/jquery.cookie.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/settings.js' %}"></script>
-    <script src="{% static 'js/jquery-migrate.min.js' %}"></script>
-    <script src="{% static 'js/jquery.uniform.min.js' %}"></script>
-    <script src="{% static 'js/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
     {% block extra_js %}
     {% endblock %}
     {% block extra_scripts %}
     {% endblock %}
 </head>
-<body class="bg-img-num0" data-settings="close" style="">
+<body>
     {% block wrapper %}
-        <div class="container">
-            <nav class="navbar brb" id="top_navbar">
+        <div id="wrapper">
+            <nav class="navbar navbar-new navbar-default navbar-static" id="top_navbar">
                 <div class="navbar-header">
                     <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".js-navbar-collapse">
                         <span class="sr-only">Toggle navigation</span>
@@ -40,40 +36,19 @@
                     </button>
                     <a class="navbar-brand" href="#">{% version %}</a>
                 </div>
-                <div class="collapse navbar-collapse navbar-ex1-collapse">
-                    <ul class="nav navbar-nav">
-                        {% url 'core:index' as core_index_url %}
-                        {% if request.get_full_path == core_index_url %}
-                            <li><a href="{{ core_index_url }}"><span class="fa fa-dashboard"></span>{% trans 'Dashboard' %}</a></li>
-                        {% else %}
-                            <li><a href="{{ core_index_url }}"><span class="fa fa-dashboard"></span>{% trans 'Dashboard' %}</a></li>
-                        {% endif %}
-                        <li class="dropdown">
-                            {% url 'core:clients' as core_clients_url %}
-                            {% url 'olltv:index' as olltv_index_url %}
-                            {% url 'core:nas' as core_nas_url %}
-                            {% url 'core:administrators' as core_administrators_url %}
-                            {% if request.get_full_path == core_clients_url or request.get_full_path == olltv_index_url or request.get_full_path == core_nas_url or request.get_full_path == core_administrators_url %}
-                                <a class="dropdown-toggle a-nav linked" data-toggle="dropdown" href="{% url 'core:clients' %}"><span class="fa fa-bars fa-2x" aria-hidden="true"></span>{% trans 'Menu' %} <span class="fa fa-caret-down"></span></a>
-                            {% else %}
-                                <a class="dropdown-toggle a-nav" data-toggle="dropdown" href="{% url 'core:clients' %}"><span class="fa fa-bars fa-2x" aria-hidden="true"></span>{% trans 'Menu' %} <span class="fa fa-caret-down"></span></a>
-                            {% endif %}
-                            <ul class="dropdown-menu dropdown-menu-flex row">
+                <div class="collapse navbar-collapse js-navbar-collapse">
+                    <ul class="nav navbar-nav my-nav">
+                        <li><a href="{% url 'core:index' %}" class="a-nav"><i class="fa fa-dashboard fa-2x"></i><br/>{% trans 'Dashboard' %}</a></li>
+                        <li class="dropdown dropdown-large">
+                            <a id="client-menu" class="dropdown-toggle a-nav" data-toggle="dropdown" href="{% url 'core:clients' %}"><i class="fa fa-bars fa-2x" aria-hidden="true"></i><br/>{% trans 'Menu' %} <span class="fa fa-caret-down"></span></a>
+                            <ul class="dropdown-menu dropdown-menu-large row">
                                 <li class="col-sm-3">
                                     <ul>
                                         <li class="dropdown-header"><i class="fa fa-users fa-fw"></i> {% trans 'Clients' %}</li>
-                                        {% if request.get_full_path == core_clients_url %}
-                                            <li><a href="{% url 'core:clients' %}" class="linked"><i class="fa fa-user fa-fw"></i>{% trans 'Logins' %}</a></li>
-                                        {% else %}
-                                            <li><a href="{% url 'core:clients' %}"><i class="fa fa-user fa-fw"></i>{% trans 'Logins' %}</a></li>
-                                        {% endif %}
+                                        <li><a href="{% url 'core:clients' %}"><i class="fa fa-user fa-fw"></i>{% trans 'Logins' %}</a></li>
                                         {% check_module 'olltv' as check_module_olltv %}
                                         {% if check_module_olltv %}
-                                            {% if request.get_full_path == olltv_index_url %}
-                                                <li><a href="{% url 'olltv:index' %}" class="linked"><i class="fa fa-television fa-fw"></i>{% trans 'OLLTV' %}</a></li>
-                                            {% else %}
-                                                <li><a href="{% url 'olltv:index' %}"><i class="fa fa-television fa-fw"></i>{% trans 'OLLTV' %}</a></li>
-                                            {% endif %}
+                                            <li><a href="{% url 'olltv:index' %}"><i class="fa fa-television fa-fw"></i>{% trans 'OLLTV' %}</a></li>
                                         {% endif %}
                                         <li class="disabled"><a href="#">How to use</a></li>
                                         <li class="divider"></li>
@@ -100,16 +75,8 @@
                                 <li class="col-sm-3">
                                     <ul>
                                         <li class="dropdown-header">{% trans 'Configuration' %}</li>
-                                        {% if request.get_full_path == core_administrators_url %}
-                                            <li><a href="{% url 'core:administrators' %}" class="linked"><i class="fa fa-users fa-fw"></i>{% trans 'Administrators' %}</a></li>
-                                        {% else %}
-                                            <li><a href="{% url 'core:administrators' %}"><i class="fa fa-users fa-fw"></i>{% trans 'Administrators' %}</a></li>
-                                        {% endif %}
-                                        {% if request.get_full_path == core_nas_url %}
-                                            <li><a href="{% url 'core:nas' %}" class="linked"><i class="fa fa-server fa-fw"></i>{% trans 'Access servers' %}</a></li>
-                                        {% else %}
-                                            <li><a href="{% url 'core:nas' %}"><i class="fa fa-server fa-fw"></i>{% trans 'Access servers' %}</a></li>
-                                        {% endif %}
+                                        <li><a href="{% url 'core:administrators' %}"><i class="fa fa-users fa-fw"></i>{% trans 'Administrators' %}</a></li>
+                                        <li><a href="{% url 'core:nas' %}"><i class="fa fa-server fa-fw"></i>{% trans 'Access servers' %}</a></li>
                                         <li><a href="#">Checkboxes and radio addons</a></li>
                                         <li class="divider"></li>
                                         <li class="dropdown-header">Navs</li>
@@ -134,12 +101,7 @@
                                 </li>
                             </ul>
                         </li>
-                        {% url 'core:search' as core_search_url %}
-                        {% if request.get_full_path == core_search_url %}
-                            <li><a href="{{ core_search_url }}" class="a-nav linked"><span class="fa fa-search fa-2x"></span>{% trans 'Search' %}</a></li>
-                        {% else %}
-                            <li><a href="{{ core_search_url }}" class="a-nav"><span class="fa fa-search fa-2x"></span>{% trans 'Search' %}</a></li>
-                        {% endif %}
+                        <li><a href="{% url 'core:search' %}" class="a-nav"><i class="fa fa-search fa-2x"></i><br/>{% trans 'Search' %}</a></li>
                     </ul>
                 </div><!-- /.nav-collapse -->
             </nav>
