@@ -361,6 +361,14 @@ class ErrorsLog(models.Model):
     log_type = models.SmallIntegerField(max_length=3, null=False, db_column='log_type')
 
 
+    @property
+    def nas_info(self):
+        try:
+            return Nas.objects.get(id=self.nas_id)
+        except Nas.DoesNotExist:
+            return None
+
+
     class Meta:
         db_table = 'errors_log'
         ordering = ['user']
@@ -417,6 +425,14 @@ class Dv_log(models.Model):
     CID = models.CharField(max_length=18)
     acct_input_gigawords = models.SmallIntegerField(max_length=4, default=0, db_column='acct_input_gigawords')
     acct_output_gigawords = models.SmallIntegerField(max_length=4, default=0, db_column='acct_output_gigawords')
+
+
+    @property
+    def nas_info(self):
+        try:
+            return Nas.objects.get(id=self.nas_id)
+        except Nas.DoesNotExist:
+            return None
 
 
     class Meta:
