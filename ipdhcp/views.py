@@ -1,7 +1,7 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 
-from ipdhcp.models import Dhcphosts_networks
+from ipdhcp.models import Dhcphosts_networks, Dhcphosts_hosts, User
 from xbills import settings
 
 
@@ -31,3 +31,9 @@ def dhcps(request):
         page_list = p
     pre_end = dhcp_page.paginator.num_pages - 2
     return render(request, 'dhcp.html', locals())
+
+def user_dhcp(request, uid):
+    user = User.objects.get(id=uid)
+    host = Dhcphosts_hosts.objects.filter(uid=uid)
+    print host.values()
+    return render(request, 'user_dhcp.html', locals())

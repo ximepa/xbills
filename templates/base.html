@@ -77,6 +77,10 @@
                                         <li class="dropdown-header">{% trans 'Configuration' %}</li>
                                         <li><a href="{% url 'core:administrators' %}"><i class="fa fa-users fa-fw"></i>{% trans 'Administrators' %}</a></li>
                                         <li><a href="{% url 'core:nas' %}"><i class="fa fa-server fa-fw"></i>{% trans 'Access servers' %}</a></li>
+                                        {% check_module 'ipdhcp' as check_module_ipdhcp %}
+                                        {% if check_module_ipdhcp %}
+                                            <li><a href="{% url 'ipdhcp:dhcps' %}"><i class="fa fa-television fa-fw"></i>{% trans 'Dhcp' %}</a></li>
+                                        {% endif %}
                                         <li><a href="#">Checkboxes and radio addons</a></li>
                                         <li class="divider"></li>
                                         <li class="dropdown-header">Navs</li>
