@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 import pyrad
 import sys
-from xbills.hangup import Hangup
+from dv.hangup import Hangup
 from pyrad.client import Client, packet
 from pyrad import server
 from pyrad.dictionary import Dictionary
