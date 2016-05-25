@@ -5,14 +5,10 @@
 {% block layout %}
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="panel-body">
-                <div class="tab-content">
-                    {% block content %}
-                    {% endblock %}
-                </div>
-            </div>
-            {% block extra_content %}
-            {% endblock %}
+        {% block content %}
+        {% endblock %}
+        {% block extra_content %}
+        {% endblock %}
         </div>
     </div>
 {% endblock %}

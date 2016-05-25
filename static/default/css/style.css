@@ -353,19 +353,16 @@ hr {
     border: 0;
     border-top: 1px solid #eee;
 }
-.well {
-    min-height: 20px;
-    padding: 19px;
-    margin-bottom: 5px;
-    background-color: #fff;
-    border: 1px solid #e3e3e3;
-    border-radius: 4px;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+.texture {
+    background-image: url("../images/gray_jean.png");
 }
-.well-sm {
-    padding: 9px;
-    border-radius: 3px;
+.well {
+    background-color: #fff;
+}
+#user-bill {
+    border-top: none;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0);
+    border-radius: 0;
 }
 .page-header {
     padding-bottom: 9px;
