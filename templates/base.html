@@ -25,7 +25,7 @@
     {% block extra_scripts %}
     {% endblock %}
 </head>
-<body class="texture">
+<body id="content" class="texture">
     {% block wrapper %}
         <nav class="navbar navbar-new navbar-default navbar-static" id="top_navbar">
             <div class="container-fluid">
@@ -108,12 +108,32 @@
                 </div><!-- /.nav-collapse -->
             </div>
         </nav>
-        <div id="main">
-            <div class="container-fluid">
-                {% block layout %}
-                {% endblock %}
-            </div>
+        <div class="container-fluid">
+            {% block layout %}
+            {% endblock %}
         </div>
+        <script>
+            $(document).ready(function() {
+                $('a').click(function() {
+                    var url = $(this).attr('href');
+                    if (url != '#') {
+                        $.ajax({
+                            url: url,
+                            success: function (data) {
+                                $('#content').html(data);
+                            }
+                        });
+                    }
+                    // А вот так просто меняется ссылка
+                    if(url != window.location){
+                        window.history.pushState(null, null, url);
+                    }
+
+                    // Предотвращаем дефолтное поведение
+                    return false;
+                });
+            });
+        </script>
     {% endblock %}
 </body>
 </html>
