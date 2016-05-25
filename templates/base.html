@@ -128,12 +128,13 @@
                  $("#ajax_loader").show();
              });
             $(document).ready(function() {
-                $('a').not('a[href$="#"]').click(function() {
+                $('a').not('a[href="#"]').click(function() {
                     var url = $(this).attr('href');
                     $.ajax({
                         url: url,
                         success: function (data) {
                             $('#content').html(data);
+                            $('.dropdown-toggle').dropdown();
                         }
                     });
                     // А вот так просто меняется ссылка
