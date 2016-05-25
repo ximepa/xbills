@@ -13,7 +13,7 @@
     {% block extra_css %}
     {% endblock %}
     {% block jquery %}
-        <script src="{% static 'js/jquery-1.12.3.min.js' %}"></script>
+        <script src="{% static 'js/jquery-2.2.4.min.js' %}"></script>
     {% endblock %}
     <script src="{% static 'js/jquery.cookie.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
@@ -128,12 +128,13 @@
                  $("#ajax_loader").show();
              });
             $(document).ready(function() {
-                $('a').not('a[href$="#"]').click(function() {
+                $('a').not("a[href~='#']").click(function() {
                     var url = $(this).attr('href');
                     $.ajax({
                         url: url,
                         success: function (data) {
                             $('#content').html(data);
+                            $('.dropdown-toggle').dropdown('dropdown')
                         }
                     });
                     // А вот так просто меняется ссылка

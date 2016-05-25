@@ -10,7 +10,8 @@
 {% endblock %}
 {% block extra_scripts %}
 <script type="application/javascript">
-    var SELF_URL = '{% url 'core:client' uid %}';
+    var SELF_URL = '';
+    console.log(SELF_URL)
     var CHOSEN_PARAMS = {
         no_results_text: 'Не существует',
         allow_single_deselect: true,
@@ -48,7 +49,7 @@
                                         <span class="label label-danger form-control-static" >{{ user.bill.deposit|floatformat:4 }}</span>
                                     {% endif %}
                                     <div class="pull-right">
-                                        <a href="{% url 'core:client_payments' uid %}"><i class="fa fa-plus-circle"></i></a>
+                                        <a id="pay" href="{% url 'core:client_payments' uid %}"><i class="fa fa-plus-circle"></i></a>
                                         <a href="{% url 'core:client_fees' uid %}"><i class="fa fa-minus-circle"></i></a>
                                         <a><i class="fa fa-print"></i></a>
                                     </div>
@@ -349,7 +350,7 @@
                                                 <a class="btn btn-xs btn-link" href="#"><span class="glyphicon glyphicon-remove"></span></a>
                                             </td>
                                             <td>
-                                                <a class="btn btn-xs btn-link" href="?hangup&acct_session_id={{ s.acct_session_id }}"><span class="glyphicon glyphicon-off"></span></a>
+                                                <a class="btn btn-xs btn-link" href="?hangup&acct_session_id={{ s.acct_session_id }}&nas_id={{ s.nas_id }}"><span class="glyphicon glyphicon-off"></span></a>
                                             </td>
                                         </tr>
                                     {% endfor %}

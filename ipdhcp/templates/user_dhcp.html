@@ -51,6 +51,11 @@
                     </div>
                 </div>
             </div>
-
     {% endif %}
+    <ul class="list-group">
+        <li class="list-group-item">
+            <span class="badge">{{ host.count }}</span>
+            {% trans 'All' %}
+        </li>
+    </ul>
 {% endblock %}

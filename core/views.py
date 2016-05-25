@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 import pyrad
 import sys
+from xbills.hangup import Hangup
 from pyrad.client import Client, packet
 from pyrad import server
 from pyrad.dictionary import Dictionary
@@ -59,6 +60,7 @@ def nas(request):
         sessions = request.GET['sessions']
         session_list = Dv_calls.objects.filter(nas=request.GET['sessions'])
         all = session_list.count()
+        guest = session_list.filter(guest=1).count()
         paginator = Paginator(session_list, 20)
         page = request.GET.get('page', 1)
         try:
@@ -269,16 +271,9 @@ def SendPacket(srv, req):
 
 
 def client(request, uid):
+    print request.GET
     if 'hangup' in request.GET:
-        sclient = Client(server="172.16.6.118", secret="radsecret", acctport=3799, dict=Dictionary("dictionary"))
-        print sclient
-        req = sclient.CreateAcctPacket(code=pyrad.packet.DisconnectRequest)
-        print req
-
-        print "Sending accounting stop packet"
-        req["Acct-Session-Id"] = request.GET['acct_session_id']
-        print req
-        reply = sclient.SendPacket(req)
+        hangup = Hangup(request.GET['nas_id'], request.GET['acct_session_id'])
 
     res1 = '<option selected="selected"></option>'
     if 'district' in request.GET:
