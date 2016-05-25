@@ -13,10 +13,11 @@
     {% block extra_css %}
     {% endblock %}
     {% block jquery %}
-        <script src="{% static 'js/jquery-2.2.4.min.js' %}"></script>
+        <script src="{% static 'js/jquery-1.12.3.min.js' %}"></script>
     {% endblock %}
     <script src="{% static 'js/jquery.cookie.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/jquery.dim-background.min.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
 
     {% block extra_js %}
@@ -42,7 +43,7 @@
                     <ul class="nav navbar-nav my-nav">
                         <li><a href="{% url 'core:index' %}" class="a-nav"><i class="fa fa-dashboard fa-fw"></i>{% trans 'Dashboard' %}</a></li>
                         <li class="dropdown dropdown-large">
-                            <a id="client-menu" class="dropdown-toggle a-nav" data-toggle="dropdown" href="{% url 'core:clients' %}"><i class="fa fa-bars fa-fw" aria-hidden="true"></i>{% trans 'Menu' %} <span class="fa fa-caret-down"></span></a>
+                            <a id="client-menu" class="dropdown-toggle a-nav" data-toggle="dropdown" href="#"><i class="fa fa-bars fa-fw" aria-hidden="true"></i>{% trans 'Menu' %} <span class="fa fa-caret-down"></span></a>
                             <ul class="dropdown-menu dropdown-menu-large row">
                                 <li class="col-sm-3">
                                     <ul>
@@ -109,21 +110,32 @@
             </div>
         </nav>
         <div class="container-fluid">
+                <div id='ajax_loader' style="position: fixed; left: 50%; top: 50%; display: none; z-index: 1000">
+                    <div class="well">
+                        <img src="{% static 'images/ajax-loader.gif' %}"/>
+                    </div>
+                </div>
             {% block layout %}
             {% endblock %}
         </div>
         <script>
+            $(document).ajaxStop(function(){
+                console.debug("ajaxStop");
+                $("#ajax_loader").hide();
+             });
+             $(document).ajaxStart(function(){
+                 console.debug("ajaxStart");
+                 $("#ajax_loader").show();
+             });
             $(document).ready(function() {
-                $('a').click(function() {
+                $('a').not('a[href$="#"]').click(function() {
                     var url = $(this).attr('href');
-                    if (url != '#') {
-                        $.ajax({
-                            url: url,
-                            success: function (data) {
-                                $('#content').html(data);
-                            }
-                        });
-                    }
+                    $.ajax({
+                        url: url,
+                        success: function (data) {
+                            $('#content').html(data);
+                        }
+                    });
                     // А вот так просто меняется ссылка
                     if(url != window.location){
                         window.history.pushState(null, null, url);
@@ -132,6 +144,19 @@
                     // Предотвращаем дефолтное поведение
                     return false;
                 });
+{#                $(function(){#}
+{#                    var current = location.pathname;#}
+{#                    $('.navbar a').each(function(){#}
+{#                        var $this = $(this);#}
+{#                        // if the current path is like this link, make it active#}
+{#                        if($this.attr('href') == current){#}
+{#                            $this.addClass('linked');#}
+{#                        }#}
+{#                    });#}
+{#                    if ($('.dropdown-menu a').hasClass('linked')){#}
+{#                        $('#client-menu').addClass('linked');#}
+{#                    }#}
+{#                });#}
             });
         </script>
     {% endblock %}

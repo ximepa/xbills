@@ -10,16 +10,16 @@
 {% endblock %}
 {% block extra_scripts %}
 {#    <script src="{% static 'olltv/js/olltv.js' %}"></script>#}
-    <script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
+{#    <script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>#}
 {#    <script src="{% static 'olltv/js/jquery.maskedinput.min.js' %}"></script>#}
     <script>
         $(document).ready(function() {
-            $(function() {
-                $('#datetimepicker1').datetimepicker({
-                    viewMode: 'years',
-                    pickTime: false
-                });
-            });
+{#            $(function() {#}
+{#                $('#datetimepicker1').datetimepicker({#}
+{#                    viewMode: 'years',#}
+{#                    pickTime: false#}
+{#                });#}
+{#            });#}
             window.setTimeout(function() {
                 $(".alert").fadeTo(1000, 0).slideUp(1000, function(){
                     $(this).remove();
