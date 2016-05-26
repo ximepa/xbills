@@ -259,17 +259,7 @@ def search(request):
     return render(request, 'search.html', locals())
 
 
-def SendPacket(srv, req):
-    try:
-        srv.SendPacket(req)
-    except pyrad.client.Timeout:
-        print "RADIUS server does not reply"
-        sys.exit(1)
-    except socket.error, error:
-        print "Network error: " + error[1]
-        sys.exit(1)
-
-
+@login_required()
 def client(request, uid):
     print request.GET
     if 'hangup' in request.GET:

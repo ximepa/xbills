@@ -2,145 +2,156 @@
 {% load url %}
 {% load i18n %}
 {% block content %}
-    {% if payments.paginator.num_pages > 1 %}
-        <div class="pag-nav">
-            <nav class="center-block">
-                <ul class="pagination pagination-sm">
-                    {% if payments.paginator.num_pages > 1 %}
-                        {% if payments.has_previous %}
-                            <li>
-                                <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
-                                    <span aria-hidden="true">1</span>
-                                </a>
-                            </li>
-                            {% if payments.number > 2 %}
-                                <li class="disabled">
-                                    <a href="#" aria-label="Previous">
-                                        <span aria-hidden="true">...</span>
-                                    </a>
-                                </li>
-                            {% endif %}
-                        {% endif %}
-                        {% for p in page_list %}
-                            {% if payments.number == p %}
-                                <li class="active">
-                                    <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                </li>
-                            {% else %}
-                                <li class="">
-                                    <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                </li>
-                            {% endif %}
-                        {% endfor %}
-                        {% if payments.has_next %}
-                            <li class="disabled">
-                                <a href="#" aria-label="Previous">
-                                    <span aria-hidden="true">...</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="?{% url_replace_page request 'page' payments.paginator.num_pages %}" aria-label="Next">
-                                    <span aria-hidden="true">{{ payments.paginator.num_pages }}</span>
-                                </a>
-                            </li>
-                        {% else %}
-                            <li class="disabled">
-                                <a href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        {% endif %}
-                    {% endif %}
-                </ul>
-            </nav>
-        </div>
-    {% endif %}
-
-    <table class="ui black table text-center table-striped table-hover table-condensed">
-        <thead>
-            <tr class="">
-                <th>{% trans 'Number' %}</th>
-                <th>{% trans 'Login' %}</th>
-                <th>{% trans 'Date' %}</th>
-                <th>{% trans 'Description' %}</th>
-                <th>{% trans 'Sum' %}</th>
-                <th>{% trans 'Deposit' %}</th>
-                <th>{% trans 'Payments type' %}</th>
-                <th>{% trans 'Administrator' %}</th>
-                <th>UID</th>
-                <th>-</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for payment in payments %}
-            <tr>
-                <td>{{ payment.id }}</td>
-                <td><a href="{% url 'core:index' %}?index=clients&uid={{ payment.uid.id }}">{{ payment.uid.login }}</a></td>
-                <td>{{ payment.date }}</td>
-                <td>{{ payment.dsc }}</td>
-                <td>{{ payment.sum }}</td>
-                {% if payment.last_deposit < 0 %}
-                    <td><span style="color: red">{{ payment.last_deposit }}</span></td>
-                {% else %}
-                    <td>{{ payment.last_deposit }}</td>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <ul class="well well-sm">
+                {% if payments.paginator.num_pages > 1 %}
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <ul class="pagination pagination-sm">
+                                {% if payments.has_previous %}
+                                    <li>
+                                        <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
+                                            <span aria-hidden="true">1</span>
+                                        </a>
+                                    </li>
+                                    {% if payments.number > 2 %}
+                                        <li class="disabled">
+                                            <a href="#" aria-label="Previous">
+                                                <span aria-hidden="true">...</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+                                {% for p in page_list %}
+                                    {% if payments.number == p %}
+                                        <li class="active">
+                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="">
+                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if payments.has_next %}
+                                    <li class="disabled">
+                                        <a href="#" aria-label="Previous">
+                                            <span aria-hidden="true">...</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="?{% url_replace_page request 'page' payments.paginator.num_pages %}" aria-label="Next">
+                                            <span aria-hidden="true">{{ payments.paginator.num_pages }}</span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="disabled">
+                                        <a href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                    </ul>
                 {% endif %}
-                <td>{{ payment.method }}</td>
-                <td>{{ payment.aid.login }}</td>
-                <td>{{ payment.uid.id }}</td>
-                <td><i class="fa fa-remove"></i></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% if payments.paginator.num_pages > 1 %}
-        <div class="pag-nav">
-            <nav class="center-block">
-                <ul class="pagination pagination-sm">
-                    {% if payments.has_previous %}
-                        <li>
-                            <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
-                                <span aria-hidden="true">1</span>
-                            </a>
+                {% if payments %}
+                <table class="ui black table text-center table-striped table-hover table-condensed">
+                    <thead>
+                        <tr class="">
+                            <th>{% trans 'Number' %}</th>
+                            <th>{% trans 'Login' %}</th>
+                            <th>{% trans 'Date' %}</th>
+                            <th>{% trans 'Description' %}</th>
+                            <th>{% trans 'Sum' %}</th>
+                            <th>{% trans 'Deposit' %}</th>
+                            <th>{% trans 'Payments type' %}</th>
+                            <th>{% trans 'Administrator' %}</th>
+                            <th>UID</th>
+                            <th>-</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for payment in payments %}
+                        <tr>
+                            <td>{{ payment.id }}</td>
+                            <td><a href="{% url 'core:index' %}?index=clients&uid={{ payment.uid.id }}">{{ payment.uid.login }}</a></td>
+                            <td>{{ payment.date }}</td>
+                            <td>{{ payment.dsc }}</td>
+                            <td>{{ payment.sum }}</td>
+                            {% if payment.last_deposit < 0 %}
+                                <td><span style="color: red">{{ payment.last_deposit }}</span></td>
+                            {% else %}
+                                <td>{{ payment.last_deposit }}</td>
+                            {% endif %}
+                            <td>{{ payment.method }}</td>
+                            <td>{{ payment.aid.login }}</td>
+                            <td>{{ payment.uid.id }}</td>
+                            <td><i class="fa fa-remove"></i></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                    {% trans 'Payments not found' %}
+                {% endif %}
+                 {% if payments.paginator.num_pages > 1 %}
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <ul class="pagination pagination-sm">
+                                {% if payments.has_previous %}
+                                    <li>
+                                        <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
+                                            <span aria-hidden="true">1</span>
+                                        </a>
+                                    </li>
+                                    {% if payments.number > 2 %}
+                                        <li class="disabled">
+                                            <a href="#" aria-label="Previous">
+                                                <span aria-hidden="true">...</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+                                {% for p in page_list %}
+                                    {% if payments.number == p %}
+                                        <li class="active">
+                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="">
+                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if payments.has_next %}
+                                    <li class="disabled">
+                                        <a href="#" aria-label="Previous">
+                                            <span aria-hidden="true">...</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="?{% url_replace_page request 'page' payments.paginator.num_pages %}" aria-label="Next">
+                                            <span aria-hidden="true">{{ payments.paginator.num_pages }}</span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="disabled">
+                                        <a href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
                         </li>
-                        {% if payments.number > 2 %}
-                            <li class="disabled">
-                                <a href="#" aria-label="Previous">
-                                    <span aria-hidden="true">...</span>
-                                </a>
-                            </li>
-                        {% endif %}
-                    {% endif %}
-                    {% for p in page_list %}
-                        {% if payments.number == p %}
-                            <li class="active">
-                                <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                            </li>
-                        {% else %}
-                            <li class="">
-                                <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                    {% if payments.has_next %}
-                        <li class="disabled">
-                            <a href="#" aria-label="Previous">
-                                <span aria-hidden="true">...</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="?{% url_replace_page request 'page' payments.paginator.num_pages %}" aria-label="Next">
-                                <span aria-hidden="true">{{ payments.paginator.num_pages }}</span>
-                            </a>
-                        </li>
-                    {% else %}
-                        <li class="disabled">
-                            <a href="#" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </nav>
+                    </ul>
+                {% endif %}
+                <li class="list-group-item list-group-item-botton">
+                    <span class="badge">{{ payments_list.count }}</span>
+                    {% trans 'All' %}
+                </li>
+            </ul>
         </div>
-    {% endif %}
+    </div>
 {% endblock %}

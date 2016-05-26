@@ -2,12 +2,6 @@
 {% load url %}
 {% load i18n %}
 {% block content %}
-    {% if error %}
-        <div class="alert alert-danger alert-dismissible" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <p class="text-center">{{ error }}</p>
-        </div>
-    {% endif %}
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <ul class="well well-sm">
@@ -156,7 +150,7 @@
                             </ul>
                         </li>
                     {% endif %}
-                    <li class="list-group-item">
+                    <li class="list-group-item list-group-item-botton">
                         <span class="badge">{{ fees_list.count }}</span>
                         {% trans 'All' %}
                     </li>
