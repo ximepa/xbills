@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^clients/(?P<uid>\d+)/company/$', views.user_company, name='user_company'),
     url(r'^clients/(?P<uid>\d+)/errors/$', views.client_errors, name='client_errors'),
     url(r'^clients/(?P<uid>\d+)/statistics/$', views.client_statistics, name='client_statistics'),
+
 ]
