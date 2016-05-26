@@ -30,6 +30,9 @@
                                             <option value="{{ net.id }}">IP: {% ip_convert net.network %} Mask: {% ip_convert net.mask %}</option>
                                         {% endfor %}
                                     </select>
+                                    <script>
+                                        $("#networks option[value=" + {{ change_dhcp.network }} + "]").attr('selected', 'true')
+                                    </script>
                                 </div>
                             </div>
                         </div>
@@ -44,8 +47,18 @@
                                         <input title="{% trans 'IP' %}" type="text" class="form-control" id="ip" name="IP" placeholder="IP" value="0.0.0.0">
                                         {% endif %}
                                         <span class="input-group-addon">
-                                            <input title="{% trans 'Auto Select' %}" type="checkbox">
+                                            <input id="auto_select" onchange="se" title="{% trans 'Auto Select' %}" type="checkbox">
                                         </span>
+                                        <script>
+                                            var se = $('#auto_select').change(function(){
+                                                if ($('#auto_select').is(':checked')){
+                                                    $('#ip').attr('disabled', true);
+                                                    console.log('checked');
+                                                } else {
+                                                    $('#ip').attr('disabled', false);
+                                                }
+                                            });
+                                        </script>
                                     </div>
                                 </div>
                             </div>
@@ -54,12 +67,16 @@
                             <div class="form-group form-group-sm">
                                 <label for="mac" class="col-sm-4 control-label">{% trans 'Mac' %}</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="mac" name="{% trans 'Mac' %}" placeholder="{% trans 'Mac' %}" value="{{ change_dhcp.mac }}">
+                                    {% if change_dhcp.mac %}
+                                        <input type="text" class="form-control" id="mac" name="{% trans 'Mac' %}" placeholder="{% trans 'Mac' %}" value="{{ change_dhcp.mac }}">
+                                    {% else %}
+                                        <input type="text" class="form-control" id="mac" name="{% trans 'Mac' %}" placeholder="{% trans 'Mac' %}" value="00:00:00:00:00:00">
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <input type="submit" name="dv_submit" class="btn btn-primary btn-xs center-block" value="{% trans 'Change' %}">
+                    <input type="submit" name="dhcp_submit" class="btn btn-primary btn-xs center-block" value="{% trans 'Change' %}">
                 </form>
             </div>
         </div>

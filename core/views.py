@@ -24,9 +24,6 @@ import datetime
 from django.http import JsonResponse
 
 
-def fsettings(request):
-    return render(request, 'settings.html', locals())
-
 
 def custom_redirect(url_name, *args, **kwargs):
     from django.core.urlresolvers import reverse
@@ -38,6 +35,7 @@ def custom_redirect(url_name, *args, **kwargs):
 
 @login_required()
 def index(request, settings=settings):
+    print request.POST
     if request.method == 'GET':
         print request.GET
     sys = platform.platform()

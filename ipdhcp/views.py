@@ -36,7 +36,8 @@ def user_dhcp(request, uid):
     net_dhcp = Dhcphosts_networks.objects.all()
     user = User.objects.get(id=uid)
     host = Dhcphosts_hosts.objects.filter(uid=uid)
-    print request.GET
     if 'change' in request.GET:
         change_dhcp = Dhcphosts_hosts.objects.get(id=request.GET['change'])
+    if 'dhcp_submit' in request.POST:
+        print request.POST
     return render(request, 'user_dhcp.html', locals())
