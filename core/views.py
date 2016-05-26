@@ -24,6 +24,10 @@ import datetime
 from django.http import JsonResponse
 
 
+def fsettings(request):
+    return render(request, 'settings.html', locals())
+
+
 def custom_redirect(url_name, *args, **kwargs):
     from django.core.urlresolvers import reverse
     import urllib
