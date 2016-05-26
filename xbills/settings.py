@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'telephone',
     'olltv',
     'dv',
+    'ipdhcp',
 )
 
 AUTH_USER_MODEL = 'core.Admin'
@@ -150,7 +151,7 @@ ABILLS_EMAIL_LOGS = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
+    os.path.join(BASE_DIR, "static/united"),
 )
 
 try:

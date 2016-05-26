@@ -1,0 +1,95 @@
+{% extends 'layout_edit.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% load url %}
+{% block content %}
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="well well-sm">
+                <div class="page-header text-center">
+                    <h4><i class="fa fa-cog"></i> {% trans 'User Dhcp' %}</h4>
+                </div>
+                <br/>
+                <form class="form-horizontal" method="post" name="dv_form">{% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group form-group-sm">
+                                <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'FIO:' %}</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Firstname, Lastname" value="{{ user.pi.fio }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group form-group-sm">
+                                <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'FIO:' %}</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Firstname, Lastname" value="{{ user.pi.fio }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group form-group-sm">
+                                <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'FIO:' %}</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Firstname, Lastname" value="{{ user.pi.fio }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group form-group-sm">
+                                <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'FIO:' %}</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Firstname, Lastname" value="{{ user.pi.fio }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="submit" name="dv_submit" class="btn btn-primary btn-xs center-block" value="{% trans 'Change' %}">
+                </form>
+            </div>
+        </div>
+    </div>
+    {% if host %}
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="well well-sm">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <table class="ui black table table-striped table-hover table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">ID</th>
+                                        <th class="text-center">Login</th>
+                                        <th class="text-center">IP</th>
+                                        <th class="text-center">Hostname</th>
+                                        <th class="text-center">netwirk_name</th>
+                                        <th class="text-center">MAC</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% for s in host %}
+                                    <tr>
+                                        <td>{{ s.id }}</td>
+                                        <td></td>
+                                        <td>{% ip_convert s.ip %}</td>
+                                        <td>{{ s.hostname }}</td>
+                                        <td>{{ s.nas }}</td>
+                                        <td>{{ s.mac }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <span class="badge">{{ host.count }}</span>
+                            {% trans 'All' %}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

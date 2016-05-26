@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 import pyrad
 import sys
+from dv.hangup import Hangup
 from pyrad.client import Client, packet
 from pyrad import server
 from pyrad.dictionary import Dictionary
@@ -55,6 +56,7 @@ def nas(request):
         sessions = request.GET['sessions']
         session_list = Dv_calls.objects.filter(nas=request.GET['sessions'])
         all = session_list.count()
+        guest = session_list.filter(guest=1).count()
         paginator = Paginator(session_list, 20)
         page = request.GET.get('page', 1)
         try:
@@ -253,44 +255,21 @@ def search(request):
     return render(request, 'search.html', locals())
 
 
+def SendPacket(srv, req):
+    try:
+        srv.SendPacket(req)
+    except pyrad.client.Timeout:
+        print "RADIUS server does not reply"
+        sys.exit(1)
+    except socket.error, error:
+        print "Network error: " + error[1]
+        sys.exit(1)
+
+
 def client(request, uid):
+    print request.GET
     if 'hangup' in request.GET:
-        # sclient = Client(server="172.16.6.118", secret="radsecret", acctport=3799, dict=Dictionary("dictionary"))
-        # print sclient
-        # req = sclient.CreateAcctPacket(code=pyrad.packet.DisconnectRequest)
-        # print req
-        #
-        # print "Sending accounting stop packet"
-        # req["Acct-Session-Id"] = request.GET['acct_session_id']
-        # print req
-        # reply = sclient.SendPacket(req)
-
-        srv = Client(server='172.16.6.118', secret='radsecret',
-                     dict=Dictionary("dictionary"))
-
-        try:
-            # req = srv.CreateAcctPacket()
-            # req['User-Name'] = '30b5.c234.d23f'
-            # req['Acct-Session-Id'] = '430957'
-            # req['Acct-Status-Type'] = 1  # Start
-            # print srv
-            # print req
-            #
-            # reply = srv.SendPacket(req)
-            # print '==========Response==========='
-            # print reply
-            # if not reply.code == pyrad.packet.AccountingResponse:
-            #     raise Exception("Unexpected response from RADIUS server")
-            #
-            # sys.stdout.write('.')
-            # sys.stdout.flush()
-
-            req = srv.CreateAcctPacket(code=pyrad.packet.StatusClient)
-            req['User-Name'] = "30b5.c234.d23f"
-            print srv.SendPacket(req).code
-            print '==========Response2==========='
-        except Exception as e:
-            print e.args
+        hangup = Hangup(request.GET['nas_id'], request.GET['acct_session_id'])
 
     res1 = '<option selected="selected"></option>'
     if 'district' in request.GET:
