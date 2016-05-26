@@ -14,33 +14,47 @@
                     <div class="row">
                         <div class="col-md-5">
                             <div class="form-group form-group-sm">
-                                <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'FIO:' %}</label>
+                                <label for="hostname" class="col-sm-4 control-label">{% trans 'Host Name' %}</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Firstname, Lastname" value="{{ user.pi.fio }}">
+                                    <input type="text" class="form-control" id="hostname" name="Host Name" placeholder="{% trans 'Host Name' %}" value="{{ change_dhcp.hostname }}">
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-5">
                             <div class="form-group form-group-sm">
-                                <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'FIO:' %}</label>
+                                <label for="networks" class="col-sm-4 control-label">{% trans 'Networks' %}</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Firstname, Lastname" value="{{ user.pi.fio }}">
+                                    <select name='networks' id='networks' class='form-control'>
+                                        {% for net in net_dhcp %}
+                                            <optgroup label="{{ net.name }}"></optgroup>
+                                            <option value="{{ net.id }}">IP: {% ip_convert net.network %} Mask: {% ip_convert net.mask %}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-5">
                             <div class="form-group form-group-sm">
-                                <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'FIO:' %}</label>
+                                <label for="ip" class="col-sm-4 control-label">{% trans 'IP' %}</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Firstname, Lastname" value="{{ user.pi.fio }}">
+                                    <div class="input-group">
+                                        {% if change_dhcp.ip %}
+                                            <input title="{% trans 'IP' %}" type="text" class="form-control" id="ip" name="IP" placeholder="IP" value="{% ip_convert change_dhcp.ip %}">
+                                        {% else %}
+                                        <input title="{% trans 'IP' %}" type="text" class="form-control" id="ip" name="IP" placeholder="IP" value="0.0.0.0">
+                                        {% endif %}
+                                        <span class="input-group-addon">
+                                            <input title="{% trans 'Auto Select' %}" type="checkbox">
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-5">
                             <div class="form-group form-group-sm">
-                                <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'FIO:' %}</label>
+                                <label for="mac" class="col-sm-4 control-label">{% trans 'Mac' %}</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Firstname, Lastname" value="{{ user.pi.fio }}">
+                                    <input type="text" class="form-control" id="mac" name="{% trans 'Mac' %}" placeholder="{% trans 'Mac' %}" value="{{ change_dhcp.mac }}">
                                 </div>
                             </div>
                         </div>
@@ -59,23 +73,27 @@
                             <table class="ui black table table-striped table-hover table-condensed">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">ID</th>
-                                        <th class="text-center">Login</th>
-                                        <th class="text-center">IP</th>
-                                        <th class="text-center">Hostname</th>
-                                        <th class="text-center">netwirk_name</th>
-                                        <th class="text-center">MAC</th>
+                                        <th>ID</th>
+                                        <th>Login</th>
+                                        <th>IP</th>
+                                        <th>Hostname</th>
+                                        <th>netwirk_name</th>
+                                        <th>MAC</th>
+                                        <th>{% trans '-' %}</th>
+                                        <th>{% trans '-' %}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 {% for s in host %}
                                     <tr>
                                         <td>{{ s.id }}</td>
-                                        <td></td>
+                                        <td>{{ user.login }}</td>
                                         <td>{% ip_convert s.ip %}</td>
                                         <td>{{ s.hostname }}</td>
                                         <td>{{ s.nas }}</td>
                                         <td>{{ s.mac }}</td>
+                                        <td><a href="{% url 'ipdhcp:user_dhcp' s.uid %}?change={{ s.id }}"><span class='glyphicon glyphicon-pencil'></span></a></td>
+                                        <td><a href="{% url 'ipdhcp:user_dhcp' s.uid %}?delete={{ s.id }}"><span class='glyphicon glyphicon-trash'></span></a></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
@@ -83,7 +101,7 @@
                         </div>
                     </div>
                     <ul class="list-group">
-                        <li class="list-group-item">
+                        <li class="list-group-item list-group-item-botton">
                             <span class="badge">{{ host.count }}</span>
                             {% trans 'All' %}
                         </li>
