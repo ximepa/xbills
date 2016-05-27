@@ -19,6 +19,7 @@ class Dhcphosts_networks(models.Model):
         return str(self.id)
 
 
+
 class Dhcphosts_hosts(models.Model):
     id = models.SmallIntegerField(max_length=3, primary_key=True)
     uid = models.IntegerField(max_length=11)
