@@ -7,18 +7,18 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>{% block title %}Xbills v0.0.6{% endblock %}</title>
-    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
-    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
-    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+    <link href="{% theme request '/css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link href="{% theme request '/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% theme request '/css/style.css' %}" rel="stylesheet">
     {% block extra_css %}
     {% endblock %}
     {% block jquery %}
-        <script src="{% static 'js/jquery-2.2.4.min.js' %}"></script>
+        <script src="{% theme request '/js/jquery-2.2.4.min.js' %}"></script>
     {% endblock %}
-    <script src="{% static 'js/jquery.cookie.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/jquery.dim-background.min.js' %}"></script>
-    <script src="{% static 'js/custom.js' %}"></script>
+    <script src="{% theme request '/js/jquery.cookie.js' %}"></script>
+    <script src="{% theme request '/js/bootstrap.min.js' %}"></script>
+    <script src="{% theme request '/js/jquery.dim-background.min.js' %}"></script>
+    <script src="{% theme request '/js/custom.js' %}"></script>
 
     {% block extra_js %}
 
@@ -85,7 +85,6 @@
                                         <li><a href="{% url 'core:administrators' %}"><i class="fa fa-users fa-fw"></i>{% trans 'Administrators' %}</a></li>
                                         <li><a href="{% url 'core:nas' %}"><i class="fa fa-server fa-fw"></i>{% trans 'Access servers' %}</a></li>
                                         <li><a href="#">Checkboxes and radio addons</a></li>
-                                        <li class="divider"></li>
                                         <li class="dropdown-header">Navs</li>
                                         <li><a href="#">Tabs</a></li>
                                         <li><a href="#">Pills</a></li>
@@ -116,7 +115,7 @@
         <div class="container-fluid">
                 <div id='ajax_loader' style="position: fixed; left: 50%; top: 50%; display: none; z-index: 1000">
                     <div class="well">
-                        <img src="{% static 'images/ajax-loader.gif' %}"/>
+                        <img src="{% theme request '/images/ajax-loader.gif' %}"/>
                     </div>
                 </div>
             {% block layout %}

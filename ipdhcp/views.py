@@ -1,6 +1,9 @@
+import ipaddress
+
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
 
+from core.models import num_to_ip
 from ipdhcp.models import Dhcphosts_networks, Dhcphosts_hosts, User
 from xbills import settings
 
@@ -32,6 +35,7 @@ def dhcps(request):
     pre_end = dhcp_page.paginator.num_pages - 2
     return render(request, 'dhcp.html', locals())
 
+
 def user_dhcp(request, uid):
     net_dhcp = Dhcphosts_networks.objects.all()
     user = User.objects.get(id=uid)
@@ -39,5 +43,17 @@ def user_dhcp(request, uid):
     if 'change' in request.GET:
         change_dhcp = Dhcphosts_hosts.objects.get(id=request.GET['change'])
     if 'dhcp_submit' in request.POST:
-        print request.POST
+        try:
+            ip_use = Dhcphosts_networks.objects.get(id=98)
+            ip_host = Dhcphosts_hosts.objects.filter(network=98)
+            ip1 = int(ipaddress.IPv4Address(unicode(num_to_ip(ip_use.ip_range_first))))
+            ip2 = int(ipaddress.IPv4Address(unicode(num_to_ip(ip_use.ip_range_last))))
+            print ip2
+            count = ip2 - ip1
+            # ip_use. = [1, 2, 3, 4, 5]
+            # b = [5, 4, 3, 2, 1]
+            c = [num_to_ip(ip_host.ip)[i] for i in range(count) if num_to_ip(ip_host.ip)[i] != num_to_ip(ip_host.ip)[i]]
+            print c
+        except:
+            print 'no'
     return render(request, 'user_dhcp.html', locals())

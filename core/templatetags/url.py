@@ -3,7 +3,7 @@ from datetime import datetime
 import binascii
 from django import template
 import math
-from core.models import num_to_ip
+from core.models import num_to_ip, Admin
 from django.conf import settings
 import os
 
@@ -38,6 +38,16 @@ def url_replace_page(request, field, value):
     dict_ = request.GET.copy()
     dict_[field] = value
     return dict_.urlencode()
+
+
+@register.simple_tag
+def theme(request, static_file):
+    if request.user.pk != None:
+        user_theme = Admin.objects.get(id=request.user.pk).theme
+        return '/static/' + user_theme + static_file
+    else:
+        return '/static/default/' + static_file
+
 
 
 @register.simple_tag

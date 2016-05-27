@@ -9,6 +9,8 @@ class Dhcphosts_networks(models.Model):
     routers = models.IntegerField(max_length=11)
     dns = models.CharField(max_length=100)
     dns2 = models.CharField(max_length=100)
+    ip_range_first = models.IntegerField(max_length=11, default=0)
+    ip_range_last = models.IntegerField(max_length=11, default=0)
 
     class Meta:
         db_table = 'dhcphosts_networks'

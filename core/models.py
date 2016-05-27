@@ -26,6 +26,10 @@ class Admin(AbstractBaseUser):
     id = models.AutoField(unique=True, primary_key=True, db_column='aid')
     regdate = models.DateField(auto_now_add=True, db_column='regdate')
     disable = models.BooleanField(default=0, db_column='disable')
+    theme = models.CharField(max_length=40, default='default')
+    cell_phone = models.CharField(max_length=20)
+    email = models.CharField(max_length=35)
+    address = models.CharField(max_length=60)
     objects = BaseUserManager()
     #last_login = models.DateTimeField(blank=True, null=True, db_column='last_login')
     USERNAME_FIELD = 'id'

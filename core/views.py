@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 import pyrad
 import sys
+from io import BytesIO
 from dv.hangup import Hangup
 from pyrad.client import Client, packet
 from pyrad import server
@@ -35,7 +36,6 @@ def custom_redirect(url_name, *args, **kwargs):
 
 @login_required()
 def index(request, settings=settings):
-    print request.POST
     if request.method == 'GET':
         print request.GET
     sys = platform.platform()
@@ -495,6 +495,7 @@ def client_fees(request, uid):
 
 def user_login(request):
     context = RequestContext(request)
+    print request.user.pk
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -539,5 +540,10 @@ def user_company(request, uid):
 @login_required()
 def administrators(request):
     admins = Admin.objects.all()
+    if 'id' in request.POST:
+        print request.POST
+        admin = Admin.objects.get(id=request.POST['id'])
+        admin.theme = request.POST['themes']
+        admin.save()
     return render(request, 'administrators.html', locals())
 
