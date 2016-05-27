@@ -14,6 +14,7 @@ from pyrad import server
 from pyrad.dictionary import Dictionary
 from .auth_backend import AuthBackend
 from .models import User, Payment, Bill, Fees, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog, Dv_log, Admin
+from .forms import AdminForm
 from django.contrib import messages
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -539,11 +540,18 @@ def user_company(request, uid):
 
 @login_required()
 def administrators(request):
+    import os
+    print tuple(os.listdir('static'))
     admins = Admin.objects.all()
-    if 'id' in request.POST:
-        print request.POST
-        admin = Admin.objects.get(id=request.POST['id'])
-        admin.theme = request.POST['themes']
-        admin.save()
+    adminform = AdminForm()
+    if request.method == 'POST':
+        adminform = AdminForm(request.POST)
+        if adminform.is_valid():
+            #adminform.save()
+            print request.POST
+            print adminform
+            return render(request, 'administrators.html', locals())
+    else:
+        adminform = AdminForm()
     return render(request, 'administrators.html', locals())
 

@@ -27,6 +27,7 @@ class Admin(AbstractBaseUser):
     regdate = models.DateField(auto_now_add=True, db_column='regdate')
     disable = models.BooleanField(default=0, db_column='disable')
     theme = models.CharField(max_length=40, default='default')
+    phone = models.CharField(max_length=20, db_column='phone')
     cell_phone = models.CharField(max_length=20)
     email = models.CharField(max_length=35)
     address = models.CharField(max_length=60)

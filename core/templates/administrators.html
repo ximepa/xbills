@@ -16,47 +16,49 @@
             <div class="btn-group btn-group-xs" role="group">
             </div>
             <div class="btn-group pull-left">
-                <a title="Добавить" class="hidden-print" data-toggle="modal" data-target="#admin_add" href="#"><span class="glyphicon glyphicon-plus"></span></a>
+                <a title="{% trans 'Add administrator' %}" class="hidden-print" data-toggle="modal" data-target="#admin_add" href="#"><span class="glyphicon glyphicon-plus"></span></a>
                 <div class="modal fade" id="admin_add" role="dialog" aria-hidden="true">
                     <div class="modal-dialog modal-title">
                         <div class="modal-content">
-                            <div class="modal-header">Сервер доступа
+                            <div class="modal-header">{% trans 'Add administrator' %}
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                             </div>
                             <div class="modal-body text-left">
-                                <form class="form-horizontal" method="post" name="form_admin">{% csrf_token %}
-                                    <div class="panel panel-default panel-form">
-                                        <div class="form-group">
-                                            <label class="control-label col-md-3 required" for="nas_ip">IP:</label>
-                                            <div class="col-md-9">
-                                                <input id="nas_ip" name="nas_ip" value="" placeholder="{% trans 'Server IP' %}" class="form-control" type="text">
-                                            </div>
-                                            <label class="control-label col-md-3" for="server_name">{% trans 'Server name' %}</label>
-                                            <div class="col-md-9">
-                                                <input id="server_name" name="server_name" value="" placeholder="{% trans 'Server name' %}" class="form-control" type="text">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-12 bg-primary">Управление</label>
-                                            <label class="control-label col-md-3" for="nas_ip_port">IP:PORT</label>
-                                            <div class="col-md-9">
-                                                <input id="nas_ip_port" name="nas_ip_port" value="" placeholder="" class="form-control" type="text">
-                                            </div>
-                                            <label class="control-label col-md-3" for="user_name">{% trans 'User name' %}:</label>
-                                            <div class="col-md-9">
-                                                <input id="user_name" name="user_name" value="" placeholder="{% trans 'User name' %}" class="form-control" type="text">
-                                            </div>
-                                            <label class="control-label col-md-3" for="nas_password">{% trans 'Password' %}:</label>
-                                            <div class="col-md-9">
-                                                <input id="nas_password" name="nas_password" value="" placeholder="{% trans 'Password' %}" class="form-control" type="password">
-                                            </div>
-                                        </div>
+                                <form method="post" name="form_admin">{% csrf_token %}
+                                    <div class="form-group">
+                                        <label class="control-label required" for="nas_ip">{% trans 'Login' %}</label>
+                                        {{ adminform.login }}
                                     </div>
-                                    <hr>
-                                    <div class="row text-center">
-                                        <input id="show_cols" name="show_cols" class="btn btn-primary" value="{% trans 'Add' %}" type="submit">
+                                    <div class="form-group">
+                                        <label class="control-label" for="server_name">{% trans 'Name' %}</label>
+                                        {{ adminform.name }}
+                                    </div>
+                                    <div class="checkbox">
+                                        <label>
+                                            {{ adminform.disable }} {% trans 'Disable' %}
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label" for="server_name">{% trans 'Name' %}</label>
+                                        {{ adminform.theme }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label" for="server_name">{% trans 'Name' %}</label>
+                                        {{ adminform.email }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label" for="server_name">{% trans 'Name' %}</label>
+                                        {{ adminform.address }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label" for="server_name">{% trans 'Name' %}</label>
+                                        {{ adminform.cell_phone }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label" for="server_name">{% trans 'Name' %}</label>
+                                        {{ adminform.phone }}
                                     </div>
                                 </form>
                             </div>
@@ -86,6 +88,8 @@
                 <th><a title="Отключено" href="" >Отключено</a></th>
                 <th><a title="Описание" href="" >Описание</a></th>
                 <th><a title="{% trans 'Theme' %}" href="" >{% trans 'Theme' %}</a></th>
+                <th>-</th>
+                <th>-</th>
             </tr>
             </thead>
             {% for admin in admins %}
@@ -101,12 +105,16 @@
                 {% else %}
                     <td><i class="fa fa-times"></i></td>
                 {% endif %}
-                <td> {{ nas.descr }} </td>
-                <td> {{ admin.theme }} </td>
-                <td><a title="Пользователи" class='btn btn-default btn-xs' href="" >Пользователи</a></td>
-                <td><a title="IP_Pool" class='btn btn-default btn-xs' href="" >IP_Pool</a></td>
+                <td>{{ nas.descr }}</td>
                 <td>
-                    <a data-toggle="modal" data-target="#admin-{{ admin.id }}" href="#"><span class='glyphicon glyphicon-pencil'></span></a>
+                    {% if admin.theme %}
+                        {{ admin.theme }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>
+                    <a data-toggle="modal" data-target="#admin-{{ admin.id }}" href="#"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
                     <div class="modal fade" id="admin-{{ admin.id }}" role="dialog" aria-hidden="true">
                         <div class="modal-dialog modal-title">
                             <div class="modal-content">
@@ -117,46 +125,38 @@
                                 </div>
                                 <div class="modal-body text-left">
                                     <form class="form-horizontal" method="post" name="form_nas">{% csrf_token %}
-
-                                        <div class="panel panel-default panel-form">
-                                            <input class="hidden" name="id" value="{{ admin.id }}">
-                                            <div class="panel-body">
-                                                <div class="form-group">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label for="inputdefault">Default input</label>
-                                                            <input class="form-control" id="inputdefault" type="text">
-                                                        </div>
-                                                    </div>
-                                                <div class="form-group">
-                                                    <label class="col-md-12 bg-info">Управление</label>
-                                                    <label class="control-label col-md-3" for="nas_ip_port">IP:PORT</label>
-                                                    <div class="col-md-9">
-                                                        <input type="text" id="nas_ip_port" name="nas_ip_port" value="{{ nas.mng_host_port }}" placeholder="" class="form-control">
-                                                    </div>
-                                                    <div class="col-md-9">
-                                                        <select name='themes' id='themes' class='form-control'>
-                                                            <option value="default">default</option>
-                                                            <option value="cerulean">cerulean</option>
-                                                            <option value="cosmo">cosmo</option>
-                                                            <option value="cyborg">cyborg</option>
-                                                            <option value="united">united</option>
-                                                        </select>
-                                                    </div>
-                                                    <label class="control-label col-md-2" for="user">{% trans 'User' %}:</label>
-                                                    <div class="col-md-9">
-                                                        <input  type="text" id="user" name="user" value="{{ nas.mng_user }}" placeholder="{% trans 'User' %}" class="form-control">
-                                                    </div>
-                                                    <label class="control-label col-md-2" for="nas_password">{% trans 'Password' %}:</label>
-                                                    <div class="col-md-9">
-                                                        <input type="password" id="nas_password" name="nas_password" value="{{ nas.mng_password }}" placeholder="{% trans 'Password' %}" class="form-control">
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div class="form-group">
+                                            <label class="control-label required" for="nas_ip">{% trans 'Login' %}</label>
+                                            {{ adminform.login }}
                                         </div>
-                                        <hr>
-                                        <div class="row text-center">
-                                            <input id="{{ admin.id }}" name="admin_edit" class="btn btn-primary" value="{% trans 'Edit' %}" type="submit">
+                                        <div class="form-group">
+                                            <label class="control-label" for="server_name">{% trans 'Name' %}</label>
+                                            {{ adminform.name }}
+                                        </div>
+                                        <div class="checkbox">
+                                            <label>
+                                                {{ adminform.disable }} {% trans 'Disable' %}
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" for="server_name">{% trans 'Name' %}</label>
+                                            {{ adminform.theme }}
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" for="server_name">{% trans 'Name' %}</label>
+                                            {{ adminform.email }}
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" for="server_name">{% trans 'Name' %}</label>
+                                            {{ adminform.address }}
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" for="server_name">{% trans 'Name' %}</label>
+                                            {{ adminform.cell_phone }}
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="control-label" for="server_name">{% trans 'Name' %}</label>
+                                            {{ adminform.phone }}
                                         </div>
                                     </form>
                                 </div>
@@ -164,7 +164,7 @@
                         </div>
                     </div>
                 </td>
-                <td><a title="Удалить" class='hidden-print' href="#"  data-id='' data-toggle='modal' data-uix='Удалить 86?' data-target='#comments_add'><span class='glyphicon glyphicon-trash'></span></a></td>
+                <td><a title="{% trans 'Delete' %}" class='' href="#"  data-id='' data-toggle='modal' ><i class="fa fa-trash fa-fw" aria-hidden="true"></i></a></td>
             </tr>
             {% endfor %}
         </table>

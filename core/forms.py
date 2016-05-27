@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import gettext as _
 from django import forms
+from .models import Admin
+import os
 
 
 class LoginForm(forms.Form):
@@ -16,3 +18,30 @@ class LoginForm(forms.Form):
             if not self.request.session.test_cookie_worked():
                 raise forms.ValidationError(_(u'Cookies должны быть включены'))
         return self.cleaned_data
+
+
+class AdminForm(forms.ModelForm):
+    disable = forms.BooleanField(initial=False)
+
+    class Meta:
+        model = Admin
+        fields = [
+            'login',
+            'name',
+            'disable',
+            'theme',
+            'email',
+            'address',
+            'cell_phone',
+            'phone',
+        ]
+        widgets = {
+            'login': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Login'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Name'}),
+            'disable': forms.CheckboxInput(),
+            'theme': forms.Select(attrs={'class': 'form-control', 'placeholder': u'Name'}, choices=[(str(o), str(o)) for o in os.listdir('static')]),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': u'Name'}),
+            'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Name'}),
+            'cell_phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Name'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Name'}),
+        }

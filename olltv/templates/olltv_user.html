@@ -152,11 +152,11 @@
                                     {% trans 'Tarif plans' %}
                                     <div class="btn-group pull-right">
                                         {% if iptv.disable == 2 or iptv.disable == 1 %}
-                                            <a type="button" class="btn btn-default btn-xs" style="cursor: pointer" data-toggle="modal" data-target="#add-tp" title="{% trans 'Add tarif plans' %}">
+                                            <a type="button" href="#" class="btn btn-default btn-xs" style="cursor: pointer" data-toggle="modal" data-target="#add-tp" title="{% trans 'Add tarif plans' %}">
                                                 <i class="fa fa-plus fa-fw"></i> {% trans 'Add tarif plans' %}
                                             </a>
                                         {% else %}
-                                                <a type="button" class="btn btn-danger btn-xs" style="cursor: pointer" data-toggle="modal" data-target="#add-extra-screen" title="{% trans 'Add extra screen' %}">
+                                                <a type="button" href="#" class="btn btn-danger btn-xs" style="cursor: pointer" data-toggle="modal" data-target="#add-extra-screen" title="{% trans 'Add extra screen' %}">
                                                     <i class="fa fa-plus fa-fw"></i> {% trans 'Add extra screen' %}
                                                 </a>
                                         {% endif %}
@@ -287,7 +287,7 @@
                                                                 {% if tp.service_type == '1' %}
                                                                     {% if tp_count > 1 %}
                                                                     {% else %}
-                                                                        <a type="" class="" style="cursor: pointer" data-toggle="modal" data-target="#unbind-tp" title="{% trans 'Unbind tarif' %}">
+                                                                        <a type="" class="" href="#" style="cursor: pointer" data-toggle="modal" data-target="#unbind-tp" title="{% trans 'Unbind tarif' %}">
                                                                             <i class="fa fa-minus fa-fw"></i>
                                                                         </a>
                                                                         <div class="modal fade" id="unbind-tp" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -364,7 +364,7 @@
                                 <div class="panel-heading">
             {#                            <a class="btn btn-default btn-xs pull-right" href='{% url 'core:index' %}?index=iptv&uid={{ user.id }}&action=add-device'>{% trans 'Додати пристрій' %}</a>#}
                                     {% trans 'Devices' %}
-                                    <a class="widget-icon" style="cursor: pointer" data-toggle="modal" data-target="#bind-dev" title="{% trans 'Bind device' %}">
+                                    <a class="" href="#" style="cursor: pointer" data-toggle="modal" data-target="#bind-dev" title="{% trans 'Bind device' %}">
                                         <i class="fa fa-plus fa-fw"></i>
                                     </a>
                                 </div>
@@ -438,7 +438,7 @@
                                                             <td>{{ dev.ID }}</td>
                                                             <td>{{ dev.date_added }}</td>
                                                             <td>
-                                                                <a type="" class="" style="cursor: pointer" data-toggle="modal" data-target="#unbind-dev-{{ dev.ID }}" title="{% trans 'Unbind device' %}">
+                                                                <a href="#" class="" style="cursor: pointer" data-toggle="modal" data-target="#unbind-dev-{{ dev.ID }}" title="{% trans 'Unbind device' %}">
                                                                     <i class="fa fa-times fa-fw"></i>
                                                                 </a>
                                                                 <div class="modal fade" id="unbind-dev-{{ dev.ID }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -506,7 +506,7 @@
                                             {% trans 'Email' %}: {{ get_user_info.email }}
                                             {# change_email #}
                                             <div class="btn-group pull-right">
-                                                <a type="button" class="" style="cursor: pointer" data-toggle="modal" data-target="#email_change_modal">
+                                                <a href="#" type="button" class="" style="cursor: pointer" data-toggle="modal" data-target="#email_change_modal">
                                                     <i class="fa fa-pencil-square-o"></i>
                                                 </a>
                                             </div>
@@ -538,7 +538,7 @@
                                         <li class="list-group-item">
                                             {% trans 'Information' %}:
                                             <div class="btn-group pull-right">
-                                                <a type="button" class="" style="cursor: pointer" data-toggle="modal" data-target="#change_user_info">
+                                                <a href="#" type="button" class="" style="cursor: pointer" data-toggle="modal" data-target="#change_user_info">
                                                     <i class="fa fa-pencil-square-o"></i>
                                                 </a>
                                             </div>
