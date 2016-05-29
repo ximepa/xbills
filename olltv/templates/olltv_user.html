@@ -279,9 +279,9 @@
     {#                                                        <td>{{ tp.service_type }}</td>#}
                                                             <td>{{ tp.start_date }}</td>
                                                             {% if tp.status == True %}
-                                                                <td><i class="glyphicon glyphicon-ok"></i></td>
+                                                                <td><i class="fa fa-check fa-fw" aria-hidden="true"></i></td>
                                                             {% else %}
-                                                                <td><i class="glyphicon glyphicon-remove"></i></td>
+                                                                <td><i class="fa fa-times fa-fw" aria-hidden="true"></i></td>
                                                             {% endif %}
                                                             <td>
                                                                 {% if tp.service_type == '1' %}
