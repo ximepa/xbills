@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 from django.db import models
+import os
 import datetime
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser,
@@ -25,12 +26,12 @@ class Admin(AbstractBaseUser):
     name = models.CharField(max_length=50, db_column='name')
     id = models.AutoField(unique=True, primary_key=True, db_column='aid')
     regdate = models.DateField(auto_now_add=True, db_column='regdate')
-    disable = models.BooleanField(default=0, db_column='disable')
-    theme = models.CharField(max_length=40, default='default')
-    phone = models.CharField(max_length=20, db_column='phone')
-    cell_phone = models.CharField(max_length=20)
-    email = models.CharField(max_length=35)
-    address = models.CharField(max_length=60)
+    disable = models.BooleanField(default=0, db_column='disable', blank=True)
+    theme = models.CharField(max_length=40, default='default', choices=[(str(o), str(o)) for o in os.listdir('static') if not o.startswith('custom')])
+    phone = models.CharField(max_length=20, db_column='phone', blank=True)
+    cell_phone = models.CharField(max_length=20, blank=True)
+    email = models.CharField(max_length=35, blank=True)
+    address = models.CharField(max_length=60, blank=True)
     objects = BaseUserManager()
     #last_login = models.DateTimeField(blank=True, null=True, db_column='last_login')
     USERNAME_FIELD = 'id'

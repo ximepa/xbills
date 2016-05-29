@@ -8,17 +8,16 @@
     <meta charset="UTF-8">
     <title>{% block title %}Xbills v0.0.6{% endblock %}</title>
     <link href="{% theme request '/css/bootstrap.min.css' %}" rel="stylesheet" />
-    <link href="{% theme request '/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
-    <link href="{% theme request '/css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'custom/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'custom/css/style.css' %}" rel="stylesheet">
     {% block extra_css %}
     {% endblock %}
     {% block jquery %}
-        <script src="{% theme request '/js/jquery-2.2.4.min.js' %}"></script>
+        <script src="{% static 'custom/js/jquery-2.2.4.min.js' %}"></script>
     {% endblock %}
-    <script src="{% theme request '/js/jquery.cookie.js' %}"></script>
-    <script src="{% theme request '/js/bootstrap.min.js' %}"></script>
-    <script src="{% theme request '/js/jquery.dim-background.min.js' %}"></script>
-    <script src="{% theme request '/js/custom.js' %}"></script>
+    <script src="{% static 'custom/js/jquery.cookie.js' %}"></script>
+    <script src="{% static 'custom/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'custom/js/custom.js' %}"></script>
 
     {% block extra_js %}
 
@@ -122,32 +121,32 @@
             {% endblock %}
         </div>
         <script>
-            $(document).ajaxStop(function(){
-                console.debug("ajaxStop");
-                $("#ajax_loader").hide();
-             });
-             $(document).ajaxStart(function(){
-                 console.debug("ajaxStart");
-                 $("#ajax_loader").show();
-             });
-            $(document).ready(function() {
-                $('a').not("a[href~='#']").click(function() {
-                    var url = $(this).attr('href');
-                    $.ajax({
-                        url: url,
-                        success: function (data) {
-                            $('#content').html(data);
-                            $('.dropdown-toggle').dropdown('dropdown')
-                        }
-                    });
-                    // А вот так просто меняется ссылка
-                    if(url != window.location){
-                        window.history.pushState(null, null, url);
-                    }
-
-                    // Предотвращаем дефолтное поведение
-                    return false;
-                });
+{#            $(document).ajaxStop(function(){#}
+{#                console.debug("ajaxStop");#}
+{#                $("#ajax_loader").hide();#}
+{#             });#}
+{#             $(document).ajaxStart(function(){#}
+{#                 console.debug("ajaxStart");#}
+{#                 $("#ajax_loader").show();#}
+{#             });#}
+{#            $(document).ready(function() {#}
+{#                $('a').not("a[href~='#']").click(function() {#}
+{#                    var url = $(this).attr('href');#}
+{#                    $.ajax({#}
+{#                        url: url,#}
+{#                        success: function (data) {#}
+{#                            $('#content').html(data);#}
+{#                            $('.dropdown-toggle').dropdown('dropdown')#}
+{#                        }#}
+{#                    });#}
+{#                    // А вот так просто меняется ссылка#}
+{#                    if(url != window.location){#}
+{#                        window.history.pushState(null, null, url);#}
+{#                    }#}
+{##}
+{#                    // Предотвращаем дефолтное поведение#}
+{#                    return false;#}
+{#                });#}
 {#                $(function(){#}
 {#                    var current = location.pathname;#}
 {#                    $('.navbar a').each(function(){#}

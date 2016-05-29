@@ -261,3 +261,9 @@ ol, ul {
 .input-group-addon {
     padding: 0px;
 }
+.breadcrumb {
+    margin-bottom: 0;
+}
+.panel-heading.no-padding {
+    padding: 0;
+}

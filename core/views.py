@@ -14,7 +14,7 @@ from pyrad import server
 from pyrad.dictionary import Dictionary
 from .auth_backend import AuthBackend
 from .models import User, Payment, Bill, Fees, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog, Dv_log, Admin
-from .forms import AdminForm
+from .forms import AdministratorForm
 from django.contrib import messages
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -540,18 +540,35 @@ def user_company(request, uid):
 
 @login_required()
 def administrators(request):
-    import os
-    print tuple(os.listdir('static'))
     admins = Admin.objects.all()
-    adminform = AdminForm()
+    admin_form = AdministratorForm()
     if request.method == 'POST':
-        adminform = AdminForm(request.POST)
-        if adminform.is_valid():
-            #adminform.save()
+        if 'admin_remove' in request.POST:
+            print 'admin_remove'
             print request.POST
-            print adminform
-            return render(request, 'administrators.html', locals())
-    else:
-        adminform = AdminForm()
+            admin = Admin.objects.get(id=request.POST['uid'])
+            admin.delete()
+        elif 'admin_add' in request.POST:
+            print 'admin_add'
+            print request.POST
+            admin_form = AdministratorForm(request.POST)
+            if admin_form.is_valid():
+                print 'valid'
+                admin_form.save()
     return render(request, 'administrators.html', locals())
 
+
+@login_required()
+def administrator_edit(request, uid):
+    try:
+        admin = Admin.objects.get(pk=uid)
+    except Admin.DoesNotExist:
+        return render(request, '404.html', locals())
+    else:
+        admin_form = AdministratorForm(instance=admin)
+        if request.method == 'POST':
+            admin_form = AdministratorForm(request.POST, instance=admin)
+            if admin_form.is_valid():
+                admin_form.save()
+                return redirect('core:administrators')
+        return render(request, 'admin_edit.html', locals())

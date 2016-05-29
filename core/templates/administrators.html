@@ -11,6 +11,9 @@
 {% block extra_scripts %}
 {% endblock %}
 {% block content %}
+    {% if admin_form.errors %}
+        {{ admin_form.errors }}
+    {% endif %}
     <div class="panel panel-default table-responsive">
         <div class="panel-heading hidden-print">
             <div class="btn-group btn-group-xs" role="group">
@@ -29,36 +32,39 @@
                                 <form method="post" name="form_admin">{% csrf_token %}
                                     <div class="form-group">
                                         <label class="control-label required" for="nas_ip">{% trans 'Login' %}</label>
-                                        {{ adminform.login }}
+                                        {{ admin_form.login }}
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label" for="server_name">{% trans 'Name' %}</label>
-                                        {{ adminform.name }}
+                                        {{ admin_form.name }}
                                     </div>
                                     <div class="checkbox">
                                         <label>
-                                            {{ adminform.disable }} {% trans 'Disable' %}
+                                            {{ admin_form.disable }} {% trans 'Disable' %}
                                         </label>
                                     </div>
                                     <div class="form-group">
-                                        <label class="control-label" for="server_name">{% trans 'Name' %}</label>
-                                        {{ adminform.theme }}
+                                        <label class="control-label" for="server_name">{% trans 'Theme' %}</label>
+                                        {{ admin_form.theme }}
                                     </div>
                                     <div class="form-group">
-                                        <label class="control-label" for="server_name">{% trans 'Name' %}</label>
-                                        {{ adminform.email }}
+                                        <label class="control-label" for="server_name">{% trans 'Email' %}</label>
+                                        {{ admin_form.email }}
                                     </div>
                                     <div class="form-group">
-                                        <label class="control-label" for="server_name">{% trans 'Name' %}</label>
-                                        {{ adminform.address }}
+                                        <label class="control-label" for="server_name">{% trans 'Address' %}</label>
+                                        {{ admin_form.address }}
                                     </div>
                                     <div class="form-group">
-                                        <label class="control-label" for="server_name">{% trans 'Name' %}</label>
-                                        {{ adminform.cell_phone }}
+                                        <label class="control-label" for="server_name">{% trans 'Cell phone' %}</label>
+                                        {{ admin_form.cell_phone }}
                                     </div>
                                     <div class="form-group">
-                                        <label class="control-label" for="server_name">{% trans 'Name' %}</label>
-                                        {{ adminform.phone }}
+                                        <label class="control-label" for="server_name">{% trans 'Phone' %}</label>
+                                        {{ admin_form.phone }}
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="submit" name="admin_add">
                                     </div>
                                 </form>
                             </div>
@@ -67,106 +73,66 @@
                 </div>
             </div>
         </div>
-        <table class="ui black table table-striped table-hover table-condensed" id="NAS_LIST_">
-            <thead>
-            <tr>
-                <th>
-                    <script>
-                        $( document ).ready(function() {
-                            $('#checkAll').click(function () {
-                                $('input:checkbox[id^="admin_ld"]').not(this).prop('checked', this.checked);
-                            })
-                        });
-                    </script>
-                    <input type='checkbox' id='checkAll'/>
-                </th>
-                <th><a title="ID" href="" >ID</a></th>
-                <th><a title="{% trans 'Login' %}" href="">{% trans 'Login' %}</a></th>
-                <th><a title="{% trans 'FIO' %}" href="" >{% trans 'FIO' %}</a></th>
-                <th><a title="Phone" href="" >{% trans 'Phone' %}</a></th>
-                <th><a title="Email" href="" >Тип</a></th>
-                <th><a title="Отключено" href="" >Отключено</a></th>
-                <th><a title="Описание" href="" >Описание</a></th>
-                <th><a title="{% trans 'Theme' %}" href="" >{% trans 'Theme' %}</a></th>
-                <th>-</th>
-                <th>-</th>
-            </tr>
-            </thead>
-            {% for admin in admins %}
-            <tr>
-                <td><input type='checkbox' name='admin_ld' value="{{ admin.id }}" id='admin_ld'></td>
-                <td> {{ admin.id }} </td>
-                <td> {{ admin.login }} </td>
-                <td> {{ admin.name }} </td>
-                <td> {{ admin.cell_phone }} </td>
-                <td> {{ admin.email }} </td>
-                {% if admin.disable == 0 %}
-                    <td><i class="fa fa-check"></i></td>
-                {% else %}
-                    <td><i class="fa fa-times"></i></td>
-                {% endif %}
-                <td>{{ nas.descr }}</td>
-                <td>
-                    {% if admin.theme %}
-                        {{ admin.theme }}
+        <div class="panel-body">
+            <table class="ui black table table-striped table-hover table-condensed">
+                <thead>
+                <tr>
+                    <th>
+                        <script>
+                            $( document ).ready(function() {
+                                $('#checkAll').click(function () {
+                                    $('input:checkbox[id^="admin_ld"]').not(this).prop('checked', this.checked);
+                                })
+                            });
+                        </script>
+                        <input type='checkbox' id='checkAll'/>
+                    </th>
+                    <th><a title="ID" href="" >ID</a></th>
+                    <th><a title="{% trans 'Login' %}" href="">{% trans 'Login' %}</a></th>
+                    <th><a title="{% trans 'FIO' %}" href="" >{% trans 'FIO' %}</a></th>
+                    <th><a title="Phone" href="" >{% trans 'Phone' %}</a></th>
+                    <th><a title="Email" href="" >Тип</a></th>
+                    <th><a title="Отключено" href="" >Отключено</a></th>
+                    <th><a title="Описание" href="" >Описание</a></th>
+                    <th><a title="{% trans 'Theme' %}" href="" >{% trans 'Theme' %}</a></th>
+                    <th>-</th>
+                    <th>-</th>
+                </tr>
+                </thead>
+                {% for admin in admins %}
+                <tr>
+                    <td><input type='checkbox' name='admin_ld' value="{{ admin.id }}" id='admin_ld'></td>
+                    <td> {{ admin.id }} </td>
+                    <td> {{ admin.login }} </td>
+                    <td> {{ admin.name }} </td>
+                    <td> {{ admin.cell_phone }} </td>
+                    <td> {{ admin.email }} </td>
+                    {% if admin.disable == 0 %}
+                        <td><i class="fa fa-check"></i></td>
                     {% else %}
-                        -
+                        <td><i class="fa fa-times"></i></td>
                     {% endif %}
-                </td>
-                <td>
-                    <a data-toggle="modal" data-target="#admin-{{ admin.id }}" href="#"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
-                    <div class="modal fade" id="admin-{{ admin.id }}" role="dialog" aria-hidden="true">
-                        <div class="modal-dialog modal-title">
-                            <div class="modal-content">
-                                <div class="modal-header">{% trans 'Edit' %}
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                </div>
-                                <div class="modal-body text-left">
-                                    <form class="form-horizontal" method="post" name="form_nas">{% csrf_token %}
-                                        <div class="form-group">
-                                            <label class="control-label required" for="nas_ip">{% trans 'Login' %}</label>
-                                            {{ adminform.login }}
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label" for="server_name">{% trans 'Name' %}</label>
-                                            {{ adminform.name }}
-                                        </div>
-                                        <div class="checkbox">
-                                            <label>
-                                                {{ adminform.disable }} {% trans 'Disable' %}
-                                            </label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label" for="server_name">{% trans 'Name' %}</label>
-                                            {{ adminform.theme }}
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label" for="server_name">{% trans 'Name' %}</label>
-                                            {{ adminform.email }}
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label" for="server_name">{% trans 'Name' %}</label>
-                                            {{ adminform.address }}
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label" for="server_name">{% trans 'Name' %}</label>
-                                            {{ adminform.cell_phone }}
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="control-label" for="server_name">{% trans 'Name' %}</label>
-                                            {{ adminform.phone }}
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td><a title="{% trans 'Delete' %}" class='' href="#"  data-id='' data-toggle='modal' ><i class="fa fa-trash fa-fw" aria-hidden="true"></i></a></td>
-            </tr>
-            {% endfor %}
-        </table>
+                    <td>{{ nas.descr }}</td>
+                    <td>
+                        {% if admin.theme %}
+                            {{ admin.theme }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'core:administrator_edit' admin.id %}"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
+                    </td>
+                    <td>
+                        <form method="post">{% csrf_token %}
+                            <input type="hidden" name="uid" value="{{ admin.id }}">
+                            <button class="btn-link" name="admin_remove" type="submit" onclick="if(!confirm('{% trans 'Remove admin ' %}{{ admin.login }}?')){return false;}"><i class="fa fa-trash fa-fw" aria-hidden="true"></i></button>
+                        </form>
+{#                        <a title="{% trans 'Delete' %}" class='' href="#"  data-id='' data-toggle='modal' ></a>#}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
     </div>
 {% endblock %}

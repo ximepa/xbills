@@ -20,8 +20,8 @@ class LoginForm(forms.Form):
         return self.cleaned_data
 
 
-class AdminForm(forms.ModelForm):
-    disable = forms.BooleanField(initial=False)
+class AdministratorForm(forms.ModelForm):
+    disable = forms.BooleanField(required=False)
 
     class Meta:
         model = Admin
@@ -39,7 +39,7 @@ class AdminForm(forms.ModelForm):
             'login': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Login'}),
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Name'}),
             'disable': forms.CheckboxInput(),
-            'theme': forms.Select(attrs={'class': 'form-control', 'placeholder': u'Name'}, choices=[(str(o), str(o)) for o in os.listdir('static')]),
+            'theme': forms.Select(attrs={'class': 'form-control', 'placeholder': u'Name'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': u'Name'}),
             'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Name'}),
             'cell_phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Name'}),
