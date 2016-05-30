@@ -3,15 +3,14 @@
 {% load staticfiles %}
 {% load url %}
 {% block extra_js %}
-    <script src="{% static 'js/chosen.jquery.min.js' %}"></script>
+    <script src="{% static 'custom/js/chosen.jquery.min.js' %}"></script>
 {% endblock %}
 {% block extra_css %}
-    <link href="{% static 'css/chosen.min.css' %}" rel="stylesheet">
+    <link href="{% static 'custom/css/chosen.min.css' %}" rel="stylesheet">
 {% endblock %}
 {% block extra_scripts %}
 <script type="application/javascript">
     var SELF_URL = '';
-    console.log(SELF_URL)
     var CHOSEN_PARAMS = {
         no_results_text: 'Не существует',
         allow_single_deselect: true,
@@ -395,7 +394,7 @@
                                         <option value="{{ user.pi.city_id }}">{{ user.pi.city }}</option>
                                     </select>
                                 </div>
-                                <script src="{% static 'js/searchLocation.js' %}"></script>
+                                <script src="{% static 'custom/js/searchLocation.js' %}"></script>
                             </div>
                         </div>
                         <div class="col-md-6">

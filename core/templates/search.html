@@ -3,10 +3,10 @@
 {% load url %}
 {% load staticfiles %}
 {% block extra_js %}
-    <script src="{% static 'js/chosen.jquery.min.js' %}"></script>
+    <script src="{% static 'custom/js/chosen.jquery.min.js' %}"></script>
 {% endblock %}
 {% block extra_css %}
-    <link href="{% static 'css/chosen.min.css' %}" rel="stylesheet">
+    <link href="{% static 'custom/css/chosen.min.css' %}" rel="stylesheet">
 {% endblock %}
 {% block extra_scripts %}
 <script type="application/javascript">
@@ -109,7 +109,7 @@
                         <select download-on-click='1' name='ADDRESS_DISTRICT' id='DISTRICT' class='form-control'>
                             <option value="{{ user.pi.city_id }}">{{ user.pi.city }}</option>
                         </select>
-                        <script src="{% static 'js/searchLocation.js' %}"></script>
+                        <script src="{% static 'custom/js/searchLocation.js' %}"></script>
                     </div>
                     <div class="form-group col-lg-6">
                         <label for="STREET" class="control-label">{% trans 'Street:' %}</label>
