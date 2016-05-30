@@ -2,9 +2,20 @@
 {% load i18n %}
 {% load staticfiles %}
 {% load url %}
+{% block extra_scripts %}
+    <script>
+                jQuery(function($) {
+                    $( ".sortable" ).sortable({
+                        connectWith: ".sortable",
+                        handle: ".panel-heading",
+                        placeholder: "placeholder ui-corner-all"
+                    });
+                });
+          </script>
+{% endblock %}
 {% block content %}
-    <div class="row sortable">
-        <div class="col-xs-12 col-sm-4 col-md-4 sort">
+    <div class="row">
+        <div class="col-xs-12 col-sm-4 col-md-4 sortable">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     {% trans 'CPU' %}
@@ -38,8 +49,23 @@
 
                 </div>
             </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {% trans 'Sys info' %}
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-4">{% trans 'System' %}:</div>
+                        <div class="col-sm-8 progress-margin"> {{ sys }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4">{% trans 'Uptime' %}:</div>
+                        <div class="col-sm-8 progress-margin">{{ uptime }}</div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-xs-12 col-sm-4 col-md-4 sort">
+        <div class="col-xs-12 col-sm-4 col-md-4 sortable">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     {% trans 'Memory' %}
@@ -84,7 +110,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-4 col-md-4 sort">
+        <div class="col-xs-12 col-sm-4 col-md-4 sortable">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     {% trans 'Swap' %}
@@ -125,107 +151,5 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-4 col-md-4 sort">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    {% trans 'Sys info' %}
-                </div>
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-sm-4">{% trans 'System' %}:</div>
-                        <div class="col-sm-8 progress-margin"> {{ sys }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4">{% trans 'Used' %}:</div>
-                        <div class="col-sm-8 progress-margin">{% sizeof_fmt swap.used %}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4">{% trans 'Free' %}:</div>
-                        <div class="col-sm-8 progress-margin">{% sizeof_fmt swap.free %}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4">{% trans 'Load' %}:</div>
-                        <div class="col-sm-8">
-                            <div class="progress">
-                                {% if swap.percent >= settings.SWAP_DANGER_THRESHOLD %}
-                                    <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="{{ swap.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ swap.percent }}%">
-                                        {{ swap.percent }}%
-                                    </div>
-                                {% elif memory.percent >= settings.SWAP_WARNING_THRESHOLD %}
-                                    <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="{{ swap.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ swap.percent }}%">
-                                        {{ swap.percent }}%
-                                    </div>
-                                {% else %}
-                                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{ swap.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ swap.percent }}%">
-                                        {{ swap.percent }}%
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
-{#                <li class="panel panel-default">#}
-{#                    <div class="panel-heading">{% trans 'Disk info' %}</div>#}
-{#                    <div class="panel-body">#}
-{#                        <div class="row">#}
-{#                            <div class="col-sm-12">#}
-{#                                <div class="row">#}
-{#                                    {% for disk in disks_dict %}#}
-{#                                        <div class="col-sm-4">#}
-{#                                            <div class="page-header text-center">#}
-{#                                                <h4>Dev: {{ disk.device }}</h4>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                    {% endfor %}#}
-{#                                </div>#}
-{#                                <div class="row">#}
-{#                                    {% for disk in disks_dict %}#}
-{#                                        <div class="col-sm-4">#}
-{#                                            <div class="row">#}
-{#                                                <div class="col-sm-4">#}
-{#                                                    {% trans 'Mount point' %}:#}
-{#                                                </div>#}
-{#                                                <div class="col-sm-8">#}
-{#                                                    {{ disk.mountpoint }}#}
-{#                                                </div>#}
-{#                                            </div>#}
-{#                                            <div class="row">#}
-{#                                                <div class="col-sm-4">#}
-{#                                                    {% trans 'fstype' %}:#}
-{#                                                </div>#}
-{#                                                <div class="col-sm-8">#}
-{#                                                    {{ disk.fstype }}#}
-{#                                                </div>#}
-{#                                            </div>#}
-{#                                            <div class="row">#}
-{#                                                <div class="col-sm-4">#}
-{#                                                    {% trans 'Opts' %}:#}
-{#                                                </div>#}
-{#                                                <div class="col-sm-8">#}
-{#                                                    {{ disk.opts }}#}
-{#                                                </div>#}
-{#                                            </div>#}
-{#                                        </div>#}
-{#                                    {% endfor %}#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </li>#}
-{#                {% check_module 'claims' as check_module_claims %}#}
-{#                {% if check_module_claims %}#}
-{#                    <li class="panel panel-default">#}
-{#                        <div class="panel-heading">#}
-{#                            {% trans 'Claims' %}#}
-{#                        </div>#}
-{#                        <div class="panel-body">#}
-{#                        </div>#}
-{#                    </li>#}
-{#                {% endif %}#}
-{#            </ul>#}
-{#        </div>#}
-{#    </div>#}
 {% endblock %}

@@ -271,3 +271,13 @@ ol, ul {
 #draggablePanelList .panel-heading {
         cursor: move;
     }
+
+.placeholder {
+    border: 1px dotted darkgrey;
+    height: 100px;
+    padding: 2px;
+    margin-bottom: 5px;
+}
+.col-md-4 {
+    min-height: 200px;
+}
