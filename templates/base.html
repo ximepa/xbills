@@ -27,16 +27,21 @@
     {% block extra_scripts %}
           <script>
                 jQuery(function($) {
-                    var panelList = $('#draggablePanelList');
-                    panelList.sortable({
-                        handle: '.panel-heading',
-                        update: function() {
-                            $('.panel', panelList).each(function(index, elem) {
-                                var $listItem = $(elem),
-                                        newIndex = $listItem.index();
-                            });
-                        }
+{#                    var panelList = $('.draggablePanelList');#}
+{#                    panelList.sortable({#}
+{#                        handle: '.panel-heading',#}
+{#                        update: function() {#}
+{#                            $('.panel', panelList).each(function(index, elem) {#}
+{#                                var $listItem = $(elem),#}
+{#                                        newIndex = $listItem.index();#}
+{#                            });#}
+{#                        }#}
+{#                    });#}
+                    $( ".sortable" ).sortable({
+                      items       : 'div.sort',
+                      placeholder : 'sortable-placeholder'
                     });
+                    $( ".sortable" ).disableSelection();
                 });
           </script>
     {% endblock %}

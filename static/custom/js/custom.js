@@ -31,32 +31,29 @@ $(document).ready(function(){
     $(function() {
 
         //add id's to the li elements so after sorting we can save the order in localstorage
-        $( "#draggablePanelList>li" ).each(function(index, domEle){ $(domEle).attr('id', 'item_'+index)});
+        $( ".sortable" ).each(function(index, domEle){ $(domEle).attr('id', 'item_'+index)});
 
-        $( "#draggablePanelList" ).sortable({
-          placeholder: "ui-state-highlight",
-          update: function(event, ui) {
-            localStorage.setItem("sorted",  $("#draggablePanelList").sortable("toArray") );
-          }
+        $( ".sortable" ).sortable({
+            placeholder: "ui-state-highlight",
+            update: function(event, ui) {
+                localStorage.setItem("sorted",  $(".sortable").sortable("toArray") );
+            }
         });
 
         restoreSorted();
 
-      });
+    });
 
 
-      function restoreSorted(){
+    function restoreSorted(){
 
-          var sorted = localStorage["sorted"];
-          if(sorted == undefined) return;
-
-          var elements = $("#draggablePanelList");
-          var sortedArr = sorted.split(",");
-
-          for (var i = 0; i < sortedArr.length; i++){
-              var el = elements.find("#" + sortedArr[i]);
-              $("#draggablePanelList").append(el);
-          };
-
-      }
+        var sorted = localStorage["sorted"];
+        if(sorted == undefined) return;
+        var elements = $(".sortable");
+        var sortedArr = sorted.split(",");
+        for (var i = 0; i < sortedArr.length; i++){
+            var el = elements.find("#" + sortedArr[i]);
+            $(".sortable").append(el);
+        }
+    }
 });
