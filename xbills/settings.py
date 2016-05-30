@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'dv',
     'ipdhcp',
     'claims',
+
 )
 
 AUTH_USER_MODEL = 'core.Admin'

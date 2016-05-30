@@ -15,6 +15,6 @@ if check('ipdhcp'):
     urlpatterns += url(r'^admin/dhcps/', include('ipdhcp.urls')),
 if check('olltv'):
     urlpatterns += url(r'^admin/olltv/', include('olltv.urls')),
-if check('olltv'):
+if check('claims'):
     urlpatterns += url(r'^admin/claims/', include('claims.urls')),
 

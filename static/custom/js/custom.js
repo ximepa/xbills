@@ -28,4 +28,16 @@ $(document).ready(function(){
             $.cookie('body_class', 'minified');
         }
     });
+    $('.panel').on('mousedown', function() {
+        //$('body').toggleClass('hidden-menu');
+        console.log($('panel'));
+        if ($('panel').hasClass('ui-sortable-handle')){
+            console.log('panel-heading');
+            $.cookie('body_class', '');
+
+
+        } else {
+            $.cookie('body_class', 'ui-sortable-handle');
+        }
+    });
 });

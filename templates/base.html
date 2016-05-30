@@ -9,6 +9,7 @@
     <title>{% block title %}Xbills v0.0.6{% endblock %}</title>
     <link href="{% theme request '/css/bootstrap.min.css' %}" rel="stylesheet" />
     <link href="{% static 'custom/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'custom/css/jquery-ui.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'custom/css/style.css' %}" rel="stylesheet">
     {% block extra_css %}
     {% endblock %}
@@ -17,12 +18,27 @@
     {% endblock %}
     <script src="{% static 'custom/js/jquery.cookie.js' %}"></script>
     <script src="{% static 'custom/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'custom/js/jquery-ui.min.js' %}"></script>
     <script src="{% static 'custom/js/custom.js' %}"></script>
 
     {% block extra_js %}
 
     {% endblock %}
     {% block extra_scripts %}
+          <script>
+                jQuery(function($) {
+                    var panelList = $('#draggablePanelList');
+                    panelList.sortable({
+                        handle: '.panel-heading',
+                        update: function() {
+                            $('.panel', panelList).each(function(index, elem) {
+                                var $listItem = $(elem),
+                                        newIndex = $listItem.index();
+                            });
+                        }
+                    });
+                });
+          </script>
     {% endblock %}
 </head>
 <body id="content" class="texture">
