@@ -28,16 +28,35 @@ $(document).ready(function(){
             $.cookie('body_class', 'minified');
         }
     });
-    $('.panel').on('mousedown', function() {
-        //$('body').toggleClass('hidden-menu');
-        console.log($('panel'));
-        if ($('panel').hasClass('ui-sortable-handle')){
-            console.log('panel-heading');
-            $.cookie('body_class', '');
+    $(function() {
+
+        //add id's to the li elements so after sorting we can save the order in localstorage
+        $( "#draggablePanelList>li" ).each(function(index, domEle){ $(domEle).attr('id', 'item_'+index)});
+
+        $( "#draggablePanelList" ).sortable({
+          placeholder: "ui-state-highlight",
+          update: function(event, ui) {
+            localStorage.setItem("sorted",  $("#draggablePanelList").sortable("toArray") );
+          }
+        });
+
+        restoreSorted();
+
+      });
 
 
-        } else {
-            $.cookie('body_class', 'ui-sortable-handle');
-        }
-    });
+      function restoreSorted(){
+
+          var sorted = localStorage["sorted"];
+          if(sorted == undefined) return;
+
+          var elements = $("#draggablePanelList");
+          var sortedArr = sorted.split(",");
+
+          for (var i = 0; i < sortedArr.length; i++){
+              var el = elements.find("#" + sortedArr[i]);
+              $("#draggablePanelList").append(el);
+          };
+
+      }
 });
