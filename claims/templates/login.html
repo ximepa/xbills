@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% block extra_scripts %}
+    <script type="application/javascript">
+        $(document).ready(function() {
+            $('.primary.button.login').click(function(){
+                $('#login').submit();
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="column">
+            <div class="ui raised very padded text container segment login">
+                <h2 class="ui header">{% trans 'Login' %}</h2>
+                <div class="ui clearing divider"></div>
+                <form id="login" class="ui form" method="post">{% csrf_token %}
+                    <div class="two fields">
+                        <div class="field">
+                            <label>{% trans 'Login' %}</label>
+                            {{ form.username }}
+                        </div>
+                        <div class="field">
+                            <label>{% trans 'Password' %}</label>
+                            {{ form.password }}
+                        </div>
+                    </div>
+                    <input class="ui primary button login" name="create_comment" value="{% trans 'Enter' %}" type="submit">
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

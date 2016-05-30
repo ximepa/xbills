@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% block content %}
+    <div class="row">
+        <div class="column">
+            <h4 class="ui header"><i class="ticket icon"></i>{% trans 'Claim' %}#{{ claim.id }} - {{ claim.problem }}</h4>
+            <div class="ui grid">
+                <div class="row">
+                        <div class="twelve wide column">
+                            <div class="ui secondary small menu">
+                                <a class="active item" href="{% url 'claims:claim_comment_add' claim.id %}" target="_blank">
+                                    <i class="home icon"></i> {% trans 'Comments' %}
+                                </a>
+                                <a class="item">
+                                    <i class="mail icon"></i> Messages
+                                </a>
+                                <a class="item">
+                                    <i class="user icon"></i> Friends
+                                </a>
+                                <div class="right menu">
+                                    <div class="item">
+                                        <div class="ui icon input">
+                                            <input placeholder="Search..." type="text">
+                                            <i class="search link icon"></i>
+                                        </div>
+                                    </div>
+                                    <a class="ui item">
+                                        Logout
+                                    </a>
+                                </div>
+                            </div>
+                            {% for comment in comments %}
+                            <div class="ui segment">
+                                <div class="ui comments">
+                                    <div class="comment">
+                                        <a class="avatar">
+                                            <img src="/images/avatar/small/stevie.jpg">
+                                        </a>
+                                        <div class="content">
+                                            <a class="author">{{ comment.user }}</a>
+                                            <div class="metadata">
+                                                <div class="date">{{ comment.created }}</div>
+                                            </div>
+                                            </br>
+                                            <div class="text">
+                                                {{ comment.comments }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <div class="four wide column">
+                            <div class="ui styled accordion">
+                                <div class="active title">
+                                    <i class="dropdown icon"></i>
+                                    {% trans 'Claim information' %}
+                                </div>
+                                <div class="active content">
+                                    <table class="ui table">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <i class="folder icon"></i> {% trans 'Created' %}
+                                                </td>
+                                                <td>{{ claim.created }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <i class="folder icon"></i> {% trans 'Owner' %}
+                                                </td>
+                                                <td>{{ claim.owner }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <i class="folder icon"></i> {% trans 'State' %}
+                                                </td>
+                                                <td>{{ claim.state }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <i class="folder icon"></i> {% trans 'Priority' %}
+                                                </td>
+                                                <td>{{ claim.priority }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <i class="folder icon"></i> {% trans 'UID' %}
+                                                </td>
+                                                <td>{{ claim.uid }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <i class="folder icon"></i> {% trans 'Address' %}
+                                                </td>
+                                                <td>{{ claim.address }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

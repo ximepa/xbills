@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% block title %}
+    {% trans 'Claims' %}
+{% endblock %}
+{% block layout %}
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="well well-sm">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-botton">
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <i class="fa fa-list"> {% trans 'Claims' %} </i>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                <li><a href="{% url 'claims:claims_list' %}"><i class="fa fa-list-alt"></i>{% trans 'Claims list' %}</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+                 <div class="ui blue segment">
+                    <h4 class="ui horizontal header divider">
+                        <i class="fa fa-bar-chart"></i>
+                        {% trans 'Summary of queues' %}
+                    </h4>
+                    <table class="ui black table table-striped table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>{% trans 'Opened' %}</th>
+                                <th>{% trans 'Closed' %}</th>
+                                <th>{% trans 'All' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for v in list %}
+                            <tr>
+                                <td class="two wide column">{{ v.name }}</td>
+                                <td class="two wide column">{{ v.opened }}</td>
+                                <td class="two wide column">{{ v.closed }}</td>
+                                <td class="two wide column">{{ v.all }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot class="full-width">
+                            <tr>
+                                <th>{% trans 'Total' %}</th>
+                                {% for v in list1 %}
+                                    <th>{{ v.all_opened }}</th>
+                                    <th>{{ v.all_closed }}</th>
+                                {% endfor %}
+                                <th></th>
+                            </tr>
+                          </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

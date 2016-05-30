@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% block title %}
+    {% trans 'Settings' %}
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="column">
+            <div class="ui blue segment">
+                <h4 class="ui horizontal header divider">
+                    <i class="settings icon"></i>
+                    {% trans 'Users settings' %}
+                </h4>
+            </div>
+            <div class="ui blue segment">
+                <form class="ui form" method="post">{% csrf_token %}
+                    <div class="field">
+                        {{ settings_form.errors }}
+                    </div>
+                    {% if settings_form.claims_per_page.errors %}
+                        <div class="error field">
+                    {% else %}
+                        <div class="field">
+                    {% endif %}
+                        {{ settings_form.claims_per_page.label_tag }}
+                        {{ settings_form.claims_per_page }}
+                    </div>
+                    {% if settings_form.comments_per_page.errors %}
+                        <div class="error field">
+                    {% else %}
+                        <div class="field">
+                    {% endif %}
+                        {{ settings_form.comments_per_page.label_tag }}
+                        {{ settings_form.comments_per_page }}
+                    </div>
+                    {% if settings_form.logs_per_page.errors %}
+                        <div class="error field">
+                    {% else %}
+                        <div class="field">
+                    {% endif %}
+                        {{ settings_form.logs_per_page.label_tag }}
+                        {{ settings_form.logs_per_page }}
+                    </div>
+                    {% if settings_form.queue.errors %}
+                        <div class="error field">
+                    {% else %}
+                        <div class="field">
+                    {% endif %}
+                        {{ settings_form.queue.label_tag }}
+                        {{ settings_form.queue }}
+                    </div>
+                    <div class="field">
+                        {{ settings_form.email.label_tag }}
+                        {{ settings_form.email }}
+                    </div>
+                    <div class="field">
+                        <input type="submit" class="ui submit button">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

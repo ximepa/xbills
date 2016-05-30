@@ -40,21 +40,25 @@
                 </div>
                 <div class="collapse navbar-collapse js-navbar-collapse">
                     <ul class="nav navbar-nav my-nav">
-                        <li><a href="{% url 'core:index' %}" class="a-nav"><i class="fa fa-dashboard fa-fw"></i>{% trans 'Dashboard' %}</a></li>
+                        <li><a href="{% url 'core:index' %}" class="a-nav"><i class="fa fa-dashboard fa-fw"></i> {% trans 'Dashboard' %} </a></li>
                         <li class="dropdown dropdown-large">
-                            <a id="client-menu" class="dropdown-toggle a-nav" data-toggle="dropdown" href="#"><i class="fa fa-bars fa-fw" aria-hidden="true"></i>{% trans 'Menu' %} <span class="fa fa-caret-down"></span></a>
+                            <a id="client-menu" class="dropdown-toggle a-nav" data-toggle="dropdown" href="#"><i class="fa fa-bars fa-fw" aria-hidden="true"></i> {% trans 'Menu' %} <span class="fa fa-caret-down"></span></a>
                             <ul class="dropdown-menu dropdown-menu-large row">
                                 <li class="col-sm-3">
                                     <ul>
-                                        <li class="dropdown-header"><i class="fa fa-users fa-fw"></i> {% trans 'Clients' %}</li>
-                                        <li><a href="{% url 'core:clients' %}"><i class="fa fa-user fa-fw"></i>{% trans 'Logins' %}</a></li>
+                                        <li class="dropdown-header"><i class="fa fa-users fa-fw"></i> {% trans 'Clients' %} </li>
+                                        <li><a href="{% url 'core:clients' %}"><i class="fa fa-user fa-fw"></i> {% trans 'Logins' %} </a></li>
                                         {% check_module 'olltv' as check_module_olltv %}
                                         {% if check_module_olltv %}
-                                            <li><a href="{% url 'olltv:index' %}"><i class="fa fa-television fa-fw"></i>{% trans 'OLLTV' %}</a></li>
+                                            <li><a href="{% url 'olltv:index' %}"><i class="fa fa-television fa-fw"></i> {% trans 'OLLTV' %} </a></li>
                                         {% endif %}
                                         {% check_module 'ipdhcp' as check_module_ipdhcp %}
                                         {% if check_module_ipdhcp %}
-                                            <li><a href="{% url 'ipdhcp:dhcps' %}"><i class="fa fa-television fa-fw"></i>{% trans 'IP Dhcp' %}</a></li>
+                                            <li><a href="{% url 'ipdhcp:dhcps' %}"><i class="fa fa-external-link fa-fw"></i> {% trans 'IP Dhcp' %} </a></li>
+                                        {% endif %}
+                                        {% check_module 'claims' as check_module_claims %}
+                                        {% if check_module_claims %}
+                                            <li><a href="{% url 'claims:claims' %}"><i class="fa fa-comment-o fa-fw"></i> {% trans 'Claims' %} </a></li>
                                         {% endif %}
                                         <li class="disabled"><a href="#">How to use</a></li>
                                         <li class="divider"></li>

@@ -1,0 +1,12 @@
+{% get_available_languages as languages %}
+                    {% for lang_code, lang_name in languages %}
+                        {% language lang_code %}
+                            <a href="{% url 'dashboard' %}" class="item">
+                                {% if lang_code == 'uk' %}
+                                    <i class="ua flag"></i> {{ lang_name }}
+                                {% else %}
+                                    <i class="{{ lang_code }} flag"></i> {{ lang_name }}
+                                {% endif %}
+                            </a>
+                        {% endlanguage %}
+                    {% endfor %}

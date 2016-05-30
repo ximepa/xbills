@@ -1,0 +1,277 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% block title %}
+    {% trans 'Claim edit' %}
+{% endblock %}
+{% block extra_scripts %}
+    <script type="application/javascript">
+        $(document).ready(function() {
+            if ($('#id_worker').val() == "") {
+                $('#id_state').hide();
+            }
+        });
+    </script>
+{% endblock %}
+{% block layout %}
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="well well-sm">
+                <h4 class="panel panel-heading">
+                    <i class="fa fa-ticket"></i>{% trans 'Claim' %}#{{ claim.id }} - {{ claim.problem }}
+                </h4>
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="panel-group">
+                            <div class="panel panel-default">
+                                <div class="panel-heading hover-link" data-toggle="collapse" data-parent="false" data-target="#comment">
+                                    <h4 class="panel-title">
+                                        {% trans 'Claim Comments' %}
+                                    </h4>
+                                </div>
+                                <div id="comment" class="panel-collapse collapse in">
+                                    <div class="panel-body">
+                                        <ul class="list-group">
+                                            {% for comment in comments %}
+                                                <li class="list-group-item list-group-item-botton">
+                                                    <span class="badge">
+                                                        {% if comment.user.avatar != '' %}
+                                                            <img src="{% static 'avatars' %}/{{ comment.user.avatar }}">
+                                                        {% else %}
+                                                            <img src="{% static 'claims/images/default-user-avatar.png' %}">
+                                                        {% endif %}
+                                                    </span>
+                                                    <div class="content">
+                                                        <a class="author">{{ comment.user }}</a>
+                                                        <div class="metadata">
+                                                            <div class="date">{{ comment.created }}</div>
+                                                        </div>
+                                                        </br>
+                                                        <div class="text">
+                                                            {{ comment.comments|safe }}
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <br/>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2">
+                    </div>
+                    <div class="col-lg-4">
+                    <div class="panel-group">
+                        <div class="panel panel-default">
+                            <div class="panel-heading hover-link" data-toggle="collapse" data-parent="false" data-target="#collapseTableOne">
+                                <h4 class="panel-title">
+                                    {% trans 'Claim information' %}
+                                </h4>
+                             </div>
+                            <div id="collapseTableOne" class="panel-collapse collapse in">
+                                <div class="panel-body">
+                                    <table class="table table-striped table-condensed table-hover">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <i class="folder icon"></i> {% trans 'Address' %}
+                                                </td>
+                                                <td>{{ claim.address }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <i class="folder icon"></i> {% trans 'Created' %}
+                                                </td>
+                                                <td>{{ claim.created }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <i class="folder icon"></i> {% trans 'Owner' %}
+                                                </td>
+                                                <td>{{ claim.owner.last_name }} {{ claim.owner.first_name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <i class="folder icon"></i> {% trans 'State' %}
+                                                </td>
+                                                <td>{{ claim.state }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <i class="folder icon"></i> {% trans 'Priority' %}
+                                                </td>
+                                                <td>{{ claim.priority }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <i class="folder icon"></i> {% trans 'UID' %}
+                                                </td>
+                                                <td>
+                                                    {% if claim.uid != None %}
+                                                        <a href="{{ user_bills_url }}{{ claim.uid }}" target="_blank">{{ claim.uid }}</a>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <i class="folder icon"></i> {% trans 'Queue' %}
+                                                </td>
+                                                <td>{{ claim.queue }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+            </div>
+                <div class="ui clearing divider"></div>
+                <div class="ui grid">
+                    <div class="row">
+                        <div class="eleven wide column">
+                            {% url 'claims:claim_state' pk as state %}
+                            {% url 'claims:claim_edit' pk as comments %}
+                            {% url 'claims:claim_priority' pk as priority %}
+                            {% url 'claims:claim_queue' pk as queue %}
+                            <div class="ui pointing secondary demo menu">
+                                {% if request.get_full_path == comments %}
+                                    <a class="active item" href="{% url 'claims:claim_edit' pk %}"><i class="comment icon"></i> {% trans 'Comments' %}</a>
+                                {% else %}
+                                    <a class="item" href="{% url 'claims:claim_edit' pk %}"><i class="comment icon"></i> {% trans 'Comments' %}</a>
+                                {% endif %}
+                                {% if request.get_full_path == state %}
+                                    <a class="active item" href="{% url 'claims:claim_state' pk %}"><i class="checkmark box icon"></i> {% trans 'State' %}</a>
+                                {% else %}
+                                    <a class="item" href="{% url 'claims:claim_state' pk %}"><i class="checkmark box icon"></i> {% trans 'State' %}</a>
+                                {% endif %}
+                                {% if request.get_full_path == priority %}
+                                    <a class="active item" href="{% url 'claims:claim_priority' pk %}"><i class="spinner icon"></i> {% trans 'Priority' %}</a>
+                                {% else %}
+                                    <a class="item" href="{% url 'claims:claim_priority' pk %}"><i class="spinner icon"></i> {% trans 'Priority' %}</a>
+                                {% endif %}
+                                {% if request.get_full_path == queue %}
+                                    <a class="active item" href="{% url 'claims:claim_queue' pk %}"><i class="list layout icon"></i> {% trans 'Queue' %}</a>
+                                {% else %}
+                                    <a class="item" href="{% url 'claims:claim_queue' pk %}"><i class="list layout icon"></i> {% trans 'Queue' %}</a>
+                                {% endif %}
+                            </div>
+                            {% if request.get_full_path == comments %}
+                                <div class="ui bottom attached active tab segment" id="comments">
+                            {% else %}
+                                <div class="ui bottom attached tab segment" id="comments">
+                            {% endif %}
+                                <form method="post" class="ui error form" id="add_comments">{% csrf_token %}
+                                    {% if comment_form.errors %}
+                                    <div class="ui error message">
+                                        <div class="header"></div>
+                                        <p>{{ comment_form.errors }}</p>
+                                    </div>
+                                    {% endif %}
+                                    <div class="field">
+                                        {{ comment_form.comments }}
+                                    </div>
+                                    <div class="field">
+                                        <input class="ui submit button" type="submit" name="create_comment" value="{% trans 'Create' %}"/>
+                                    </div>
+                                </form>
+                            </div>
+                            {% if request.get_full_path == state %}
+                            <div class="ui bottom attached active tab segment">
+                            {% else %}
+                            <div class="ui bottom attached tab segment">
+                            {% endif %}
+                                <form method="post" class="ui error form" id="change_state">{% csrf_token %}
+                                    {% if state_form.errors %}
+                                    <div class="ui error message">
+                                        <div class="header"></div>
+                                        <p>{{ state_form.errors }}</p>
+                                    </div>
+                                    {% endif %}
+                                    <div class="field">
+                                        {{ state_form.worker.label_tag }}
+                                        {{ state_form.worker }}
+                                    </div>
+                                    <div class="field">
+                                        {{ state_form.state }}
+                                    </div>
+                                    <div class="field">
+                                        {{ state_form.comments }}
+                                    </div>
+                                    <div class="field">
+                                        <input class="ui submit button" type="submit" name="change_state" value="{% trans 'Change' %}"/>
+                                    </div>
+                                </form>
+                                <script type="application/javascript">
+                                    $(document).ready(function() {
+                                        $('#id_worker').on('change', function(){
+                                            if ($(this).val() != "") {
+                                                $('#id_state').show()
+                                            } else {
+                                                $('#id_state').hide()
+                                            }
+                                        });
+                                    });
+                                </script>
+                            </div>
+                            {% if request.get_full_path == priority %}
+                                <div class="ui bottom attached active tab segment">
+                            {% else %}
+                                <div class="ui bottom attached tab segment">
+                            {% endif %}
+                                <form method="post" class="ui error form" id="change_priority">{% csrf_token %}
+                                    {% if priority_form.errors %}
+                                    <div class="ui error message">
+                                        <div class="header"></div>
+                                        <p>{{ priority_form.errors }}</p>
+                                    </div>
+                                    {% endif %}
+                                    <div class="field">
+                                        {{ priority_form.priority.label_tag }}
+                                        {{ priority_form.priority }}
+                                    </div>
+                                    <div class="field">
+                                        {{ priority_form.comments }}
+                                    </div>
+                                    <div class="field">
+                                        <input class="ui submit button" type="submit" name="change_priority" value="{% trans 'Change' %}"/>
+                                    </div>
+                                </form>
+                            </div>
+                            {% if request.get_full_path == queue %}
+                                <div class="ui bottom attached active tab segment">
+                            {% else %}
+                                <div class="ui bottom attached tab segment">
+                            {% endif %}
+                                <form method="post" class="ui error form" id="change_queue">{% csrf_token %}
+                                    {% if queue_form.errors %}
+                                    <div class="ui error message">
+                                        <div class="header"></div>
+                                        <p>{{ queue_form.errors }}</p>
+                                    </div>
+                                    {% endif %}
+                                    <div class="field">
+                                        {{ queue_form.queue.label_tag }}
+                                        {{ queue_form.queue }}
+                                    </div>
+                                    <div class="field">
+                                        {{ queue_form.comments }}
+                                    </div>
+                                    <div class="field">
+                                        <input class="ui submit button" type="submit" name="change_queue" value="{% trans 'Change' %}"/>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="five wide column">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

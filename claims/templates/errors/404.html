@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block content %}
+    <div class="row">
+        <div class="column">
+            <h2 class="ui center aligned icon header">
+                <i class="ban icon"></i>
+                <div class="content">
+                    {% trans 'Error' %} 404
+                    <div class="sub header">{% trans 'Sorry, the page you are looking for is not found' %}</div>
+                </div>
+            </h2>
+        </div>
+    </div>
+{% endblock %}

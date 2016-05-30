@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% load static_pages %}
+{% block title %}
+    {% trans 'Claims list' %}
+{% endblock %}
+{% block extra_scripts %}
+{% endblock %}
+{% block layout %}
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="well well-sm">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-botton">
+                        <div class="dropdown">
+                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <i class="fa fa-list">{% trans 'Claims' %}</i>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                {% for g in claims_count %}
+                                    <li>
+                                        {% if g.claims__count > 0 %}
+                                            <a href="?{% url_replace_page request 'filter_by' g.id %}">
+                                                {{ g.name }}
+                                                <span class="badge">
+                                                    {{ g.claims__count }}
+                                                </span>
+                                            </a>
+                                        {% else %}
+
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+                <table class="ui black table table-bordered table-striped table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <th>
+                                <a href="?{% url_replace request 'order_by' 'id' %}">{% trans 'ID' %}#</a><i class="sort alphabet ascending icon right aligned"></i>
+                            </th>
+                            <th>
+                                <a href="?{% url_replace request 'order_by' 'uid' %}">{% trans 'UID' %}#</a><i class="sort alphabet ascending icon right aligned"></i>
+                            </th>
+                            <th>
+                                <a href="?{% url_replace request 'order_by' 'address' %}">{% trans 'Theme|Address' %}</a><i class="sort alphabet ascending icon right aligned"></i>
+                            </th>
+                            <th>
+                                <a href="?{% url_replace request 'order_by' 'problem' %}">{% trans 'Problem' %}</a><i class="sort alphabet ascending icon right aligned"></i>
+                            </th>
+                            <th>
+                                <a href="?{% url_replace request 'order_by' 'state' %}">{% trans 'State' %}</a><i class="sort alphabet ascending icon right aligned"></i>
+                            </th>
+                            <th>
+                                <a href="?{% url_replace request 'order_by' 'queue' %}">{% trans 'Queue' %}</a><i class="sort alphabet ascending icon right aligned"></i>
+                            </th>
+                            <th>
+                                <a href="?{% url_replace request 'order_by' 'worker' %}">{% trans 'Worker' %}</a><i class="sort alphabet ascending icon right aligned"></i>
+                            </th>
+                            <th>
+                                {% trans 'Age' %}
+                            </th>
+                            <th>
+                                {% trans 'Maps' %}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for claim in claims %}
+                            {% if claim.priority_id == 3 %}
+                                <tr class="danger">
+                            {% elif claim.priority_id == 2 %}
+                                <tr class="warning">
+                            {% else %}
+                                <tr>
+                            {% endif %}
+                        <td>
+                                <a href="{% url 'claims:claim_edit' claim.id %}" title="{% trans 'Edit' %}">{{ claim.id }}</a>
+                            </td>
+                            <td>
+                                {% if claim.uid %}
+                                    <a href="{% url 'core:client' claim.uid %}" target="_blank" title="Abills">{{ claim.uid }}</a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{% url 'claims:claim_edit' claim.id %}" title="{% trans 'Edit' %}">{{ claim.address }}</a>
+                            </td>
+                            <td>{{ claim.problem }}</td>
+                            <td>{{ claim.state }}</td>
+                            <td>{{ claim.queue }}</td>
+                            {% if claim.worker %}
+                                <td>{{ claim.worker }}</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                            <td>{{ claim.created }}</td>
+                            <td><a href="{% url 'claims:claim_map' claim.id %}" target="_blank"><i class="fa fa-map-marker fa-lg"></i></a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    <tfoot class="full-width">
+                    {% if claims.paginator.num_pages > 1 %}
+                        <tr>
+                            <th colspan="9" class="center aligned">
+                                <div class="ui small pagination menu">
+                                    {% if claims.has_previous %}
+                                        <a class="icon item" href="?{% url_replace_page request 'page' '1' %}"><i class="angle double left icon"></i></a>
+                                        <a class="icon item" href="?{% url_replace_page request 'page' claims.previous_page_number %}">
+                                            <i class="angle left icon"></i>
+                                        </a>
+                                    {% else %}
+                                        <div class="icon disabled item">
+                                            <i class="angle double left icon"></i>
+                                        </div>
+                                        <div class="icon disabled item">
+                                            <i class="angle left icon"></i>
+                                        </div>
+                                    {% endif %}
+                                    <div class="disabled item">
+                                        {{ claims.number }} / {{ claims.paginator.num_pages }}
+                                    </div>
+                                    {% if claims.has_next %}
+                                        <a class="icon item" href="?{% url_replace_page request 'page' claims.next_page_number %}">
+                                            <i class="angle right icon"></i>
+                                        </a>
+                                        <a class="icon item" href="?{% url_replace_page request 'page' claims.paginator.num_pages %}"><i class="angle double right icon"></i></a>
+                                    {% else %}
+                                        <div class="icon disabled item">
+                                            <i class="angle right icon"></i>
+                                        </div>
+                                        <div class="icon disabled item">
+                                            <i class="angle double right icon"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </th>
+                        </tr>
+                    {% endif %}
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% block claims %}
+    {% endblock %}
+{% endblock %}

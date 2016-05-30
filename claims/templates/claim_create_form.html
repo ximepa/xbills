@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% block content %}
+    <div class="row">
+        <div class="column">
+            <div class="ui blue segment">
+                <h4 class="ui horizontal header divider">
+                    <i class="add circle icon"></i>
+                    {% trans 'Claim create' %}
+                </h4>
+            </div>
+            <div class="ui page grid">
+                <div class="row">
+                    <div class="column">
+                        <div class="ui blue segment create">
+                            <form method="post" class="ui small form">{% csrf_token %}
+                                {{ form.errors }}
+                                {% if form.address.errors %}
+                                    <div class="required field error">
+                                {% else %}
+                                    <div class="required field">
+                                {% endif %}
+                                    <label>{% trans 'Theme|Address' %}</label>
+                                    {{ form.address }}
+                                </div>
+                                {% if form.uid.errors %}
+                                    <div class="field error">
+                                {% else %}
+                                    <div class="field">
+                                {% endif %}
+                                    <label>UID</label>
+                                    {{ form.uid }}
+                                </div>
+                                <div class="three fields">
+                                    {% if form.queue.errors %}
+                                    <div class="required field error">
+                                    {% else %}
+                                    <div class="required field">
+                                    {% endif %}
+                                        <label>{% trans 'Queue' %}</label>
+                                        {{ form.queue }}
+                                    </div>
+                                    {% if form.state.errors %}
+                                    <div class="required field error">
+                                    {% else %}
+                                    <div class="required field">
+                                    {% endif %}
+                                        <label>{% trans 'State' %}</label>
+                                        {{ form.state }}
+                                    </div>
+                                    {% if form.priority.errors %}
+                                    <div class="required field error">
+                                    {% else %}
+                                    <div class="required field">
+                                    {% endif %}
+                                        <label>{% trans 'Priority' %}</label>
+                                        {{ form.priority }}
+                                    </div>
+                                </div>
+                                <div class="two fields">
+                                    {% if form.problem.errors %}
+                                        <div class="required field error">
+                                    {% else %}
+                                        <div class="required field">
+                                    {% endif %}
+                                        <label>{% trans 'Problem' %}</label>
+                                        {{ form.problem }}
+                                    </div>
+                                    {% if form.worker.errors %}
+                                        <div class="required field error">
+                                    {% else %}
+                                        <div class="required field">
+                                    {% endif %}
+                                        <label>{% trans 'Worker' %}</label>
+                                        {{ form.worker }}
+                                    </div>
+                                </div>
+                                {% if form.comments.errors %}
+                                    <div class="required field error">
+                                {% else %}
+                                    <div class="required field">
+                                {% endif %}
+                                    <label>{% trans 'Comments' %}</label>
+                                    {{ form.media }}
+                                    {{ form.comments }}
+                                </div>
+                                <div class="field">
+                                    <input type="submit" class="ui submit button" value="{% trans 'Create' %}" name="create">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
