@@ -31,9 +31,8 @@ $(document).ready(function(){
     $(function() {
 
         //add id's to the li elements so after sorting we can save the order in localstorage
-        $( ".sortable" ).each(function(index, domEle){
-            $(domEle).attr('id', 'item_'+index);
-            console.log($(domEle).attr('id', 'item_'+index))
+        $( ".sortable div" ).each(function(index, domEle){
+            $(domEle).attr('id', 'item_'+index)
         });
         $( ".sortable" ).sortable({
             placeholder: "ui-state-highlight",
