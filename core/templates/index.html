@@ -3,19 +3,10 @@
 {% load staticfiles %}
 {% load url %}
 {% block extra_scripts %}
-    <script>
-                jQuery(function($) {
-                    $( ".sortable" ).sortable({
-                        connectWith: ".sortable",
-                        handle: ".panel-heading",
-                        placeholder: "placeholder ui-corner-all"
-                    });
-                });
-          </script>
 {% endblock %}
 {% block content %}
-    <div class="row">
-        <div class="col-xs-12 col-sm-4 col-md-4 sortable">
+    <div id="sortable" class="row">
+        <div class="sortable col-xs-4 col-sm-4 col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     {% trans 'CPU' %}
@@ -49,6 +40,8 @@
 
                 </div>
             </div>
+        </div>
+        <div class="sortable col-xs-4 col-sm-4 col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     {% trans 'Sys info' %}
@@ -65,7 +58,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-4 col-md-4 sortable">
+        <div class="sortable col-xs-4 col-sm-4 col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     {% trans 'Memory' %}
@@ -110,7 +103,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-4 col-md-4 sortable">
+        <div Class="sortable col-xs-4 col-sm-4 col-md-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     {% trans 'Swap' %}

@@ -7,6 +7,7 @@ from django.contrib.auth.models import (
 )
 from django.db import connection
 from django.conf import settings
+
 __author__ = 'ximepa'
 
 

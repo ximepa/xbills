@@ -281,15 +281,15 @@
                                 {% if user_password %}
                                     <span class="label label-success">{{ user_password }}</span>
                                 {% else %}
-                                    <a class="btn btn-default btn-sm" href="{% url 'core:client' uid %}?show_password=1" role="button">{% trans 'Show password' %}</a>
+                                    <a class="btn btn-default btn-xs" href="{% url 'core:client' uid %}?show_password=1" role="button">{% trans 'Show password' %}</a>
                                 {% endif %}
-                                <button type="button" class="btn btn-default btn-sm">{% trans 'Change password' %}</button>
-                                <button type="button" class="btn btn-default btn-sm">{% trans 'Send password SMS' %}</button>
+                                <button type="button" class="btn btn-default btn-xs">{% trans 'Change password' %}</button>
+                                <button type="button" class="btn btn-default btn-xs">{% trans 'Send password SMS' %}</button>
                             </div>
                         </div>
                     </div>
                     <hr/>
-                    <input type="submit" class="btn btn-primary btn-sm center-block" value="{% trans 'Change' %}">
+                    <input type="submit" class="btn btn-primary btn-xs center-block" value="{% trans 'Change' %}">
                 </form>
             </div>
         </div>
@@ -308,6 +308,58 @@
             </div>
         </div>
     </div>
+    {% check_module 'claims' as check_module_claims %}
+        {% if check_module_claims and claims %}
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12">
+                    <div class="well well-sm text-center">
+                        <table class="ui black table">
+                            <th>
+                                {% trans 'Problem' %}
+                            </th>
+                            <th>
+                                {% trans 'Theme|Address' %}
+                            </th>
+                            <th>
+                                {% trans 'State' %}
+                            </th>
+                            <th>
+                                {% trans 'Queue' %}
+                            </th>
+                            <th>
+                                {% trans 'Worker' %}
+                            </th>
+                            <th>
+                                {% trans 'Age' %}
+                            </th>
+                        <tbody>
+                            {% for c in claims %}
+                                {% if c.priority_id == 3 %}
+                                    <tr class="danger">
+                                {% elif c.priority_id == 2 %}
+                                    <tr class="warning">
+                                {% else %}
+                                    <tr>
+                                {% endif %}
+                                    <td><a href="{% url 'claims:claim_edit' c.id%}" title="{% trans 'Edit' %}">{{ c.problem }}</a></td>
+
+                                    <td>{{ c.address }}</td>
+
+                                    <td>{{ c.state }}</td>
+
+                                    <td>{{ c.owner }}</td>
+
+                                    <td>{{ c.worker }}</td>
+                                    <td>{{ c.created }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     {% if dv_session %}
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12">

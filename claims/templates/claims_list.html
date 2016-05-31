@@ -70,14 +70,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for claim in claims %}
-                            {% if claim.priority_id == 3 %}
-                                <tr class="danger">
-                            {% elif claim.priority_id == 2 %}
-                                <tr class="warning">
-                            {% else %}
-                                <tr>
-                            {% endif %}
+                    {% for claim in claims %}
+                        {% if claim.priority_id == 3 %}
+                            <tr class="danger">
+                                {% elif claim.priority_id == 2 %}
+                            <tr class="warning">
+                                {% else %}
+                            <tr>
+                        {% endif %}
                         <td>
                                 <a href="{% url 'claims:claim_edit' claim.id %}" title="{% trans 'Edit' %}">{{ claim.id }}</a>
                             </td>

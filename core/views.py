@@ -330,6 +330,11 @@ def client(request, uid):
     else:
         user_password = ''
     dv = Dv.objects.get(user=uid)
+    if module_check.check('claims'):
+        from claims.models import Claims
+        claims = Claims.objects.filter(uid=uid)
+        print claims.count()
+
     # if 'dv_submit' in request.POST:
     #     print 'yes'
     # else:
