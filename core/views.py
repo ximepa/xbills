@@ -262,7 +262,7 @@ def search(request):
 def client(request, uid):
     print request.GET
     if 'hangup' in request.GET:
-        hangup = Hangup(request.GET['nas_id'], request.GET['acct_session_id'])
+        hangup = Hangup(request.GET['nas_id'], request.GET['port_id'], request.GET['acct_session_id'], request.GET['user_name'])
 
     res1 = '<option selected="selected"></option>'
     if 'district' in request.GET:
@@ -332,9 +332,7 @@ def client(request, uid):
     dv = Dv.objects.get(user=uid)
     if module_check.check('claims'):
         from claims.models import Claims
-        claims = Claims.objects.filter(uid=uid)
-        print claims.count()
-
+        claims = Claims.objects.filter(uid=uid, state=1)
     # if 'dv_submit' in request.POST:
     #     print 'yes'
     # else:

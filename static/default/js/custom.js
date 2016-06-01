@@ -26,6 +26,6 @@ $(document).ready(function(){
             $.cookie('body_class', '');
         } else {
             $.cookie('body_class', 'minified');
-        }
+        } 
     });
 });

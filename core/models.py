@@ -418,6 +418,12 @@ class Nas(models.Model):
     def __unicode__(self):
         return str(self.id)
 
+    @property
+    def get_hash_password(self):
+        q = 'SELECT id, DECODE(mng_password, "%s") as pwd FROM %s WHERE id=%s' % (
+        settings.ENCRYPT_KEY, self._meta.db_table, self.id)
+        return self.__class__.objects.raw(q)[0].pwd
+
 class Dv_log(models.Model):
     start = models.DateTimeField(default='0000-00-00 00:00:00', primary_key=True)
     duration = models.IntegerField(max_length=11, default=0)
