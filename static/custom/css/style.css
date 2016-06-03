@@ -198,8 +198,13 @@ ol, ul {
 .ui.black.table {
     border-top: .2em solid #1b1c1d;
 }
+.ui.black.bordered.table {
+    border-top: .2em solid #1b1c1d;
+    border-bottom: .2em solid #1b1c1d;
+    margin-bottom: 0;
+}
 .ui.table {
-    width: 100%;
+    /*width: 100%;*/
     /*background: #fff;*/
     /*margin: 1em 0;*/
     border: 1px solid rgba(34,36,38,.15);
@@ -280,4 +285,9 @@ ol, ul {
 }
 .col-md-4 {
     min-height: 200px;
+}
+.affix,.affix-top {
+   /*position:static;*/
+    top: 0;
+    /*width:225px;*/
 }
