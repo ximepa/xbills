@@ -55,10 +55,6 @@
                                         {% if check_module_olltv %}
                                             <li><a href="{% url 'olltv:index' %}"><i class="fa fa-television fa-fw"></i> {% trans 'OLLTV' %} </a></li>
                                         {% endif %}
-                                        {% check_module 'ipdhcp' as check_module_ipdhcp %}
-                                        {% if check_module_ipdhcp %}
-                                            <li><a href="{% url 'ipdhcp:dhcps' %}"><i class="fa fa-external-link fa-fw"></i> {% trans 'IP Dhcp' %} </a></li>
-                                        {% endif %}
                                         {% check_module 'claims' as check_module_claims %}
                                         {% if check_module_claims %}
                                             <li><a href="{% url 'claims:claims' %}"><i class="fa fa-comment-o fa-fw"></i> {% trans 'Claims' %} </a></li>
@@ -90,6 +86,10 @@
                                         <li class="dropdown-header">{% trans 'Configuration' %}</li>
                                         <li><a href="{% url 'core:administrators' %}"><i class="fa fa-users fa-fw"></i>{% trans 'Administrators' %}</a></li>
                                         <li><a href="{% url 'core:nas' %}"><i class="fa fa-server fa-fw"></i>{% trans 'Access servers' %}</a></li>
+                                        {% check_module 'ipdhcp' as check_module_ipdhcp %}
+                                        {% if check_module_ipdhcp %}
+                                            <li><a href="{% url 'ipdhcp:dhcps' %}"><i class="fa fa-external-link fa-fw"></i> {% trans 'IP Dhcp' %} </a></li>
+                                        {% endif %}
                                         <li><a href="#">Checkboxes and radio addons</a></li>
                                         <li class="dropdown-header">Navs</li>
                                         <li><a href="#">Tabs</a></li>
