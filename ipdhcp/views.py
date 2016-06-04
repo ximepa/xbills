@@ -9,6 +9,7 @@ from xbills import settings
 
 
 def dhcps(request):
+    print request.POST
     order_by = request.GET.get('order_by', 'id')
     net_dhcp = Dhcphosts_networks.objects.all().order_by(order_by)
     paginator = Paginator(net_dhcp, settings.FEES_PER_PAGE)
@@ -33,6 +34,9 @@ def dhcps(request):
     for p in page_range:
         page_list = p
     pre_end = dhcp_page.paginator.num_pages - 2
+    if 'edit_dhcp' in request.POST:
+        edit_dhcp = Dhcphosts_networks.objects.get(id=request.POST['edit_dhcp'])
+        print edit_dhcp
     return render(request, 'dhcp.html', locals())
 
 
