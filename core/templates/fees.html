@@ -5,8 +5,33 @@
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="well well-sm">
-                {% if fees.paginator.num_pages > 1 %}
                     <ul class="list-group" data-spy="affix" data-offset-top="200" data-offset-bottom="200">
+                        <li class="list-group-item">
+                            <form id="export_form" name="export" method="POST" action="{% url 'core:client_fees' uid %}?export">{% csrf_token %}
+                                <div class="form-group form-group-sm">
+                                    <div class="input-group date">
+                                        <input id="last" data-format="yyyy-MM-dd" type="date" name="Last" placeholder="Last" class="form-control" value="" style="width: 50%; border-right: none;" />
+                                        <input id="first" data-format="yyyy-MM-dd" type="date" name="First" placeholder="First" class="form-control" value="" style="width: 50%" />
+                                        <span class="input-group-btn">
+                                            <input type="submit" name="export_submit" class="btn btn-primary btn-sm" value="{% trans 'Export' %}">
+                                        </span>
+                                        <script>
+                                            $(function () {
+                                                $('#last').datetimepicker({
+                                                    format: 'yyyy-mm-dd',
+                                                    pickTime: false,
+                                                });
+                                                $('#first').datetimepicker({
+                                                    format: 'yyyy-mm-dd',
+                                                    pickTime: false,
+                                                });
+                                            })
+                                        </script>
+                                    </div>
+                                </div>
+                            </form>
+                        </li>
+                    {% if fees.paginator.num_pages > 1 %}
                         <li class="list-group-item">
                             <ul class="pagination pagination-sm">
                                 {% if fees.has_previous %}
@@ -98,7 +123,11 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="9"></td>
+                                <td colspan="4"></td>
+                                <td>
+                                    <span class="badge">{{ out_sum }}</span>
+                                </td>
+                                <td colspan="4"></td>
                                 <td>
                                     <span class="badge">{{ fees_list.count }}</span>
                                 </td>

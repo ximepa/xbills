@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+import csv
 import random
 import socket
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse, render_to_response, RequestContext, redirect
@@ -8,6 +9,9 @@ from django.core.urlresolvers import reverse
 import pyrad
 import sys
 from io import BytesIO
+
+from django.template.context_processors import request
+
 from dv.hangup import Hangup
 from pyrad.client import Client, packet
 from pyrad import server
@@ -399,7 +403,9 @@ def payments(request):
     return render(request, 'payments.html', locals())
 
 
+@login_required()
 def fees(request):
+    print request.user
     order_by = request.GET.get('order_by', '-date')
     fees_list = Fees.objects.all().order_by(order_by)
     paginator = Paginator(fees_list, settings.FEES_PER_PAGE)
@@ -463,6 +469,7 @@ def client_payments(request, uid):
 
 
 def client_fees(request, uid):
+    out_sum = 0
     order_by = request.GET.get('order_by', '-date')
     try:
         user = User.objects.get(id=uid)
@@ -470,6 +477,8 @@ def client_fees(request, uid):
         error = 'user not found'
         return render(request, 'layout_edit.html', locals())
     fees_list = Fees.objects.filter(uid=user.id).order_by(order_by)
+    for ex_fees in fees_list:
+        out_sum = out_sum + ex_fees.sum
     paginator = Paginator(fees_list, settings.FEES_PER_PAGE)
     page = request.GET.get('page', 1)
     try:
@@ -494,6 +503,17 @@ def client_fees(request, uid):
     pre_end = fees.paginator.num_pages - 2
     if 'del' in request.GET:
         return redirect(request.GET['return_url'])
+    if 'export_submit' in request.POST:
+        print request.POST
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
+        writer = csv.writer(response)
+        writer.writerow(['Service', 'Sum'])
+        for ex_fees in fees_list.filter(uid=uid, date__range=(request.POST['Last'], request.POST['First'])):
+            writer.writerow([ex_fees.dsc.encode('utf-8'), ex_fees.sum])
+            out_sum = out_sum + ex_fees.sum
+        writer.writerow(['', out_sum])
+        return response
     return render(request, 'fees.html', locals())
 
 
