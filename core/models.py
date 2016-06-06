@@ -177,7 +177,7 @@ class District(models.Model):
 
     class Meta:
         db_table = 'districts'
-        ordering = ['name']
+        ordering = ['id']
 
 
 class Street(models.Model):
@@ -193,7 +193,7 @@ class Street(models.Model):
 
     class Meta:
         db_table = 'streets'
-        ordering = ['name']
+        ordering = ['id']
 
 
 class House(models.Model):
@@ -207,7 +207,7 @@ class House(models.Model):
 
     class Meta:
         db_table = 'builds'
-        ordering = ['number']
+        ordering = ['id']
 
 
 class AbonTarifs(models.Model):
