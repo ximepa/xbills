@@ -255,7 +255,6 @@ class UserPi(models.Model):
     @property
     def pi(self):
         try:
-            print User.objects.get(login=self)
             return User.objects.get(login=self.id)
         except User.DoesNotExist:
             return None

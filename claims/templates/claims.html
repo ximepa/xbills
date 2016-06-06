@@ -4,6 +4,12 @@
 {% block title %}
     {% trans 'Claims' %}
 {% endblock %}
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+      <li class=""><a href="{% url 'core:index' %}">{% trans 'Dashboard' %}</a></li>
+      <li class="active">{% trans 'Claims' %}</li>
+    </ol>
+{% endblock %}
 {% block layout %}
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
