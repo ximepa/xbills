@@ -285,7 +285,7 @@ def client(request, uid):
         house = House.objects.filter(street_id=request.GET['STREET'])
         dict_resp= []
         for item in house:
-            res = '<option value=' + str(item.street_id) + '>' + item.number.encode('utf8') + '</option>'
+            res = '<option value=' + str(item.id) + '>' + item.number.encode('utf8') + '</option>'
             dict_resp.append(res1 + res)
         return HttpResponse(dict_resp)
     user = User.objects.get(id=uid)
