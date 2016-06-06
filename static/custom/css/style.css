@@ -259,7 +259,9 @@ ol, ul {
 .pagination.pagination-sm {
     display: inline-block;
     padding-left: 0;
-    margin: 0px 0;
+    /*margin-top: 8px;*/
+    /*margin-bottom: 0;*/
+    margin: 8px 8px 0 0;
     border-radius: 4px;
 }
 
@@ -286,8 +288,24 @@ ol, ul {
 .affix,.affix-top {
    /*position:static;*/
     top: 0;
-    /*width:225px;*/
+
+    width:100%;
 }
 .popover{
     max-width: 100%;
+}
+
+.navbar .no-brand .container-fluid, .navbar-collapse {
+    padding-left:0;
+}
+.navbar {
+    min-height: 50px;
+}
+.no-brand .navbar-form {
+    padding-left: 0;
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+.navbar-collapse.in {
+    padding-left:30px;
 }
