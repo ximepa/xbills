@@ -1,6 +1,40 @@
 /**
  * Created by ximepa on 23.05.16.
  */
+
+
+var dashboard = {};
+//
+// dashboard.getProc = function () {
+//
+//         $("#get_proc").dataTable({
+//         ajax: "?process"
+//         })
+//
+// };
+
+dashboard.getProc = function () {
+    $(function() {
+        $('#get_proc').bootstrapTable({
+            url: '?process',
+            search: true,
+            pageSize: 10,
+            columns: [{
+                field: 'pid',
+                title: 'Pid',
+            }, {
+                field: 'name',
+                title: 'Name'
+            }, {
+                field: 'cpu',
+                title: '% CPU',
+                valign: 'bottom'
+            }
+            ]
+        });
+    })
+};
+
 $(document).ready(function(){
     var body_class = $.cookie('body_class');
     if(body_class) {
@@ -29,25 +63,28 @@ $(document).ready(function(){
         }
     });
 
-    $(function() {
-		var columnObj = jQuery('.sortable');
+    // $(function() {
+		// var columnObj = jQuery('.sortable');
+    //
+		// if (columnObj.length > 0) {
+		// 	columnObj
+		// 		.sortable({
+		// 			connectWith: '.panel-heading',
+		// 			forcePlaceholderSize: true,
+		// 			placeholder: 'panel-heading',
+		// 			opacity: '0.5 '
+    //
+		// 		});
+		// }
+    //
+    // });
+    //
+    //
+    // function restoreSorted(){
+    //
+    //
+    // }
 
-		if (columnObj.length > 0) {
-			columnObj
-				.sortable({
-					connectWith: '.sortable',
-					forcePlaceholderSize: true,
-					placeholder: 'panel',
-					opacity: '0.5 '
-
-				});
-		}
-
-    });
 
 
-    function restoreSorted(){
-
-        
-    }
 });

@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 import csv
+import json
 import random
 import socket
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse, render_to_response, RequestContext, redirect
@@ -55,6 +56,20 @@ def index(request, settings=settings):
     swap = psutil.swap_memory()
     disks = psutil.disk_partitions()
     root_disk_usage = psutil.disk_usage('/')
+    if 'process' in request.GET:
+        try:
+            list = []
+            for proc in psutil.process_iter():
+                pinfo = {}
+                pinfo['pid'] = proc.pid
+                pinfo['name'] = proc.name()
+                pinfo['cpu'] = proc.cpu_percent().real
+                print proc.cpu_percent()
+                list.append(pinfo)
+            res_json = json.dumps(list)
+            return HttpResponse(res_json)
+        except Exception:
+            pass
     return render(request, 'index.html', locals())
 
 
