@@ -70,6 +70,14 @@ def index(request, settings=settings):
         except Exception:
             pass
     memory = psutil.virtual_memory()
+    if 'memory' in request.GET:
+        try:
+            pinfo = {}
+            pinfo['memory'] = memory.percent
+            res_json = json.dumps(pinfo)
+            return HttpResponse(res_json)
+        except Exception:
+            pass
     swap = psutil.swap_memory()
     disks = psutil.disk_partitions()
     root_disk_usage = psutil.disk_usage('/')

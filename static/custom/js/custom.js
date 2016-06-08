@@ -6,16 +6,27 @@ dashboard.getCpu = function () {
             var cores = index +1;
             if (value.core > 40 && value.core < 59) {
                 $('#core' + cores).css('width', data[index].core + '%').attr('aria-valuenow', data[index].core).removeClass('progress-bar-danger').addClass('progress-bar-warning');
+                $('#core' + cores).text(data[index].core + '%');
             }
             else if (value.core > 60) {
                 $('#core' + cores).css('width', data[index].core + '%').attr('aria-valuenow', data[index].core).removeClass('progress-bar-warning').addClass('progress-bar-danger');
+                $('#core' + cores).text(data[index].core + '%');
             }
             else {
                 $('#core' + cores).css('width', data[index].core + '%').attr('aria-valuenow', data[index].core).removeClass('progress-bar-warning progress-bar-danger');
+                $('#core' + cores).text(data[index].core + '%');
             }
         });
     });
 };
+
+dashboard.getMemory = function () {
+    $.getJSON('?memory', function (data) {
+        $('#getMemory').css('width', data.memory + '%').attr('aria-valuenow', data.memory).removeClass('progress-bar-danger').addClass('progress-bar-warning');
+        $('#getMemory').text(data.memory + '%');
+    })
+};
+
 dashboard.getUptime = function () {
     $.getJSON('?uptime', function (data) {
         $('#uptime').text(data.uptime);
@@ -70,6 +81,7 @@ function refresh() {
         dashboard.getCpu();
         dashboard.getProc();
         dashboard.getUptime();
+        dashboard.getMemory();
         refresh();
     }, 10000);
 }
@@ -78,5 +90,6 @@ $(document).ready(function(){
     dashboard.getProc();
     dashboard.getCpu();
     dashboard.getUptime();
+    dashboard.getMemory();
     refresh();
 });

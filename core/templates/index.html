@@ -72,19 +72,8 @@
                         <div class="col-sm-4">{% trans 'Load' %}:</div>
                         <div class="col-sm-8">
                             <div class="progress">
-                                {% if memory.percent >= settings.MEM_DANGER_THRESHOLD %}
-                                    <div id="memory_percent" class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="{{ memory.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ memory.percent }}%">
-                                        {{ memory.percent }}%
-                                    </div>
-                                {% elif memory.percent >= settings.MEM_WARNING_THRESHOLD %}
-                                    <div id="memory_percent" class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="{{ memory.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ memory.percent }}%">
-                                        {{ memory.percent }}%
-                                    </div>
-                                {% else %}
-                                    <div id="memory_percent" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{ memory.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ memory.percent }}%">
-                                        {{ memory.percent }}%
-                                    </div>
-                                {% endif %}
+                                <div id="getMemory" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar">
+                                </div>
                             </div>
                         </div>
                     </div>
