@@ -1,90 +1,82 @@
-/**
- * Created by ximepa on 23.05.16.
- */
-
-
 var dashboard = {};
-//
-// dashboard.getProc = function () {
-//
-//         $("#get_proc").dataTable({
-//         ajax: "?process"
-//         })
-//
-// };
 
-dashboard.getProc = function () {
+dashboard.getCpu = function () {
+    $.getJSON('?cpu', function (data) {
+        $.each(data, function(index, value) {
+            var cores = index +1;
+            if (value.core > 40 && value.core < 59) {
+                $('#core' + cores).css('width', data[index].core + '%').attr('aria-valuenow', data[index].core).removeClass('progress-bar-danger').addClass('progress-bar-warning');
+            }
+            else if (value.core > 60) {
+                $('#core' + cores).css('width', data[index].core + '%').attr('aria-valuenow', data[index].core).removeClass('progress-bar-warning').addClass('progress-bar-danger');
+            }
+            else {
+                $('#core' + cores).css('width', data[index].core + '%').attr('aria-valuenow', data[index].core).removeClass('progress-bar-warning progress-bar-danger');
+            }
+        });
+    });
+};
+dashboard.getUptime = function () {
+    $.getJSON('?uptime', function (data) {
+        $('#uptime').text(data.uptime);
+    });
+};
+
+dashboard.getProc = function() {
+      function rowStyle(row, index) {
+          if (row.cpu > 35 && row.cpu < 50) {
+              return {
+                  classes: 'warning'
+              }
+          }
+          if (row.cpu > 50 && row.cpu < 200) {
+              return {
+                  classes: 'danger'
+              }
+          }
+          return {};
+      }
+
     $(function() {
         $('#get_proc').bootstrapTable({
             url: '?process',
-            search: true,
-            pageSize: 10,
+            height: 300,
+            rowStyle: rowStyle,
+            sortName: 'cpu',
+            sortOrder: 'desc',
             columns: [{
                 field: 'pid',
-                title: 'Pid',
+                title: 'Pid'
             }, {
                 field: 'name',
                 title: 'Name'
             }, {
+                field: 'status',
+                title: 'Status'
+            }, {
                 field: 'cpu',
                 title: '% CPU',
-                valign: 'bottom'
+                valign: 'top',
+                sortable: true
             }
             ]
         });
     })
 };
 
+function refresh() {
+    setTimeout(function(){
+        $('#get_proc').bootstrapTable('destroy');
+        dashboard.getCpu();
+        dashboard.getProc();
+        dashboard.getUptime();
+        refresh();
+    }, 10000);
+}
+
 $(document).ready(function(){
-    var body_class = $.cookie('body_class');
-    if(body_class) {
-    //    console.log('class');
-        $('body').addClass(body_class);
-    //        var currentHref = $(this).attr('href');
-    //        if(currentHref == currentPage) {
-    //            $(this).attr('class', body_class);
-    //        }
-    //    })
-    }
-    $('#hide-menu').on('click', function() {
-        //$('body').toggleClass('hidden-menu');
-        if ($('body').hasClass('hidden-menu')){
-            $.cookie('body_class', '');
-        } else {
-            $.cookie('body_class', 'hidden-menu');
-        }
-    });
-    $('.minifyme').on('click', function() {
-        //$('body').toggleClass('hidden-menu');
-        if ($('body').hasClass('minified')){
-            $.cookie('body_class', '');
-        } else {
-            $.cookie('body_class', 'minified');
-        }
-    });
-
-    // $(function() {
-		// var columnObj = jQuery('.sortable');
-    //
-		// if (columnObj.length > 0) {
-		// 	columnObj
-		// 		.sortable({
-		// 			connectWith: '.panel-heading',
-		// 			forcePlaceholderSize: true,
-		// 			placeholder: 'panel-heading',
-		// 			opacity: '0.5 '
-    //
-		// 		});
-		// }
-    //
-    // });
-    //
-    //
-    // function restoreSorted(){
-    //
-    //
-    // }
-
-
-
+    dashboard.getProc();
+    dashboard.getCpu();
+    dashboard.getUptime();
+    refresh();
 });

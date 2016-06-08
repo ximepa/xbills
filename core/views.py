@@ -49,9 +49,26 @@ def index(request, settings=settings):
     boot_time = datetime.datetime.fromtimestamp(psutil.boot_time())
     d2 = datetime.datetime.now()
     diff = abs((d2 - boot_time))
-    uptime = strfdelta(diff, settings.UPTIME_FORMAT)
-    cpu_count = psutil.cpu_count()
+    if 'uptime' in request.GET:
+        try:
+            pinfo = {}
+            pinfo['uptime'] = strfdelta(diff, settings.UPTIME_FORMAT)
+            res_json = json.dumps(pinfo)
+            return HttpResponse(res_json)
+        except Exception:
+            pass
     cpu_load_list = psutil.cpu_percent(interval=1, percpu=True)
+    if 'cpu' in request.GET:
+        try:
+            list = []
+            for getCpu in psutil.cpu_percent(interval=1, percpu=True):
+                pinfo = {}
+                pinfo['core'] = getCpu
+                list.append(pinfo)
+            res_json = json.dumps(list)
+            return HttpResponse(res_json)
+        except Exception:
+            pass
     memory = psutil.virtual_memory()
     swap = psutil.swap_memory()
     disks = psutil.disk_partitions()
@@ -63,8 +80,8 @@ def index(request, settings=settings):
                 pinfo = {}
                 pinfo['pid'] = proc.pid
                 pinfo['name'] = proc.name()
+                pinfo['status'] = proc.status()
                 pinfo['cpu'] = proc.cpu_percent().real
-                print proc.cpu_percent()
                 list.append(pinfo)
             res_json = json.dumps(list)
             return HttpResponse(res_json)
