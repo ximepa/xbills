@@ -6,10 +6,12 @@ import socket
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse, render_to_response, RequestContext, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
 from django.core.urlresolvers import reverse
 import pyrad
 import sys
 from io import BytesIO
+from dateutil.relativedelta import relativedelta
 
 from django.template.context_processors import request
 
@@ -42,13 +44,23 @@ def custom_redirect(url_name, *args, **kwargs):
 
 @login_required()
 def index(request, settings=settings):
-    if request.method == 'GET':
-        print request.GET
     sys = platform.platform()
     psutil.boot_time()
     boot_time = datetime.datetime.fromtimestamp(psutil.boot_time())
     d2 = datetime.datetime.now()
     diff = abs((d2 - boot_time))
+    if 'pay' in request.GET:
+        pinfo = {}
+        result_day_pay = 0
+        result_week_pay = 0
+        payments_today = Payment.objects.filter(date__icontains=datetime.datetime.now().date())
+        payments_week = Payment.objects.filter(date__lte=datetime.datetime.now().date() + datetime.timedelta(days=1), date__gte=(datetime.datetime.now().date() + datetime.timedelta(days=1)) - datetime.timedelta(weeks=1))
+        payments_month = Payment.objects.filter(date__year=datetime.datetime.now().year, date__month=datetime.datetime.now().month)
+        pinfo['pay_day'] = payments_today.aggregate(Sum('sum')), payments_today.count()
+        pinfo['pay_week'] = payments_week.aggregate(Sum('sum')), payments_week.count()
+        pinfo['pay_month'] = payments_month.aggregate(Sum('sum')), payments_month.count()
+        res_json = json.dumps(pinfo)
+        return HttpResponse(res_json)
     if 'uptime' in request.GET:
         try:
             pinfo = {}

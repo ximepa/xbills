@@ -20,6 +20,17 @@ dashboard.getCpu = function () {
     });
 };
 
+dashboard.getPay = function () {
+    $.getJSON('?pay', function (data) {
+        $('#day_sum').text(data.pay_day[0].sum__sum);
+        $('#day_sum_count').text(data.pay_day[1]);
+        $('#week_sum').text(data.pay_week[0].sum__sum);
+        $('#week_sum_count').text(data.pay_week[1]);
+        $('#month_sum').text(data.pay_month[0].sum__sum);
+        $('#month_sum_count').text(data.pay_month[1]);
+    })
+};
+
 dashboard.getMemory = function () {
     $.getJSON('?memory', function (data) {
         $('#getMemory').css('width', data.memory + '%').attr('aria-valuenow', data.memory).removeClass('progress-bar-danger').addClass('progress-bar-warning');
@@ -82,6 +93,7 @@ function refresh() {
         dashboard.getProc();
         dashboard.getUptime();
         dashboard.getMemory();
+        dashboard.getPay();
         refresh();
     }, 10000);
 }
@@ -91,5 +103,6 @@ $(document).ready(function(){
     dashboard.getCpu();
     dashboard.getUptime();
     dashboard.getMemory();
+    dashboard.getPay();
     refresh();
 });
