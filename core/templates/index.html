@@ -4,6 +4,9 @@
 {% load url %}
 {% block extra_scripts %}
 {% endblock %}
+{% block extra_js %}
+    <script src="{% static 'custom/js/custom.js' %}"></script>
+{% endblock %}
 {% block content %}
     <div id="sortable" class="row">
         <div class="sortable col-xs-4 col-sm-4 col-md-4">

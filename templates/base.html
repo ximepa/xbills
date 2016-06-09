@@ -23,7 +23,7 @@
     <script src="{% static 'custom/js/jquery-ui.min.js' %}"></script>
     <script src="{% static 'custom/js/bootstrap-table.min.js' %}"></script>
     <script src="{% static 'custom/js/bootstrap-datetimepicker.min.js' %}"></script>
-    <script src="{% static 'custom/js/custom.js' %}"></script>
+    <script>var urlIndex = '{% url 'core:index' %}'</script>
 
     {% block extra_js %}
 
