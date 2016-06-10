@@ -1,21 +1,11 @@
 # -*- encoding: utf-8 -*-
 import csv
-import random
-import socket
+import json
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse, render_to_response, RequestContext, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
-import pyrad
-import sys
-from io import BytesIO
-
-from django.template.context_processors import request
-
+from django.db.models import Sum
 from dv.hangup import Hangup
-from pyrad.client import Client, packet
-from pyrad import server
-from pyrad.dictionary import Dictionary
 from .auth_backend import AuthBackend
 from .models import User, Payment, Bill, Fees, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog, Dv_log, Admin
 from .forms import AdministratorForm
@@ -27,7 +17,7 @@ import module_check
 import platform
 import psutil
 import datetime
-from django.http import JsonResponse
+
 
 
 
@@ -41,20 +31,69 @@ def custom_redirect(url_name, *args, **kwargs):
 
 @login_required()
 def index(request, settings=settings):
-    if request.method == 'GET':
-        print request.GET
     sys = platform.platform()
     psutil.boot_time()
     boot_time = datetime.datetime.fromtimestamp(psutil.boot_time())
     d2 = datetime.datetime.now()
     diff = abs((d2 - boot_time))
-    uptime = strfdelta(diff, settings.UPTIME_FORMAT)
-    cpu_count = psutil.cpu_count()
+    if 'pay' in request.GET:
+        pay_list = {}
+        result_day_pay = 0
+        result_week_pay = 0
+        payments_today = Payment.objects.filter(date__icontains=datetime.datetime.now().date())
+        payments_week = Payment.objects.filter(date__lte=datetime.datetime.now().date() + datetime.timedelta(days=1), date__gte=(datetime.datetime.now().date() + datetime.timedelta(days=1)) - datetime.timedelta(weeks=1))
+        payments_month = Payment.objects.filter(date__year=datetime.datetime.now().year, date__month=datetime.datetime.now().month)
+        pay_list['pay_day'] = payments_today.aggregate(Sum('sum')), payments_today.count()
+        pay_list['pay_week'] = payments_week.aggregate(Sum('sum')), payments_week.count()
+        pay_list['pay_month'] = payments_month.aggregate(Sum('sum')), payments_month.count()
+        res_json = json.dumps(pay_list)
+        return HttpResponse(res_json)
+    if 'uptime' in request.GET:
+        try:
+            pinfo = {}
+            pinfo['uptime'] = strfdelta(diff, settings.UPTIME_FORMAT)
+            res_json = json.dumps(pinfo)
+            return HttpResponse(res_json)
+        except Exception:
+            pass
     cpu_load_list = psutil.cpu_percent(interval=1, percpu=True)
+    if 'cpu' in request.GET:
+        try:
+            list = []
+            for getCpu in psutil.cpu_percent(interval=1, percpu=True):
+                pinfo = {}
+                pinfo['core'] = getCpu
+                list.append(pinfo)
+            res_json = json.dumps(list)
+            return HttpResponse(res_json)
+        except Exception:
+            pass
     memory = psutil.virtual_memory()
+    if 'memory' in request.GET:
+        try:
+            pinfo = {}
+            pinfo['memory'] = memory.percent
+            res_json = json.dumps(pinfo)
+            return HttpResponse(res_json)
+        except Exception:
+            pass
     swap = psutil.swap_memory()
     disks = psutil.disk_partitions()
     root_disk_usage = psutil.disk_usage('/')
+    if 'process' in request.GET:
+        try:
+            list = []
+            for proc in psutil.process_iter():
+                pinfo = {}
+                pinfo['pid'] = proc.pid
+                pinfo['name'] = proc.name()
+                pinfo['status'] = proc.status()
+                pinfo['cpu'] = proc.cpu_percent().real
+                list.append(pinfo)
+            res_json = json.dumps(list)
+            return HttpResponse(res_json)
+        except Exception:
+            pass
     return render(request, 'index.html', locals())
 
 
@@ -149,7 +188,6 @@ def client_statistics(request, uid):
 
 def search(request):
     user_list = None
-    print request.POST
     if 'address' in request.POST:
         try:
             city = District.objects.get(id=request.POST['ADDRESS_DISTRICT'])
@@ -157,7 +195,6 @@ def search(request):
             if userpi.count() == 0:
                 error = 'User not found'
             elif userpi.count() == 1:
-                print 'asd'
                 for u in userpi:
                     return redirect('core:client', uid=u.id_id)
             else:
@@ -264,10 +301,8 @@ def search(request):
 
 @login_required()
 def client(request, uid):
-    print request.GET
     if 'hangup' in request.GET:
         hangup = Hangup(request.GET['nas_id'], request.GET['port_id'], request.GET['acct_session_id'], request.GET['user_name'])
-
     res1 = '<option selected="selected"></option>'
     if 'district' in request.GET:
         district = District.objects.all()
@@ -276,7 +311,6 @@ def client(request, uid):
             res = '<option value=' + str(item.id) + '>' + item.name + '</option>'
             dict_resp.append(res1 + res)
         return HttpResponse(dict_resp)
-
     if 'DISTRICT' in request.GET:
         street = Street.objects.filter(district_id=request.GET['DISTRICT'])
         dict_resp = []
@@ -284,7 +318,6 @@ def client(request, uid):
             res = '<option value=' + str(item.id) + '>' + item.name + '</option>'
             dict_resp.append(res1 + res)
         return HttpResponse(dict_resp)
-
     if 'STREET' in request.GET:
         house = House.objects.filter(street_id=request.GET['STREET'])
         dict_resp= []
@@ -293,8 +326,6 @@ def client(request, uid):
             dict_resp.append(res1 + res)
         return HttpResponse(dict_resp)
     user = User.objects.get(id=uid)
-    #bill = Bill.objects.get(company_id=user.company)
-    #print bill
     streets = Street.objects.all()
     houses = House.objects.all()
     dv_session = Dv_calls.objects.filter(uid=uid)
@@ -337,10 +368,6 @@ def client(request, uid):
     if module_check.check('claims'):
         from claims.models import Claims
         claims = Claims.objects.filter(uid=uid, state=1)
-    # if 'dv_submit' in request.POST:
-    #     print 'yes'
-    # else:
-    #     print 'no'
     return render(request, 'user_edit.html', locals())
 
 
@@ -405,7 +432,6 @@ def payments(request):
 
 @login_required()
 def fees(request):
-    print request.user
     order_by = request.GET.get('order_by', '-date')
     fees_list = Fees.objects.all().order_by(order_by)
     paginator = Paginator(fees_list, settings.FEES_PER_PAGE)
@@ -504,7 +530,6 @@ def client_fees(request, uid):
     if 'del' in request.GET:
         return redirect(request.GET['return_url'])
     if 'export_submit' in request.POST:
-        print request.POST
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
         writer = csv.writer(response)
@@ -519,7 +544,6 @@ def client_fees(request, uid):
 
 def user_login(request):
     context = RequestContext(request)
-    print request.user.pk
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']

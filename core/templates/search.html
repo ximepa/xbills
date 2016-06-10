@@ -198,6 +198,10 @@
                                         <tr class="info">
                                             <th>{% trans 'Login' %}</th>
                                             <th>{% trans 'FIO' %}</th>
+                                            <th>{% trans 'City' %}</th>
+                                            <th>{% trans 'Street' %}</th>
+                                            <th>{% trans 'Build' %}</th>
+                                            <th>{% trans 'Flat' %}</th>
                                             <th>{% trans 'Deposit' %}</th>
                                             <th>{% trans 'Credit' %}</th>
                                             <th>{% trans 'Login status' %}</th>
@@ -211,6 +215,10 @@
                                         <tr>
                                             <td><a href="{% url 'core:index' %}?index=clients&uid={{ user.id }}">{{ user.login }}</a></td>
                                             <td>{{ user.user_pi.fio }}</td>
+                                            <td>{{ user.pi.city }}</td>
+                                            <td>{{ user.pi.street }}</td>
+                                            <td>{{ user.pi.location }}</td>
+                                            <td>{{ user.pi.kv }}</td>
                                             {% if user.bill.deposit < 0 %}
                                                 <td><span style="color: red">{{ user.bill.deposit }}</span></td>
                                             {% else %}
@@ -363,6 +371,10 @@
                                         <tr>
                                             <th>{% trans 'Login' %}</th>
                                             <th>{% trans 'FIO' %}</th>
+                                            <th>{% trans 'City' %}</th>
+                                            <th>{% trans 'Street' %}</th>
+                                            <th>{% trans 'Build' %}</th>
+                                            <th>{% trans 'Flat' %}</th>
                                             <th>{% trans 'Deposit' %}</th>
                                             <th>{% trans 'Credit' %}</th>
                                             <th>{% trans 'Login status' %}</th>
@@ -376,6 +388,10 @@
                                         <tr>
                                             <td><a href="{% url 'core:clients' %}{{ u.id_id }}">{{ u }}</a></td>
                                             <td>{{ u.fio }}</td>
+                                            <td>{{ u.city }}</td>
+                                            <td>{{ u.street }}</td>
+                                            <td>{{ u.location }}</td>
+                                            <td>{{ u.kv }}</td>
                                             {% if u.pi.bill.deposit < 0 %}
                                                 <td><span style="color: red">{{ u.pi.bill.deposit }}</span></td>
                                             {% else %}
