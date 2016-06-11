@@ -125,8 +125,8 @@
                                         <td>{{ s.hostname }}</td>
                                         <td>{{ s.nas }}</td>
                                         <td>{{ s.mac }}</td>
-                                        <td><a href="{% url 'ipdhcp:user_dhcp' s.uid %}?change={{ s.id }}"><span class='glyphicon glyphicon-pencil'></span></a></td>
-                                        <td><a href="{% url 'ipdhcp:user_dhcp' s.uid %}?delete={{ s.id }}"><span class='glyphicon glyphicon-trash'></span></a></td>
+                                        <td><a href="{% url 'core:user_dhcp' s.uid %}?change={{ s.id }}"><span class='glyphicon glyphicon-pencil'></span></a></td>
+                                        <td><a href="{% url 'core:user_dhcp' s.uid %}?delete={{ s.id }}"><span class='glyphicon glyphicon-trash'></span></a></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
