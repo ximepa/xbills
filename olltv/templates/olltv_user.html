@@ -28,6 +28,13 @@
         });
     </script>
 {% endblock %}
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+      <li class=""><a href="{% url 'core:index' %}"><i class="fa fa-dashboard fa-fw"></i>{% trans 'Dashboard' %}</a></li>
+      <li class=""><a href="{% url 'core:client' uid %}"><i class="fa fa-user fa-fw"></i>{{ user.login }} (UID: {{ user.id }})</a></li>
+      <li class="active">{% trans 'Olltv' %}</li>
+    </ol>
+{% endblock %}
 {% block content %}
     <div class="col-md-12">
         {% if user != False %}

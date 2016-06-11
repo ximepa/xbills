@@ -38,6 +38,12 @@
     });
 </script>
 {% endblock %}
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+      <li class=""><a href="{% url 'core:index' %}"><i class="fa fa-dashboard fa-fw"></i>{% trans 'Dashboard' %}</a></li>
+      <li class="active"><i class="fa fa-user fa-fw"></i>{{ user.login }} (UID: {{ user.id }})</li>
+    </ol>
+{% endblock %}
 {% block content %}
     <div class="row" id="pop">
         <div class="col-xs-12 col-sm-12 col-md-12">
