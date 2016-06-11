@@ -1,14 +1,23 @@
 var dashboard = {};
 
+function formatBytes(bytes,decimals) {
+   if(bytes == 0) return '0 Byte';
+   var k = 1024; // or 1024 for binary
+   var dm = decimals + 1 || 3;
+   var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+   var i = Math.floor(Math.log(bytes) / Math.log(k));
+   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
 dashboard.getCpu = function () {
     $.getJSON('?cpu', function (data) {
         $.each(data, function(index, value) {
             var cores = index +1;
-            if (value.core > 40 && value.core < 59) {
+            if (value.core > 40 && value.core < 60) {
                 $('#core' + cores).css('width', data[index].core + '%').attr('aria-valuenow', data[index].core).removeClass('progress-bar-danger').addClass('progress-bar-warning');
                 $('#core' + cores).text(data[index].core + '%');
             }
-            else if (value.core > 60) {
+            else if (value.core > 65) {
                 $('#core' + cores).css('width', data[index].core + '%').attr('aria-valuenow', data[index].core).removeClass('progress-bar-warning').addClass('progress-bar-danger');
                 $('#core' + cores).text(data[index].core + '%');
             }
@@ -33,15 +42,19 @@ dashboard.getPay = function () {
 
 dashboard.getMemory = function () {
     $.getJSON('?memory', function (data) {
+        $('#uptime').text(data.uptime);
         $('#getMemory').css('width', data.memory + '%').attr('aria-valuenow', data.memory).removeClass('progress-bar-danger').addClass('progress-bar-warning');
         $('#getMemory').text(data.memory + '%');
+        $('#getSwap').css('width', data.swap + '%').attr('aria-valuenow', data.swap).removeClass('progress-bar-danger').addClass('progress-bar-warning');
+        $('#getSwap').text(data.swap + '%');
+        $('#getMemoryTotal').text(formatBytes(data.total));
+        $('#getMemoryUsed').text(formatBytes(data.used));
+        $('#getMemoryFree').text(formatBytes(data.free));
+        $('#getMemoryCached').text(formatBytes(data.cached));
+        $('#getSwapTotal').text(formatBytes(data.stotal));
+        $('#getSwapUsed').text(formatBytes(data.sused));
+        $('#getSwapFree').text(formatBytes(data.sfree));
     })
-};
-
-dashboard.getUptime = function () {
-    $.getJSON('?uptime', function (data) {
-        $('#uptime').text(data.uptime);
-    });
 };
 
 dashboard.getProc = function() {
@@ -91,7 +104,6 @@ function refresh() {
         $('#get_proc').bootstrapTable('destroy');
         dashboard.getCpu();
         dashboard.getProc();
-        dashboard.getUptime();
         dashboard.getMemory();
         dashboard.getPay();
         refresh();
@@ -101,7 +113,6 @@ function refresh() {
 $(document).ready(function(){
     dashboard.getProc();
     dashboard.getCpu();
-    dashboard.getUptime();
     dashboard.getMemory();
     dashboard.getPay();
     refresh();

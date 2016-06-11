@@ -2,9 +2,8 @@
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import render
-from django.contrib import messages
 from core.models import num_to_ip, ip_to_num
-from ipdhcp.models import Dhcphosts_networks, Dhcphosts_hosts, User
+from .models import Dhcphosts_networks, Dhcphosts_hosts, User, ipRange
 from xbills import settings
 
 
@@ -41,9 +40,16 @@ def dhcps(request):
 
 
 def user_dhcp(request, uid):
+    ip_list_db = []
     net_dhcp = Dhcphosts_networks.objects.all()
     user = User.objects.get(id=uid)
-    host = Dhcphosts_hosts.objects.filter(uid=uid)
+    # host = Dhcphosts_hosts.objects.filter(uid=uid)
+    ip_db = Dhcphosts_hosts.objects.filter(network=6)
+    ip_range = ipRange("172.16.74.10", "172.16.74.250")
+    for db_ip in ip_db:
+        ip_list_db.append(num_to_ip(db_ip.ip))
+    c = [i for i in ip_range if i not in ip_list_db]
+    print c
     if 'change' in request.GET:
         change_dhcp = Dhcphosts_hosts.objects.get(id=request.GET['change'])
     if 'dhcp_submit' in request.POST:
@@ -54,7 +60,7 @@ def user_dhcp(request, uid):
             change_dhcp.hostname = request.POST['hostname']
             change_dhcp.mac = request.POST['mac']
             change_dhcp.network = request.POST['networks']
-            change_dhcp.save()
+            # change_dhcp.save()
         except:
             print 'no'
     return render(request, 'user_dhcp.html', locals())
