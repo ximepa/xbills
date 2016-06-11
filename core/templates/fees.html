@@ -5,85 +5,85 @@
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="well well-sm">
-                <nav class="navbar navbar-default no-brand" data-spy="affix" data-offset-top="200" data-offset-bottom="200">
-                    <div class="container-fluid">
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            {% if fees.paginator.num_pages > 1 %}
-                                <nav style="float: left">
-                                    <ul class="pagination pagination-sm">
-                                        {% if fees.has_previous %}
-                                            <li>
-                                                <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
-                                                    <span aria-hidden="true">1</span>
-                                                </a>
-                                            </li>
-                                            {% if fees.number > 2 %}
+                {% if fees %}
+                    <nav class="navbar navbar-inverse no-brand " data-spy="affix" data-offset-top="200" data-offset-bottom="200">
+                        <div class="container-fluid">
+                            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                {% if fees.paginator.num_pages > 1 %}
+                                    <nav style="float: left">
+                                        <ul class="pagination pagination-sm">
+                                            {% if fees.has_previous %}
+                                                <li>
+                                                    <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
+                                                        <span aria-hidden="true">1</span>
+                                                    </a>
+                                                </li>
+                                                {% if fees.number > 2 %}
+                                                    <li class="disabled">
+                                                        <a href="#" aria-label="Previous">
+                                                            <span aria-hidden="true">...</span>
+                                                        </a>
+                                                    </li>
+                                                {% endif %}
+                                            {% endif %}
+                                            {% for p in page_list %}
+                                                {% if fees.number == p %}
+                                                    <li class="active">
+                                                        <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                                    </li>
+                                                {% else %}
+                                                    <li class="">
+                                                        <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                                    </li>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if fees.has_next %}
                                                 <li class="disabled">
                                                     <a href="#" aria-label="Previous">
                                                         <span aria-hidden="true">...</span>
                                                     </a>
                                                 </li>
-                                            {% endif %}
-                                        {% endif %}
-                                        {% for p in page_list %}
-                                            {% if fees.number == p %}
-                                                <li class="active">
-                                                    <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                                <li>
+                                                    <a href="?{% url_replace_page request 'page' fees.paginator.num_pages %}" aria-label="Next">
+                                                        <span aria-hidden="true">{{ fees.paginator.num_pages }}</span>
+                                                    </a>
                                                 </li>
                                             {% else %}
-                                                <li class="">
-                                                    <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                                <li class="disabled">
+                                                    <a href="#" aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
                                                 </li>
                                             {% endif %}
-                                        {% endfor %}
-                                        {% if fees.has_next %}
-                                            <li class="disabled">
-                                                <a href="#" aria-label="Previous">
-                                                    <span aria-hidden="true">...</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="?{% url_replace_page request 'page' fees.paginator.num_pages %}" aria-label="Next">
-                                                    <span aria-hidden="true">{{ fees.paginator.num_pages }}</span>
-                                                </a>
-                                            </li>
-                                        {% else %}
-                                            <li class="disabled">
-                                                <a href="#" aria-label="Next">
-                                                    <span aria-hidden="true">&raquo;</span>
-                                                </a>
-                                            </li>
-                                        {% endif %}
-                                    </ul>
-                                </nav>
-                            {% endif %}
-                            <form style="" class="navbar-form" id="export_form" name="export" method="POST" action="{% url 'core:client_fees' uid %}?export">{% csrf_token %}
-                                <div class="form-group form-group-sm">
-                                    <div class="input-group date">
-                                        <input id="last" data-format="yyyy-MM-dd" type="date" name="Last" placeholder="Last" class="form-control" value="" style="width: 50%; border-right: none;" />
-                                        <input id="first" data-format="yyyy-MM-dd" type="date" name="First" placeholder="First" class="form-control" value="" style="width: 50%" />
-                                        <span class="input-group-btn">
-                                            <input type="submit" name="export_submit" class="btn btn-primary btn-sm" value="{% trans 'Export' %}">
-                                        </span>
+                                        </ul>
+                                    </nav>
+                                {% endif %}
+                                <form style="" class="navbar-form" id="export_form" name="export" method="POST" action="{% url 'core:client_fees' uid %}?export">{% csrf_token %}
+                                    <div class="form-group form-group-sm">
+                                        <div class="input-group date">
+                                            <input id="last" data-format="yyyy-MM-dd" type="date" name="Last" placeholder="Last" class="form-control" value="" style="width: 50%; border-right: none;" />
+                                            <input id="first" data-format="yyyy-MM-dd" type="date" name="First" placeholder="First" class="form-control" value="" style="width: 50%" />
+                                            <span class="input-group-btn">
+                                                <input type="submit" name="export_submit" class="btn btn-primary btn-sm" value="{% trans 'Export' %}">
+                                            </span>
 
+                                        </div>
                                     </div>
-                                </div>
-                                <script>
-                                                $('#last').datetimepicker({
-                                                    pickTime: false,
-                                                    format: 'yyyy-mm-dd'
+                                    <script>
+                                                    $('#last').datetimepicker({
+                                                        pickTime: false,
+                                                        format: 'yyyy-mm-dd'
 
-                                                });
-                                                $('#first').datetimepicker({
-                                                    format: 'yyyy-mm-dd',
-                                                    pickTime: false
-                                                });
-                                        </script>
-                            </form>
+                                                    });
+                                                    $('#first').datetimepicker({
+                                                        format: 'yyyy-mm-dd',
+                                                        pickTime: false
+                                                    });
+                                            </script>
+                                </form>
+                            </div>
                         </div>
-                    </div>
-                </nav>
-                {% if fees %}
+                    </nav>
                     <table class="ui black bordered table table-striped table-hover table-condensed" >
                         <thead>
                             <tr class="">

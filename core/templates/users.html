@@ -19,6 +19,12 @@
         });
     </script>
 {% endblock %}
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+      <li class=""><a href="{% url 'core:index' %}">{% trans 'Dashboard' %}</a></li>
+      <li class="active">{% trans 'Logins' %}</li>
+    </ol>
+{% endblock %}
 {% block content %}
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
