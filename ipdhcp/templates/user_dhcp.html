@@ -47,7 +47,7 @@
                                         <input title="{% trans 'IP' %}" type="text" class="form-control" id="ip" name="ip" placeholder="IP" value="0.0.0.0">
                                         {% endif %}
                                         <span class="input-group-addon">
-                                            <input id="auto_select" onchange="se" title="{% trans 'Auto Select' %}" type="checkbox">
+                                            <input id="auto_select" onchange="se" title="{% trans 'Auto Select' %}" type="checkbox" name="auto_select">
                                         </span>
                                         <script>
                                             var se = $('#auto_select').change(function(){

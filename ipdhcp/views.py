@@ -43,20 +43,26 @@ def user_dhcp(request, uid):
     ip_list_db = []
     net_dhcp = Dhcphosts_networks.objects.all()
     user = User.objects.get(id=uid)
-    # host = Dhcphosts_hosts.objects.filter(uid=uid)
-    ip_db = Dhcphosts_hosts.objects.filter(network=6)
-    ip_range = ipRange("172.16.74.10", "172.16.74.250")
-    for db_ip in ip_db:
-        ip_list_db.append(num_to_ip(db_ip.ip))
-    c = [i for i in ip_range if i not in ip_list_db]
-    print c
-    if 'change' in request.GET:
-        change_dhcp = Dhcphosts_hosts.objects.get(id=request.GET['change'])
+    host = Dhcphosts_hosts.objects.filter(uid=uid)
+    # if 'change' in request.GET:
+    #     change_dhcp = Dhcphosts_hosts.objects.get(id=request.GET['change'])
     if 'dhcp_submit' in request.POST:
+        print request.POST
         change_dhcp = Dhcphosts_hosts.objects.get(id=request.POST['uid'])
         try:
+            if 'auto_select' in request.POST:
+                ip_db_range = net_dhcp.get(id=int(request.POST['networks']))
+                ip_db = Dhcphosts_hosts.objects.filter(network=int(request.POST['networks']))
+                ip_range = ipRange(num_to_ip(ip_db_range.ip_range_first), num_to_ip(ip_db_range.ip_range_last))
+                for db_ip in ip_db:
+                    ip_list_db.append(num_to_ip(db_ip.ip))
+                result_ip = [i for i in ip_range if i not in ip_list_db]
+            get_ip = result_ip[0]
             change_dhcp.uid = request.POST['uid']
-            change_dhcp.ip = ip_to_num(request.POST['ip'])
+            if request.POST['ip'] != None:
+                change_dhcp.ip = ip_to_num(request.POST['ip'])
+            else:
+                change_dhcp.ip = ip_to_num(get_ip)
             change_dhcp.hostname = request.POST['hostname']
             change_dhcp.mac = request.POST['mac']
             change_dhcp.network = request.POST['networks']
