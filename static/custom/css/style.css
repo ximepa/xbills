@@ -309,3 +309,6 @@ ol, ul {
 .navbar-collapse.in {
     padding-left:30px;
 }
+.breadcrumb > li > a:focus, .breadcrumb > li > a:hover {
+    text-decoration: none;
+}

@@ -5,5 +5,4 @@ app_name = 'ipdhcp'
 
 urlpatterns = [
     url(r'^$', views.dhcps, name='dhcps'),
-    url(r'^(?P<uid>.+)/$', views.user_dhcp, name='user_dhcp'),
 ]

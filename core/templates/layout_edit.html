@@ -4,13 +4,13 @@
 {% load staticfiles %}
 
 {% block layout %}
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="well well-sm">
-                <i class="fa fa-user fa-fw"></i> <a href="{% url 'core:client' user.id %}">{{ user.login }}</a> (UID: {{ user.id }})
-            </div>
-        </div>
-    </div>
+{#    <div class="row">#}
+{#        <div class="col-xs-12 col-sm-12 col-md-12">#}
+{#            <div class="well well-sm">#}
+{#                <i class="fa fa-user fa-fw"></i> <a href="{% url 'core:client' user.id %}">{{ user.login }}</a> (UID: {{ user.id }})#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <ul class="nav nav-tabs">
@@ -36,18 +36,18 @@
                 {% if check_module_olltv %}
                     {% url 'olltv:user_change' user.id as user_olltv_url %}
                     {% if request.get_full_path == user_olltv_url %}
-                        <li class="active"><a href="{% url 'olltv:user_change' user.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'OLLTV' %}</a></li>
+                        <li class="active"><a href="{% url 'core:user_change' user.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'OLLTV' %}</a></li>
                     {% else %}
-                        <li><a href="{% url 'olltv:user_change' user.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'OLLTV' %}</a></li>
+                        <li><a href="{% url 'core:user_change' user.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'OLLTV' %}</a></li>
                     {% endif %}
                 {% endif %}
                 {% check_module 'ipdhcp' as check_module_dhcp %}
                 {% if check_module_dhcp %}
                     {% url 'ipdhcp:user_dhcp' user.id as user_dhcp_url %}
                     {% if request.get_full_path == user_dhcp_url %}
-                        <li class="active"><a href="{% url 'ipdhcp:user_dhcp' user.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'Dhcp' %}</a></li>
+                        <li class="active"><a href="{% url 'core:user_dhcp' user.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'Dhcp' %}</a></li>
                     {% else %}
-                        <li><a href="{% url 'ipdhcp:user_dhcp' user.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'Dhcp' %}</a></li>
+                        <li><a href="{% url 'core:user_dhcp' user.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'Dhcp' %}</a></li>
                     {% endif %}
                 {% endif %}
                 <li class="dropdown">
