@@ -22,6 +22,7 @@ def num_to_ip(number):
         a = int(number/(256**3)) % 256
         return "%s.%s.%s.%s" % (a,b,c,d)
 
+
 class Admin(AbstractBaseUser):
     login = models.CharField(max_length=50, db_column='id', unique=True)
     name = models.CharField(max_length=50, db_column='name')

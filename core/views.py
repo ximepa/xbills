@@ -1,13 +1,17 @@
 # -*- encoding: utf-8 -*-
 import csv
 import json
+
+import itertools
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse, render_to_response, RequestContext, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from dv.hangup import Hangup
+from ipdhcp.models import Dhcphosts_networks, Dhcphosts_hosts
 from .auth_backend import AuthBackend
-from .models import User, Payment, Bill, Fees, Tp, ip_to_num, AdminLog, AbonTarifs, AbonUserList, Dv, num_to_ip, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog, Dv_log, Admin
+from .models import User, Payment, Fees, Dv, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog, Dv_log, Admin, num_to_ip
+from ipdhcp.models import ipRange
 from .forms import AdministratorForm
 from django.contrib import messages
 from django.conf import settings
@@ -17,7 +21,6 @@ import module_check
 import platform
 import psutil
 import datetime
-
 
 
 
@@ -31,6 +34,8 @@ def custom_redirect(url_name, *args, **kwargs):
 
 @login_required()
 def index(request, settings=settings):
+    ip_list_r = []
+    ip_list_db = []
     sys = platform.platform()
     psutil.boot_time()
     boot_time = datetime.datetime.fromtimestamp(psutil.boot_time())
@@ -48,14 +53,6 @@ def index(request, settings=settings):
         pay_list['pay_month'] = payments_month.aggregate(Sum('sum')), payments_month.count()
         res_json = json.dumps(pay_list)
         return HttpResponse(res_json)
-    if 'uptime' in request.GET:
-        try:
-            pinfo = {}
-            pinfo['uptime'] = strfdelta(diff, settings.UPTIME_FORMAT)
-            res_json = json.dumps(pinfo)
-            return HttpResponse(res_json)
-        except Exception:
-            pass
     cpu_load_list = psutil.cpu_percent(interval=1, percpu=True)
     if 'cpu' in request.GET:
         try:
@@ -68,17 +65,23 @@ def index(request, settings=settings):
             return HttpResponse(res_json)
         except Exception:
             pass
-    memory = psutil.virtual_memory()
     if 'memory' in request.GET:
         try:
-            pinfo = {}
-            pinfo['memory'] = memory.percent
-            res_json = json.dumps(pinfo)
+            memInfo = {}
+            memInfo['memory'] = psutil.virtual_memory().percent
+            memInfo['total'] = psutil.virtual_memory().total
+            memInfo['used'] = psutil.virtual_memory().used
+            memInfo['free'] = psutil.virtual_memory().free
+            memInfo['cached'] = psutil.virtual_memory().cached
+            memInfo['swap'] = psutil.swap_memory().percent
+            memInfo['stotal'] = psutil.swap_memory().total
+            memInfo['sused'] = psutil.swap_memory().used
+            memInfo['sfree'] = psutil.swap_memory().free
+            memInfo['uptime'] = strfdelta(diff, settings.UPTIME_FORMAT)
+            res_json = json.dumps(memInfo)
             return HttpResponse(res_json)
         except Exception:
             pass
-    swap = psutil.swap_memory()
-    disks = psutil.disk_partitions()
     root_disk_usage = psutil.disk_usage('/')
     if 'process' in request.GET:
         try:

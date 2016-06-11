@@ -13,7 +13,6 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     {% trans 'Sys info' %}
-			{{address}}
                 </div>
                 <div class="panel-body">
                     <div class="row">
@@ -45,19 +44,19 @@
                     <br/>
                     <div class="row">
                         <div class="col-sm-4">{% trans 'Total' %}:</div>
-                        <div class="col-sm-8 progress-margin">{% sizeof_fmt memory.total %}</div>
+                        <div class="col-sm-8 progress-margin" id="getMemoryTotal"></div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4">{% trans 'Used' %}:</div>
-                        <div class="col-sm-8 progress-margin" id="memory_used">{% sizeof_fmt memory.used %}</div>
+                        <div class="col-sm-8 progress-margin" id="getMemoryUsed"></div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4">{% trans 'Free' %}:</div>
-                        <div class="col-sm-8 progress-margin" id="memory_free">{% sizeof_fmt memory.free %}</div>
+                        <div class="col-sm-8 progress-margin" id="getMemoryFree"></div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4">{% trans 'Cached' %}:</div>
-{#                                        <div class="col-sm-8 progress-margin" id="memory_cached">{% sizeof_fmt memory.cached %}</div>#}
+                        <div class="col-sm-8 progress-margin" id="getMemoryCached"></div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4">{% trans 'Load' %}:</div>
@@ -73,33 +72,22 @@
                     <br/>
                     <div class="row">
                         <div class="col-sm-4">{% trans 'Total' %}:</div>
-                        <div class="col-sm-8 progress-margin">{% sizeof_fmt swap.total %}</div>
+                        <div class="col-sm-8 progress-margin" id="getSwapTotal"></div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4">{% trans 'Used' %}:</div>
-                        <div class="col-sm-8 progress-margin">{% sizeof_fmt swap.used %}</div>
+                        <div class="col-sm-8 progress-margin" id="getSwapUsed"></div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4">{% trans 'Free' %}:</div>
-                        <div class="col-sm-8 progress-margin">{% sizeof_fmt swap.free %}</div>
+                        <div class="col-sm-8 progress-margin" id="getSwapFree"></div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4">{% trans 'Load' %}:</div>
                         <div class="col-sm-8">
                             <div class="progress">
-                                {% if swap.percent >= settings.SWAP_DANGER_THRESHOLD %}
-                                    <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="{{ swap.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ swap.percent }}%">
-                                        {{ swap.percent }}%
-                                    </div>
-                                {% elif memory.percent >= settings.SWAP_WARNING_THRESHOLD %}
-                                    <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="{{ swap.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ swap.percent }}%">
-                                        {{ swap.percent }}%
-                                    </div>
-                                {% else %}
-                                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{ swap.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ swap.percent }}%">
-                                        {{ swap.percent }}%
-                                    </div>
-                                {% endif %}
+                                <div id="getSwap" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar">
+                                </div>
                             </div>
                         </div>
                     </div>
