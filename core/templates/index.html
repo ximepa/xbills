@@ -11,9 +11,6 @@
     <div id="sortable" class="row">
         <div class="sortable col-xs-4 col-sm-4 col-md-4">
             <div class="panel panel-default">
-                <div class="panel-heading">
-                    {% trans 'Sys info' %}
-                </div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-sm-4">{% trans 'System' %}:</div>
@@ -44,19 +41,19 @@
                     <br/>
                     <div class="row">
                         <div class="col-sm-4">{% trans 'Total' %}:</div>
-                        <div class="col-sm-8 progress-margin" id="getMemoryTotal"></div>
+                        <div class="col-sm-8 progress-margin">{% sizeof_fmt memory.total %}</div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4">{% trans 'Used' %}:</div>
-                        <div class="col-sm-8 progress-margin" id="getMemoryUsed"></div>
+                        <div class="col-sm-8 progress-margin" id="memory_used">{% sizeof_fmt memory.used %}</div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4">{% trans 'Free' %}:</div>
-                        <div class="col-sm-8 progress-margin" id="getMemoryFree"></div>
+                        <div class="col-sm-8 progress-margin" id="memory_free">{% sizeof_fmt memory.free %}</div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4">{% trans 'Cached' %}:</div>
-                        <div class="col-sm-8 progress-margin" id="getMemoryCached"></div>
+{#                                        <div class="col-sm-8 progress-margin" id="memory_cached">{% sizeof_fmt memory.cached %}</div>#}
                     </div>
                     <div class="row">
                         <div class="col-sm-4">{% trans 'Load' %}:</div>
@@ -72,22 +69,33 @@
                     <br/>
                     <div class="row">
                         <div class="col-sm-4">{% trans 'Total' %}:</div>
-                        <div class="col-sm-8 progress-margin" id="getSwapTotal"></div>
+                        <div class="col-sm-8 progress-margin">{% sizeof_fmt swap.total %}</div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4">{% trans 'Used' %}:</div>
-                        <div class="col-sm-8 progress-margin" id="getSwapUsed"></div>
+                        <div class="col-sm-8 progress-margin">{% sizeof_fmt swap.used %}</div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4">{% trans 'Free' %}:</div>
-                        <div class="col-sm-8 progress-margin" id="getSwapFree"></div>
+                        <div class="col-sm-8 progress-margin">{% sizeof_fmt swap.free %}</div>
                     </div>
                     <div class="row">
                         <div class="col-sm-4">{% trans 'Load' %}:</div>
                         <div class="col-sm-8">
                             <div class="progress">
-                                <div id="getSwap" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar">
-                                </div>
+                                {% if swap.percent >= settings.SWAP_DANGER_THRESHOLD %}
+                                    <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="{{ swap.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ swap.percent }}%">
+                                        {{ swap.percent }}%
+                                    </div>
+                                {% elif memory.percent >= settings.SWAP_WARNING_THRESHOLD %}
+                                    <div class="progress-bar progress-bar-warning progress-bar-striped active" role="progressbar" aria-valuenow="{{ swap.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ swap.percent }}%">
+                                        {{ swap.percent }}%
+                                    </div>
+                                {% else %}
+                                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{ swap.percent }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ swap.percent }}%">
+                                        {{ swap.percent }}%
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -96,50 +104,40 @@
         </div>
         <div class="sortable col-xs-8 col-sm-8 col-md-8">
             <div class="panel panel-default">
-                <div class="panel-heading">
-                    {% trans 'Periodic payments' %}
-                </div>
                 <div class="panel-body">
-                    <div class="row">
-                        <table class="table table-hover table-striped table-condensed">
-                            <thead>
-                                <tr>
-                                    <th>{% trans 'Periodic' %}</th>
-                                    <th>{% trans 'Count pay' %}</th>
-                                    <th>{% trans 'Sum' %}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{% trans 'Day' %}</td>
-                                    <td id="day_sum_count"></td>
-                                    <td id="day_sum">{% trans 'Day' %}</td>
-                                </tr>
-                                <tr>
-                                    <td>{% trans 'Week' %}</td>
-                                    <td id="week_sum_count"></td>
-                                    <td id="week_sum">{% trans 'Week' %}</td>
-                                </tr>
-                                <tr>
-                                    <td>{% trans 'Month' %}</td>
-                                    <td id="month_sum_count"></td>
-                                    <td id="month_sum">{% trans 'Month' %}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <table class="ui black table table-hover table-striped table-condensed">
+                        <thead>
+                            <tr>
+                                <th>{% trans 'Periodic' %}</th>
+                                <th>{% trans 'Count pay' %}</th>
+                                <th>{% trans 'Sum' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{% trans 'Day' %}</td>
+                                <td id="day_sum_count"></td>
+                                <td id="day_sum">{% trans 'Day' %}</td>
+                            </tr>
+                            <tr>
+                                <td>{% trans 'Week' %}</td>
+                                <td id="week_sum_count"></td>
+                                <td id="week_sum">{% trans 'Week' %}</td>
+                            </tr>
+                            <tr>
+                                <td>{% trans 'Month' %}</td>
+                                <td id="month_sum_count"></td>
+                                <td id="month_sum">{% trans 'Month' %}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
         <div class="sortable col-xs-8 col-sm-8 col-md-8">
             <div class="panel panel-default">
-                <div class="panel-heading">
-                    {% trans 'System Process' %}
-                </div>
                 <div class="panel-body">
-                    <div class="row">
-                        <table id="get_proc"></table>
-                    </div>
+                    <table id="get_proc" class="ui black table"></table>
                 </div>
             </div>
         </div>
