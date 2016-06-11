@@ -344,9 +344,9 @@ class Dv(models.Model):
     user = models.OneToOneField(User, db_column='uid', related_name="dv", primary_key=True)
     cid = models.CharField(max_length=120, db_column='cid')
     speed = models.CharField(max_length=120, db_column='speed')
-    ip = models.IntegerField(max_length=120, db_column='ip')
-    netmask = models.IntegerField(max_length=120, db_column='netmask')
-    logins = models.IntegerField(max_length=120, db_column='logins')
+    ip = models.IntegerField(db_column='ip')
+    netmask = models.IntegerField(db_column='netmask')
+    logins = models.IntegerField(db_column='logins')
     filter_id = models.CharField(max_length=120, db_column='filter_id')
     tp = models.ForeignKey(Tp)
 
@@ -359,12 +359,12 @@ class Dv(models.Model):
 
 
 class ErrorsLog(models.Model):
-    nas_id = models.IntegerField(max_length=25, primary_key=True, db_column='nas_id')
+    nas_id = models.IntegerField(primary_key=True, db_column='nas_id')
     user = models.CharField(max_length=20, db_column='user')
     message = models.CharField(max_length=120, db_column='message')
     date = models.DateTimeField(db_column='date', null=False)
     action = models.CharField(max_length=10, db_column='action', null=False)
-    log_type = models.SmallIntegerField(max_length=3, null=False, db_column='log_type')
+    log_type = models.SmallIntegerField(null=False, db_column='log_type')
 
 
     @property
@@ -425,18 +425,18 @@ class Nas(models.Model):
 
 class Dv_log(models.Model):
     start = models.DateTimeField(default='0000-00-00 00:00:00', primary_key=True)
-    duration = models.IntegerField(max_length=11, default=0)
-    sent = models.IntegerField(max_length=10, default=0)
-    recv = models.IntegerField(max_length=10, default=0)
+    duration = models.IntegerField(default=0)
+    sent = models.IntegerField(default=0)
+    recv = models.IntegerField(default=0)
     sum = models.FloatField(default='0.000000')
     port_id = models.SmallIntegerField(default=0)
     nas_id = models.SmallIntegerField(default=0)
-    ip = models.IntegerField(max_length=10, default=0)
-    uid = models.IntegerField(max_length=11)
-    tp_id = models.SmallIntegerField(max_length=5, default=0)
+    ip = models.IntegerField(default=0)
+    uid = models.IntegerField()
+    tp_id = models.SmallIntegerField(default=0)
     CID = models.CharField(max_length=18)
-    acct_input_gigawords = models.SmallIntegerField(max_length=4, default=0, db_column='acct_input_gigawords')
-    acct_output_gigawords = models.SmallIntegerField(max_length=4, default=0, db_column='acct_output_gigawords')
+    acct_input_gigawords = models.SmallIntegerField(default=0, db_column='acct_input_gigawords')
+    acct_output_gigawords = models.SmallIntegerField(default=0, db_column='acct_output_gigawords')
 
 
     @property
