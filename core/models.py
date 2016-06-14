@@ -12,15 +12,15 @@ __author__ = 'ximepa'
 
 
 def ip_to_num(ip_addr):
-        sets = map(int, ip_addr.split("."))
-        return int(sets[0]*256**3 + sets[1]*256**2 + sets[2]*256 + sets[3])
+    sets = map(int, ip_addr.split("."))
+    return int(sets[0]*256**3 + sets[1]*256**2 + sets[2]*256 + sets[3])
 
 def num_to_ip(number):
-        d = number % 256
-        c = int(number/256) % 256
-        b = int(number/(256**2)) % 256
-        a = int(number/(256**3)) % 256
-        return "%s.%s.%s.%s" % (a,b,c,d)
+    d = number % 256
+    c = int(number/256) % 256
+    b = int(number/(256**2)) % 256
+    a = int(number/(256**3)) % 256
+    return "%s.%s.%s.%s" % (a,b,c,d)
 
 
 class Admin(AbstractBaseUser):

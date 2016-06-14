@@ -10,13 +10,18 @@
                     <h4><i class="fa fa-cog"></i> {% trans 'User Dhcp' %}</h4>
                 </div>
                 <br/>
+                {% if dhcphosts_hostsform.errors %}
+                    <div class="alert alert-warning" role="alert">{{ dhcphosts_hostsform.errors }}</div>
+                {% endif %}
                 <form class="form-horizontal" method="post" name="dv_form">{% csrf_token %}
                     <div class="row">
                         <div class="col-md-5">
                             <div class="form-group form-group-sm">
                                 <label for="hostname" class="col-sm-4 control-label">{% trans 'Host Name' %}</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="hostname" name="hostname" placeholder="{% trans 'Host Name' %}" value="{{ change_dhcp.hostname }}">
+                                    {{ dhcphosts_hostsform.hostname }}
+                                    {{ dhcphosts_hostsform.uid }}
+                                    {{ dhcphosts_hostsform.id }}
                                 </div>
                             </div>
                         </div>
@@ -24,37 +29,35 @@
                             <div class="form-group form-group-sm">
                                 <label for="networks" class="col-sm-4 control-label">{% trans 'Networks' %}</label>
                                 <div class="col-sm-8">
-                                    <select name='networks' id='networks' class='form-control'>
-                                        {% for net in net_dhcp %}
-                                            <optgroup label="{{ net.name }}"></optgroup>
-                                            <option value="{{ net.id }}">IP: {% ip_convert net.network %} Mask: {% ip_convert net.mask %}</option>
-                                        {% endfor %}
-                                    </select>
-                                    <script>
-                                        $("#networks option[value=" + {{ change_dhcp.network }} + "]").attr('selected', 'true')
-                                    </script>
+                                    {{ dhcphosts_hostsform.network }}
+{#                                    <select name='networks' id='networks' class='form-control'>#}
+{#                                        {% for net in net_dhcp %}#}
+{#                                            <optgroup label="{{ net.name }}"></optgroup>#}
+{#                                            <option value="{{ net.id }}">IP: {% ip_convert net.network %} Mask: {% ip_convert net.mask %}</option>#}
+{#                                        {% endfor %}#}
+{#                                    </select>#}
+{#                                    <script>#}
+{#                                        $("#networks option[value=" + {{ change_dhcp.network }} + "]").attr('selected', 'true')#}
+{#                                    </script>#}
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-5">
                             <div class="form-group form-group-sm">
-                                <label for="ip" class="col-sm-4 control-label">{% trans 'IP' %}</label>
+                                <label for="id_ip" class="col-sm-4 control-label">{% trans 'IP' %}</label>
                                 <div class="col-sm-8">
                                     <div class="input-group">
-                                        {% if change_dhcp.ip %}
-                                            <input title="{% trans 'IP' %}" type="text" class="form-control" id="ip" name="ip" placeholder="IP" value="{% ip_convert change_dhcp.ip %}">
-                                        {% else %}
-                                        <input title="{% trans 'IP' %}" type="text" class="form-control" id="ip" name="ip" placeholder="IP" value="0.0.0.0">
-                                        {% endif %}
-                                        <span class="input-group-addon">
+                                        {{ dhcphosts_hostsform.ip }}
+{#                                        <input type="text" class="form-control" placeholder="Ip" aria-describedby="select_input" id="id_ip" name="ip" value="{% ip_convert dhcphosts_hostsform.ip.value %}">#}
+                                        <span class="input-group-addon" id="select_input">
                                             <input id="auto_select" onchange="se" title="{% trans 'Auto Select' %}" type="checkbox" name="auto_select">
                                         </span>
                                         <script>
                                             var se = $('#auto_select').change(function(){
                                                 if ($('#auto_select').is(':checked')){
-                                                    $('#ip').attr('disabled', true);
+                                                    $('#id_ip').attr('disabled', true);
                                                 } else {
-                                                    $('#ip').attr('disabled', false);
+                                                    $('#id_ip').attr('disabled', false);
                                                 }
                                             });
                                         </script>
@@ -66,11 +69,7 @@
                             <div class="form-group form-group-sm">
                                 <label for="mac" class="col-sm-4 control-label">{% trans 'Mac' %}</label>
                                 <div class="col-sm-8">
-                                    {% if change_dhcp.mac %}
-                                        <input type="text" class="form-control" id="mac" name="mac" placeholder="{% trans 'Mac' %}" value="{{ change_dhcp.mac }}">
-                                    {% else %}
-                                        <input type="text" class="form-control" id="mac" name="mac" placeholder="{% trans 'Mac' %}" value="00:00:00:00:00:00">
-                                    {% endif %}
+                                    {{ dhcphosts_hostsform.mac }}
                                 </div>
                             </div>
                         </div>
@@ -78,7 +77,7 @@
                             <div class="form-group form-group-sm">
                                 <label for="svlan" class="col-sm-4 control-label">{% trans 'Server Vlan' %}</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="svlan" name="svlan" placeholder="{% trans 'Server Vlan' %}" value="{{ change_dhcp.server_vid }}">
+                                    {{ dhcphosts_hostsform.server_vid }}
                                 </div>
                             </div>
                         </div>
@@ -86,18 +85,48 @@
                             <div class="form-group form-group-sm">
                                 <label for="cvlan" class="col-sm-4 control-label">{% trans 'Client Vlan' %}</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="cvlan" name="cvlan" placeholder="{% trans 'Client Vlan' %}" value="{{ change_dhcp.vid }}">
+                                    {{ dhcphosts_hostsform.vid }}
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-5">
+                            <div class="form-group form-group-sm">
+                                <label for="mac" class="col-sm-4 control-label">{% trans 'Disable' %}</label>
+                                <div class="col-sm-8">
+                                    {{ dhcphosts_hostsform.disable }}
+                                </div>
+                                <script type="application/javascript">
+                                    var ipdhcp_disable = $('#id_disable').change(function(){
+                                        console.log($(this));
+                                        if ($(this).is(':checked')){
+                                            $(this).attr('value', 1);
+                                            $(this).attr('checked', true);
+                                        } else {
+                                            $(this).attr('value', 0);
+                                            $(this).attr('checked', false);
+                                        }
+                                    });
+                                    if ({{ dhcphosts_hostsform.disable.value }} == 0){
+                                        $('#id_disable').attr('value', 0);
+                                        $('#id_disable').attr('checked', false)
+                                    } else {
+                                        $('#id_disable').attr('value', 1);
+                                        $('#id_disable').attr('checked', true)
+                                    }
+                                </script>
+                            </div>
+                        </div>
                     </div>
-                    <input class="hide" name="uid" value="{{ user.id }}">
-                    <input type="submit" name="dhcp_submit" class="btn btn-primary btn-xs center-block" value="{% trans 'Change' %}">
+                    {% if change_dhcp_host %}
+                        <button type="submit" class="btn btn-primary btn-xs center-block" name="action" value="change">{% trans 'Change' %}</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-primary btn-xs center-block" name="action" value="add">{% trans 'Add' %}</button>
+                    {% endif %}
                 </form>
             </div>
         </div>
     </div>
-    {% if host %}
+    {% if hosts %}
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12">
                 <div class="well well-sm">
@@ -117,16 +146,18 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {% for s in host %}
+                                {% for host in hosts %}
                                     <tr>
-                                        <td>{{ s.id }}</td>
+                                        <td>{{ host.id }}</td>
                                         <td>{{ user.login }}</td>
-                                        <td>{% ip_convert s.ip %}</td>
-                                        <td>{{ s.hostname }}</td>
-                                        <td>{{ s.nas }}</td>
-                                        <td>{{ s.mac }}</td>
-                                        <td><a href="{% url 'core:user_dhcp' s.uid %}?change={{ s.id }}"><span class='glyphicon glyphicon-pencil'></span></a></td>
-                                        <td><a href="{% url 'core:user_dhcp' s.uid %}?delete={{ s.id }}"><span class='glyphicon glyphicon-trash'></span></a></td>
+                                        <td>{% ip_convert host.ip %}</td>
+                                        <td>{{ host.hostname }}</td>
+                                        <td>{{ host.nas }}</td>
+                                        <td>{{ host.mac }}</td>
+                                        <td>
+                                            <a href="{% url 'core:user_ipdhcp_host_change' uid host.id %}"><span class='glyphicon glyphicon-pencil'></span></a>
+                                        </td>
+                                        <td><a href="{% url 'core:user_dhcp' host.uid %}?delete={{ host.id }}"><span class='glyphicon glyphicon-trash'></span></a></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

@@ -1,5 +1,7 @@
 from django.db import models
 from core.models import User
+from core.models import num_to_ip
+from core.validators import validate_mac
 
 class Dhcphosts_networks(models.Model):
     id = models.AutoField(primary_key=True)
@@ -14,24 +16,25 @@ class Dhcphosts_networks(models.Model):
     ip_range_last = models.IntegerField(default=0)
 
     class Meta:
+        ordering = ['name']
         db_table = 'dhcphosts_networks'
 
     def __unicode__(self):
-        return str(self.id)
+        return str(self.id) + ' ' + str(self.name) + ' ' + '(IP: %s, Netmask: %s)' % (num_to_ip(self.network), num_to_ip(self.mask))
 
 
 
 class Dhcphosts_hosts(models.Model):
     id = models.AutoField(primary_key=True)
     uid = models.IntegerField()
-    ip = models.IntegerField()
-    hostname = models.CharField(max_length=40)
-    network = models.SmallIntegerField()
-    mac = models.CharField(max_length=17, default='00.00.00.00.00.00')
-    disable = models.SmallIntegerField(default=0)
-    vid = models.SmallIntegerField(default=0)
-    nas = models.SmallIntegerField(default=0)
-    server_vid = models.SmallIntegerField(default=0)
+    ip = models.GenericIPAddressField(default='0.0.0.0')
+    hostname = models.CharField(max_length=255, unique=True, blank=False)
+    network = models.ForeignKey('Dhcphosts_networks', db_column='network', blank=False)
+    mac = models.CharField(max_length=17, default='00:00:00:00:00:00', validators=[validate_mac], unique=True)
+    disable = models.IntegerField(default=0)
+    vid = models.IntegerField(default=0)
+    nas = models.IntegerField(default=0)
+    server_vid = models.IntegerField(default=0)
 
     class Meta:
         db_table = 'dhcphosts_hosts'

@@ -1,7 +1,7 @@
 __author__ = 'ximepa'
 from django.conf.urls import include, url
 from . import views
-from .module_check import check
+from .helpers import module_check
 app_name = 'core'
 
 
@@ -27,17 +27,18 @@ urlpatterns = [
     url(r'^clients/(?P<uid>\d+)/statistics/$', views.client_statistics, name='client_statistics'),
 ]
 
-if check('olltv'):
+if module_check('olltv'):
     try:
         from olltv import views as olltv_views
     except:
         pass
     finally:
         urlpatterns += url(r'^clients/(?P<uid>\d+)/olltv/$', olltv_views.user_change, name='user_change'),
-if check('ipdhcp'):
+if module_check('ipdhcp'):
     try:
         from ipdhcp import views as ipdhcp_views
     except:
         pass
     finally:
         urlpatterns += url(r'^clients/(?P<uid>.+)/dhcp/$', ipdhcp_views.user_dhcp, name='user_dhcp'),
+        urlpatterns += url(r'^clients/(?P<uid>.+)/dhcp/(?P<host_id>.+)/$', ipdhcp_views.user_dhcp, name='user_ipdhcp_host_change'),

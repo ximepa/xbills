@@ -17,7 +17,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .commands import strfdelta, sizeof_fmt
-import module_check
+import helpers
 import platform
 import psutil
 import datetime
@@ -332,7 +332,7 @@ def client(request, uid):
     streets = Street.objects.all()
     houses = House.objects.all()
     dv_session = Dv_calls.objects.filter(uid=uid)
-    if module_check.check('olltv'):
+    if helpers.module_check('olltv'):
         from olltv.models import Iptv, IptvDevice, IptvDeviceType
         from olltv.api import oll_user_info, oll_check_bundle, olltv_auth
         try:
@@ -368,7 +368,7 @@ def client(request, uid):
     else:
         user_password = ''
     dv = Dv.objects.get(user=uid)
-    if module_check.check('claims'):
+    if helpers.module_check('claims'):
         from claims.models import Claims
         claims = Claims.objects.filter(uid=uid, state=1)
     return render(request, 'user_edit.html', locals())
@@ -468,7 +468,7 @@ def client_payments(request, uid):
     payments_list = Payment.objects.filter(uid=user.id).order_by(order_by)
     paginator = Paginator(payments_list, settings.PAYMENTS_PER_PAGE)
     page = request.GET.get('page', 1)
-    if module_check.check('olltv'):
+    if helpers.module_check('olltv'):
         olltv_module = True
     else:
         olltv_module = False
