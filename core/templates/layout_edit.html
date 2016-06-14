@@ -34,7 +34,7 @@
                 {% endif %}
                 {% check_module 'olltv' as check_module_olltv %}
                 {% if check_module_olltv %}
-                    {% url 'olltv:user_change' user.id as user_olltv_url %}
+                    {% url 'core:user_change' user.id as user_olltv_url %}
                     {% if request.get_full_path == user_olltv_url %}
                         <li class="active"><a href="{% url 'core:user_change' user.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'OLLTV' %}</a></li>
                     {% else %}
@@ -43,7 +43,7 @@
                 {% endif %}
                 {% check_module 'ipdhcp' as check_module_dhcp %}
                 {% if check_module_dhcp %}
-                    {% url 'ipdhcp:user_dhcp' user.id as user_dhcp_url %}
+                    {% url 'core:user_dhcp' user.id as user_dhcp_url %}
                     {% if request.get_full_path == user_dhcp_url %}
                         <li class="active"><a href="{% url 'core:user_dhcp' user.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'Dhcp' %}</a></li>
                     {% else %}
