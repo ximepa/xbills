@@ -9,13 +9,13 @@ def validate_mac(value):
     if valid_mac(value):
         value = EUI(value, dialect=mac_unix_expanded)
         if settings.UNIQUE_MAC == True:
+            from ipdhcp.models import Dhcphosts_hosts
             try:
-                from ipdhcp.models import Dhcphosts_hosts
                 host = Dhcphosts_hosts.objects.get(mac=value)
-            except:
+                raise ValidationError(_('%(value)s binded to user %(user)s'),
+                                      params={'value': value, 'user': host.uid}, )
+            except Dhcphosts_hosts.DoesNotExist:
                 return value
-            finally:
-                raise ValidationError(_('%(value)s binded to user %(user)s'), params={'value': value, 'user': host.uid}, )
         else:
             return value
     else:

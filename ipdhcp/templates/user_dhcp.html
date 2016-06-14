@@ -157,7 +157,7 @@
                                         <td>
                                             <a href="{% url 'core:user_ipdhcp_host_change' uid host.id %}"><span class='glyphicon glyphicon-pencil'></span></a>
                                         </td>
-                                        <td><a href="{% url 'core:user_dhcp' host.uid %}?delete={{ host.id }}"><span class='glyphicon glyphicon-trash'></span></a></td>
+                                        <td><a href="{% url 'core:user_dhcp' host.uid %}?action=remove&host_id={{ host.id }}"><span class='glyphicon glyphicon-trash'></span></a></td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

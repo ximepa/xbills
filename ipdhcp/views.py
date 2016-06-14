@@ -41,11 +41,15 @@ def dhcps(request):
 
 
 def user_dhcp(request, uid, host_id=None):
+    print host_id
+    net_dhcp = Dhcphosts_networks.objects.all()
+    user = User.objects.get(id=uid)
+    hosts = Dhcphosts_hosts.objects.filter(uid=uid)
     if host_id:
-        dhcphosts_hostsform = Dhcphosts_hostsForm()
         host = Dhcphosts_hosts.objects.get(pk=host_id)
         change_dhcp_host = True
         if request.method == 'POST':
+            print request.POST
             dhcphosts_hostsform = Dhcphosts_hostsForm(request.POST, instance=host)
             if dhcphosts_hostsform.is_valid():
                 form = dhcphosts_hostsform.save(commit=False)
@@ -57,35 +61,35 @@ def user_dhcp(request, uid, host_id=None):
                 form.save()
                 return redirect(reverse('core:user_dhcp', kwargs={'uid': uid}))
         else:
+            print 'no post'
             dhcphosts_hostsform = Dhcphosts_hostsForm(instance=host, initial={'ip': num_to_ip(host.ip)})
     else:
         host = None
-    ip_list_db = []
-    net_dhcp = Dhcphosts_networks.objects.all()
-    user = User.objects.get(id=uid)
-    hosts = Dhcphosts_hosts.objects.filter(uid=uid)
-    parsed_list = []
-    for host in hosts:
-        hostnames = host.hostname.split('_')
-        if hostnames[-1].isdigit():
-            parsed_list.append(int(hostnames[-1]))
-    dhcphosts_hostsform = Dhcphosts_hostsForm(initial={
-        'hostname': str(user.login) + '_' + str(max(parsed_list) + 1),
-        'uid': user.id
-    })
-    if 'action' in request.POST and request.POST['action'] == 'add':
-        #print request.POST
-        dhcphosts_hostsform = Dhcphosts_hostsForm(request.POST)
-        if dhcphosts_hostsform.is_valid():
-            form = dhcphosts_hostsform.save(commit=False)
-            mac = str(request.POST['mac']).strip()
-            if valid_mac(mac):
-                mac = EUI(mac, dialect=mac_unix_expanded)
-            form.ip = str(ip_to_num(request.POST['ip']))
-            form.mac = mac
-            print mac
-            print form
-            #form.save()
+        parsed_list = []
+        for host in hosts:
+            hostnames = host.hostname.split('_')
+            if hostnames[-1].isdigit():
+                parsed_list.append(int(hostnames[-1]))
+        dhcphosts_hostsform = Dhcphosts_hostsForm(initial={
+            'hostname': str(user.login) + '_' + str(max(parsed_list) + 1),
+            'uid': user.id
+        })
+        if 'action' in request.POST and request.POST['action'] == 'add':
+            dhcphosts_hostsform = Dhcphosts_hostsForm(request.POST)
+            if dhcphosts_hostsform.is_valid():
+                form = dhcphosts_hostsform.save(commit=False)
+                mac = str(request.POST['mac']).strip()
+                if valid_mac(mac):
+                    mac = EUI(mac, dialect=mac_unix_expanded)
+                form.ip = str(ip_to_num(request.POST['ip']))
+                form.mac = mac
+                form.save()
+                return redirect(reverse('core:user_dhcp', kwargs={'uid': uid}))
+    if 'action' in request.GET and request.GET['action'] == 'remove':
+        print request.GET
+        host = Dhcphosts_hosts.objects.get(pk=request.GET['host_id'])
+        host.delete()
+        return redirect(reverse('core:user_dhcp', kwargs={'uid': uid}))
         #change_dhcp = Dhcphosts_hosts.objects.get(id=request.POST['uid'])
         # try:
         #     if 'auto_select' in request.POST:
