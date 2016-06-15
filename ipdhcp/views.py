@@ -50,7 +50,6 @@ def user_dhcp(request, uid, host_id=None):
         dhcphosts_hostsform = Dhcphosts_hostsForm(instance=host, initial={'ip': num_to_ip(host.ip)})
         if request.method == 'POST':
             dhcphosts_hostsform = Dhcphosts_hostsForm(request.POST, instance=host)
-            print request.POST
             if dhcphosts_hostsform.is_valid():
                 form = dhcphosts_hostsform.save(commit=False)
                 mac = str(request.POST['mac']).strip()
@@ -73,10 +72,17 @@ def user_dhcp(request, uid, host_id=None):
             hostnames = host.hostname.split('_')
             if hostnames[-1].isdigit():
                 parsed_list.append(int(hostnames[-1]))
-        dhcphosts_hostsform = Dhcphosts_hostsForm(initial={
-            'hostname': str(user.login) + '_' + str(max(parsed_list) + 1),
-            'uid': user.id
-        })
+        print len(parsed_list)
+        if len(parsed_list) == 0:
+            dhcphosts_hostsform = Dhcphosts_hostsForm(initial={
+                'hostname': str(user.login) + '_' + str(100 + 1),
+                'uid': user.id
+            })
+        else:
+            dhcphosts_hostsform = Dhcphosts_hostsForm(initial={
+                'hostname': str(user.login) + '_' + str(max(parsed_list) + 1),
+                'uid': user.id
+            })
         if 'action' in request.POST and request.POST['action'] == 'add':
             dhcphosts_hostsform = Dhcphosts_hostsForm(request.POST)
             if dhcphosts_hostsform.is_valid():
@@ -93,6 +99,6 @@ def user_dhcp(request, uid, host_id=None):
                 return redirect(reverse('core:user_dhcp', kwargs={'uid': uid}))
     if 'action' in request.GET and request.GET['action'] == 'remove':
         host = Dhcphosts_hosts.objects.get(pk=request.GET['host_id'])
-        # host.delete()
+        host.delete()
         return redirect(reverse('core:user_dhcp', kwargs={'uid': uid}))
     return render(request, 'user_dhcp.html', locals())
