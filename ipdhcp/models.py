@@ -60,7 +60,8 @@ def ipRange(start_ip, end_ip):
 
     return ip_range
 
-def new_ip (network_id):
+
+def new_ip(network_id):
     print network_id
     ip_list = []
     ip_db = Dhcphosts_hosts.objects.filter(network=network_id)
