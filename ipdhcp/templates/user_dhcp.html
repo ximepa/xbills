@@ -54,11 +54,11 @@
                                         </span>
                                         <script>
                                             var se = $('#auto_select').change(function(){
-                                                if ($('#auto_select').is(':checked')){
-                                                    $('#id_ip').attr('disabled', true);
-                                                } else {
-                                                    $('#id_ip').attr('disabled', false);
-                                                }
+{#                                                if ($('#auto_select').is(':checked')){#}
+{#                                                    $('#id_ip').attr('disabled', true);#}
+{#                                                } else {#}
+{#                                                    $('#id_ip').attr('disabled', false);#}
+{#                                                }#}
                                             });
                                         </script>
                                     </div>
@@ -106,7 +106,7 @@
                                             $(this).attr('checked', false);
                                         }
                                     });
-                                    if ({{ dhcphosts_hostsform.disable.value }} == 0){
+                                    if ('{{ dhcphosts_hostsform.disable.value }}' == 0){
                                         $('#id_disable').attr('value', 0);
                                         $('#id_disable').attr('checked', false)
                                     } else {

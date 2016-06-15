@@ -194,7 +194,13 @@ def search(request):
     if 'address' in request.POST:
         try:
             city = District.objects.get(id=request.POST['ADDRESS_DISTRICT'])
-            userpi = UserPi.objects.filter(city=city, street__id__icontains=request.POST['ADDRESS_STREET'], location__id__icontains=request.POST['ADDRESS_BUILD'], kv__icontains=request.POST['flat']).order_by('id')
+            if request.POST['ADDRESS_STREET'] == '':
+                userpi = UserPi.objects.filter(city=city).order_by('id')
+            else:
+                userpi = UserPi.objects.filter(city=city, street__id__icontains=request.POST['ADDRESS_STREET'],
+                                               location__id__icontains=request.POST['ADDRESS_BUILD'],
+                                               kv__icontains=request.POST['flat']).order_by('id')
+
             if userpi.count() == 0:
                 error = 'User not found'
             elif userpi.count() == 1:

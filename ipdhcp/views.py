@@ -2,7 +2,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from core.models import num_to_ip, ip_to_num
-from .models import Dhcphosts_networks, Dhcphosts_hosts, User, ipRange
+from .models import Dhcphosts_networks, Dhcphosts_hosts, User, new_ip
 from xbills import settings
 from .forms import Dhcphosts_hostsForm
 from netaddr import *
@@ -58,7 +58,7 @@ def user_dhcp(request, uid, host_id=None):
                     mac = EUI(mac, dialect=mac_unix_expanded)
                 form.ip = str(ip_to_num(request.POST['ip']))
                 form.mac = mac
-                form.save()
+                # form.save()
                 return redirect(reverse('core:user_dhcp', kwargs={'uid': uid}))
         else:
             print 'no post'
@@ -75,19 +75,25 @@ def user_dhcp(request, uid, host_id=None):
             'uid': user.id
         })
         if 'action' in request.POST and request.POST['action'] == 'add':
+            print request.POST
             dhcphosts_hostsform = Dhcphosts_hostsForm(request.POST)
             if dhcphosts_hostsform.is_valid():
                 form = dhcphosts_hostsform.save(commit=False)
                 mac = str(request.POST['mac']).strip()
                 if valid_mac(mac):
                     mac = EUI(mac, dialect=mac_unix_expanded)
-                form.ip = str(ip_to_num(request.POST['ip']))
+                if 'auto_select' in request.POST:
+                    print 'auto_select'
+                    form.ip = str(ip_to_num(new_ip(request.POST['network'])))
+                else:
+                    form.ip = str(ip_to_num(request.POST['ip']))
                 form.mac = mac
-                form.save()
+                print form.ip
+                # form.save()
                 return redirect(reverse('core:user_dhcp', kwargs={'uid': uid}))
     if 'action' in request.GET and request.GET['action'] == 'remove':
         print request.GET
         host = Dhcphosts_hosts.objects.get(pk=request.GET['host_id'])
-        host.delete()
+        # host.delete()
         return redirect(reverse('core:user_dhcp', kwargs={'uid': uid}))
     return render(request, 'user_dhcp.html', locals())

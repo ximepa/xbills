@@ -59,3 +59,18 @@ def ipRange(start_ip, end_ip):
         ip_range.append(".".join(map(str, temp)))
 
     return ip_range
+
+def new_ip (network_id):
+    print network_id
+    ip_list = []
+    ip_db = Dhcphosts_hosts.objects.filter(network=network_id)
+    network = Dhcphosts_networks.objects.get(id=network_id)
+    print network.ip_range_first
+    print network.ip_range_last
+    for ip_range in ip_db:
+        ip_list.append(num_to_ip(ip_range.ip))
+    print ip_list
+    print ipRange(num_to_ip(network.ip_range_first), num_to_ip(network.ip_range_last))
+    result = [i for i in ipRange(num_to_ip(network.ip_range_first), num_to_ip(network.ip_range_last)) if i not in ip_list]
+    print result[0]
+    return result[0]
