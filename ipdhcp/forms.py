@@ -11,7 +11,7 @@ class Dhcphosts_hostsForm(forms.ModelForm):
                 'onclick': 'ipdhcp_disable'
             }
         ),
-        required=False
+        required=False,
     )
     mac = forms.CharField(
         widget=forms.TextInput(

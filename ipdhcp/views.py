@@ -76,12 +76,14 @@ def user_dhcp(request, uid, host_id=None):
         if len(parsed_list) == 0:
             dhcphosts_hostsform = Dhcphosts_hostsForm(initial={
                 'hostname': str(user.login) + '_' + str(100 + 1),
-                'uid': user.id
+                'uid': user.id,
+                'disable': 0
             })
         else:
             dhcphosts_hostsform = Dhcphosts_hostsForm(initial={
                 'hostname': str(user.login) + '_' + str(max(parsed_list) + 1),
-                'uid': user.id
+                'uid': user.id,
+                'disable': 0
             })
         if 'action' in request.POST and request.POST['action'] == 'add':
             dhcphosts_hostsform = Dhcphosts_hostsForm(request.POST)
