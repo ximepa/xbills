@@ -45,7 +45,7 @@ class Dhcphosts_hostsForm(forms.ModelForm):
         ]
         widgets = {
             'uid': forms.HiddenInput(),
-            'ip': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Ip', 'aria-describedby': 'select_input'}),
+            'ip': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Ip', 'aria-describedby': 'select_input', 'id': 'id_ip'}),
             'hostname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Hostname'}),
             'vid': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Client vid'}),
             'server_vid': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Server vid'}),

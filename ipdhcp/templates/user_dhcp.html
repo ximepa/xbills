@@ -54,11 +54,12 @@
                                         </span>
                                         <script>
                                             var se = $('#auto_select').change(function(){
-{#                                                if ($('#auto_select').is(':checked')){#}
-{#                                                    $('#id_ip').attr('disabled', true);#}
-{#                                                } else {#}
-{#                                                    $('#id_ip').attr('disabled', false);#}
-{#                                                }#}
+                                                if ($('#auto_select').is(':checked')){
+                                                    document.getElementById('id_ip').readOnly = true;
+                                                    $('#id_ip').val('0.0.0.0')
+                                                } else {
+                                                    document.getElementById('id_ip').readOnly = false;
+                                                }
                                             });
                                         </script>
                                     </div>
