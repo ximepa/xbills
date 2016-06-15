@@ -41,7 +41,6 @@ def dhcps(request):
 
 
 def user_dhcp(request, uid, host_id=None):
-    print host_id
     net_dhcp = Dhcphosts_networks.objects.all()
     user = User.objects.get(id=uid)
     hosts = Dhcphosts_hosts.objects.filter(uid=uid)
@@ -49,7 +48,6 @@ def user_dhcp(request, uid, host_id=None):
         host = Dhcphosts_hosts.objects.get(pk=host_id)
         change_dhcp_host = True
         if request.method == 'POST':
-            print request.POST
             dhcphosts_hostsform = Dhcphosts_hostsForm(request.POST, instance=host)
             if dhcphosts_hostsform.is_valid():
                 form = dhcphosts_hostsform.save(commit=False)
@@ -58,7 +56,7 @@ def user_dhcp(request, uid, host_id=None):
                     mac = EUI(mac, dialect=mac_unix_expanded)
                 form.ip = str(ip_to_num(request.POST['ip']))
                 form.mac = mac
-                # form.save()
+                form.save()
                 return redirect(reverse('core:user_dhcp', kwargs={'uid': uid}))
         else:
             print 'no post'
@@ -75,7 +73,6 @@ def user_dhcp(request, uid, host_id=None):
             'uid': user.id
         })
         if 'action' in request.POST and request.POST['action'] == 'add':
-            print request.POST
             dhcphosts_hostsform = Dhcphosts_hostsForm(request.POST)
             if dhcphosts_hostsform.is_valid():
                 form = dhcphosts_hostsform.save(commit=False)
@@ -83,16 +80,13 @@ def user_dhcp(request, uid, host_id=None):
                 if valid_mac(mac):
                     mac = EUI(mac, dialect=mac_unix_expanded)
                 if 'auto_select' in request.POST:
-                    print 'auto_select'
                     form.ip = str(ip_to_num(new_ip(request.POST['network'])))
                 else:
                     form.ip = str(ip_to_num(request.POST['ip']))
                 form.mac = mac
-                print form.ip
-                # form.save()
+                form.save()
                 return redirect(reverse('core:user_dhcp', kwargs={'uid': uid}))
     if 'action' in request.GET and request.GET['action'] == 'remove':
-        print request.GET
         host = Dhcphosts_hosts.objects.get(pk=request.GET['host_id'])
         # host.delete()
         return redirect(reverse('core:user_dhcp', kwargs={'uid': uid}))
