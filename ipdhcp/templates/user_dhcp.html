@@ -11,7 +11,15 @@
                 </div>
                 <br/>
                 {% if dhcphosts_hostsform.errors %}
-                    <div class="alert alert-warning" role="alert">{{ dhcphosts_hostsform.errors }}</div>
+                    <script>
+                        $().toastmessage('showToast', {
+                            text: '{{ dhcphosts_hostsform.errors }}',
+                            sticky: false,
+                            position: 'bottom-right',
+                            type: 'error',
+                            stayTime: 6000
+                        });
+                    </script>
                 {% endif %}
                 <form class="form-horizontal" method="post" name="dv_form">{% csrf_token %}
                     <div class="row">
