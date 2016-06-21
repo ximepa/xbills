@@ -39,6 +39,18 @@ dashboard.getPay = function () {
         $('#month_sum_count').text(data.pay_month[1]);
     })
 };
+var uid = "UID";
+
+dashboard.getPayNow = function () {
+    $.getJSON('?pay_now', function (data) {
+        if (uid != data.pay_now[2]) {
+            $.each(data, function (index, value) {
+                toastr.info(value[0] + ' ' + value[1], value[2] + ' (UID: <a style="color: white" href="clients/' + value[3] + '"' + '>' + value[3] + '</a>' + ')', {timeOut: 0, onclick: null, extendedTimeOut: 0})
+            })
+        }
+        uid = data.pay_now[2];
+    })
+};
 
 dashboard.getMemory = function () {
     $.getJSON('?memory', function (data) {
@@ -103,17 +115,19 @@ function refresh() {
     setTimeout(function(){
         $('#get_proc').bootstrapTable('destroy');
         dashboard.getCpu();
-        dashboard.getProc();
+        // dashboard.getProc();
         dashboard.getMemory();
         dashboard.getPay();
+        dashboard.getPayNow();
         refresh();
     }, 10000);
 }
 
 $(document).ready(function(){
-    dashboard.getProc();
     dashboard.getCpu();
+    // dashboard.getProc();
     dashboard.getMemory();
     dashboard.getPay();
+    dashboard.getPayNow();
     refresh();
 });

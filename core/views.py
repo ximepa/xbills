@@ -41,6 +41,13 @@ def index(request, settings=settings):
     boot_time = datetime.datetime.fromtimestamp(psutil.boot_time())
     d2 = datetime.datetime.now()
     diff = abs((d2 - boot_time))
+    if 'pay_now' in request.GET:
+        payments_now = Payment.objects.filter(date__icontains=datetime.datetime.now().date()).last()
+        pay_list = {}
+        pay_list['pay_now'] = payments_now.sum, payments_now.dsc, payments_now.uid.login, str(payments_now.uid.id)
+        res_json = json.dumps(pay_list)
+        print res_json
+        return HttpResponse(res_json)
     if 'pay' in request.GET:
         pay_list = {}
         result_day_pay = 0

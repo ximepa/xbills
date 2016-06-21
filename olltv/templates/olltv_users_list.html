@@ -114,7 +114,7 @@
                             {% else %}
                                 <td><span style="color: green">{% trans 'Active' %}</span></td>
                             {% endif %}
-                            <td><a href="{% url 'olltv:user_change' tv.uid.id %}">{% trans 'Change' %}</a></td>
+                            <td><a href="{% url 'core:user_change' tv.uid.id %}">{% trans 'Change' %}</a></td>
                         </tr>
                         {% endfor %}
                     </tbody>
