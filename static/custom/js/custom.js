@@ -39,17 +39,35 @@ dashboard.getPay = function () {
         $('#month_sum_count').text(data.pay_month[1]);
     })
 };
+
 var uid = "UID";
 
 dashboard.getPayNow = function () {
     $.getJSON('?pay_now', function (data) {
         if (uid != data.pay_now[2]) {
             $.each(data, function (index, value) {
-                toastr.info(value[0] + ' ' + value[1], value[2] + ' (UID: <a style="color: white" href="clients/' + value[3] + '"' + '>' + value[3] + '</a>' + ')', {timeOut: 0, onclick: null, extendedTimeOut: 0})
+                toastr.pay(value[0] + ' грн.  ' + value[1], value[2] + ' (UID: <a style="color: white" href="clients/' + value[3] + '"' + '>' + value[3] + '</a>' + ')', value[4],
+                    {progressBar: true, timeOut: 40000, extendedTimeOut: 10000})
             })
         }
         uid = data.pay_now[2];
     })
+};
+
+var claim = "claim";
+
+dashboard.getClaimsNotifi = function () {
+    $.getJSON('claims/?claim_notifi', function (data) {
+        if (claim != data.claim[0]) {
+            $.each(data, function (index, value) {
+                toastr.claims(value[0], 'UID: <a style="color: white" href="clients/' + value[1] + '"' + '>' + value[1] + '</a>', value[2], value[3], value[4],
+                    {timeOut: 0, onclick: null, extendedTimeOut: 0})
+            })
+        }
+        claim = data.claim[0];
+    })
+    
+
 };
 
 dashboard.getMemory = function () {
@@ -119,6 +137,7 @@ function refresh() {
         dashboard.getMemory();
         dashboard.getPay();
         dashboard.getPayNow();
+        dashboard.getClaimsNotifi();
         refresh();
     }, 10000);
 }
@@ -129,5 +148,6 @@ $(document).ready(function(){
     dashboard.getMemory();
     dashboard.getPay();
     dashboard.getPayNow();
+    dashboard.getClaimsNotifi();
     refresh();
 });

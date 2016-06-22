@@ -1,4 +1,6 @@
 # -*- encoding: utf-8 -*-
+import json
+
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -49,8 +51,13 @@ def name(request):
     return redirect('dashboard')
 
 
-@login_required(login_url='/login/')
 def index(request):
+    if 'claim_notifi' in request.GET:
+        claim = Claims.objects.filter(state=1).last()
+        pay_list = {}
+        pay_list['claim'] = claim.problem, claim.uid, claim.owner.username, claim.queue.name, claim.address
+        res_json = json.dumps(pay_list)
+        return HttpResponse(res_json)
     queue = Queue.objects.all()
     claims_list_opened = Claims.objects.filter(state=1).count()
     claims_list_closed = Claims.objects.filter(state=2).count()

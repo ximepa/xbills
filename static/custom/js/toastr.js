@@ -7,6 +7,8 @@
             var toastType = {
                 error: 'error',
                 info: 'info',
+                claims: 'claims',
+                pay: 'pay',
                 success: 'success',
                 warning: 'warning'
             };
@@ -17,6 +19,8 @@
                 error: error,
                 getContainer: getContainer,
                 info: info,
+                claims: claims,
+                pay: pay,
                 options: {},
                 subscribe: subscribe,
                 success: success,
@@ -59,6 +63,31 @@
                     message: message,
                     optionsOverride: optionsOverride,
                     title: title
+                });
+            }
+
+            function claims(message, uid, owner, queue, address, optionsOverride) {
+                return notify({
+                    type: toastType.claims,
+                    iconClass: getOptions().iconClasses.claims,
+                    message: message,
+                    uid: uid,
+                    owner: owner,
+                    queue: queue,
+                    address: address,
+                    optionsOverride: optionsOverride
+                });
+
+            }
+
+            function pay(message, aid, title, optionsOverride) {
+                return notify({
+                    type: toastType.info,
+                    iconClass: getOptions().iconClasses.info,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title,
+                    aid: aid
                 });
             }
 
@@ -162,13 +191,17 @@
                     iconClasses: {
                         error: 'toast-error',
                         info: 'toast-info',
+                        claims: 'toast-claims',
                         success: 'toast-success',
                         warning: 'toast-warning'
                     },
                     iconClass: 'toast-info',
                     positionClass: 'toast-top-right',
                     timeOut: 7000, // Set timeOut and extendedTimeOut to 0 to make it sticky
+                    uidClass: 'toast-title',
+                    aidClass: 'toast-title',
                     titleClass: 'toast-title',
+                    addressClass: 'toast-title',
                     messageClass: 'toast-message',
                     escapeHtml: false,
                     target: 'body',
@@ -182,6 +215,7 @@
             function publish(args) {
                 if (!listener) { return; }
                 listener(args);
+                console.log(listener)
             }
 
             function notify(map) {
@@ -196,11 +230,16 @@
                 if (shouldExit(options, map)) { return; }
 
                 toastId++;
-
+                
                 $container = getContainer(options, true);
 
                 var intervalId = null;
                 var $toastElement = $('<div/>');
+                var $uidElement= $('<div/>');
+                var $aidElement= $('<div/>');
+                var $ownerElement= $('<div/>');
+                var $queueElement= $('<div/>');
+                var $addressElement= $('<div/>');
                 var $titleElement = $('<div/>');
                 var $messageElement = $('<div/>');
                 var $progressElement = $('<div/>');
@@ -246,6 +285,11 @@
 
                 function personalizeToast() {
                     setIcon();
+                    setUID();
+                    setAID();
+                    setOwner();
+                    setQueue();
+                    setAddress();
                     setTitle();
                     setMessage();
                     setCloseButton();
@@ -306,6 +350,41 @@
                         $container.prepend($toastElement);
                     } else {
                         $container.append($toastElement);
+                    }
+                }
+
+                function setUID() {
+                    if (map.uid) {
+                        $uidElement.append(!options.escapeHtml ? map.uid : escapeHtml(map.uid)).addClass(options.uidClass);
+                        $toastElement.append($uidElement);
+                    }
+                }
+
+                function setAID() {
+                    if (map.aid) {
+                        $aidElement.append(!options.escapeHtml ? map.aid : escapeHtml(map.aid)).addClass(options.aidClass);
+                        $toastElement.append($aidElement);
+                    }
+                }
+
+                function setOwner() {
+                    if (map.owner) {
+                        $ownerElement.append(!options.escapeHtml ? map.owner : escapeHtml(map.owner)).addClass(options.titleClass);
+                        $toastElement.append($ownerElement);
+                    }
+                }
+
+                function setQueue() {
+                    if (map.queue) {
+                        $queueElement.append(!options.escapeHtml ? map.queue : escapeHtml(map.queue)).addClass(options.titleClass);
+                        $toastElement.append($queueElement);
+                    }
+                }
+
+                function setAddress() {
+                    if (map.address) {
+                        $addressElement.append(!options.escapeHtml ? map.address : escapeHtml(map.address)).addClass(options.addressClass);
+                        $toastElement.append($addressElement);
                     }
                 }
 

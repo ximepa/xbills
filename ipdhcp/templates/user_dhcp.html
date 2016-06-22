@@ -12,13 +12,7 @@
                 <br/>
                 {% if dhcphosts_hostsform.errors %}
                     <script>
-                        $().toastmessage('showToast', {
-                            text: '{{ dhcphosts_hostsform.errors }}',
-                            sticky: false,
-                            position: 'bottom-right',
-                            type: 'error',
-                            stayTime: 6000
-                        });
+                        toastr.error('', '{{ dhcphosts_hostsform.errors }}', {progressBar: true})
                     </script>
                 {% endif %}
                 <form class="form-horizontal" method="post" name="dv_form">{% csrf_token %}
