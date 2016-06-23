@@ -5,7 +5,7 @@
 {% block extra_scripts %}
 {% endblock %}
 {% block extra_js %}
-    <script src="{% static 'custom/js/custom.js' %}"></script>
+
 {% endblock %}
 {% block content %}
     <div id="sortable" class="row">
@@ -123,12 +123,22 @@
                 </div>
             </div>
         </div>
-{#        <div class="sortable col-xs-8 col-sm-8 col-md-8">#}
-{#            <div class="panel panel-default">#}
-{#                <div class="panel-body">#}
-{#                    <table id="get_proc" class="ui black table"></table>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
+        <script>
+            function refresh() {
+                setTimeout(function(){
+                    for (dash in dashboard) {
+                        dashboard[dash]()
+                    }
+                    refresh();
+                }, 10000);
+            }
+
+            $(document).ready(function(){
+                for (dash in dashboard) {
+                    dashboard[dash]()
+                }
+                refresh();
+            });
+        </script>
     </div>
 {% endblock %}

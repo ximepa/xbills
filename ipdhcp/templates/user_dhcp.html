@@ -15,9 +15,13 @@
                         toastr.error('', '{{ dhcphosts_hostsform.errors }}', {progressBar: true})
                     </script>
                 {% endif %}
-                {% if response %}
+                {% if response != None %}
                     <script>
-                        toastr.error('', '{{ response }}', {progressBar: true})
+                        toastr.mac_test('{{ response.ping }}', '{{ response.ip }}', '{{ response.mac }}', '{{ response.vlan }}', {progressBar: true, timeOut: 40000, extendedTimeOut: 10000})
+                    </script>
+                {% elif response == None %}
+                    <script>
+                        toastr.error('', '{% trans 'Mac not found' %}', {progressBar: true})
                     </script>
                 {% endif %}
                 <form class="form-horizontal" method="post" name="dv_form">{% csrf_token %}

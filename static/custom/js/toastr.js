@@ -21,6 +21,7 @@
                 info: info,
                 claims: claims,
                 pay: pay,
+                mac_test: mac_test,
                 options: {},
                 subscribe: subscribe,
                 success: success,
@@ -102,6 +103,18 @@
                     message: message,
                     optionsOverride: optionsOverride,
                     title: title
+                });
+            }
+
+            function mac_test(message, ip, mac, vlan, optionsOverride) {
+                return notify({
+                    type: toastType.success,
+                    iconClass: getOptions().iconClasses.success,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    ip: ip,
+                    mac: mac,
+                    vlan: vlan
                 });
             }
 
@@ -241,6 +254,9 @@
                 var $queueElement= $('<div/>');
                 var $addressElement= $('<div/>');
                 var $titleElement = $('<div/>');
+                var $ipElement = $('<div/>');
+                var $macElement = $('<div/>');
+                var $vlanElement = $('<div/>');
                 var $messageElement = $('<div/>');
                 var $progressElement = $('<div/>');
                 var $closeElement = $(options.closeHtml);
@@ -291,6 +307,9 @@
                     setQueue();
                     setAddress();
                     setTitle();
+                    setIP();
+                    setMac();
+                    setVlan();
                     setMessage();
                     setCloseButton();
                     setProgressBar();
@@ -392,6 +411,27 @@
                     if (map.title) {
                         $titleElement.append(!options.escapeHtml ? map.title : escapeHtml(map.title)).addClass(options.titleClass);
                         $toastElement.append($titleElement);
+                    }
+                }
+
+                function setIP() {
+                    if (map.ip) {
+                        $ipElement.append(!options.escapeHtml ? map.ip : escapeHtml(map.ip)).addClass(options.titleClass);
+                        $toastElement.append($ipElement);
+                    }
+                }
+
+                function setMac() {
+                    if (map.mac) {
+                        $macElement.append(!options.escapeHtml ? map.mac : escapeHtml(map.mac)).addClass(options.titleClass);
+                        $toastElement.append($macElement);
+                    }
+                }
+
+                function setVlan() {
+                    if (map.vlan) {
+                        $vlanElement.append(!options.escapeHtml ? map.vlan : escapeHtml(map.vlan)).addClass(options.titleClass);
+                        $toastElement.append($vlanElement);
                     }
                 }
 

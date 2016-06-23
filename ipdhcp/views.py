@@ -79,8 +79,7 @@ def user_dhcp(request, uid, host_id=None):
                     pass
                 response = test_mac(settings.ALCATEL_HOST, settings.ALCATEL_USER, settings.ALCATEL_PASSWD, mac)
                 print response
-                if response == None:
-                    response = 'mac not found'
+
         host = None
         parsed_list = []
         for host in hosts:

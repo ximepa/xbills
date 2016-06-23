@@ -1,4 +1,6 @@
 var dashboard = {};
+var global = {};
+
 
 function formatBytes(bytes,decimals) {
    if(bytes == 0) return '0 Byte';
@@ -42,8 +44,8 @@ dashboard.getPay = function () {
 
 var uid = "UID";
 
-dashboard.getPayNow = function () {
-    $.getJSON('?pay_now', function (data) {
+global.getPayNow = function () {
+    $.getJSON('/admin/?pay_now', function (data) {
         if (uid != data.pay_now[2]) {
             $.each(data, function (index, value) {
                 toastr.pay(value[0] + ' грн.  ' + value[1], value[2] + ' (UID: <a style="color: white" href="clients/' + value[3] + '"' + '>' + value[3] + '</a>' + ')', value[4],
@@ -56,8 +58,8 @@ dashboard.getPayNow = function () {
 
 var claim = "claim";
 
-dashboard.getClaimsNotifi = function () {
-    $.getJSON('claims/?claim_notifi', function (data) {
+global.getClaimsNotifi = function () {
+    $.getJSON('/admin/claims/?claim_notifi', function (data) {
         if (claim != data.claim[0]) {
             $.each(data, function (index, value) {
                 toastr.claims(value[0], 'UID: <a style="color: white" href="clients/' + value[1] + '"' + '>' + value[1] + '</a>', value[2], value[3], value[4],
@@ -87,67 +89,67 @@ dashboard.getMemory = function () {
     })
 };
 
-dashboard.getProc = function() {
-      function rowStyle(row, index) {
-          if (row.cpu > 35 && row.cpu < 50) {
-              return {
-                  classes: 'warning'
-              }
-          }
-          if (row.cpu > 50 && row.cpu < 200) {
-              return {
-                  classes: 'danger'
-              }
-          }
-          return {};
-      }
+// dashboard.getProc = function() {
+//       function rowStyle(row, index) {
+//           if (row.cpu > 35 && row.cpu < 50) {
+//               return {
+//                   classes: 'warning'
+//               }
+//           }
+//           if (row.cpu > 50 && row.cpu < 200) {
+//               return {
+//                   classes: 'danger'
+//               }
+//           }
+//           return {};
+//       }
+//
+//     $(function() {
+//         $('#get_proc').bootstrapTable({
+//             url: '?process',
+//             height: 300,
+//             rowStyle: rowStyle,
+//             sortName: 'cpu',
+//             sortOrder: 'desc',
+//             columns: [{
+//                 field: 'pid',
+//                 title: 'Pid'
+//             }, {
+//                 field: 'name',
+//                 title: 'Name'
+//             }, {
+//                 field: 'status',
+//                 title: 'Status'
+//             }, {
+//                 field: 'cpu',
+//                 title: '% CPU',
+//                 valign: 'top',
+//                 sortable: true
+//             }
+//             ]
+//         });
+//     })
+// };
 
-    $(function() {
-        $('#get_proc').bootstrapTable({
-            url: '?process',
-            height: 300,
-            rowStyle: rowStyle,
-            sortName: 'cpu',
-            sortOrder: 'desc',
-            columns: [{
-                field: 'pid',
-                title: 'Pid'
-            }, {
-                field: 'name',
-                title: 'Name'
-            }, {
-                field: 'status',
-                title: 'Status'
-            }, {
-                field: 'cpu',
-                title: '% CPU',
-                valign: 'top',
-                sortable: true
-            }
-            ]
-        });
-    })
-};
-
-function refresh() {
-    setTimeout(function(){
-        $('#get_proc').bootstrapTable('destroy');
-        dashboard.getCpu();
-        // dashboard.getProc();
-        dashboard.getMemory();
-        dashboard.getPay();
-        dashboard.getPayNow();
-        dashboard.getClaimsNotifi();
-        refresh();
-    }, 10000);
-}
-
-$(document).ready(function(){
-    dashboard.getCpu();
-    // dashboard.getProc();
-    dashboard.getMemory();
-    dashboard.getPay();
-    dashboard.getPayNow();
-    dashboard.getClaimsNotifi();
-    refresh();
-});
+// function refresh() {
+//     setTimeout(function(){
+//         $('#get_proc').bootstrapTable('destroy');
+//         dashboard.getCpu();
+//         // dashboard.getProc();
+//         dashboard.getMemory();
+//         dashboard.getPay();
+//         dashboard.getPayNow();
+//         dashboard.getClaimsNotifi();
+//         refresh();
+//     }, 10000);
+// }
+//
+// $(document).ready(function(){
+//     dashboard.getCpu();
+//     // dashboard.getProc();
+//     dashboard.getMemory();
+//     dashboard.getPay();
+//     dashboard.getPayNow();
+//     dashboard.getClaimsNotifi();
+//     refresh();
+// });
