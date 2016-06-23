@@ -68,7 +68,6 @@ def user_dhcp(request, uid, host_id=None):
             print 'no post'
     else:
         if 'mac_test' in request.POST:
-            print request.POST
             mac_input = str(request.POST['mac_test']).strip()
             if valid_mac(mac_input):
                 mac = EUI(mac_input, dialect=mac_unix_expanded)
