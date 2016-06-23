@@ -15,6 +15,11 @@
                         toastr.error('', '{{ dhcphosts_hostsform.errors }}', {progressBar: true})
                     </script>
                 {% endif %}
+                {% if response %}
+                    <script>
+                        toastr.error('', '{{ response }}', {progressBar: true})
+                    </script>
+                {% endif %}
                 <form class="form-horizontal" method="post" name="dv_form">{% csrf_token %}
                     <div class="row">
                         <div class="col-md-5">
@@ -156,7 +161,11 @@
                                         <td>{% ip_convert host.ip %}</td>
                                         <td>{{ host.hostname }}</td>
                                         <td>{{ host.nas }}</td>
-                                        <td>{{ host.mac }}</td>
+                                        <td>
+                                            <form name="mac_test" method="post">{% csrf_token %}
+                                                <button type="submit" class="btn-link" name="mac_test" value="{{ host.mac }}">{{ host.mac }}</button>
+                                            </form>
+                                        </td>
                                         <td>
                                             <a href="{% url 'core:user_ipdhcp_host_change' uid host.id %}"><span class='fa fa-pencil'></span></a>
                                         </td>

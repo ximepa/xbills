@@ -5,6 +5,7 @@ from core.models import num_to_ip, ip_to_num
 from .models import Dhcphosts_networks, Dhcphosts_hosts, User, new_ip
 from xbills import settings
 from .forms import Dhcphosts_hostsForm
+from core.helpers import test_mac
 from netaddr import *
 
 
@@ -66,13 +67,26 @@ def user_dhcp(request, uid, host_id=None):
             print dhcphosts_hostsform.errors
             print 'no post'
     else:
+        if 'mac_test' in request.POST:
+            print request.POST
+            mac_input = str(request.POST['mac_test']).strip()
+            if valid_mac(mac_input):
+                mac = EUI(mac_input, dialect=mac_unix_expanded)
+                try:
+                    dhcp = Dhcphosts_hosts.objects.get(mac=mac)
+                    get_user = User.objects.get(id=dhcp.uid)
+                except Dhcphosts_hosts.DoesNotExist:
+                    pass
+                response = test_mac(settings.ALCATEL_HOST, settings.ALCATEL_USER, settings.ALCATEL_PASSWD, mac)
+                print response
+                if response == None:
+                    response = 'mac not found'
         host = None
         parsed_list = []
         for host in hosts:
             hostnames = host.hostname.split('_')
             if hostnames[-1].isdigit():
                 parsed_list.append(int(hostnames[-1]))
-        print len(parsed_list)
         if len(parsed_list) == 0:
             dhcphosts_hostsform = Dhcphosts_hostsForm(initial={
                 'hostname': str(user.login) + '_' + str(100 + 1),
