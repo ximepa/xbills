@@ -124,12 +124,12 @@
             </div>
         </div>
         <script>
-            function refresh() {
+            function dashRefresh() {
                 setTimeout(function(){
                     for (dash in dashboard) {
                         dashboard[dash]()
                     }
-                    refresh();
+                    dashRefresh();
                 }, 10000);
             }
 
@@ -137,7 +137,7 @@
                 for (dash in dashboard) {
                     dashboard[dash]()
                 }
-                refresh();
+                dashRefresh();
             });
         </script>
     </div>
