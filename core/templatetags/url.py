@@ -42,7 +42,7 @@ def url_replace_page(request, field, value):
 
 @register.simple_tag
 def theme(request, static_file):
-    if request.user.pk != None:
+    if request.user.pk is not None:
         try:
             user_theme = Admin.objects.get(id=request.user.pk).theme
             return '/static/' + user_theme + static_file

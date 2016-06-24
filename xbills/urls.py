@@ -1,6 +1,7 @@
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
+from django.views.generic import TemplateView
 import os
 from core.helpers import module_check
 
@@ -17,4 +18,6 @@ if module_check('olltv'):
     urlpatterns += url(r'^admin/olltv/', include('olltv.urls')),
 if module_check('claims'):
     urlpatterns += url(r'^admin/claims/', include('claims.urls')),
+if module_check('chat'):
+    urlpatterns += url(r'^admin/chat/', include('chat.urls')),
 

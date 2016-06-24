@@ -46,6 +46,8 @@ INSTALLED_APPS = (
     'dv',
     'ipdhcp',
     'claims',
+    'chat',
+    'swampdragon',
 
 )
 
@@ -148,6 +150,12 @@ OLLTVGETBUNDLESTATUS = 'http://dev.oll.tv/ispAPI/checkBundle/'
 # LOGS
 #Add logs to Abills history
 ABILLS_EMAIL_LOGS = True
+
+# CHAT && WEBSOCKET
+SWAMP_DRAGON_CONNECTION = ('chat_example.sockserver.DataConnection', '/data')
+#SWAMP_DRAGON_HOST = '0.0.0.0'
+
+DRAGON_URL = 'http://127.0.0.1:9999/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
