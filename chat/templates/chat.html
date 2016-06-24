@@ -1,5 +1,26 @@
 {% extends 'layout.html' %}
+{% load staticfiles %}
+{% load swampdragon_tags %}
 
 {% block content %}
-    asd
+    <div class="col-md-6">
+        <form method="post" class="form-inline">
+            <div class="form-group">
+                <input type="hidden" class="form-control" placeholder="name" id="name" autofocus="true" value="{{ request.user.login }}">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="message" id="message">
+            </div>
+
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" id="send-message-button">chat</button>
+            </div>
+        </form>
+
+        <ul class="list-group">
+            <li class="list-group-item" id="messages">
+
+            </li>
+        </ul>
+    </div>
 {% endblock %}

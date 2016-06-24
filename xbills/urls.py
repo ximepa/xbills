@@ -20,4 +20,6 @@ if module_check('claims'):
     urlpatterns += url(r'^admin/claims/', include('claims.urls')),
 if module_check('chat'):
     urlpatterns += url(r'^admin/chat/', include('chat.urls')),
+else:
+    urlpatterns += url(r'^admin/chat/', TemplateView.as_view(template_name='404.html'), name='home'),
 

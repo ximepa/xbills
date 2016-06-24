@@ -2,6 +2,7 @@
 {% load staticfiles %}
 {% load url %}
 {% load project %}
+{% load swampdragon_tags %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -123,7 +124,10 @@
                         <li><a href="{% url 'core:search' %}" class="a-nav"><i class="fa fa-search fa-fw"></i>{% trans 'Search' %}</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="{% url 'core:chat' %}"><i class="fa fa-weixin fa-fw" aria-hidden="true"></i></a></li>
+                        {% check_module 'chat' as check_module_chat %}
+                        {% if check_module_olltv %}
+                            <li><a href="{% url 'chat:home' %}"><i class="fa fa-weixin fa-fw" aria-hidden="true"></i></a></li>
+                        {% endif %}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
                             <ul class="dropdown-menu">
@@ -147,6 +151,9 @@
             {% block layout %}
             {% endblock %}
         </div>
+        {% autoescape off %}{% swampdragon_settings %}{% endautoescape %}
+        <script type="text/javascript" src="{% static '' %}swampdragon/js/dist/swampdragon.js"></script>
+        <script type="text/javascript" src="{% static 'custom/js/app.js' %}"></script>
         <script>
             function refresh() {
                 setTimeout(function(){
