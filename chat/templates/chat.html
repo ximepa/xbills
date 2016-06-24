@@ -1,26 +1,34 @@
 {% extends 'layout.html' %}
 {% load staticfiles %}
+{% load i18n %}
 {% load swampdragon_tags %}
 
 {% block content %}
-    <div class="col-md-6">
-        <form method="post" class="form-inline">
-            <div class="form-group">
-                <input type="hidden" class="form-control" placeholder="name" id="name" autofocus="true" value="{{ request.user.login }}">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="well well-sm">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">Panel heading without title</div>
+                            <div class="panel-body" style="min-height: 500px;max-height: 500px;overflow-y: scroll;">
+                                <ul class="list-group" id="messages">
+                                </ul>
+                            </div>
+                            <div class="panel-footer">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" class="form-control" placeholder="{% trans 'Type your message' %}" id="message">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-primary" type="button" id="send-message-button">{% trans 'Send' %}</button>
+                                        <input type="hidden" class="form-control" placeholder="name" id="name" autofocus="true" value="{{ request.user.login }}">
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">{{ request.online_now }}</div>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="message" id="message">
-            </div>
-
-            <div class="form-group">
-                <button type="button" class="btn btn-primary" id="send-message-button">chat</button>
-            </div>
-        </form>
-
-        <ul class="list-group">
-            <li class="list-group-item" id="messages">
-
-            </li>
-        </ul>
+        </div>
     </div>
 {% endblock %}

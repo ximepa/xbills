@@ -31,11 +31,12 @@ document.getElementById("send-message-button").addEventListener("click", functio
 
 
 function addMessage (name, msg) {
-    toastr.info(msg, name, {progressBar: true})
+    toastr.info(msg, name, {progressBar: true});
     var messages = document.getElementById("messages");
-    var div = document.createElement("div");
-    messages.insertBefore(div, messages.firstChild);
-    div.innerHTML = "<span class='label label-primary'>" + name + "</span> " + msg;
+    var li = document.createElement("li");
+    messages.insertBefore(li, messages.firstChild);
+    li.className += "list-group-item";
+    li.innerHTML = "<span class='label label-primary'>" + name + "</span> " + msg;
 }
 
 
