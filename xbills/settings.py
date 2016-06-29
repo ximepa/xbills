@@ -154,9 +154,9 @@ ABILLS_EMAIL_LOGS = True
 
 # CHAT && WEBSOCKET
 SWAMP_DRAGON_CONNECTION = ('chat.sockserver.DataConnection', '/data')
-SWAMP_DRAGON_HOST = '127.0.0.1'
+SWAMP_DRAGON_HOST = '0.0.0.0'
 
-DRAGON_URL = 'http://172.16.3.126:9999/'
+DRAGON_URL = 'http://0.0.0.0:9999/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
