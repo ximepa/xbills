@@ -47,8 +47,7 @@ INSTALLED_APPS = (
     'ipdhcp',
     'claims',
     'chat',
-    'swampdragon',
-
+    'ws4redis',
 )
 
 AUTH_USER_MODEL = 'core.Admin'
@@ -82,12 +81,14 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'ws4redis.context_processors.default',
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'xbills.wsgi.application'
+# WSGI_APPLICATION = 'xbills.wsgi.application'
+WSGI_APPLICATION = 'ws4redis.django_runserver.application'
 
 
 # Database
@@ -126,7 +127,6 @@ USER_ERRORS_PER_PAGE = 100
 IPTV_USERS_PER_PAGE = 100
 ABILLSIP = '172.16.7.5'
 UNIQUE_MAC = True
-#ABILLSMYSQLUSER = ''
 COMPANY_NAME = 'Xbills'
 PROJECT_VERSION = '0.0.6'
 SHOW_VERSION = True
@@ -153,11 +153,20 @@ OLLTVGETBUNDLESTATUS = 'http://dev.oll.tv/ispAPI/checkBundle/'
 ABILLS_EMAIL_LOGS = True
 
 # CHAT && WEBSOCKET
-SWAMP_DRAGON_CONNECTION = ('chat.sockserver.DataConnection', '/data')
-SWAMP_DRAGON_HOST = '127.0.0.1'
+WEBSOCKET_URL = '/ws/'
+# WS4REDIS_CONNECTION = {
+#     'host': '127.0.0.1',
+#     'port': 6379,
+#     # 'db': 16,
+#     'password': 'xbillspassword',
+# }
+WS4REDIS_EXPIRE = 3600
 
-DRAGON_URL = 'http://172.16.3.126:9999/'
+WS4REDIS_HEARTBEAT = '--heartbeat--'
 
+WS4REDIS_PREFIX = 'demo'
+SESSION_ENGINE = 'redis_sessions.session'
+SESSION_REDIS_PREFIX = 'session'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 

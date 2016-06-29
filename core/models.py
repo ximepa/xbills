@@ -56,6 +56,9 @@ class Admin(AbstractBaseUser):
         row = cursor.fetchone()
         self.password = row[0]
 
+    def get_full_name(self):
+        return str(self.login)
+
 
     class Meta:
         db_table = 'admins'

@@ -2,7 +2,6 @@
 {% load staticfiles %}
 {% load url %}
 {% load project %}
-{% load swampdragon_tags %}
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -151,9 +150,6 @@
             {% block layout %}
             {% endblock %}
         </div>
-        {% autoescape off %}{% swampdragon_settings %}{% endautoescape %}
-        <script type="text/javascript" src="{% static '' %}swampdragon/js/dist/swampdragon.js"></script>
-        <script type="text/javascript" src="{% static 'custom/js/app.js' %}"></script>
         <script>
             function refresh() {
                 setTimeout(function(){
