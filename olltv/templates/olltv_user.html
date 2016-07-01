@@ -59,79 +59,81 @@
                     <div class="col-lg-2">
                     </div>
                     <div class="col-lg-6">
-                        {% if check_user.data == 0 %}
-                            <form method="post" class="form-horizontal main_form" role="form" id="main_form">{% csrf_token %}
-                                <h3>{% trans 'Заявка:' %}</h3>
-                                <input hidden type="text" name="account" value="{{ user.id }}">
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">{% trans 'Пароль' %}</label>
-                                    <div class="col-sm-10">
-                                        <input class="form-control input-sm" type="password" name="password" value="123456">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">{% trans 'Email' %}</label>
-                                    <div class="col-sm-10">
-                                        <input class="form-control input-sm" type="email" name="email" value="{{ user.email }}">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">{% trans 'Дата народження' %}</label>
-                                    <div class="col-sm-10">
-                                        <div class="input-group input-append date" id="datetimepicker1">
-                                            <input class="form-control input-sm" data-format="yyyy-MM-dd" type="text" name="birth_date" value="">
-                                            <span class="input-group-addon add-on"><i class="glyphicon glyphicon-calendar"></i></span>
+                        <div class="well well-sm">
+                            {% if check_user.data == 0 %}
+                                <form method="post" class="form-horizontal main_form" role="form" id="main_form">{% csrf_token %}
+                                    <h3>{% trans 'Заявка:' %}</h3>
+                                    <input hidden type="text" name="account" value="{{ user.id }}">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">{% trans 'Пароль' %}</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control input-sm" type="password" name="password" value="123456">
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">{% trans 'Стать' %}</label>
-                                    <div class="col-sm-10">
-                                        <input class="form-control input-sm" type="text" name="gender" value="M">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">{% trans 'Email' %}</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control input-sm" type="email" name="email" value="{{ user.email }}">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">{% trans 'Ім’я' %}</label>
-                                    <div class="col-sm-10">
-                                        <input class="form-control input-sm" type="text" name="firstname" value="">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">{% trans 'Дата народження' %}</label>
+                                        <div class="col-sm-10">
+                                            <div class="input-group input-append date" id="datetimepicker1">
+                                                <input class="form-control input-sm" data-format="yyyy-MM-dd" type="text" name="birth_date" value="">
+                                                <span class="input-group-addon add-on"><i class="glyphicon glyphicon-calendar"></i></span>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">{% trans 'Прізвище' %}</label>
-                                    <div class="col-sm-10">
-                                        <input class="form-control input-sm" type="text" name="lastname" value="">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">{% trans 'Стать' %}</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control input-sm" type="text" name="gender" value="M">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">{% trans 'Місто' %}</label>
-                                    <div class="col-sm-10">
-                                        <input class="form-control input-sm" type="text" name="region" value="Умань">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">{% trans 'Ім’я' %}</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control input-sm" type="text" name="firstname" value="">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">{% trans 'Телефон' %}</label>
-                                    <div class="col-sm-10">
-                                        <input class="form-control input-sm" type="text" name="phone" value="{{ user.pi.phone }}">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">{% trans 'Прізвище' %}</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control input-sm" type="text" name="lastname" value="">
+                                        </div>
                                     </div>
-                                </div>
-                                <input type="checkbox" checked hidden name="receive_news" value="1">
-                                <input type="checkbox" checked hidden name="send_registration_email" value="1">
-                                <div class="form-group">
-                                    <label class="col-sm-2 control-label">{% trans 'Поштовий індекс' %}</label>
-                                    <div class="col-sm-10">
-                                        <input class="form-control input-sm" type="text" name="postcode" value="20301">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">{% trans 'Місто' %}</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control input-sm" type="text" name="region" value="Умань">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="btn-group">
-                                    <button id="save" type="submit" class="btn btn-primary submit_btn_group" name="save-user">{% trans 'Зберегти' %}</button>
-                                </div>
-                            </form>
-                        {% else %}
-                            <form method="post">{% csrf_token %}
-                                <button type="button" hidden name="bind" value="bind"></button>
-                                <button class="btn btn-primary center-block btn-block" type="submit" hidden name="bind-user">{% trans 'Bind' %}</button>
-                            </form>
-                        {% endif %}
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">{% trans 'Телефон' %}</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control input-sm" type="text" name="phone" value="{{ user.pi.phone }}">
+                                        </div>
+                                    </div>
+                                    <input type="checkbox" checked hidden name="receive_news" value="1">
+                                    <input type="checkbox" checked hidden name="send_registration_email" value="1">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">{% trans 'Поштовий індекс' %}</label>
+                                        <div class="col-sm-10">
+                                            <input class="form-control input-sm" type="text" name="postcode" value="20301">
+                                        </div>
+                                    </div>
+                                    <div class="btn-group">
+                                        <button id="save" type="submit" class="btn btn-primary submit_btn_group" name="save-user">{% trans 'Зберегти' %}</button>
+                                    </div>
+                                </form>
+                            {% else %}
+                                <form method="post">{% csrf_token %}
+                                    <button type="button" hidden name="bind" value="bind"></button>
+                                    <button class="btn btn-primary center-block btn-block" type="submit" hidden name="bind-user">{% trans 'Bind' %}</button>
+                                </form>
+                            {% endif %}
+                        </div>
                     </div>
                     <div class="col-lg-2">
                     </div>
