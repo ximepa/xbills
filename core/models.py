@@ -249,6 +249,7 @@ class UserPi(models.Model):
     street = models.ForeignKey('Street', max_length=100, db_column='address_street')
     kv = models.CharField(max_length=10, db_column='address_flat')
     phone = models.CharField(max_length=100, db_column='phone')
+    phone2 = models.CharField(max_length=100, db_column='phone2')
     city = models.CharField(max_length=100, db_column='city')
     location = models.ForeignKey('House', db_column='location_id', related_name='location', blank=True, default='0')
     contract_date = models.DateField(db_column='contract_date')

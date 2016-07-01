@@ -1411,7 +1411,7 @@ a.bg-danger:focus {
   background-color: #e9322d;
 }
 .page-header {
-  padding-bottom: 9px;
+  padding: 2px;
   margin: 40px 0 20px;
   background-color: rgba(58, 63, 68, 0.70);
   background-image: -webkit-linear-gradient(rgba(58, 63, 68, 0.10), rgba(38, 38, 38, 0.6), rgba(58, 63, 68, 0.10));
@@ -1961,7 +1961,7 @@ pre code {
     width: 58.33333333%;
   }
   .col-md-6 {
-    width: 50%;
+    width: 45%;
   }
   .col-md-5 {
     width: 41.66666667%;
@@ -2736,6 +2736,7 @@ select[multiple].input-sm {
   font-size: 12px;
   line-height: 1.5;
   border-radius: 3px;
+  box-shadow: 0 0 5px #191b1d;
 }
 .form-group-sm select.form-control {
   height: 30px;
@@ -3069,8 +3070,8 @@ fieldset[disabled] a.btn {
 }
 .btn-default {
   color: #ffffff;
-  background-color: #3a3f44;
-  border-color: #3a3f44;
+  background-color: #7a8288;
+  border-color: #7a8288;
 }
 .btn-default:focus,
 .btn-default.focus {
@@ -3126,8 +3127,8 @@ fieldset[disabled] .btn-default.focus {
 }
 .btn-primary {
   color: #ffffff;
-  background-color: #7a8288;
-  border-color: #7a8288;
+  background-color: #3a3f44;
+  border-color: #3a3f44;
 }
 .btn-primary:focus,
 .btn-primary.focus {
@@ -4856,7 +4857,8 @@ fieldset[disabled] .navbar-inverse .btn-link:focus {
   text-align: center;
   white-space: nowrap;
   vertical-align: baseline;
-  border-radius: .25em;
+  border-radius: .30em;
+  box-shadow: 0 0 5px #191b1d;
 }
 a.label:hover,
 a.label:focus {
@@ -5126,8 +5128,10 @@ a.thumbnail.active {
   background-color: rgba(28, 30, 34, 0);
   border-radius: 10px;
   border: 1px solid rgba(42, 42, 42, 0.6);
-  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 0 5px rgba(25, 27, 29, 0.81);
+  /*-webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);*/
+  /*box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);*/
+  box-shadow: 0 0 5px rgba(25, 27, 29, 0.8);
 }
 .progress-bar {
   float: left;
@@ -5448,8 +5452,8 @@ button.list-group-item-danger.active:focus {
   background-color: rgba(58, 63, 68, 0.70);
   border: 1px solid transparent;
   border-radius: 4px;
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.84);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.84);
 }
 .panel-body {
   padding: 15px;
@@ -5819,8 +5823,8 @@ button.list-group-item-danger.active:focus {
   background-color: rgba(58, 63, 68, 0.50);
   border: 1px solid #0c0d0e;
   border-radius: 4px;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  -webkit-box-shadow: 0 0 7px rgba(0, 0, 0, 0.84);
+  box-shadow: 0 0 7px rgba(0, 0, 0, 0.84);
 }
 .well blockquote {
   border-color: #ddd;
@@ -7107,6 +7111,8 @@ legend {
   background-repeat: no-repeat;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff484e55', endColorstr='#ff313539', GradientType=0);
   filter: none;
+  -webkit-box-shadow: 0 0 7px rgba(0, 0, 0, 0.84);
+  box-shadow: 0 0 7px rgba(0, 0, 0, 0.84);
 }
 .alert .alert-link,
 .alert a {
