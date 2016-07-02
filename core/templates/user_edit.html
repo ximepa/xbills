@@ -4,8 +4,10 @@
 {% load url %}
 {% block extra_js %}
     <script src="{% static 'custom/js/chosen.jquery.min.js' %}"></script>
+    <script src="{% static 'custom/js/bootstrap-editable.js' %}"></script>
 {% endblock %}
 {% block extra_css %}
+    <link href="{% static 'custom/css/bootstrap-editable.css' %}" rel="stylesheet">
 {% endblock %}
 {% block extra_scripts %}
 <script type="application/javascript">
@@ -182,9 +184,10 @@
                                 <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Group' %}</label>
                                 <div class="col-sm-8">
                                     <div class="input-group">
-                                      <input type="text" class="form-control" placeholder="{% trans 'Group' %}" aria-describedby="group" disabled value="{{ user.gid }}">
+                                        <input href="#" data-type="text" type="text" class="form-control" placeholder="{% trans 'Group' %}" aria-describedby="group" value="{{ user.gid }}">
+                                        <a href="#" id="projectname{{project.id}}" data-type="text" data-pk="{{project.id}}" data-title="Enter project name" data-url="{% url 'core:user_group' user.id %}" data-params="{csrfmiddlewaretoken:'{{csrf_token}}'}">{{ project.name }}</a>
                                       <span class="input-group-addon" id="group">
-                                          <a href="{% url 'core:user_group' user.id %}">
+                                          <a href="#" id="status" data-type="select" data-pk="1" data-url="{% url 'core:user_group' user.id %}">
                                               <i class="fa fa-edit fa-fw"></i>
                                           </a>
                                       </span>
