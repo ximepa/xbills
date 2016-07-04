@@ -6,11 +6,9 @@ import os
 from core.helpers import module_check
 
 urlpatterns = [
+    url(r'^api/', include('api.urls', 'api')),
     url(r'^admin/', include('core.urls')),
     url(r'^admin/telephone/', include('telephone.urls')),
-
-    #url(r'^admin/olltv/', include('olltv.urls')),
-    #url(r'^admin/', include(admin.site.urls)),
 ]
 if module_check('ipdhcp'):
     urlpatterns += url(r'^admin/dhcps/', include('ipdhcp.urls')),

@@ -4,7 +4,7 @@
 
 {% block introduction %}
 <p>Point a second browser onto this URL and check for message synchronization.</p>
-    {{ WEBSOCKET_URI }} - {{ WS4REDIS_HEARTBEAT }}
+    {{ request.session.session_key }}
 {% endblock introduction %}
 
 {% block script_panel %}

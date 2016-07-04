@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib.auth.models import Group
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from core.models import Admin
 from django.http import HttpResponse
 from django.views.generic.base import TemplateView
@@ -11,6 +13,7 @@ from ws4redis.publisher import RedisPublisher
 class BroadcastChatView(TemplateView):
     template_name = 'broadcast_chat.html'
 
+    @method_decorator(login_required)
     def get(self, request, *args, **kwargs):
         welcome = RedisMessage('Hello everybody')  # create a welcome message to be sent to everybody
         RedisPublisher(facility='foobar', broadcast=True).publish_message(welcome)

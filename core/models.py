@@ -187,7 +187,7 @@ class District(models.Model):
 class Street(models.Model):
 
     id = models.SmallIntegerField(default=0, db_column='id', primary_key=True)
-    district_id = models.SmallIntegerField(default=0, db_column='district_id')
+    district = models.ForeignKey('District')
     name = models.CharField(max_length=120, unique=True, db_column='name')
     # district = models.ForeignKey('District')
 
@@ -204,7 +204,7 @@ class House(models.Model):
 
     id = models.AutoField(max_length=11, primary_key=True)
     number = models.CharField(max_length=10, db_column='number')
-    street_id = models.SmallIntegerField(default=0, db_column='street_id')
+    street = models.ForeignKey('Street', related_name='houses')
 
     def __unicode__(self):
         return self.number

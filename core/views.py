@@ -73,22 +73,19 @@ def index(request, settings=settings):
         except Exception:
             pass
     if 'memory' in request.GET:
-        try:
-            memInfo = {}
-            memInfo['memory'] = psutil.virtual_memory().percent
-            memInfo['total'] = psutil.virtual_memory().total
-            memInfo['used'] = psutil.virtual_memory().used
-            memInfo['free'] = psutil.virtual_memory().free
-            memInfo['cached'] = psutil.virtual_memory().cached
-            memInfo['swap'] = psutil.swap_memory().percent
-            memInfo['stotal'] = psutil.swap_memory().total
-            memInfo['sused'] = psutil.swap_memory().used
-            memInfo['sfree'] = psutil.swap_memory().free
-            memInfo['uptime'] = strfdelta(diff, settings.UPTIME_FORMAT)
-            res_json = json.dumps(memInfo)
-            return HttpResponse(res_json)
-        except Exception:
-            pass
+        memInfo = {}
+        memInfo['memory'] = psutil.virtual_memory().percent
+        memInfo['total'] = psutil.virtual_memory().total
+        memInfo['used'] = psutil.virtual_memory().used
+        memInfo['free'] = psutil.virtual_memory().free
+        memInfo['cached'] = psutil.virtual_memory().cached
+        memInfo['swap'] = psutil.swap_memory().percent
+        memInfo['stotal'] = psutil.swap_memory().total
+        memInfo['sused'] = psutil.swap_memory().used
+        memInfo['sfree'] = psutil.swap_memory().free
+        memInfo['uptime'] = strfdelta(diff, settings.UPTIME_FORMAT)
+        res_json = json.dumps(memInfo)
+        return HttpResponse(res_json)
     root_disk_usage = psutil.disk_usage('/')
     if 'process' in request.GET:
         try:
@@ -198,23 +195,25 @@ def client_statistics(request, uid):
 
 def search(request):
     user_list = None
-    if 'address' in request.POST:
+    districts = District.objects.all()
+    print request.POST
+    if 'district' in request.POST:
+        district = True
         try:
-            city = District.objects.get(id=request.POST['ADDRESS_DISTRICT'])
-            if request.POST['ADDRESS_STREET'] == '':
+            city = District.objects.get(id=request.POST['district'])
+            if 'street' in request.POST:
                 userpi = UserPi.objects.filter(city=city).order_by('id')
             else:
-                userpi = UserPi.objects.filter(city=city, street__id__icontains=request.POST['ADDRESS_STREET'],
-                                               location__id__icontains=request.POST['ADDRESS_BUILD'],
+                userpi = UserPi.objects.filter(city=city, street__id__icontains=request.POST['street'],
+                                               location__id__icontains=request.POST['house'],
                                                kv__icontains=request.POST['flat']).order_by('id')
-
+            print userpi
             if userpi.count() == 0:
                 error = 'User not found'
             elif userpi.count() == 1:
                 for u in userpi:
                     return redirect('core:client', uid=u.id_id)
             else:
-                address = request.POST['address']
                 all = userpi.count()
                 paginator = Paginator(userpi, 20)
                 page = request.GET.get('page', 1)
@@ -288,30 +287,6 @@ def search(request):
                 page_list = p
             pre_end = users.paginator.num_pages - 2
         return render(request, 'search.html', locals())
-    res1 = '<option selected="selected"></option>'
-    if 'district' in request.GET:
-        district = District.objects.all()
-        dict_resp= []
-        for item  in district:
-            res = '<option value=' + str(item.id) + '>' + item.name + '</option>'
-            dict_resp.append(res1 + res)
-        return HttpResponse(dict_resp)
-
-    if 'DISTRICT' in request.GET:
-        street = Street.objects.filter(district_id=request.GET['DISTRICT'])
-        dict_resp= []
-        for item  in street:
-            res = '<option value=' + str(item.id) + '>' + item.name + '</option>'
-            dict_resp.append(res1 + res)
-        return HttpResponse(dict_resp)
-
-    if 'STREET' in request.GET:
-        house = House.objects.filter(street_id=request.GET['STREET'])
-        dict_resp= []
-        for item in house:
-            res = '<option value=' + str(item.id) + '>' + item.number.encode('utf8') + '</option>'
-            dict_resp.append(res1 + res)
-        return HttpResponse(dict_resp)
     return render(request, 'search.html', locals())
 
 

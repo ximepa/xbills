@@ -47,12 +47,13 @@ INSTALLED_APPS = (
     'ipdhcp',
     'claims',
     'chat',
+    'djangorpc',
     'ws4redis',
 )
 
 AUTH_USER_MODEL = 'core.Admin'
 AUTHENTICATION_BACKENDS = ('core.auth_backend.AuthBackend',)
-LOGIN_URL = 'login/'
+LOGIN_URL = '/admin/login/'
 LOGIN_REDIRECT_URL = '/admin/'
 
 MIDDLEWARE_CLASSES = (
@@ -154,17 +155,10 @@ ABILLS_EMAIL_LOGS = True
 
 # CHAT && WEBSOCKET
 WEBSOCKET_URL = '/ws/'
-# WS4REDIS_CONNECTION = {
-#     'host': '127.0.0.1',
-#     'port': 6379,
-#     # 'db': 16,
-#     'password': 'xbillspassword',
-# }
-WS4REDIS_EXPIRE = 3600
 
+WS4REDIS_EXPIRE = 3600
 WS4REDIS_HEARTBEAT = '--heartbeat--'
 
-WS4REDIS_PREFIX = 'demo'
 SESSION_ENGINE = 'redis_sessions.session'
 SESSION_REDIS_PREFIX = 'session'
 # Static files (CSS, JavaScript, Images)

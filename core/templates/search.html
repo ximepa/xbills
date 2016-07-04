@@ -3,22 +3,91 @@
 {% load url %}
 {% load staticfiles %}
 {% block extra_js %}
-    <script src="{% static 'custom/js/chosen.jquery.min.js' %}"></script>
+    <script src="{% static 'djangorpc/js/jquery-1.9.1.min.js' %}"></script>
+    <script src="{% static 'djangorpc/js/jquery.util.js' %}"></script>
+    <script src="{% static 'djangorpc/js/jquery.rpc.js' %}"></script>
+    <script src="{% static 'djangorpc/js/jquery.form.js' %}"></script>
+    <script src="{% static 'custom/js/csrf.js' %}"></script>
 {% endblock %}
 {% block extra_css %}
 {% endblock %}
 {% block extra_scripts %}
 <script type="application/javascript">
-    var SELF_URL = '{% url 'core:search' %}';
-    var CHOSEN_PARAMS = {
-        no_results_text: 'Не существует',
-        allow_single_deselect: true,
-        placeholder_text: '--'
-    };
-
-    $(function () {
-        $('select:not(#type)').chosen(CHOSEN_PARAMS);
+$(document).ready(function() {
+    if (!$("#id_street").val()){
+        $("#id_street option").remove();
+        $('#id_street').append($("<option></option>").attr("value", '').text('---------'));
+    }
+    if (!$('#id_build').val()){
+        $("#id_build option").remove();
+        $('#id_build').append($("<option></option>").attr("value", '').text('---------'));
+    }
+    if (!$('#id_house').val()){
+        $("#id_house option").remove();
+        $('#id_house').append($("<option></option>").attr("value", '').text('---------'));
+    }
+    function getStreets(value){
+        url = "/api/streets/" + "?district=" + value;
+        $.ajax({
+            type: "GET",
+            url: url,
+            datatype: 'json',
+            beforeSend: function() {
+                $('#response').html("<img src='/images/loading.gif' />");
+            },
+            success: function(data){
+                //var parsed_data = $.parseJSON(data);
+                $('#id_street').append($("<option></option>").attr("value", '').text('-----------'));
+                $.each(data, function(index, val) {
+                    $('#id_street').append($("<option></option>").attr("value", val.id).text(val.name));
+                });
+            }
+        });
+    }
+    function getHouses(value){
+        url = '/api/houses/' + '?street=' + value;
+        $.ajax({
+            type: "GET",
+            url: url,
+            datatype: 'json',
+            beforeSend: function() {
+                $('#response').html("<img src='/images/loading.gif' />");
+            },
+            success: function(data){
+                //var parsed_data = $.parseJSON(data);
+                $('#id_house').append($("<option></option>").attr("value", '').text('-----------'));
+                $.each(data, function(index, val) {
+                    $('#id_house').append($("<option></option>").attr("value", val.id).text(val.number));
+                });
+            }
+        });
+    }
+    $('#id_district').on('change', function(){
+        if (this.value){
+            $("#id_street option").remove();
+            getStreets(this.value);
+        } else {
+            $("#id_street option").remove();
+            $('#id_street').append($("<option></option>").attr("value", '').text('---------'));
+        }
     });
+    $('#id_street').on('change', function(){
+        if (this.value){
+            $("#id_house option").remove();
+            getHouses(this.value);
+        } else {
+            $("#id_house option").remove();
+            $('#id_house').append($("<option></option>").attr("value", '').text('---------'));
+        }
+    });
+    $(document).ajaxSend(function(event, request, settings) {
+        $('#overlay').show();
+    });
+
+    $(document).ajaxComplete(function(event, request, settings) {
+        $('#overlay').hide();
+    });
+});
 </script>
 {% endblock %}
 {% block content %}
@@ -104,36 +173,29 @@
                         <br/>
                         <div class="col-md-3"></div>
                         <div class="col-md-6">
-                            <form method="POST">{% csrf_token %}
-                                <hr>
-                                <div class="form-group col-lg-6">
-                                <label for="DISTRICT">{% trans 'Districts:' %}</label>
-                                    <select download-on-click='1' name='ADDRESS_DISTRICT' id='DISTRICT' class='form-control'>
-                                        <option value="{{ user.pi.city_id }}">{{ user.pi.city }}</option>
-                                    </select>
-                                    <script src="{% static 'custom/js/searchLocation.js' %}"></script>
-                                </div>
-                                <div class="form-group col-lg-6">
-                                    <label for="STREET" class="control-label">{% trans 'Street:' %}</label>
-                                    <select download-on-click='1' name='ADDRESS_STREET' id='STREET' class='form-control'>
-                                        <option value="{{ user.pi.street_id }}">{{ user.pi.street }}</option>
+                            <form class="navbar-form navbar-left" role="search" method="POST" id="search_form">{% csrf_token %}
+                                <div class="form-group">
+                                    <label>Н/С: </label>
+                                    <select class="form-control" id="id_district" name="district">
+                                        <option value="none">--------</option>
+                                        {% for district in districts %}
+                                            <option value="{{ district.pk }}">{{ district.name }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
-                                <div class="form-group col-lg-6">
-                                    <label for="BUILD" class="control-label">{% trans 'Build' %}:</label>
-                                    <select download-on-click='1' name='ADDRESS_BUILD' id='BUILD' class='form-control'>
-                                        <option value="{{ user.pi.location_id }}">{{ user.pi.location }}</option>
+                                <div class="form-group">
+                                    <label id="id_street_label" style="display: none">Вул.:</label>
+                                    <select class="form-control" id="id_street" name="street">
                                     </select>
                                 </div>
-                                <div class="form-group col-lg-6">
-                                    <label for="flat" class="control-label">Flat:</label>
-                                    <input type="text" class="form-control input-sm" id="flat" name="flat" placeholder="Flat:" value="{{ user.pi.kv }}">
+                                <div class="form-group">
+                                    <label id="id_house_label" style="display: none">№.:</label>
+                                    <select class="form-control" id="id_house" style="" name="house">
+                                    </select>
                                 </div>
-                                <div class="col-sm-6">
-                                    <input type="hidden" name="address" value="search_address">
-                                    <button type="submit" class="btn btn-default btn-sm">Send notifications to this email</button>
-                                </div>
+                                <button type="submit" class="btn btn-default">Submit</button>
                             </form>
+
                         </div>
                         <div class="col-md-3"></div>
                     </div>
@@ -313,7 +375,7 @@
                                 </ul>
                             {% endif %}
                         {% endif %}
-                        {% if address %}
+                        {% if district %}
                             {% if error %}
                             {% else %}
                                 <ul class="list-group">

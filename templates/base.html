@@ -125,8 +125,8 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         {% check_module 'chat' as check_module_chat %}
-                        {% if check_module_olltv %}
-                            <li><a href="{% url 'chat:home' %}"><i class="fa fa-weixin fa-fw" aria-hidden="true"></i></a></li>
+                        {% if check_module_chat %}
+                            <li><a href="{% url 'chat:broadcast_chat' %}"><i class="fa fa-weixin fa-fw" aria-hidden="true"></i></a></li>
                         {% endif %}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ request.user.login }} <span class="caret"></span></a>
