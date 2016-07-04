@@ -246,7 +246,7 @@ class AbonUserList(models.Model):
 
 class UserPi(models.Model):
 
-    id = models.OneToOneField('User', related_name="user_pi", primary_key=True, db_column='uid', unique=True)
+    user_id = models.OneToOneField('User', related_name="user_pi", primary_key=True, db_column='uid', unique=True)
     fio = models.CharField(max_length=100, unique=True)
     #house = models.ForeignKey('House', max_length=100, db_column='address_build', blank=True, default='0')
     email = models.EmailField(db_column='email')
@@ -266,11 +266,11 @@ class UserPi(models.Model):
             return None
 
     def __unicode__(self):
-        return '%s' % self.id
+        return '%s' % self.user_id
 
     class Meta:
         db_table = 'users_pi'
-        ordering = ['id']
+        ordering = ['user_id']
 
     def export(self):
         data = {'exists':True}

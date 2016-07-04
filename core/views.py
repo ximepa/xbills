@@ -12,7 +12,7 @@ from ipdhcp.models import Dhcphosts_networks, Dhcphosts_hosts
 from .auth_backend import AuthBackend
 from .models import User, Payment, Fees, Dv, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog, Dv_log, Admin, num_to_ip
 from ipdhcp.models import ipRange
-from .forms import AdministratorForm
+from .forms import AdministratorForm, SearchForm
 from django.contrib import messages
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -194,6 +194,7 @@ def client_statistics(request, uid):
 
 
 def search(request):
+    search_form = SearchForm()
     user_list = None
     districts = District.objects.all()
     print request.POST
@@ -240,23 +241,25 @@ def search(request):
                 page_list = p
             pre_end = users.paginator.num_pages - 2
         return render(request, 'search.html', locals())
-    elif 'district' in request.POST:
-        print request.POST
+    elif 'district' in request.GET:
+        search_form = SearchForm(request.GET, initial=request.GET)
+        print request.GET
         district = True
         try:
             filter_location = {}
-            city = District.objects.get(id=request.POST['district'])
-            if 'street' not in request.POST or request.POST['street'] == '':
-                city_street = Street.objects.values('id').filter(district_id=request.POST['district'])
+            city = District.objects.get(id=request.GET['district'])
+            if 'street' not in request.GET or request.GET['street'] == '':
+                city_street = Street.objects.values('id').filter(district_id=request.GET['district'])
                 filter_location['street_id__in'] = city_street
-            if 'street' in request.POST and request.POST['street'] != '':
-                street = Street.objects.values_list('id').get(id=request.POST['street'])
+            if 'street' in request.GET and request.GET['street'] != '':
+                street = Street.objects.values_list('id').get(id=request.GET['street'])
                 filter_location.update({'street_id': street})
-            if 'house' in request.POST and request.POST['house'] != '':
-                house = House.objects.values_list('id').get(id=request.POST['house'])
+            if 'house' in request.GET and request.GET['house'] != '':
+                house = House.objects.values_list('id').get(id=request.GET['house'])
                 filter_location.update({'location_id': house})
             userpi = UserPi.objects.values(
-                'id', 'fio', 'id__bill__deposit', 'id__login', 'street__name', 'location__number', 'kv',
+                'user_id', 'fio', 'user_id__bill__deposit', 'user_id__login', 'street__name', 'location__number', 'kv',
+                'user_id__credit', 'user_id__disabled', 'user_id__deleted'
 
             ).filter(**filter_location)
             # userpi = UserPi.objects.filter(street_id__in=city_street)
@@ -267,10 +270,10 @@ def search(request):
                 error = 'User not found'
             elif userpi.count() == 1:
                 for u in userpi:
-                    return redirect('core:client', uid=u['id'])
+                    return redirect('core:client', uid=u['user_id'])
             else:
                 all = userpi.count()
-                paginator = Paginator(userpi, 20)
+                paginator = Paginator(userpi, 5)
                 page = request.GET.get('page', 1)
                 try:
                     users = paginator.page(page)
