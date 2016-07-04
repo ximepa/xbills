@@ -46,9 +46,7 @@ INSTALLED_APPS = (
     'dv',
     'ipdhcp',
     'claims',
-    'chat',
     'djangorpc',
-    'ws4redis',
 )
 
 AUTH_USER_MODEL = 'core.Admin'
@@ -82,14 +80,12 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'ws4redis.context_processors.default',
             ],
         },
     },
 ]
 
-# WSGI_APPLICATION = 'xbills.wsgi.application'
-WSGI_APPLICATION = 'ws4redis.django_runserver.application'
+WSGI_APPLICATION = 'xbills.wsgi.application'
 
 
 # Database
@@ -154,13 +150,6 @@ OLLTVGETBUNDLESTATUS = 'http://dev.oll.tv/ispAPI/checkBundle/'
 ABILLS_EMAIL_LOGS = True
 
 # CHAT && WEBSOCKET
-WEBSOCKET_URL = '/ws/'
-
-WS4REDIS_EXPIRE = 3600
-WS4REDIS_HEARTBEAT = '--heartbeat--'
-
-SESSION_ENGINE = 'redis_sessions.session'
-SESSION_REDIS_PREFIX = 'session'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 

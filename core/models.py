@@ -110,24 +110,25 @@ class User(models.Model):
     activate = models.DateField(db_column='activate', default='0000-00-00', blank=True)
     expire = models.DateField(db_column='expire', default='0000-00-00', blank=True)
     deleted = models.BooleanField(db_column='deleted')
+    bill = models.ForeignKey('Bill')
 
     def __unicode__(self):
         return self.login
 
     class Meta:
         db_table = 'users'
-        ordering = ['login']
+        ordering = ['id']
 
-    @property
-    def bill(self):
-        try:
-            c = Company.objects.get(id=self.company.id)
-            return Bill.objects.get(company_id=c.id)
-        except Company.DoesNotExist:
-            try:
-                return Bill.objects.get(uid=self.id)
-            except Bill.DoesNotExist:
-                return None
+    # @property
+    # def bill(self):
+    #     try:
+    #         c = Company.objects.get(id=self.company.id)
+    #         return Bill.objects.get(company_id=c.id)
+    #     except Company.DoesNotExist:
+    #         try:
+    #             return Bill.objects.get(uid=self.id)
+    #         except Bill.DoesNotExist:
+    #             return None
 
 
     @property
@@ -269,7 +270,7 @@ class UserPi(models.Model):
 
     class Meta:
         db_table = 'users_pi'
-        ordering = ['fio']
+        ordering = ['id']
 
     def export(self):
         data = {'exists':True}

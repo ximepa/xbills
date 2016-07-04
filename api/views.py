@@ -21,31 +21,6 @@ def district_view(request):
 @api_view(['GET'])
 @permission_classes((IsAuthenticated,))
 @authentication_classes((SessionAuthentication,))
-def search_street_form_view(request):
-    if request.method == 'GET':
-        district = request.GET.get('district', 1)
-        street = Street.objects.all().filter(district=district).exclude(name='')
-        serializer_context = {'request': request}
-        serializer = StreetSerializer(street, context=serializer_context, many=True)
-        return Response(serializer.data)
-
-
-@api_view(['GET'])
-@permission_classes((IsAuthenticated,))
-@authentication_classes((SessionAuthentication,))
-def search_house_form_view(request):
-    if request.method == 'GET':
-        street = request.GET.getlist('street')
-        streets = Street.objects.all().filter(id__in=street).exclude(name='')
-        serializer_context = {'request': request}
-        serializer = StreetFormSerializer(streets, context=serializer_context, many=True)
-        #print repr(serializer.data).decode('unicode-escape')
-        return Response(serializer.data)
-
-
-@api_view(['GET'])
-@permission_classes((IsAuthenticated,))
-@authentication_classes((SessionAuthentication,))
 def street_view(request):
     if request.method == 'GET':
         district = request.GET.get('district', 1)
