@@ -1,17 +1,5 @@
 var dashboard = {};
 var global = {};
-$(document).ready(function() {
-    $(function(){
-    $('#status').editable({
-        value: 2,    
-        source: [
-              {value: 1, text: 'Active'},
-              {value: 2, text: 'Blocked'},
-              {value: 3, text: 'Deleted'}
-           ]
-    });
-});
-});
 
 function setCookie(cname, value) {
     document.cookie = cname + "=" + value + ";"

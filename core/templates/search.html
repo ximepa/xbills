@@ -8,12 +8,15 @@
     <script src="{% static 'djangorpc/js/jquery.rpc.js' %}"></script>
     <script src="{% static 'djangorpc/js/jquery.form.js' %}"></script>
     <script src="{% static 'custom/js/csrf.js' %}"></script>
+    <script src="{% static 'custom/js/chosen.jquery.js' %}"></script>
 {% endblock %}
 {% block extra_css %}
+    <link href="{% static 'custom/css/chosen.css' %}" rel="stylesheet" type="text/css">
 {% endblock %}
 {% block extra_scripts %}
 <script type="application/javascript">
 $(document).ready(function() {
+    console.log($('#id_district').val())
     if ($('#id_district').val()){
         getStreets($('#id_district').val())
     }
@@ -35,7 +38,7 @@ $(document).ready(function() {
             url: url,
             datatype: 'json',
             beforeSend: function() {
-                $('#response').html("<img src='/images/loading.gif' />");
+                $('#response').html("<img src='/static/custom/images/ajax-loader.gif' />");
             },
             success: function(data){
                 //var parsed_data = $.parseJSON(data);
@@ -53,7 +56,7 @@ $(document).ready(function() {
             url: url,
             datatype: 'json',
             beforeSend: function() {
-                $('#response').html("<img src='/images/loading.gif' />");
+                $('#response').html("<img src='/static/custom/images/ajax-loader.gif' />");
             },
             success: function(data){
                 //var parsed_data = $.parseJSON(data);
@@ -118,7 +121,7 @@ $(document).ready(function() {
                         <br/>
                         <div class="col-md-3"></div>
                         <div class="col-md-6">
-                            <form method="POST" class="text-center">{% csrf_token %}
+                            <form method="GET" class="text-center">
                                 <ul class="nav nav-pills nav-justified">
                                     <li role="presentation" class="active"><a href="#">{% trans 'Clients' %}</a></li>
                                     <li role="presentation"><a href="#">{% trans 'Company' %}</a></li>
@@ -155,397 +158,379 @@ $(document).ready(function() {
                                     <label>Repeat Email Address</label>
                                     <input type="" name="" class="form-control input-sm" id="" value="">
                                 </div>
-
-                                <div class="col-sm-6">
-                                    <input type="checkbox"/>Sigh up for our newsletter
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <input type="checkbox"/>Send notifications to this email
-                                </div>
-                                <div class="col-sm-6">
-                                    <input type="hidden" name="index" value="search">
-                                    <button type="submit" class="btn btn-default btn-sm">Send notifications to this email</button>
+                                {% if error %}
+                                    <div class="alert alert-danger alert-dismissible" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <p class="text-center">{{ error }}</p>
+                                    </div>
+                                {% endif %}
+                                <br/>
+                                <div class="col-md-3"></div>
+                                <br/>
+                                <div class="form-group col-md-6">
+                                    {{ search_form.as_p }}
+                                    <button type="submit" class="btn btn-default">Submit</button>
                                 </div>
                             </form>
                         </div>
-                        <div class="col-md-3"></div>
-                    </div>
-                    <div class="col-lg-12">
-                        {% if error %}
-                            <div class="alert alert-danger alert-dismissible" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <p class="text-center">{{ error }}</p>
-                            </div>
-                        {% endif %}
-                        <div class="page-header text-center">
-                            <h4><i class="fa fa-search"></i> {% trans 'Search' %}</h4>
-                        </div>
-                        <br/>
-                        <div class="col-md-3"></div>
-                        <div class="col-md-6">
-                            <form class="text-center" role="search" method="GET" id="search_form">
-                                {{ search_form.as_p }}
-                                <button type="submit" class="btn btn-default">Submit</button>
-                            </form>
-                        </div>
-                        <div class="col-md-3"></div>
                     </div>
                 </div>
-                <div class="row">
-                    <ul class="col-lg-12">
-                        {% if login %}
-                            {% if error %}
-                            {% else %}
-                                <div class="pag-nav">
-                                    <nav class="center-block">
-                                        <ul class="pagination pagination-sm">
-                                            {% if users.has_previous %}
-                                                <li>
-                                                    <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
-                                                        <span aria-hidden="true">1</span>
-                                                    </a>
-                                                </li>
-                                                {% if users.number > 2 %}
-                                                    <li class="disabled">
-                                                        <a href="#" aria-label="Previous">
-                                                            <span aria-hidden="true">...</span>
-                                                        </a>
-                                                    </li>
-                                                {% endif %}
-                                            {% endif %}
-                                            {% for p in page_list %}
-                                                {% if users.number == p %}
-                                                    <li class="active">
-                                                        <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                                    </li>
-                                                {% else %}
-                                                    <li class="">
-                                                        <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                                    </li>
-                                                {% endif %}
-                                            {% endfor %}
-                                            {% if users.has_next %}
-                                                <li class="disabled">
-                                                    <a href="#" aria-label="Previous">
-                                                        <span aria-hidden="true">...</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
-                                                        <span aria-hidden="true">{{ users.paginator.num_pages }}</span>
-                                                    </a>
-                                                </li>
-                                            {% else %}
-                                                <li class="disabled">
-                                                    <a href="#" aria-label="Next">
-                                                        <span aria-hidden="true">&raquo;</span>
-                                                    </a>
-                                                </li>
-                                            {% endif %}
-                                        </ul>
-                                    </nav>
-                                </div>
-                                <table class="table table-hover table-striped table-condensed">
-                                    <thead>
-                                        <tr class="info">
-                                            <th>{% trans 'Login' %}</th>
-                                            <th>{% trans 'FIO' %}</th>
-                                            <th>{% trans 'City' %}</th>
-                                            <th>{% trans 'Street' %}</th>
-                                            <th>{% trans 'Build' %}</th>
-                                            <th>{% trans 'Flat' %}</th>
-                                            <th>{% trans 'Deposit' %}</th>
-                                            <th>{% trans 'Credit' %}</th>
-                                            <th>{% trans 'Login status' %}</th>
-                                            <th>{% trans 'Deleted' %}</th>
-                                            <th>{% trans '-' %}</th>
-                                            <th>{% trans '-' %}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for user in user_list %}
-                                        <tr>
-                                            <td><a href="{% url 'core:index' %}?index=clients&uid={{ user.id }}">{{ user.login }}</a></td>
-                                            <td>{{ user.user_pi.fio }}</td>
-                                            <td>{{ user.pi.city }}</td>
-                                            <td>{{ user.pi.street }}</td>
-                                            <td>{{ user.pi.location }}</td>
-                                            <td>{{ user.pi.kv }}</td>
-                                            {% if user.bill.deposit < 0 %}
-                                                <td><span style="color: red">{{ user.bill.deposit }}</span></td>
-                                            {% else %}
-                                                <td>{{ user.bill.deposit }}</td>
-                                            {% endif %}
-                                            {% if user.credit > 0 %}
-                                                <td><span style="color: green">{{ user.credit }}</span></td>
-                                            {% else %}
-                                                <td>{{ user.credit }}</td>
-                                            {% endif %}
-                                            {% if user.disabled %}
-                                                <td><span style="color: red">{% trans 'Disabled' %}</span></td>
-                                            {% else %}
-                                                <td><span style="color: green">{% trans 'Active' %}</span></td>
-                                            {% endif %}
-                                            {% if user.deleted %}
-                                                <td><span style="color: red">{% trans 'Yes' %}</span></td>
-                                            {% else %}
-                                                <td>{% trans 'No' %}</td>
-                                            {% endif %}
-                                            <td><a href="{% url 'core:index' %}?index=payments&uid={{ user.id }}"><img src="{% static 'images/button_payments.png' %}" /></a></td>
-                                            <td><a href="{% url 'core:fees' %}?uid={{ user.id }}"><img src="{% static 'images/button_fees.png' %}" /></a></td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                                <div class="pag-nav">
-                                    <nav class="center-block">
-                                        <ul class="pagination pagination-sm">
-                                            {% if users.has_previous %}
-                                                <li>
-                                                    <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
-                                                        <span aria-hidden="true">1</span>
-                                                    </a>
-                                                </li>
-                                                {% if users.number > 2 %}
-                                                    <li class="disabled">
-                                                        <a href="#" aria-label="Previous">
-                                                            <span aria-hidden="true">...</span>
-                                                        </a>
-                                                    </li>
-                                                {% endif %}
-                                            {% endif %}
-                                            {% for p in page_list %}
-                                                {% if users.number == p %}
-                                                    <li class="active">
-                                                        <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                                    </li>
-                                                {% else %}
-                                                    <li class="">
-                                                        <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                                    </li>
-                                                {% endif %}
-                                            {% endfor %}
-                                            {% if users.has_next %}
-                                                <li class="disabled">
-                                                    <a href="#" aria-label="Previous">
-                                                        <span aria-hidden="true">...</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
-                                                        <span aria-hidden="true">{{ users.paginator.num_pages }}</span>
-                                                    </a>
-                                                </li>
-                                            {% else %}
-                                                <li class="disabled">
-                                                    <a href="#" aria-label="Next">
-                                                        <span aria-hidden="true">&raquo;</span>
-                                                    </a>
-                                                </li>
-                                            {% endif %}
-                                        </ul>
-                                    </nav>
-                                </div>
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <span class="badge">{{ all }}</span>
-                                        {% trans 'All' %}
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="badge">{{ end }}</span>
-                                        {% trans 'End' %}
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="badge">{{ disabled }}</span>
-                                        {% trans 'Disabled' %}
-                                    </li>
-                                    <li class="list-group-item">
-                                        <span class="badge">{{ deleted }}</span>
-                                        {% trans 'Deleted' %}
-                                    </li>
-                                </ul>
-                            {% endif %}
-                        {% endif %}
-                        {% if district %}
-                            {% if error %}
-                            {% else %}
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <ul class="pagination pagination-sm">
-                                            {% if users.has_previous %}
-                                                <li>
-                                                    <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
-                                                        <span aria-hidden="true">1</span>
-                                                    </a>
-                                                </li>
-                                                {% if users.number > 2 %}
-                                                    <li class="disabled">
-                                                        <a href="#" aria-label="Previous">
-                                                            <span aria-hidden="true">...</span>
-                                                        </a>
-                                                    </li>
-                                                {% endif %}
-                                            {% endif %}
-                                            {% for p in page_list %}
-                                                {% if users.number == p %}
-                                                    <li class="active">
-                                                        <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                                    </li>
-                                                {% else %}
-                                                    <li class="">
-                                                        <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                                    </li>
-                                                {% endif %}
-                                            {% endfor %}
-                                            {% if users.has_next %}
-                                                <li class="disabled">
-                                                    <a href="#" aria-label="Previous">
-                                                        <span aria-hidden="true">...</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
-                                                        <span aria-hidden="true">{{ users.paginator.num_pages }}</span>
-                                                    </a>
-                                                </li>
-                                            {% else %}
-                                                <li class="disabled">
-                                                    <a href="#" aria-label="Next">
-                                                        <span aria-hidden="true">&raquo;</span>
-                                                    </a>
-                                                </li>
-                                            {% endif %}
-                                        </ul>
-                                    </li>
-                                </ul>
-                                <table class="ui black table table-hover table-striped table-condensed">
-                                    <thead>
-                                        <tr>
-                                            <th>{% trans 'Login' %}</th>
-                                            <th>{% trans 'FIO' %}</th>
-                                            <th>{% trans 'City' %}</th>
-                                            <th><a href="?{% url_replace request 'order_by' 'street' %}">{% trans 'Street' %}</a><i class="sortable"></i></th>
-                                            <th>{% trans 'Build' %}</th>
-                                            <th>{% trans 'Flat' %}</th>
-                                            <th>{% trans 'Deposit' %}</th>
-                                            <th>{% trans 'Credit' %}</th>
-                                            <th>{% trans 'Login status' %}</th>
-                                            <th>{% trans 'Deleted' %}</th>
-                                            <th>{% trans '-' %}</th>
-                                            <th>{% trans '-' %}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for u in users %}
-                                        <tr>
-                                            <td><a href="{% url 'core:clients' %}{{ u.user_id }}">{{ u.user_id__login }}</a></td>
-                                            <td>{{ u.fio }}</td>
-                                            <td>{{ city }}</td>
-                                            <td>{{ u.street__name }}</td>
-                                            <td>{{ u.location__number }}</td>
-                                            <td>{{ u.kv }}</td>
-                                            {% if u.user_id__credit > u.user_id__bill__deposit and u.user_id__credit > 0 and u.user_id__bill__deposit != 0%}
-                                                <td><span style="color: orange">{{ u.user_id__bill__deposit }}</span></td>
-                                            {% else %}
-                                                {% if u.user_id__bill__deposit < 0 %}
-                                                <td><span style="color: red">{{ u.user_id__bill__deposit }}</span></td>
-                                            {% else %}
-                                                <td>{{ u.user_id__bill__deposit }}</td>
-                                            {% endif %}
-                                            {% endif %}
-                                            {% if u.user_id__credit > 0 %}
-                                                <td><span style="color: green">{{ u.user_id__credit }}</span></td>
-                                            {% else %}
-                                                <td>{{ u.user_id__credit }}</td>
-                                            {% endif %}
-                                            {% if u.user_id__disabled %}
-                                                <td><span style="color: red">{% trans 'Disabled' %}</span></td>
-                                            {% else %}
-                                                <td><span style="color: green">{% trans 'Active' %}</span></td>
-                                            {% endif %}
-                                            {% if u.user_id__deleted %}
-                                                <td><span style="color: red">{% trans 'Yes' %}</span></td>
-                                            {% else %}
-                                                <td>{% trans 'No' %}</td>
-                                            {% endif %}
-                                            <td><a href="{% url 'core:client_payments' u.user_id %}"><img src="{% static 'custom/images/button_payments.png' %}" /></a></td>
-                                            <td><a href="{% url 'core:client_fees' u.user_id %}"><img src="{% static 'custom/images/button_fees.png' %}" /></a></td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        <ul class="pagination pagination-sm">
-                                            {% if users.has_previous %}
-                                                <li>
-                                                    <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
-                                                        <span aria-hidden="true">1</span>
-                                                    </a>
-                                                </li>
-                                                {% if users.number > 2 %}
-                                                    <li class="disabled">
-                                                        <a href="#" aria-label="Previous">
-                                                            <span aria-hidden="true">...</span>
-                                                        </a>
-                                                    </li>
-                                                {% endif %}
-                                            {% endif %}
-                                            {% for p in page_list %}
-                                                {% if users.number == p %}
-                                                    <li class="active">
-                                                        <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                                    </li>
-                                                {% else %}
-                                                    <li class="">
-                                                        <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                                    </li>
-                                                {% endif %}
-                                            {% endfor %}
-                                            {% if users.has_next %}
-                                                <li class="disabled">
-                                                    <a href="#" aria-label="Previous">
-                                                        <span aria-hidden="true">...</span>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
-                                                        <span aria-hidden="true">{{ users.paginator.num_pages }}</span>
-                                                    </a>
-                                                </li>
-                                            {% else %}
-                                                <li class="disabled">
-                                                    <a href="#" aria-label="Next">
-                                                        <span aria-hidden="true">&raquo;</span>
-                                                    </a>
-                                                </li>
-                                            {% endif %}
-                                        </ul>
-                                    </li>
-                                </ul>
-                                <ul class="list-group">
-                                    <li class="list-group-item list-group-item-botton">
-                                        <span class="badge">{{ all }}</span>
-                                        {% trans 'All' %}
-                                    </li>
-                                    <li class="list-group-item list-group-item-botton">
-                                        <span class="badge">{{ end }}</span>
-                                        {% trans 'End' %}
-                                    </li>
-                                    <li class="list-group-item list-group-item-botton">
-                                        <span class="badge">{{ disabled }}</span>
-                                        {% trans 'Disabled' %}
-                                    </li>
-                                    <li class="list-group-item list-group-item-botton">
-                                        <span class="badge">{{ deleted }}</span>
-                                        {% trans 'Deleted' %}
-                                    </li>
-                                </ul>
-                            {% endif %}
-                        {% endif %}
-                    </div>
+                <div class="col-md-3"></div>
             </div>
         </div>
+    </div>
+    <div class="row">
+        <ul class="col-lg-12">
+            {% if login %}
+                {% if error %}
+                {% else %}
+                    <div class="pag-nav">
+                        <nav class="center-block">
+                            <ul class="pagination pagination-sm">
+                                {% if users.has_previous %}
+                                    <li>
+                                        <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
+                                            <span aria-hidden="true">1</span>
+                                        </a>
+                                    </li>
+                                    {% if users.number > 2 %}
+                                        <li class="disabled">
+                                            <a href="#" aria-label="Previous">
+                                                <span aria-hidden="true">...</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+                                {% for p in page_list %}
+                                    {% if users.number == p %}
+                                        <li class="active">
+                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="">
+                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if users.has_next %}
+                                    <li class="disabled">
+                                        <a href="#" aria-label="Previous">
+                                            <span aria-hidden="true">...</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
+                                            <span aria-hidden="true">{{ users.paginator.num_pages }}</span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="disabled">
+                                        <a href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                    <table class="ui black table table-hover table-striped table-condensed">
+                        <thead>
+                            <tr>
+                                <th>{% trans 'Login' %}</th>
+                                <th>{% trans 'FIO' %}</th>
+                                <th>{% trans 'City' %}</th>
+                                <th>{% trans 'Street' %}</th>
+                                <th>{% trans 'Build' %}</th>
+                                <th>{% trans 'Flat' %}</th>
+                                <th>{% trans 'Deposit' %}</th>
+                                <th>{% trans 'Credit' %}</th>
+                                <th>{% trans 'Login status' %}</th>
+                                <th>{% trans 'Deleted' %}</th>
+                                <th>{% trans '-' %}</th>
+                                <th>{% trans '-' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in user_list %}
+                            <tr>
+                                <td><a href="{% url 'core:index' %}?index=clients&uid={{ user.id }}">{{ user.login }}</a></td>
+                                <td>{{ user.user_pi.fio }}</td>
+                                <td>{{ user.pi.city }}</td>
+                                <td>{{ user.pi.street }}</td>
+                                <td>{{ user.pi.location }}</td>
+                                <td>{{ user.pi.kv }}</td>
+                                {% if user.bill.deposit < 0 %}
+                                    <td><span style="color: red">{{ user.bill.deposit }}</span></td>
+                                {% else %}
+                                    <td>{{ user.bill.deposit }}</td>
+                                {% endif %}
+                                {% if user.credit > 0 %}
+                                    <td><span style="color: green">{{ user.credit }}</span></td>
+                                {% else %}
+                                    <td>{{ user.credit }}</td>
+                                {% endif %}
+                                {% if user.disabled %}
+                                    <td><span style="color: red">{% trans 'Disabled' %}</span></td>
+                                {% else %}
+                                    <td><span style="color: green">{% trans 'Active' %}</span></td>
+                                {% endif %}
+                                {% if user.deleted %}
+                                    <td><span style="color: red">{% trans 'Yes' %}</span></td>
+                                {% else %}
+                                    <td>{% trans 'No' %}</td>
+                                {% endif %}
+                                <td><a href="{% url 'core:index' %}?index=payments&uid={{ user.id }}"><img src="{% static 'custom/images/button_payments.png' %}" /></a></td>
+                                <td><a href="{% url 'core:fees' %}?uid={{ user.id }}"><img src="{% static 'custom/images/button_fees.png' %}" /></a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="pag-nav">
+                        <nav class="center-block">
+                            <ul class="pagination pagination-sm">
+                                {% if users.has_previous %}
+                                    <li>
+                                        <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
+                                            <span aria-hidden="true">1</span>
+                                        </a>
+                                    </li>
+                                    {% if users.number > 2 %}
+                                        <li class="disabled">
+                                            <a href="#" aria-label="Previous">
+                                                <span aria-hidden="true">...</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+                                {% for p in page_list %}
+                                    {% if users.number == p %}
+                                        <li class="active">
+                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="">
+                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if users.has_next %}
+                                    <li class="disabled">
+                                        <a href="#" aria-label="Previous">
+                                            <span aria-hidden="true">...</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
+                                            <span aria-hidden="true">{{ users.paginator.num_pages }}</span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="disabled">
+                                        <a href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <span class="badge">{{ all }}</span>
+                            {% trans 'All' %}
+                        </li>
+                        <li class="list-group-item">
+                            <span class="badge">{{ end }}</span>
+                            {% trans 'End' %}
+                        </li>
+                        <li class="list-group-item">
+                            <span class="badge">{{ disabled }}</span>
+                            {% trans 'Disabled' %}
+                        </li>
+                        <li class="list-group-item">
+                            <span class="badge">{{ deleted }}</span>
+                            {% trans 'Deleted' %}
+                        </li>
+                    </ul>
+                {% endif %}
+            {% endif %}
+            {% if district %}
+                {% if error %}
+                {% else %}
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <ul class="pagination pagination-sm">
+                                {% if users.has_previous %}
+                                    <li>
+                                        <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
+                                            <span aria-hidden="true">1</span>
+                                        </a>
+                                    </li>
+                                    {% if users.number > 2 %}
+                                        <li class="disabled">
+                                            <a href="#" aria-label="Previous">
+                                                <span aria-hidden="true">...</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+                                {% for p in page_list %}
+                                    {% if users.number == p %}
+                                        <li class="active">
+                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="">
+                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if users.has_next %}
+                                    <li class="disabled">
+                                        <a href="#" aria-label="Previous">
+                                            <span aria-hidden="true">...</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
+                                            <span aria-hidden="true">{{ users.paginator.num_pages }}</span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="disabled">
+                                        <a href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                    </ul>
+                    <table class="ui black table table-hover table-striped table-condensed">
+                        <thead>
+                            <tr>
+                                <th>{% trans 'Login' %}</th>
+                                <th>{% trans 'FIO' %}</th>
+                                <th>{% trans 'City' %}</th>
+                                <th><a href="?{% url_replace request 'order_by' 'street' %}">{% trans 'Street' %}</a><i class="sortable"></i></th>
+                                <th>{% trans 'Build' %}</th>
+                                <th>{% trans 'Flat' %}</th>
+                                <th>{% trans 'Deposit' %}</th>
+                                <th>{% trans 'Credit' %}</th>
+                                <th>{% trans 'Login status' %}</th>
+                                <th>{% trans 'Deleted' %}</th>
+                                <th>{% trans '-' %}</th>
+                                <th>{% trans '-' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for u in users %}
+                            <tr>
+                                <td><a href="{% url 'core:clients' %}{{ u.user_id }}">{{ u.user_id__login }}</a></td>
+                                <td>{{ u.fio }}</td>
+                                <td>{{ city }}</td>
+                                <td>{{ u.street__name }}</td>
+                                <td>{{ u.location__number }}</td>
+                                <td>{{ u.kv }}</td>
+                                {% if u.user_id__credit > u.user_id__bill__deposit and u.user_id__credit > 0 and u.user_id__bill__deposit != 0%}
+                                    <td><span style="color: orange">{{ u.user_id__bill__deposit }}</span></td>
+                                {% else %}
+                                    {% if u.user_id__bill__deposit < 0 %}
+                                    <td><span style="color: red">{{ u.user_id__bill__deposit }}</span></td>
+                                {% else %}
+                                    <td>{{ u.user_id__bill__deposit }}</td>
+                                {% endif %}
+                                {% endif %}
+                                {% if u.user_id__credit > 0 %}
+                                    <td><span style="color: green">{{ u.user_id__credit }}</span></td>
+                                {% else %}
+                                    <td>{{ u.user_id__credit }}</td>
+                                {% endif %}
+                                {% if u.user_id__disabled %}
+                                    <td><span style="color: red">{% trans 'Disabled' %}</span></td>
+                                {% else %}
+                                    <td><span style="color: green">{% trans 'Active' %}</span></td>
+                                {% endif %}
+                                {% if u.user_id__deleted %}
+                                    <td><span style="color: red">{% trans 'Yes' %}</span></td>
+                                {% else %}
+                                    <td>{% trans 'No' %}</td>
+                                {% endif %}
+                                <td><a href="{% url 'core:client_payments' u.user_id %}"><img src="{% static 'custom/images/button_payments.png' %}" /></a></td>
+                                <td><a href="{% url 'core:client_fees' u.user_id %}"><img src="{% static 'custom/images/button_fees.png' %}" /></a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <ul class="pagination pagination-sm">
+                                {% if users.has_previous %}
+                                    <li>
+                                        <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
+                                            <span aria-hidden="true">1</span>
+                                        </a>
+                                    </li>
+                                    {% if users.number > 2 %}
+                                        <li class="disabled">
+                                            <a href="#" aria-label="Previous">
+                                                <span aria-hidden="true">...</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+                                {% for p in page_list %}
+                                    {% if users.number == p %}
+                                        <li class="active">
+                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="">
+                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if users.has_next %}
+                                    <li class="disabled">
+                                        <a href="#" aria-label="Previous">
+                                            <span aria-hidden="true">...</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
+                                            <span aria-hidden="true">{{ users.paginator.num_pages }}</span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="disabled">
+                                        <a href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="list-group">
+                        <li class="list-group-item list-group-item-botton">
+                            <span class="badge">{{ all }}</span>
+                            {% trans 'All' %}
+                        </li>
+                        <li class="list-group-item list-group-item-botton">
+                            <span class="badge">{{ end }}</span>
+                            {% trans 'End' %}
+                        </li>
+                        <li class="list-group-item list-group-item-botton">
+                            <span class="badge">{{ disabled }}</span>
+                            {% trans 'Disabled' %}
+                        </li>
+                        <li class="list-group-item list-group-item-botton">
+                            <span class="badge">{{ deleted }}</span>
+                            {% trans 'Deleted' %}
+                        </li>
+                    </ul>
+                {% endif %}
+            {% endif %}
+        </ul>
     </div>
 {% endblock %}

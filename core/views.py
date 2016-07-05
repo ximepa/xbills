@@ -197,16 +197,16 @@ def search(request):
     search_form = SearchForm()
     user_list = None
     districts = District.objects.all()
-    if 'uid' in request.POST and request.POST['uid'] != '':
+    if 'uid' in request.GET and request.GET['uid'] != '':
         try:
-            user = User.objects.get(id=request.POST['uid'])
+            user = User.objects.get(id=request.GET['uid'])
             return redirect('core:client', uid=user.id)
         except User.DoesNotExist:
             error = 'User not found'
             return render(request, 'search.html', locals())
-    elif 'login' in request.POST and request.POST['login'] != '':
-        login = request.POST['login']
-        user_list = User.objects.filter(login__icontains=request.POST['login']).order_by('id')
+    elif 'login' in request.GET and request.GET['login'] != '':
+        login = request.GET['login']
+        user_list = User.objects.filter(login__icontains=request.GET['login']).order_by('id')
         if user_list.count() == 0:
             error = 'User not found'
         elif user_list.count() == 1:

@@ -50,4 +50,4 @@ class AdministratorForm(forms.ModelForm):
 class SearchForm(forms.Form):
     district = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control input-sm', 'placeholder': u'District'}), queryset=District.objects.all())
     street = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control input-sm', 'placeholder': u'Street'}), queryset=Street.objects.all(), required=False)
-    house = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control input-sm', 'placeholder': u'House'}), queryset=House.objects.all(), required=False)
+    house = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control input-sm   ', 'placeholder': u'House'}), queryset=House.objects.all(), required=False)
