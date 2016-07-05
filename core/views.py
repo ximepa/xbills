@@ -7,7 +7,7 @@ from django.shortcuts import render, HttpResponseRedirect, HttpResponse, render_
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
-from dv.hangup import Hangup
+from dv.helpers import Hangup
 from ipdhcp.models import Dhcphosts_networks, Dhcphosts_hosts
 from .auth_backend import AuthBackend
 from .models import User, Payment, Fees, Dv, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog, Dv_log, Admin, num_to_ip
@@ -197,7 +197,6 @@ def search(request):
     search_form = SearchForm()
     user_list = None
     districts = District.objects.all()
-    print request.POST
     if 'uid' in request.POST and request.POST['uid'] != '':
         try:
             user = User.objects.get(id=request.POST['uid'])
@@ -218,7 +217,7 @@ def search(request):
             end = user_list.filter(deleted=1).count()
             disabled = user_list.filter(disabled=1).count()
             deleted = user_list.filter(deleted=1).count()
-            paginator = Paginator(user_list, 20)
+            paginator = Paginator(user_list, 100)
             page = request.GET.get('page', 1)
             try:
                 users = paginator.page(page)
@@ -243,7 +242,6 @@ def search(request):
         return render(request, 'search.html', locals())
     elif 'district' in request.GET:
         search_form = SearchForm(request.GET, initial=request.GET)
-        print request.GET
         district = True
         try:
             filter_location = {}
@@ -262,10 +260,6 @@ def search(request):
                 'user_id__credit', 'user_id__disabled', 'user_id__deleted'
 
             ).filter(**filter_location)
-            # userpi = UserPi.objects.filter(street_id__in=city_street)
-            print userpi
-            # for u in userpi:
-                # print u['id']
             if userpi.count() == 0:
                 error = 'User not found'
             elif userpi.count() == 1:
@@ -273,7 +267,7 @@ def search(request):
                     return redirect('core:client', uid=u['user_id'])
             else:
                 all = userpi.count()
-                paginator = Paginator(userpi, 5)
+                paginator = Paginator(userpi, 100)
                 page = request.GET.get('page', 1)
                 try:
                     users = paginator.page(page)

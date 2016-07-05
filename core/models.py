@@ -134,7 +134,7 @@ class User(models.Model):
     @property
     def pi(self):
         try:
-            return UserPi.objects.get(id=self.id)
+            return UserPi.objects.get(user_id=self.id)
         except UserPi.DoesNotExist:
             return None
 
@@ -261,7 +261,7 @@ class UserPi(models.Model):
     @property
     def pi(self):
         try:
-            return User.objects.get(login=self.id)
+            return User.objects.get(login=self.user_id)
         except User.DoesNotExist:
             return None
 

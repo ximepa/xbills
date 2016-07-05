@@ -39,7 +39,7 @@ $(document).ready(function() {
             },
             success: function(data){
                 //var parsed_data = $.parseJSON(data);
-                $('#id_street').append($("<option></option>").attr("value", '').text('-----------'));
+{#                $('#id_street').append($("<option></option>").attr("value", '').text('-----------'));#}
                 $.each(data, function(index, val) {
                     $('#id_street').append($("<option></option>").attr("value", val.id).text(val.name));
                 });
@@ -57,7 +57,7 @@ $(document).ready(function() {
             },
             success: function(data){
                 //var parsed_data = $.parseJSON(data);
-                $('#id_house').append($("<option></option>").attr("value", '').text('-----------'));
+{#                $('#id_house').append($("<option></option>").attr("value", '').text('-----------'));#}
                 $.each(data, function(index, val) {
                     $('#id_house').append($("<option></option>").attr("value", val.id).text(val.number));
                 });
@@ -68,6 +68,7 @@ $(document).ready(function() {
         if (this.value){
             $("#id_street option").remove();
             getStreets(this.value);
+            $('#id_street').append($("<option></option>").attr("value", '').text('---------'));
         } else {
             $("#id_street option").remove();
             $('#id_street').append($("<option></option>").attr("value", '').text('---------'));
@@ -77,6 +78,7 @@ $(document).ready(function() {
         if (this.value){
             $("#id_house option").remove();
             getHouses(this.value);
+            $('#id_house').append($("<option></option>").attr("value", '').text('---------'));
         } else {
             $("#id_house option").remove();
             $('#id_house').append($("<option></option>").attr("value", '').text('---------'));
@@ -91,6 +93,12 @@ $(document).ready(function() {
     });
 });
 </script>
+{% endblock %}
+{% block breadcrumbs %}
+    <ol class="breadcrumb">
+      <li class=""><a href="{% url 'core:index' %}">{% trans 'Dashboard' %}</a></li>
+      <li class="active">{% trans 'Search' %}</li>
+    </ol>
 {% endblock %}
 {% block content %}
     <div class="row">
@@ -110,11 +118,12 @@ $(document).ready(function() {
                         <br/>
                         <div class="col-md-3"></div>
                         <div class="col-md-6">
-                            <form method="POST">{% csrf_token %}
+                            <form method="POST" class="text-center">{% csrf_token %}
                                 <ul class="nav nav-pills nav-justified">
-                                    <li role="presentation" class="active"><a href="#">Home</a></li>
-                                    <li role="presentation"><a href="#">Profile</a></li>
-                                    <li role="presentation"><a href="#">Messages</a></li>
+                                    <li role="presentation" class="active"><a href="#">{% trans 'Clients' %}</a></li>
+                                    <li role="presentation"><a href="#">{% trans 'Company' %}</a></li>
+                                    <li role="presentation"><a href="#">{% trans 'Fees' %}</a></li>
+                                    <li role="presentation"><a href="#">{% trans 'Payments' %}</a></li>
                                 </ul>
                                 <hr>
                                 <div class="form-group col-lg-6">
@@ -175,7 +184,7 @@ $(document).ready(function() {
                         <br/>
                         <div class="col-md-3"></div>
                         <div class="col-md-6">
-                            <form class="navbar-form navbar-left" role="search" method="GET" id="search_form">
+                            <form class="text-center" role="search" method="GET" id="search_form">
                                 {{ search_form.as_p }}
                                 <button type="submit" class="btn btn-default">Submit</button>
                             </form>
@@ -436,10 +445,14 @@ $(document).ready(function() {
                                             <td>{{ u.street__name }}</td>
                                             <td>{{ u.location__number }}</td>
                                             <td>{{ u.kv }}</td>
-                                            {% if u.user_id__bill__deposit < 0 %}
+                                            {% if u.user_id__credit > u.user_id__bill__deposit and u.user_id__credit > 0 and u.user_id__bill__deposit != 0%}
+                                                <td><span style="color: orange">{{ u.user_id__bill__deposit }}</span></td>
+                                            {% else %}
+                                                {% if u.user_id__bill__deposit < 0 %}
                                                 <td><span style="color: red">{{ u.user_id__bill__deposit }}</span></td>
                                             {% else %}
                                                 <td>{{ u.user_id__bill__deposit }}</td>
+                                            {% endif %}
                                             {% endif %}
                                             {% if u.user_id__credit > 0 %}
                                                 <td><span style="color: green">{{ u.user_id__credit }}</span></td>
