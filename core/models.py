@@ -226,7 +226,7 @@ class House(models.Model):
 
     class Meta:
         db_table = 'builds'
-        ordering = ['id']
+        ordering = ['number']
 
 
 class AbonTarifs(models.Model):

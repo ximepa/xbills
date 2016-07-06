@@ -198,6 +198,7 @@ def search(request):
     districts = District.objects.all()
     filter_params = {}
     if request.method == 'GET':
+        order_by = request.GET.get('order_by', 'user_id')
         search_form = SearchForm(request.GET, initial=request.GET)
         if 'uid' in request.GET and request.GET['uid'] != '':
             try:
@@ -206,11 +207,12 @@ def search(request):
             except User.DoesNotExist:
                 error = 'User not found'
                 return render(request, 'search.html', locals())
-        else:
+        elif 'login' in request.GET and request.GET['login'] != '' or 'district' in request.GET and request.GET['district'] != '' or 'flat' in request.GET and request.GET['flat'] != '':
             if 'login' in request.GET and request.GET['login'] != '':
                 login = request.GET['login']
                 filter_params.update({'user_id__login__contains': login})
             if 'district' in request.GET and request.GET['district'] != '':
+                city = District.objects.get(id=request.GET['district'])
                 if 'street' not in request.GET or request.GET['street'] == '':
                     city_street = Street.objects.values('id').filter(district_id=request.GET['district'])
                     filter_params['street_id__in'] = city_street
@@ -227,7 +229,7 @@ def search(request):
                     'user_id', 'fio', 'user_id__bill__deposit', 'user_id__login', 'street__name', 'location__number', 'kv',
                     'user_id__credit', 'user_id__disabled', 'user_id__deleted'
 
-                ).filter(**filter_params)
+                ).filter(**filter_params).order_by(order_by)
                 if userpi.count() == 0:
                     error = 'User not found'
                 elif userpi.count() == 1:
