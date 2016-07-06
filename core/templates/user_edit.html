@@ -3,26 +3,11 @@
 {% load staticfiles %}
 {% load url %}
 {% block extra_js %}
-    <script src="{% static 'custom/js/chosen.jquery.min.js' %}"></script>
-    <script src="{% static 'custom/js/bootstrap-editable.js' %}"></script>
 {% endblock %}
 {% block extra_css %}
-    <link href="{% static 'custom/css/bootstrap-editable.css' %}" rel="stylesheet">
 {% endblock %}
 {% block extra_scripts %}
 <script type="application/javascript">
-    var SELF_URL = '';
-    var CHOSEN_PARAMS = {
-        no_results_text: 'Не существует',
-        allow_single_deselect: true,
-        placeholder_text: '--'
-    };
-    $.fn.popover.Constructor.DEFAULTS.trigger = 'click';
-    $.fn.popover.Constructor.DEFAULTS.placement = 'bottom';
-    $(function () {
-        $('select:not(#type)').chosen(CHOSEN_PARAMS);
-    });
-
     $(function () {
         $("#olltv").popover({
             html : true,
@@ -481,7 +466,6 @@
                                         <option value="{{ user.pi.city_id }}">{{ user.pi.city }}</option>
                                     </select>
                                 </div>
-                                <script src="{% static 'custom/js/searchLocation.js' %}"></script>
                             </div>
                         </div>
                         <div class="col-md-6">

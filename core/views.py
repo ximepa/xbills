@@ -240,10 +240,8 @@ def search(request):
                     try:
                         users = paginator.page(page)
                     except PageNotAnInteger:
-                        # If page is not an integer, deliver first page.
                         users = paginator.page(1)
                     except EmptyPage:
-                        # If page is out of range (e.g. 9999), deliver last page of results.
                         users = paginator.page(paginator.num_pages)
                     if int(page) > 5:
                         start = str(int(page)-5)
