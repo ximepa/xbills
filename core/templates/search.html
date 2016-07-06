@@ -182,7 +182,8 @@ $(document).ready(function() {
             <div class="well well-sm">
                 {% if error %}
                 {% else %}
-                    <nav class="navbar navbar-inverse no-brand " data-spy="affix" data-offset-top="200" data-offset-bottom="200">
+                    <nav class="navbar navbar-inverse no-brand ">
+{#                         data-spy="affix" data-offset-top="200" data-offset-bottom="200">#}
                         <div class="container-fluid">
                             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                                 <ul class="pagination pagination-sm">
@@ -317,55 +318,6 @@ $(document).ready(function() {
                             {% endfor %}
                         </tbody>
                     </table>
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <ul class="pagination pagination-sm">
-                                {% if users.has_previous %}
-                                    <li>
-                                        <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
-                                            <span aria-hidden="true">1</span>
-                                        </a>
-                                    </li>
-                                    {% if users.number > 2 %}
-                                        <li class="disabled">
-                                            <a href="#" aria-label="Previous">
-                                                <span aria-hidden="true">...</span>
-                                            </a>
-                                        </li>
-                                    {% endif %}
-                                {% endif %}
-                                {% for p in page_list %}
-                                    {% if users.number == p %}
-                                        <li class="active">
-                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                        </li>
-                                    {% else %}
-                                        <li class="">
-                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
-                                {% if users.has_next %}
-                                    <li class="disabled">
-                                        <a href="#" aria-label="Previous">
-                                            <span aria-hidden="true">...</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
-                                            <span aria-hidden="true">{{ users.paginator.num_pages }}</span>
-                                        </a>
-                                    </li>
-                                {% else %}
-                                    <li class="disabled">
-                                        <a href="#" aria-label="Next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                        </a>
-                                    </li>
-                                {% endif %}
-                            </ul>
-                        </li>
-                    </ul>
                     <ul class="list-group">
                         <li class="list-group-item list-group-item-botton">
                             <span class="badge">{{ all }}</span>
