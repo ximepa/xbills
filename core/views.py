@@ -223,13 +223,11 @@ def search(request):
             if 'flat' in request.GET and request.GET['flat'] != '':
                 filter_params.update({'kv': request.GET['flat']})
             try:
-                print filter_params
                 userpi = UserPi.objects.values(
                     'user_id', 'fio', 'user_id__bill__deposit', 'user_id__login', 'street__name', 'location__number', 'kv',
                     'user_id__credit', 'user_id__disabled', 'user_id__deleted'
 
                 ).filter(**filter_params)
-                print userpi
                 if userpi.count() == 0:
                     error = 'User not found'
                 elif userpi.count() == 1:
