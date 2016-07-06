@@ -195,105 +195,75 @@ def client_statistics(request, uid):
 
 def search(request):
     search_form = SearchForm()
-    user_list = None
     districts = District.objects.all()
-    if 'uid' in request.GET and request.GET['uid'] != '':
-        try:
-            user = User.objects.get(id=request.GET['uid'])
-            return redirect('core:client', uid=user.id)
-        except User.DoesNotExist:
-            error = 'User not found'
-            return render(request, 'search.html', locals())
-    elif 'login' in request.GET and request.GET['login'] != '':
-        login = request.GET['login']
-        user_list = User.objects.filter(login__icontains=request.GET['login']).order_by('id')
-        if user_list.count() == 0:
-            error = 'User not found'
-        elif user_list.count() == 1:
-            for u in user_list:
-                return redirect('core:client', uid=u.id)
-        else:
-            all = user_list.count()
-            end = user_list.filter(deleted=1).count()
-            disabled = user_list.filter(disabled=1).count()
-            deleted = user_list.filter(deleted=1).count()
-            paginator = Paginator(user_list, 100)
-            page = request.GET.get('page', 1)
-            try:
-                users = paginator.page(page)
-            except PageNotAnInteger:
-                # If page is not an integer, deliver first page.
-                users = paginator.page(1)
-            except EmptyPage:
-                # If page is out of range (e.g. 9999), deliver last page of results.
-                users = paginator.page(paginator.num_pages)
-            if int(page) > 5:
-                start = str(int(page)-5)
-            else:
-                start = 1
-            if int(page) < paginator.num_pages-5:
-                end = str(int(page)+5+1)
-            else:
-                end = paginator.num_pages+1
-            page_range = range(int(start), int(end)),
-            for p in page_range:
-                page_list = p
-            pre_end = users.paginator.num_pages - 2
-        return render(request, 'search.html', locals())
-    elif 'district' in request.GET:
+    filter_params = {}
+    if request.method == 'GET':
         search_form = SearchForm(request.GET, initial=request.GET)
-        district = True
-        try:
-            filter_location = {}
-            city = District.objects.get(id=request.GET['district'])
-            if 'street' not in request.GET or request.GET['street'] == '':
-                city_street = Street.objects.values('id').filter(district_id=request.GET['district'])
-                filter_location['street_id__in'] = city_street
-            if 'street' in request.GET and request.GET['street'] != '':
-                street = Street.objects.values_list('id').get(id=request.GET['street'])
-                filter_location.update({'street_id': street})
-            if 'house' in request.GET and request.GET['house'] != '':
-                house = House.objects.values_list('id').get(id=request.GET['house'])
-                filter_location.update({'location_id': house})
-            userpi = UserPi.objects.values(
-                'user_id', 'fio', 'user_id__bill__deposit', 'user_id__login', 'street__name', 'location__number', 'kv',
-                'user_id__credit', 'user_id__disabled', 'user_id__deleted'
-
-            ).filter(**filter_location)
-            if userpi.count() == 0:
+        if 'uid' in request.GET and request.GET['uid'] != '':
+            try:
+                user = User.objects.get(id=request.GET['uid'])
+                return redirect('core:client', uid=user.id)
+            except User.DoesNotExist:
                 error = 'User not found'
-            elif userpi.count() == 1:
-                for u in userpi:
-                    return redirect('core:client', uid=u['user_id'])
-            else:
-                all = userpi.count()
-                paginator = Paginator(userpi, 100)
-                page = request.GET.get('page', 1)
-                try:
-                    users = paginator.page(page)
-                except PageNotAnInteger:
-                    # If page is not an integer, deliver first page.
-                    users = paginator.page(1)
-                except EmptyPage:
-                    # If page is out of range (e.g. 9999), deliver last page of results.
-                    users = paginator.page(paginator.num_pages)
-                if int(page) > 5:
-                    start = str(int(page)-5)
+                return render(request, 'search.html', locals())
+        else:
+            if 'login' in request.GET and request.GET['login'] != '':
+                login = request.GET['login']
+                filter_params.update({'user_id__login__contains': login})
+            if 'district' in request.GET and request.GET['district'] != '':
+                if 'street' not in request.GET or request.GET['street'] == '':
+                    city_street = Street.objects.values('id').filter(district_id=request.GET['district'])
+                    filter_params['street_id__in'] = city_street
                 else:
-                    start = 1
-                if int(page) < paginator.num_pages-5:
-                    end = str(int(page)+5+1)
-                else:
-                    end = paginator.num_pages+1
-                page_range = range(int(start), int(end)),
-                for p in page_range:
-                    page_list = p
-                pre_end = users.paginator.num_pages - 2
+                    street = Street.objects.values_list('id').get(id=request.GET['street'])
+                    filter_params.update({'street_id': street})
+                    if 'house' in request.GET and request.GET['house'] != '':
+                        house = House.objects.values_list('id').get(id=request.GET['house'])
+                        filter_params.update({'location_id': house})
+            if 'flat' in request.GET and request.GET['flat'] != '':
+                filter_params.update({'kv': request.GET['flat']})
+            try:
+                print filter_params
+                userpi = UserPi.objects.values(
+                    'user_id', 'fio', 'user_id__bill__deposit', 'user_id__login', 'street__name', 'location__number', 'kv',
+                    'user_id__credit', 'user_id__disabled', 'user_id__deleted'
 
-            return render(request, 'search.html', locals())
-        except User.DoesNotExist:
-            error = 'User not found'
-            return render(request, 'search.html', locals())
+                ).filter(**filter_params)
+                print userpi
+                if userpi.count() == 0:
+                    error = 'User not found'
+                elif userpi.count() == 1:
+                    for u in userpi:
+                        return redirect('core:client', uid=u['user_id'])
+                else:
+                    all = userpi.count()
+                    paginator = Paginator(userpi, 100)
+                    page = request.GET.get('page', 1)
+                    try:
+                        users = paginator.page(page)
+                    except PageNotAnInteger:
+                        # If page is not an integer, deliver first page.
+                        users = paginator.page(1)
+                    except EmptyPage:
+                        # If page is out of range (e.g. 9999), deliver last page of results.
+                        users = paginator.page(paginator.num_pages)
+                    if int(page) > 5:
+                        start = str(int(page)-5)
+                    else:
+                        start = 1
+                    if int(page) < paginator.num_pages-5:
+                        end = str(int(page)+5+1)
+                    else:
+                        end = paginator.num_pages+1
+                    page_range = range(int(start), int(end)),
+                    for p in page_range:
+                        page_list = p
+                    pre_end = users.paginator.num_pages - 2
+
+                return render(request, 'search.html', locals())
+            except User.DoesNotExist:
+                error = 'User not found'
+                return render(request, 'search.html', locals())
     return render(request, 'search.html', locals())
 
 
