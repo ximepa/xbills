@@ -65,6 +65,20 @@ class Admin(AbstractBaseUser):
         ordering = ['id']
 
 
+class Admin_Settings(models.Model):
+
+    aid = models.SmallIntegerField(primary_key=True, default=0)
+    object = models.CharField(primary_key=True, max_length=20)
+    setting = models.TextField
+
+    def __unicode__(self):
+        return "%s" % self.aid
+
+    class Meta:
+        db_table = 'admin_settings'
+
+
+
 class Bill(models.Model):
 
     deposit = models.FloatField(default=0)

@@ -1,6 +1,13 @@
 var dashboard = {};
 var global = {};
-
+// $( document ).ready(function() {
+//     $.each($("#show_col li").children(), function (i, item) {
+//         if (item.attributes['checked']) {
+//             console.log(item.attributes['value'])
+//         }
+//
+//     })
+// });
 function setCookie(cname, value) {
     document.cookie = cname + "=" + value + ";"
 }

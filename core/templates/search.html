@@ -8,7 +8,6 @@
     <script src="{% static 'djangorpc/js/jquery.rpc.js' %}"></script>
     <script src="{% static 'djangorpc/js/jquery.form.js' %}"></script>
     <script src="{% static 'custom/js/csrf.js' %}"></script>
-    <script src="{% static 'custom/js/chosen.jquery.js' %}"></script>
 {% endblock %}
 {% block extra_css %}
     <link href="{% static 'custom/css/chosen.css' %}" rel="stylesheet" type="text/css">
@@ -16,18 +15,17 @@
 {% block extra_scripts %}
 <script type="application/javascript">
 $(document).ready(function() {
-    console.log($('#id_district').val())
-    if ($('#id_district').val()){
+    if ($('#id_district').val()) {
         getStreets($('#id_district').val())
     }
-    if ($('#id_street').val()){
+    if ($('#id_street').val()) {
         getHouses($('#id_street').val())
     }
-    if (!$("#id_street").val()){
+    if (!$("#id_street").val()) {
         $("#id_street option").remove();
         $('#id_street').append($("<option></option>").attr("value", '').text('---------'));
     }
-    if (!$('#id_house').val()){
+    if (!$('#id_house').val()) {
         $("#id_house option").remove();
         $('#id_house').append($("<option></option>").attr("value", '').text('---------'));
     }
@@ -406,6 +404,32 @@ $(document).ready(function() {
                             </ul>
                         </li>
                     </ul>
+                    <div class="modal fade" id="filter_model" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-title">
+                                <div class="modal-content">
+                                    <div class="modal-header">Сервер доступа
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    </div>
+                                    <div class="modal-body text-left">
+                                        <form class="form-horizontal" method="post" name="form_nas">{% csrf_token %}
+                                            <div class="panel panel-default panel-form">
+                                            </div>
+                                            <hr>
+                                            <div class="row text-center">
+                                                <input id="show_cols" name="show_cols" class="btn btn-primary" value="{% trans 'Show' %}" type="submit">
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#filter_model" aria-haspopup="true" aria-expanded="false">
+                            <span><i class="fa fa-plus"></i></span>
+                        </button>
+                    </div>
                     <table class="ui black table table-hover table-striped table-condensed">
                         <thead>
                             <tr>
@@ -446,8 +470,10 @@ $(document).ready(function() {
                                 {% else %}
                                     <td>{{ u.user_id__credit }}</td>
                                 {% endif %}
-                                {% if u.user_id__disabled %}
+                                {% if u.user_id__disabled == 1 %}
                                     <td><span style="color: red">{% trans 'Disabled' %}</span></td>
+                                {% elif u.user_id__disabled == 2 %}
+                                    <td><span style="color: orange">{% trans 'Not Active' %}</span></td>
                                 {% else %}
                                     <td><span style="color: green">{% trans 'Active' %}</span></td>
                                 {% endif %}
