@@ -65,20 +65,6 @@ class Admin(AbstractBaseUser):
         ordering = ['id']
 
 
-class Admin_Settings(models.Model):
-
-    aid = models.SmallIntegerField(primary_key=True, default=0)
-    object = models.CharField(primary_key=True, max_length=20)
-    setting = models.TextField
-
-    def __unicode__(self):
-        return "%s" % self.aid
-
-    class Meta:
-        db_table = 'admin_settings'
-
-
-
 class Bill(models.Model):
 
     deposit = models.FloatField(default=0)
@@ -598,3 +584,17 @@ class Shedule(models.Model):
 
     class Meta:
         db_table = 'shedule'
+
+
+class AdminSettings(models.Model):
+
+    admin_id = models.IntegerField(db_column='aid', primary_key=True)
+    object = models.CharField(max_length=20, db_column='object', primary_key=True)
+    setting = models.CharField(max_length=1000, db_column='setting')
+
+    def __unicode__(self):
+        return str(self.setting)
+
+    class Meta:
+        db_table = 'admin_settings'
+        unique_together = ('admin_id', 'object')

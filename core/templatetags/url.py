@@ -109,3 +109,19 @@ def convert_bytes(value, giga):
     else:
         print value
         return '%s %s' % (str(value), 'B')
+
+
+# @register.simple_tag
+# def get_field_verbose_name(instance, arg):
+#     verbose_name = instance._meta.get_field(arg).verbose_name.title()
+#     name = instance._meta.get_field(arg).name
+#     return instance._meta.get_field(arg).verbose_name.title()
+# #register.filter('field_verbose_name', get_field_verbose_name)
+#
+#
+# @register.simple_tag
+# def get_queryset_field_verbose_name(queryset, arg):
+#     verbose_name = queryset.model._meta.get_field(arg).verbose_name.title()
+#     name = queryset.model._meta.get_field(arg).name
+#     return queryset.model._meta.get_field(arg).verbose_name.title()
+# #register.filter('queryset_field_verbose_name', get_queryset_field_verbose_name)
