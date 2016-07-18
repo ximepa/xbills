@@ -593,7 +593,7 @@ class AdminSettings(models.Model):
     setting = models.CharField(max_length=1000, db_column='setting')
 
     def __unicode__(self):
-        return str(self.setting)
+        return str(self.admin_id)
 
     class Meta:
         db_table = 'admin_settings'

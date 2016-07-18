@@ -194,25 +194,59 @@ def client_statistics(request, uid):
 
 
 def search(request):
+    all_table_choices = [
+        'user_id__id',
+        'user_id__login',
+        'fio',
+        'user_id__bill__deposit',
+        'city',
+        'district',
+        'street',
+        'location',
+        'kv',
+        'user_id__credit',
+        'user_id__disabled',
+        'user_id__deleted',
+    ]
+    default_table_choices = [
+        'user_id__login',
+        'fio',
+        'user_id__bill__deposit',
+        'user_id__credit',
+        'user_id__disabled',
+        'user_id__deleted',
+    ]
     search_form = SearchForm()
     districts = District.objects.all()
     filter_params = {}
-    admin_settings_dict = {}
-    upi_fields_name_list = [{'fname': f.name, 'fverbose_name': f.verbose_name.title()} for f in UserPi._meta.fields]
-    users_fields_name_list = [{'fname': f.name, 'fverbose_name': f.verbose_name.title()} for f in User._meta.fields]
-    print users_fields_name_list
-    for fname in users_fields_name_list:
-        #admin_settings_dict['field_name'] =
-        upi_fields_name_list.append(fname)
-    print upi_fields_name_list
+    includes = []
+    print request.user.id
     try:
         admin_settings = AdminSettings.objects.get(admin_id=request.user.id, object='USERS_LIST')
-        admin_settings = admin_settings.setting.lower().replace(' ', '').split(',')
+        print 'admin_settings_exist'
+        print admin_settings.admin_id
+        default_table_choices = admin_settings.setting.lower().replace(' ', '').split(',')
     except AdminSettings.DoesNotExist:
-        admin_settings = [{'user_id__login': 'login', 'deleted': 'deleted'}]
-    print admin_settings
+        admin_settings = AdminSettings.objects.create(
+            admin_id=request.user.id,
+            object='USERS_LIST',
+            setting=', '.join(default_table_choices)
+        )
     if request.method == 'POST':
-        print request.POST
+        includes = [', '.join(request.POST.getlist('includes'))]
+        if any('user_id__login' in s for s in includes):
+            pass
+        else:
+            includes.append('user_id__login')
+        if any('user_id__deleted' in s for s in includes):
+            pass
+        else:
+            includes.append('user_id__deleted')
+        print admin_settings.admin_id
+        admin_settings.admin_id = request.user.id
+        admin_settings.setting = ', '.join(includes)
+        admin_settings.save()
+        return redirect(request.get_full_path())
     if request.method == 'GET':
         order_by = request.GET.get('order_by', 'user_id')
         search_form = SearchForm(request.GET, initial=request.GET)
@@ -242,15 +276,8 @@ def search(request):
                 filter_params.update({'kv': request.GET['flat']})
             try:
                 print '==============='
-                # print userpi.value
-                # upi_fields_name_list = [{'fname': f.name, 'fverbose_name': f.verbose_name.title()} for f in userpi[0]._meta.fields]
-                # print upi_fields_name_list
-                # users_fields_name_list = [{'fname': f.name, 'fverbose_name': f.verbose_name.title()} for f in User._meta.fields]
-                userpi = UserPi.objects.values(
-                    'user_id', 'fio', 'user_id__bill__deposit', 'user_id__login', 'street__name', 'location__number', 'kv',
-                    'user_id__credit', 'user_id__disabled', 'user_id__deleted',
-
-                ).filter(**filter_params).order_by(order_by)
+                userpi = UserPi.objects.all().filter(**filter_params).order_by(order_by)
+                print '================='
                 if userpi.count() == 0:
                     error = 'User not found'
                 elif userpi.count() == 1:
