@@ -176,10 +176,68 @@ $(document).ready(function() {
                                         {% for item in all_table_choices %}
                                             <div class="checkbox">
                                                 <label>
-                                                    {% if item in default_table_choices %}
-                                                        <input type="checkbox" value="{{ item }}" checked name="includes"> {{ item }}
-                                                    {% else %}
-                                                        <input type="checkbox" value="{{ item }}" name="includes"> {{ item }}
+                                                    {% if item == 'user_id__id' %}
+                                                        {% if item in default_table_choices %}
+                                                            <input type="checkbox" value="{{ item }}" checked name="includes"> UID
+                                                        {% else %}
+                                                            <input type="checkbox" value="{{ item }}" name="includes"> UID
+                                                        {% endif %}
+                                                    {% elif 'user_id__login' == item %}
+{#                                                        {% if item in default_table_choices %}#}
+                                                        <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'Login' %}
+{#                                                        {% else %}#}
+{#                                                            <input type="checkbox" value="{{ item }}" disabled checked name="includes"> {% trans 'Login' %}#}
+{#                                                        {% endif %}#}
+                                                    {% elif 'district' == item %}
+                                                        {% if item in default_table_choices %}
+                                                            <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'City' %}
+                                                        {% else %}
+                                                            <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'City' %}
+                                                        {% endif %}
+                                                    {% elif 'fio' == item %}
+                                                        {% if item in default_table_choices %}
+                                                            <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'FIO' %}
+                                                        {% else %}
+                                                            <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'FIO' %}
+                                                        {% endif %}
+                                                    {% elif 'street' == item %}
+                                                        {% if item in default_table_choices %}
+                                                            <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'Street' %}
+                                                        {% else %}
+                                                            <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'Street' %}
+                                                        {% endif %}
+                                                    {% elif 'location' == item %}
+                                                        {% if item in default_table_choices %}
+                                                            <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'House' %}
+                                                        {% else %}
+                                                            <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'House' %}
+                                                        {% endif %}
+                                                    {% elif 'kv' == item %}
+                                                        {% if item in default_table_choices %}
+                                                            <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'Kv' %}
+                                                        {% else %}
+                                                            <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'Kv' %}
+                                                        {% endif %}
+                                                    {% elif 'user_id__bill__deposit' == item %}
+                                                        {% if item in default_table_choices %}
+                                                            <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'Deposit' %}
+                                                        {% else %}
+                                                            <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'Deposit' %}
+                                                        {% endif %}
+                                                    {% elif 'user_id__credit' == item %}
+                                                        {% if item in default_table_choices %}
+                                                            <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'Credit' %}
+                                                        {% else %}
+                                                            <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'Credit' %}
+                                                        {% endif %}
+                                                    {% elif 'user_id__disabled' == item %}
+                                                        {% if item in default_table_choices %}
+                                                            <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'Disabled' %}
+                                                        {% else %}
+                                                            <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'Disabled' %}
+                                                        {% endif %}
+                                                    {% elif 'user_id__deleted' == item %}
+                                                        <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'Deleted' %}
                                                     {% endif %}
                                                 </label>
                                             </div>
@@ -200,16 +258,11 @@ $(document).ready(function() {
                         <span class="badge">{{ all }}</span>
                         {% trans 'All' %}
                         <div>
-                    {% for u in users %}
-                        ({% for key, value in u.items %}
-                            {{ key }}-{{ value }}
-                        {% endfor %})
-                    {% endfor %}
                 </div>
                     </li>
                     <li class="list-group-item list-group-item-botton">
-                        <span class="badge">{{ end }}</span>
-                        {% trans 'End' %}
+                        <span class="badge">{{ not_active }}</span>
+                        {% trans 'Not active' %}
                     </li>
                     <li class="list-group-item list-group-item-botton">
                         <span class="badge">{{ disabled }}</span>
@@ -249,54 +302,54 @@ $(document).ready(function() {
                                     <li role="presentation"><a href="#">{% trans 'Payments' %}</a></li>
                                 </ul>
                                 <hr>
-                                <div class="form-group col-lg-6">
-                                    <label>{% trans 'Login' %}</label>
-                                    {{ search_form.login }}
-                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <label>{% trans 'Login' %}</label>
+                                        {{ search_form.login }}
+                                        <label>Password</label>
+                                        <input type="password" name="" class="form-control input-sm" id="" value="">
+                                        <div class="row">
+                                            <div class="col-lg-2">
+                                                {% trans 'Disabled: ' %}
+                                            </div>
+                                            <div class="col-lg-10">
 
-                                <div class="form-group col-lg-6">
-                                    <label>{% trans 'UID' %}</label>
-                                    {{ search_form.uid }}
+                                            {% for radio in search_form.disabled %}
+                                                <label for="{{ radio.id_for_label }}" class="radio-inline">
+                                                    {{ radio.tag }}
+                                                    {{ radio.choice_label }}
+                                                </label>
+                                            {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <label>{% trans 'UID' %}</label>
+                                        {{ search_form.uid }}
+                                        <label>Email Address</label>
+                                        <input type="" name="" class="form-control input-sm" id="" value="">
+                                    </div>
                                 </div>
-
-                                <div class="form-group col-lg-6">
-                                    <label>Password</label>
-                                    <input type="password" name="" class="form-control input-sm" id="" value="">
-                                </div>
-
-                                <div class="form-group col-lg-6">
-                                    <label>Repeat Password</label>
-                                    <input type="password" name="" class="form-control input-sm" id="" value="">
-                                </div>
-
-                                <div class="form-group col-lg-6">
-                                    <label>Email Address</label>
-                                    <input type="" name="" class="form-control input-sm" id="" value="">
-                                </div>
-
-                                <div class="form-group col-lg-6">
-                                    <label>Repeat Email Address</label>
-                                    <input type="" name="" class="form-control input-sm" id="" value="">
-                                </div>
-                                <br/>
-                                <div class="col-md-3"></div>
-                                <br/>
-                                <div class="form-group col-md-6">
-                                    <label>{% trans 'District' %}</label>
-                                    {{ search_form.district }}
-                                    <label>{% trans 'Street' %}</label>
-                                    {{ search_form.street }}
-                                    <label>{% trans 'House' %}</label>
-                                    {{ search_form.house }}
-                                    <label>{% trans 'Flat' %}</label>
-                                    {{ search_form.flat }}
-                                    <button type="submit" class="btn btn-default">Submit</button>
+                                <div class="row">
+                                    <div class="col-lg-3"></div>
+                                    <div class="col-lg-6">
+                                        <label>{% trans 'District' %}</label>
+                                        {{ search_form.district }}
+                                        <label>{% trans 'Street' %}</label>
+                                        {{ search_form.street }}
+                                        <label>{% trans 'House' %}</label>
+                                        {{ search_form.house }}
+                                        <label>{% trans 'Flat' %}</label>
+                                        {{ search_form.flat }}
+                                        <button type="submit" class="btn btn-default">Submit</button>
+                                    </div>
+                                    <div class="col-lg-3"></div>
                                 </div>
                             </form>
                         </div>
+                        <div class="col-md-3"></div>
                     </div>
                 </div>
-                <div class="col-md-3"></div>
             </div>
         </div>
     </div>

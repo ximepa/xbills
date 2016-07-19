@@ -100,7 +100,7 @@ class User(models.Model):
 
     id = models.IntegerField(primary_key=True, db_column='uid')
     login = models.CharField(max_length=20, unique=True, db_column='id')
-    disabled = models.BooleanField(db_column='disable')
+    disabled = models.SmallIntegerField(db_column='disable', default=2)
     company = models.ForeignKey(Company, related_name='clients')
     credit = models.FloatField(db_column='credit', default='0.00', blank=True, null=False)
     credit_date = models.DateField(db_column='credit_date', default='0000-00-00', blank=True)

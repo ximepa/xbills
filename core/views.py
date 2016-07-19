@@ -103,7 +103,7 @@ def index(request, settings=settings):
             pass
     return render(request, 'index.html', locals())
 
-
+@login_required()
 def nas(request):
     if 'sessions' in request.GET:
         sessions = request.GET['sessions']
@@ -135,7 +135,7 @@ def nas(request):
     nas_id = Nas.objects.all()
     return render(request, 'nas.html', locals())
 
-
+@login_required()
 def client_errors(request, uid):
     user = User.objects.get(id=uid)
     user_errors = ErrorsLog.objects.filter(user=user.login)
@@ -163,7 +163,7 @@ def client_errors(request, uid):
     pre_end = errors.paginator.num_pages - 2
     return render(request, 'user_errors.html', locals())
 
-
+@login_required()
 def client_statistics(request, uid):
     order_by = request.GET.get('order_by', '-start')
     user = User.objects.get(id=uid)
@@ -192,14 +192,13 @@ def client_statistics(request, uid):
     pre_end = statistics.paginator.num_pages - 2
     return render(request, 'user_statistics.html', locals())
 
-
+@login_required()
 def search(request):
     all_table_choices = [
         'user_id__id',
         'user_id__login',
         'fio',
         'user_id__bill__deposit',
-        'city',
         'district',
         'street',
         'location',
@@ -220,11 +219,8 @@ def search(request):
     districts = District.objects.all()
     filter_params = {}
     includes = []
-    print request.user.id
     try:
         admin_settings = AdminSettings.objects.get(admin_id=request.user.id, object='USERS_LIST')
-        print 'admin_settings_exist'
-        print admin_settings.admin_id
         default_table_choices = admin_settings.setting.lower().replace(' ', '').split(',')
     except AdminSettings.DoesNotExist:
         admin_settings = AdminSettings.objects.create(
@@ -232,6 +228,7 @@ def search(request):
             object='USERS_LIST',
             setting=', '.join(default_table_choices)
         )
+
     if request.method == 'POST':
         includes = [', '.join(request.POST.getlist('includes'))]
         if any('user_id__login' in s for s in includes):
@@ -242,13 +239,12 @@ def search(request):
             pass
         else:
             includes.append('user_id__deleted')
-        print admin_settings.admin_id
-        admin_settings.admin_id = request.user.id
         admin_settings.setting = ', '.join(includes)
+        admin_settings.admin_id = request.user.id
         admin_settings.save()
         return redirect(request.get_full_path())
     if request.method == 'GET':
-        order_by = request.GET.get('order_by', 'user_id')
+        order_by = request.GET.get('order_by', 'user_id__login')
         search_form = SearchForm(request.GET, initial=request.GET)
         if 'uid' in request.GET and request.GET['uid'] != '':
             try:
@@ -257,7 +253,7 @@ def search(request):
             except User.DoesNotExist:
                 error = 'User not found'
                 return render(request, 'search.html', locals())
-        elif 'login' in request.GET and request.GET['login'] != '' or 'district' in request.GET and request.GET['district'] != '' or 'flat' in request.GET and request.GET['flat'] != '':
+        else:
             if 'login' in request.GET and request.GET['login'] != '':
                 login = request.GET['login']
                 filter_params.update({'user_id__login__contains': login})
@@ -274,10 +270,10 @@ def search(request):
                         filter_params.update({'location_id': house})
             if 'flat' in request.GET and request.GET['flat'] != '':
                 filter_params.update({'kv': request.GET['flat']})
+            if 'disabled' in request.GET and request.GET['disabled'] != '':
+               filter_params.update({'user_id__disabled': request.GET['disabled']})
             try:
-                print '==============='
-                userpi = UserPi.objects.all().filter(**filter_params).order_by(order_by)
-                print '================='
+                userpi = UserPi.objects.filter(**filter_params).order_by(order_by)
                 if userpi.count() == 0:
                     error = 'User not found'
                 elif userpi.count() == 1:
@@ -285,6 +281,9 @@ def search(request):
                         return redirect('core:client', uid=u['user_id'])
                 else:
                     all = userpi.count()
+                    disabled = userpi.filter(user_id__disabled=1).count()
+                    not_active = userpi.filter(user_id__disabled=2).count()
+                    deleted = userpi.filter(user_id__deleted=1).count()
                     paginator = Paginator(userpi, 100)
                     page = request.GET.get('page', 1)
                     try:

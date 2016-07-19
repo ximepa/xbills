@@ -325,3 +325,7 @@ ol, ul {
 /*.modal-backdrop {*/
    /*background-color: transparent;*/
 /*}*/
+
+input[type="radio"], input[type="checkbox"] {
+    margin: 1px 0 0;
+}

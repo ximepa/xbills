@@ -48,8 +48,15 @@ class AdministratorForm(forms.ModelForm):
 
 
 class SearchForm(forms.Form):
+    DISABLED = (
+       ('', _("All")),
+       (0, _("Active")),
+       (1, _("Disabled")),
+       (2, _("Not Active")),
+    )
     login = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control input-sm', 'placeholder': u'Login'}))
     uid = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control input-sm', 'placeholder': u'UID'}))
+    disabled = forms.ChoiceField(widget=forms.RadioSelect(), choices=DISABLED)
     district = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control input-sm', 'placeholder': u'District'}), queryset=District.objects.all(), required=False)
     street = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control input-sm', 'placeholder': u'Street'}), queryset=Street.objects.all(), required=False)
     house = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control input-sm   ', 'placeholder': u'House'}), queryset=House.objects.all(), required=False)
