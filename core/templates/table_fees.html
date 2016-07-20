@@ -1,0 +1,56 @@
+{% load i18n %}
+{% load url %}
+{% load staticfiles %}
+asdasd
+<table class="ui black bordered table table-striped table-hover table-condensed" >
+    <thead>
+        <tr>
+            <th>
+                <a href="?{% url_replace request 'order_by' 'id' %}">{% trans 'Number' %}</a>
+            </th>
+            <th>{% trans 'Login' %}</th>
+            <th>
+                <a href="?{% url_replace request 'order_by' 'date' %}">{% trans 'Date' %}</a>
+            </th>
+            <th><a href="?{% url_replace request 'order_by' 'dsc' %}">{% trans 'Description' %}</a></th>
+            <th><a href="?{% url_replace request 'order_by' 'sum' %}">{% trans 'Sum' %}</a></th>
+            <th><a href="?{% url_replace request 'order_by' 'last_deposit' %}">{% trans 'Deposit' %}</a></th>
+            <th><a href="?{% url_replace request 'order_by' 'method' %}">{% trans 'Payments type' %}</a></th>
+            <th><a href="?{% url_replace request 'order_by' 'aid' %}">{% trans 'Administrator' %}</a></th>
+            <th>UID</th>
+            <th>-</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for f in fees %}
+        <tr>
+            <td>{{ f.id }}</td>
+            <td><a href="{% url 'core:index' %}?index=clients&uid={{ f.uid.id }}">{{ f.uid.login }}</a></td>
+            <td>{{ f.date }}</td>
+            <td>{{ f.dsc }}</td>
+            <td>{{ f.sum }}</td>
+            {% if f.last_deposit < 0 %}
+                <td><span style="color: red">{{ f.last_deposit }}</span></td>
+            {% else %}
+                <td>{{ f.last_deposit }}</td>
+            {% endif %}
+            <td>{{ f.method.name }}</td>
+            <td>{{ f.aid.login }}</td>
+            <td>{{ f.uid.id }}</td>
+            <td><i class="fa fa-remove"></i></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="4"></td>
+            <td>
+{#                <span class="badge">{{ out_sum }}</span>#}
+            </td>
+            <td colspan="4"></td>
+            <td>
+                <span class="badge">{{ fees_list.count }}</span>
+            </td>
+        </tr>
+    </tfoot>
+</table>

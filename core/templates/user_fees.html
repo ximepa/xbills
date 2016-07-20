@@ -1,133 +1,100 @@
-{% extends 'base.html' %}
+{% extends 'layout_edit.html' %}
 {% load url %}
 {% load i18n %}
-{% block content %}
+{% block breadcrumbs %}
     <ol class="breadcrumb">
-        <li class="active"><i class="fa fa-user"></i> <a href="{% url 'core:user_edit' user.id %}">{{ user.login }}</a> (UID: {{ user.id }})</li>
+      <li class=""><a href="{% url 'core:index' %}">{% trans 'Dashboard' %}</a></li>
+      <li class=""><a href="{% url 'core:client' uid %}">{{ user.login }} (UID: {{ user.id }})</a></li>
+      <li class="active">{% trans 'Fees' %}</li>
     </ol>
+{% endblock %}
+{% block content %}
     <div class="row">
-        <div class="col-md-3">
-        </div>
-        <div class="col-md-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">{% trans 'Payments' %}</div>
-                <div class="panel-body">
-                    <form class="form-horizontal">
-                        <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
-                            <div class="col-sm-10">
-                                <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="well well-sm">
+                {% if fees %}
+                    <nav class="navbar navbar-inverse no-brand " data-spy="affix" data-offset-top="200" data-offset-bottom="200">
+                        <div class="container-fluid">
+                            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                {% if fees.paginator.num_pages > 1 %}
+                                    <nav style="float: left">
+                                        <ul class="pagination pagination-sm">
+                                            {% if fees.has_previous %}
+                                                <li>
+                                                    <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
+                                                        <span aria-hidden="true">1</span>
+                                                    </a>
+                                                </li>
+                                                {% if fees.number > 2 %}
+                                                    <li class="disabled">
+                                                        <a href="#" aria-label="Previous">
+                                                            <span aria-hidden="true">...</span>
+                                                        </a>
+                                                    </li>
+                                                {% endif %}
+                                            {% endif %}
+                                            {% for p in page_list %}
+                                                {% if fees.number == p %}
+                                                    <li class="active">
+                                                        <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                                    </li>
+                                                {% else %}
+                                                    <li class="">
+                                                        <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                                    </li>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if fees.has_next %}
+                                                <li class="disabled">
+                                                    <a href="#" aria-label="Previous">
+                                                        <span aria-hidden="true">...</span>
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="?{% url_replace_page request 'page' fees.paginator.num_pages %}" aria-label="Next">
+                                                        <span aria-hidden="true">{{ fees.paginator.num_pages }}</span>
+                                                    </a>
+                                                </li>
+                                            {% else %}
+                                                <li class="disabled">
+                                                    <a href="#" aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+                                    </nav>
+                                {% endif %}
+                                <form style="" class="navbar-form" id="export_form" name="export" method="POST" action="{% url 'core:client_fees' uid %}?export">{% csrf_token %}
+                                    <div class="form-group form-group-sm">
+                                        <div class="input-group date">
+                                            <input id="last" data-format="yyyy-MM-dd" type="date" name="Last" placeholder="Last" class="form-control" value="" style="width: 50%; border-right: none;" />
+                                            <input id="first" data-format="yyyy-MM-dd" type="date" name="First" placeholder="First" class="form-control" value="" style="width: 50%" />
+                                            <span class="input-group-btn">
+                                                <input type="submit" name="export_submit" class="btn btn-primary btn-sm" value="{% trans 'Export' %}">
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                    <script>
+                                                    $('#last').datetimepicker({
+                                                        pickTime: false,
+                                                        format: 'yyyy-mm-dd'
+
+                                                    });
+                                                    $('#first').datetimepicker({
+                                                        format: 'yyyy-mm-dd',
+                                                        pickTime: false
+                                                    });
+                                            </script>
+                                </form>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
-                            <div class="col-sm-10">
-                                <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox"> Remember me
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <button type="submit" class="btn btn-default">Sign in</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 table-custom">
-            <table class="table table-hover table-striped table-condensed">
-                <thead>
-                    <tr class="info">
-                        <th><a href="?{% url_replace request 'order_by' 'id' %}">{% trans 'Number' %}</a></th>
-                        <th><a href="?{% url_replace request 'order_by' 'uid' %}">{% trans 'Login' %}</a></th>
-                        <th><a href="?{% url_replace request 'order_by' 'date' %}">{% trans 'Date' %}</a></th>
-                        <th><a href="?{% url_replace request 'order_by' 'dsc' %}">{% trans 'Description' %}</a></th>
-                        <th><a href="?{% url_replace request 'order_by' 'sum' %}">{% trans 'Sum' %}</a></th>
-                        <th><a href="?{% url_replace request 'order_by' 'last_deposit' %}">{% trans 'Deposit' %}</a></th>
-                        <th><a href="?{% url_replace request 'order_by' 'method' %}">{% trans 'Payments type' %}</a></th>
-                        <th><a href="?{% url_replace request 'order_by' 'aid__login' %}">{% trans 'Administrator' %}</a></th>
-                        <th>UID</th>
-                        <th>-</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for f in fees %}
-                    <tr>
-                        <td>{{ f.id }}</td>
-                        <td>{{ f.uid.login }}</td>
-                        <td>{{ f.date }}</td>
-                        <td>{{ f.dsc }}</td>
-                        <td>{{ f.sum }}</td>
-                        <td>{{ f.last_deposit }}</td>
-                        <td>{{ f.method.name }}</td>
-                        <td>{{ f.aid.login }}</td>
-                        <td>{{ f.uid.id }}</td>
-                        <td><a href="{% url 'core:payments' %}?del={{ f.id }}&uid={{ f.uid.id }}&return_url={{ request.get_full_path }}"><i class="fa fa-remove"></i></a></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <div class="pag-nav">
-                <nav class="center-block">
-                    <ul class="pagination pagination-sm">
-                        {% if fees.has_previous %}
-                            <li>
-                                <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
-                                    <span aria-hidden="true">1</span>
-                                </a>
-                            </li>
-                            {% if fees.number > 2 %}
-                                <li class="disabled">
-                                    <a href="#" aria-label="Previous">
-                                        <span aria-hidden="true">...</span>
-                                    </a>
-                                </li>
-                            {% endif %}
-                        {% endif %}
-                        {% for p in page_list %}
-                            {% if fees.number == p %}
-                                <li class="active">
-                                    <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                </li>
-                            {% else %}
-                                <li class="">
-                                    <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                </li>
-                            {% endif %}
-                        {% endfor %}
-                        {% if fees.has_next %}
-                            <li class="disabled">
-                                <a href="#" aria-label="Previous">
-                                    <span aria-hidden="true">...</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="?{% url_replace_page request 'page' fees.paginator.num_pages %}" aria-label="Next">
-                                    <span aria-hidden="true">{{ fees.paginator.num_pages }}</span>
-                                </a>
-                            </li>
-                        {% else %}
-                            <li class="disabled">
-                                <a href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </nav>
+                    </nav>
+                    {% include 'table_fees.html' %}
+                {% else %}
+                    {% trans 'Fees not found' %}
+                {% endif %}
             </div>
         </div>
     </div>

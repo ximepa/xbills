@@ -546,7 +546,7 @@ class Fees(models.Model):
         ordering = ['date']
 
     def __unicode__(self):
-        return self.sum
+        return str(self.pk)
 
     def ip_to_num(self, ip_addr):
         sets = map(int, ip_addr.split("."))

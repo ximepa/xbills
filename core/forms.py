@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import gettext as _
 from django import forms
-from .models import Admin, District, Street, House
+from .models import Admin, District, Street, House, Group
 import os
 
 
@@ -61,3 +61,13 @@ class SearchForm(forms.Form):
     street = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control input-sm', 'placeholder': u'Street'}), queryset=Street.objects.all(), required=False)
     house = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control input-sm   ', 'placeholder': u'House'}), queryset=House.objects.all(), required=False)
     flat = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control input-sm', 'placeholder': u'Flat'}))
+
+
+class SearchFeesForm(forms.Form):
+    login = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control input-sm', 'placeholder': u'Login'}))
+    group = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control input-sm', 'placeholder': u'District'}), queryset=Group.objects.all(), required=False)
+
+
+class SearchPaymentsForm(forms.Form):
+    login = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control input-sm', 'placeholder': u'Login'}))
+    group = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control input-sm', 'placeholder': u'District'}), queryset=Group.objects.all(), required=False)
