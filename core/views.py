@@ -7,6 +7,7 @@ from django.shortcuts import render, HttpResponseRedirect, HttpResponse, render_
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
+from django.views.decorators.csrf import csrf_exempt
 from dv.helpers import Hangup
 from ipdhcp.models import Dhcphosts_networks, Dhcphosts_hosts
 from .auth_backend import AuthBackend
@@ -34,6 +35,7 @@ def custom_redirect(url_name, *args, **kwargs):
 
 @login_required()
 def index(request, settings=settings):
+    print request.user.get_all_permissions()
     ip_list_r = []
     ip_list_db = []
     sys = platform.platform()
@@ -251,9 +253,7 @@ def search(request):
     except:
         search = None
     search_type = request.GET.get('search_type', '1')
-    print request.GET
     if search_type == '1':
-        print 1
         search_form = SearchForm(request.GET, initial=request.GET)
         if request.GET.get('search'):
             order_by = request.GET.get('order_by', 'user_id__login')
@@ -314,7 +314,6 @@ def search(request):
                         for p in page_range:
                             page_list = p
                         pre_end = users.paginator.num_pages - 2
-                        print users
                     return render(request, 'search.html', locals())
                 except User.DoesNotExist:
                     error = 'User not found'
@@ -362,7 +361,6 @@ def search(request):
                     for p in page_range:
                         page_list = p
                     pre_end = fees.paginator.num_pages - 2
-                    print fees
                 return render(request, 'search.html', locals())
             except Fees.DoesNotExist:
                 error = 'User not found'
@@ -605,7 +603,7 @@ def client_payments(request, uid):
     pre_end = payments.paginator.num_pages - 2
     if 'del' in request.GET:
         return redirect(request.GET['return_url'])
-    return render(request, 'payments.html', locals())
+    return render(request, 'user_payments.html', locals())
 
 
 def client_fees(request, uid):
@@ -653,7 +651,7 @@ def client_fees(request, uid):
             out_sum = out_sum + ex_fees.sum
         writer.writerow(['', out_sum])
         return response
-    return render(request, 'fees.html', locals())
+    return render(request, 'user_fees.html', locals())
 
 
 def user_login(request):

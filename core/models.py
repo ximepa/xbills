@@ -4,7 +4,7 @@ import os
 import datetime
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser,
-)
+    PermissionsMixin)
 from django.db import connection
 from django.conf import settings
 
@@ -23,7 +23,7 @@ def num_to_ip(number):
     return "%s.%s.%s.%s" % (a,b,c,d)
 
 
-class Admin(AbstractBaseUser):
+class Admin(AbstractBaseUser, PermissionsMixin):
     login = models.CharField(max_length=50, db_column='id', unique=True)
     name = models.CharField(max_length=50, db_column='name')
     id = models.AutoField(unique=True, primary_key=True, db_column='aid')

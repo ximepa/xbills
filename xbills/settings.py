@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'ipdhcp',
     'claims',
     'djangorpc',
+    'autotranslate',
 )
 
 AUTH_USER_MODEL = 'core.Admin'
@@ -56,6 +57,7 @@ LOGIN_REDIRECT_URL = '/admin/'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -95,7 +97,16 @@ WSGI_APPLICATION = 'xbills.wsgi.application'
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
+
+ugettext = lambda s: s
+
+LANGUAGES = (
+    ('en', ugettext('English')),
+    ('uk', ugettext('Ukrainian')),
+    ('ru', ugettext('Russian')),
+)
+
 
 TIME_ZONE = 'Europe/Kiev'
 
@@ -154,6 +165,11 @@ ABILLS_EMAIL_LOGS = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale'),
+
+)
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),

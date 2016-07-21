@@ -66,7 +66,9 @@
                                         {% endif %}
                                         <li class="disabled"><a href="#">How to use</a></li>
                                         <li class="divider"></li>
-                                        <li class="dropdown-header">Dropdowns</li>
+                                        <li class="dropdown-header"><a href="{% url 'core:fees' %}"><i class="fa fa-user fa-fw"></i> {% trans 'Fees' %}</a></li>
+                                        <li class="divider"></li>
+                                        <li class="dropdown-header"><a href="{% url 'core:payments' %}"><i class="fa fa-user fa-fw"></i> {% trans 'Payments' %}</a></li>
                                         <li><a href="#">Example</a></li>
                                         <li><a href="#">Aligninment options</a></li>
                                         <li><a href="#">Headers</a></li>
@@ -125,6 +127,28 @@
                         {% if check_module_chat %}
                             <li><a href="{% url 'chat:broadcast_chat' %}"><i class="fa fa-weixin fa-fw" aria-hidden="true"></i></a></li>
                         {% endif %}
+                        {% get_current_language as LANGUAGE_CODE %}
+                        {% get_available_languages as LANGUAGES %}
+                        {% get_current_language_bidi as LANGUAGE_BIDI %}
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                {% get_current_language as LANGUAGE_CODE %}
+                                {% get_language_info for LANGUAGE_CODE as lang %}
+                                {% get_available_languages as LANGUAGES %}
+                                {% get_language_info_list for LANGUAGES as languages %}
+                                {{ lang.name_local }}
+                                <span class="caret"></span>
+                            </a>
+                                <ul class="dropdown-menu">
+                                <form name="ui" action="{% url 'set_language' %}" method="post">{% csrf_token %}
+                                <input name="next" type="hidden" value="{{ request.get_full_path }}" />
+                                <input name="language" type="hidden"/>
+                                {% for language in languages %}
+                                    <li><a href="#" onclick="document.ui.language.value='{{ language.code}}'; document.ui.submit();"><img src="{% static 'custom/images/' %}{{ language.code }}.png"> {{ language.name_local }}</a></li>
+                                {% endfor %}
+                                </form>
+                                </ul>
+                        </li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ request.user.login }} <span class="caret"></span></a>
                             <ul class="dropdown-menu">

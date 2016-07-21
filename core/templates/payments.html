@@ -1,10 +1,9 @@
-{% extends 'layout_edit.html' %}
+{% extends 'layout.html' %}
 {% load url %}
 {% load i18n %}
 {% block breadcrumbs %}
     <ol class="breadcrumb">
       <li class=""><a href="{% url 'core:index' %}"><i class="fa fa-dashboard fa-fw"></i>{% trans 'Dashboard' %}</a></li>
-      <li class=""><a href="{% url 'core:client' uid %}"><i class="fa fa-user fa-fw"></i>{{ user.login }} (UID: {{ user.id }})</a></li>
       <li class="active">{% trans 'Payments' %}</li>
     </ol>
 {% endblock %}

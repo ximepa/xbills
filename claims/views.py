@@ -5,8 +5,9 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
-from .models import Claims, Queue, Comments, ClaimState, Priority, User, Log, Workers
-from .forms import ClaimsCreateForm, CommentAddForm, StateAddForm, PriorityAddForm, QueueAddForm, UserSettingsForm
+from .models import Claims, Queue, Comments, ClaimState, Priority, Log, Workers
+from core.models import Admin as User
+# from .forms import ClaimsCreateForm, CommentAddForm, StateAddForm, PriorityAddForm, QueueAddForm, UserSettingsForm
 from django.conf import settings
 from django.db.models import Count
 from django.contrib.auth import logout
@@ -55,7 +56,7 @@ def index(request):
     if 'claim_notifi' in request.GET:
         claim = Claims.objects.filter(state=1).last()
         pay_list = {}
-        pay_list['claim'] = claim.problem, claim.uid, claim.owner.username, claim.queue.name, claim.address
+        pay_list['claim'] = claim.problem, claim.uid, claim.owner.login, claim.queue.name, claim.address
         res_json = json.dumps(pay_list)
         return HttpResponse(res_json)
     queue = Queue.objects.all()
@@ -126,140 +127,140 @@ def claims_list_all(request, template_name='claims/claims_list.html'):
 
     })
 
-@login_required(login_url='/login/')
-def claim_create(request, template_name='claims/claim_create_form.html'):
-    if request.user.has_perm('claims.add_claims'):
-        form = ClaimsCreateForm()
-        if request.method == 'POST':
-            form = ClaimsCreateForm(request.POST)
-            if form.is_valid():
-                vehicle = form.save(commit=False)
-                vehicle.owner_id = request.user.id
-                vehicle.save()
-                if request.POST['comments'] != '':
-                    comments = Comments(user_id=request.user.pk, claim_id=vehicle.pk, comments=request.POST['comments'], title=request.POST['problem'])
-                    comments.save()
-                return redirect(reverse('claims:list'))
-            else:
-                print 'form not valid'
-        else:
-            print 'no post'
-        return render(request, template_name, {'form': form})
-    else:
-        return render(request, 'errors/404.html')
+# @login_required(login_url='/login/')
+# def claim_create(request, template_name='claims/claim_create_form.html'):
+#     if request.user.has_perm('claims.add_claims'):
+#         form = ClaimsCreateForm()
+#         if request.method == 'POST':
+#             form = ClaimsCreateForm(request.POST)
+#             if form.is_valid():
+#                 vehicle = form.save(commit=False)
+#                 vehicle.owner_id = request.user.id
+#                 vehicle.save()
+#                 if request.POST['comments'] != '':
+#                     comments = Comments(user_id=request.user.pk, claim_id=vehicle.pk, comments=request.POST['comments'], title=request.POST['problem'])
+#                     comments.save()
+#                 return redirect(reverse('claims:list'))
+#             else:
+#                 print 'form not valid'
+#         else:
+#             print 'no post'
+#         return render(request, template_name, {'form': form})
+#     else:
+#         return render(request, 'errors/404.html')
 
-@login_required(login_url='/login/')
-def claim_edit(request, id):
-    claim = get_object_or_404(Claims, pk=id)
-    priority = Priority.objects.all()
-    queue = Queue.objects.all()
-    comments = Comments.objects.filter(claim_id=claim.pk)
-    comment_form = CommentAddForm()
-    queue_form = QueueAddForm(initial={'queue': claim.queue})
-    state_form = StateAddForm(initial={'worker': claim.worker, 'state': claim.state})
-    priority_form = PriorityAddForm(initial={'priority': claim.priority})
-    if request.method == 'POST':
-        if 'create_comment' in request.POST:
-            comment_form = CommentAddForm(request.POST)
-            if comment_form.is_valid():
-                vehicle = comment_form.save(commit=False)
-                vehicle.user_id = request.user.id
-                vehicle.claim_id = claim.pk
-                log = Log(user_id=request.user.pk, claim_id=id, action='Added comment')
-                log.save()
-                vehicle.save()
-                return redirect(request.get_full_path())
-            else:
-                print 'form not valid'
-        if 'change_state' in request.POST:
-            state_form = StateAddForm(request.POST)
-            if state_form.is_valid():
-                try:
-                    worker = int(request.POST['worker'])
-                except:
-                    worker = None
-                if worker != None:
-                    action = ''
-                    if claim.worker_id != worker:
-                        action = action + 'Worker changed (%s to %s)' % (claim.worker, Workers.objects.get(pk=worker))
-                    if claim.state_id != int(request.POST['state']):
-                        if action == '':
-                            action = action + 'State changed (%s to %s)' % (claim.state, ClaimState.objects.get(pk=request.POST['state']))
-                        else:
-                            action = action + ' | State changed (%s to %s)' % (claim.state, ClaimState.objects.get(pk=request.POST['state']))
-                    log = Log(user_id=request.user.pk, claim_id=id, action=action)
-                    log.save()
-                else:
-                    if claim.worker_id == worker:
-                        log = Log(user_id=request.user.pk, claim_id=id, action='Nothing changed')
-                    else:
-                        log = Log(user_id=request.user.pk, claim_id=id, action='Worker changed (%s to None)' % claim.worker)
-                    log.save()
-                if request.POST['comments']:
-                    comments = Comments(user_id=request.user.id, claim_id=id, comments=request.POST['comments'])
-                    comments.save()
-                claim.worker_id = request.POST['worker']
-                claim.state_id = request.POST['state']
-                claim.save()
-                return redirect(request.get_full_path())
-            else:
-                print 'form not valid'
-        if 'change_priority' in request.POST:
-            priority_form = PriorityAddForm(request.POST)
-            if priority_form.is_valid():
-                log = Log(user_id=request.user.pk, claim_id=id, action='Priority changed (%s to %s)' % (claim.priority, Priority.objects.get(pk=request.POST['priority'])))
-                if request.POST['comments']:
-                    comments = Comments(user_id=request.user.id, claim_id=id, comments=request.POST['comments'])
-                    comments.save()
-                claim.priority_id = request.POST['priority']
-                log.save()
-                claim.save()
-                return redirect(request.get_full_path())
-            else:
-                print 'form not valid'
-        if 'change_queue' in request.POST:
-            queue_form = QueueAddForm(request.POST)
-            print request.POST
-            if queue_form.is_valid():
-                log = Log(user_id=request.user.pk, claim_id=id, action='Queue changed (%s to %s)' % (claim.queue, Queue.objects.get(pk=request.POST['queue'])))
-                comments = Comments(user_id=request.user.id, claim_id=id, comments=request.POST['comments'])
-                claim.queue_id = request.POST['queue']
-                log.save()
-                comments.save()
-                claim.save()
-                return redirect(request.get_full_path())
-            else:
-                print 'form not valid'
-    return render(request, 'claim_edit_form.html', {
-        'priority': priority,
-        'claim': claim,
-        'pk': id,
-        'comments': comments,
-        'comment_form': comment_form,
-        'queue_form': queue_form,
-        'state_form': state_form,
-        'priority_form': priority_form,
-        'user_bills_url': '/',
-        'queue': queue,
-    })
+# @login_required(login_url='/login/')
+# def claim_edit(request, id):
+#     claim = get_object_or_404(Claims, pk=id)
+#     priority = Priority.objects.all()
+#     queue = Queue.objects.all()
+#     comments = Comments.objects.filter(claim_id=claim.pk)
+#     comment_form = CommentAddForm()
+#     queue_form = QueueAddForm(initial={'queue': claim.queue})
+#     state_form = StateAddForm(initial={'worker': claim.worker, 'state': claim.state})
+#     priority_form = PriorityAddForm(initial={'priority': claim.priority})
+#     if request.method == 'POST':
+#         if 'create_comment' in request.POST:
+#             comment_form = CommentAddForm(request.POST)
+#             if comment_form.is_valid():
+#                 vehicle = comment_form.save(commit=False)
+#                 vehicle.user_id = request.user.id
+#                 vehicle.claim_id = claim.pk
+#                 log = Log(user_id=request.user.pk, claim_id=id, action='Added comment')
+#                 log.save()
+#                 vehicle.save()
+#                 return redirect(request.get_full_path())
+#             else:
+#                 print 'form not valid'
+#         if 'change_state' in request.POST:
+#             state_form = StateAddForm(request.POST)
+#             if state_form.is_valid():
+#                 try:
+#                     worker = int(request.POST['worker'])
+#                 except:
+#                     worker = None
+#                 if worker != None:
+#                     action = ''
+#                     if claim.worker_id != worker:
+#                         action = action + 'Worker changed (%s to %s)' % (claim.worker, Workers.objects.get(pk=worker))
+#                     if claim.state_id != int(request.POST['state']):
+#                         if action == '':
+#                             action = action + 'State changed (%s to %s)' % (claim.state, ClaimState.objects.get(pk=request.POST['state']))
+#                         else:
+#                             action = action + ' | State changed (%s to %s)' % (claim.state, ClaimState.objects.get(pk=request.POST['state']))
+#                     log = Log(user_id=request.user.pk, claim_id=id, action=action)
+#                     log.save()
+#                 else:
+#                     if claim.worker_id == worker:
+#                         log = Log(user_id=request.user.pk, claim_id=id, action='Nothing changed')
+#                     else:
+#                         log = Log(user_id=request.user.pk, claim_id=id, action='Worker changed (%s to None)' % claim.worker)
+#                     log.save()
+#                 if request.POST['comments']:
+#                     comments = Comments(user_id=request.user.id, claim_id=id, comments=request.POST['comments'])
+#                     comments.save()
+#                 claim.worker_id = request.POST['worker']
+#                 claim.state_id = request.POST['state']
+#                 claim.save()
+#                 return redirect(request.get_full_path())
+#             else:
+#                 print 'form not valid'
+#         if 'change_priority' in request.POST:
+#             priority_form = PriorityAddForm(request.POST)
+#             if priority_form.is_valid():
+#                 log = Log(user_id=request.user.pk, claim_id=id, action='Priority changed (%s to %s)' % (claim.priority, Priority.objects.get(pk=request.POST['priority'])))
+#                 if request.POST['comments']:
+#                     comments = Comments(user_id=request.user.id, claim_id=id, comments=request.POST['comments'])
+#                     comments.save()
+#                 claim.priority_id = request.POST['priority']
+#                 log.save()
+#                 claim.save()
+#                 return redirect(request.get_full_path())
+#             else:
+#                 print 'form not valid'
+#         if 'change_queue' in request.POST:
+#             queue_form = QueueAddForm(request.POST)
+#             print request.POST
+#             if queue_form.is_valid():
+#                 log = Log(user_id=request.user.pk, claim_id=id, action='Queue changed (%s to %s)' % (claim.queue, Queue.objects.get(pk=request.POST['queue'])))
+#                 comments = Comments(user_id=request.user.id, claim_id=id, comments=request.POST['comments'])
+#                 claim.queue_id = request.POST['queue']
+#                 log.save()
+#                 comments.save()
+#                 claim.save()
+#                 return redirect(request.get_full_path())
+#             else:
+#                 print 'form not valid'
+#     return render(request, 'claim_edit_form.html', {
+#         'priority': priority,
+#         'claim': claim,
+#         'pk': id,
+#         'comments': comments,
+#         'comment_form': comment_form,
+#         'queue_form': queue_form,
+#         'state_form': state_form,
+#         'priority_form': priority_form,
+#         'user_bills_url': '/',
+#         'queue': queue,
+#     })
 
-@login_required(login_url='/login/')
-def claim_comment_add(request, pk, template_name='claims/claim_comment_add.html'):
-    claim = get_object_or_404(Claims, pk=pk)
-    comments = Comments.objects.filter(claim_id=claim.pk)
-    form = CommentAddForm()
-    if request.method == 'POST':
-        form = CommentAddForm(request.POST)
-        if form.is_valid():
-            comments = form.save(commit=False)
-            comments.user_id = request.user.id
-            comments.save()
-            return redirect(reverse('claims:list'))
-        else:
-            print 'form not valid'
-    else:
-        print 'no post'
-    return render(request, template_name, {'form': form, 'claim': claim, 'comments': comments})
+# @login_required(login_url='/login/')
+# def claim_comment_add(request, pk, template_name='claims/claim_comment_add.html'):
+#     claim = get_object_or_404(Claims, pk=pk)
+#     comments = Comments.objects.filter(claim_id=claim.pk)
+#     form = CommentAddForm()
+#     if request.method == 'POST':
+#         form = CommentAddForm(request.POST)
+#         if form.is_valid():
+#             comments = form.save(commit=False)
+#             comments.user_id = request.user.id
+#             comments.save()
+#             return redirect(reverse('claims:list'))
+#         else:
+#             print 'form not valid'
+#     else:
+#         print 'no post'
+#     return render(request, template_name, {'form': form, 'claim': claim, 'comments': comments})
 
 @login_required(login_url='/login/')
 def claim_delete(request, pk, template_name='claims/claim_confirm_delete.html'):
@@ -297,28 +298,28 @@ def claim_map(request, claim_id):
     return render(request, 'maps.html', locals())
 
 
-@login_required(login_url='/login/')
-def user_settings(request, template_name='user/settings.html'):
-    settings_form = UserSettingsForm(initial={
-        'claims_per_page': request.user.claims_per_page,
-        'comments_per_page': request.user.comments_per_page,
-        'logs_per_page': request.user.logs_per_page,
-        'queue': request.user.queue,
-        'email': request.user.email,
-    })
-    user = User.objects.get(pk=request.user.pk)
-    if request.method == 'POST':
-        print request.POST
-        settings_form = UserSettingsForm(request.POST)
-        if settings_form.is_valid():
-            user.claims_per_page = request.POST['claims_per_page']
-            user.comments_per_page = request.POST['comments_per_page']
-            user.logs_per_page = request.POST['logs_per_page']
-            user.queue_id = request.POST['queue']
-            user.email = request.POST['email']
-            user.save()
-            return redirect(reverse('user_settings'))
-    return render(request, template_name, {
-        'settings_form': settings_form,
-    })
+# @login_required(login_url='/login/')
+# def user_settings(request, template_name='user/settings.html'):
+#     settings_form = UserSettingsForm(initial={
+#         'claims_per_page': request.user.claims_per_page,
+#         'comments_per_page': request.user.comments_per_page,
+#         'logs_per_page': request.user.logs_per_page,
+#         'queue': request.user.queue,
+#         'email': request.user.email,
+#     })
+#     user = User.objects.get(pk=request.user.pk)
+#     if request.method == 'POST':
+#         print request.POST
+#         settings_form = UserSettingsForm(request.POST)
+#         if settings_form.is_valid():
+#             user.claims_per_page = request.POST['claims_per_page']
+#             user.comments_per_page = request.POST['comments_per_page']
+#             user.logs_per_page = request.POST['logs_per_page']
+#             user.queue_id = request.POST['queue']
+#             user.email = request.POST['email']
+#             user.save()
+#             return redirect(reverse('user_settings'))
+#     return render(request, template_name, {
+#         'settings_form': settings_form,
+#     })
 
