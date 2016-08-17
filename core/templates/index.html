@@ -5,140 +5,110 @@
 {% block extra_scripts %}
 {% endblock %}
 {% block extra_js %}
-
+<script src="{% static 'custom/js/dashboard.js' %}"></script>
 {% endblock %}
 {% block content %}
-    <div id="sortable" class="row">
-        <div class="sortable col-xs-4 col-sm-4 col-md-4">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <div class="row">
-                        <div class="col-sm-4">{% trans 'System' %}:</div>
-                        <div class="col-sm-8 progress-margin"> {{ sys }}</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4">{% trans 'Uptime' %}:</div>
-                        <div id="uptime" class="col-sm-8 progress-margin">{{ uptime }}</div>
-                    </div>
-                    <br/>
-                        {% trans 'CPU' %}
-                    <br/>
-                    {% for cpu in cpu_load_list %}
-                        <div class="row">
-                            <div class="col-sm-4">
-                                {% trans 'Core load' %} {{ forloop.counter }}:
-                            </div>
-                            <div class="col-sm-8">
-                                <div class="progress">
-                                    <div id="core{{ forloop.counter }}" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="{{ cpu }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ cpu }}%">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                    <br/>
-                        {% trans 'Memory' %}
-                    <br/>
-                    <div class="row">
-                        <div class="col-sm-4">{% trans 'Total' %}:</div>
-                        <div class="col-sm-8 progress-margin" id="getMemoryTotal"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4">{% trans 'Used' %}:</div>
-                        <div class="col-sm-8 progress-margin" id="getMemoryUsed"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4">{% trans 'Free' %}:</div>
-                        <div class="col-sm-8 progress-margin" id="getMemoryFree"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4">{% trans 'Cached' %}:</div>
-                        <div class="col-sm-8 progress-margin" id="getMemoryCached"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4">{% trans 'Load' %}:</div>
-                        <div class="col-sm-8">
-                            <div class="progress">
-                                <div id="getMemory" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar">
-                                </div>
+    <div class="row">
+        <div class="four wide column">
+            <div class="ui segment">
+                <div class="ui relaxed divided list">
+                    <div class="item">
+                        <i class="large info middle aligned icon"></i>
+                        <div class="content">
+                            <div class="header">{% trans 'System' %}</div>
+                            <div class="description">
+                                <marquee scrollamount="2" behavior="scroll" direction="left" bgcolor="#ffffff">
+                                    {{ sys }}
+                                </marquee>
                             </div>
                         </div>
                     </div>
-                    <br/>
-                        {% trans 'Swap' %}
-                    <br/>
-                    <div class="row">
-                        <div class="col-sm-4">{% trans 'Total' %}:</div>
-                        <div class="col-sm-8 progress-margin" id="getSwapTotal"></div>
+                    <div class="item">
+                        <i class="large alarm outline middle aligned icon"></i>
+                        <div class="content">
+                            <div class="header">{% trans 'Uptime' %}</div>
+                            <div id="uptime" class="description">{{ uptime }}</div>
+                        </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-4">{% trans 'Used' %}:</div>
-                        <div class="col-sm-8 progress-margin" id="getSwapUsed"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4">{% trans 'Free' %}:</div>
-                        <div class="col-sm-8 progress-margin" id="getSwapFree"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-4">{% trans 'Load' %}:</div>
-                        <div class="col-sm-8">
-                            <div class="progress">
-                                <div id="getSwap" class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar">
+                    <div class="item">
+                        <i class="large area chart middle aligned icon"></i>
+                        <div class="content" style="width: 100%">
+                            <div class="header">{% trans 'CPU' %}</div>
+                            {% for cpu in cpu_load_list %}
+                                <div>{% trans 'Core load' %} {{ forloop.counter }}</div>
+                                <div class="ui indicating tiny progress" id="core{{ forloop.counter }}" style="margin: 0.1em 0 0.1em;">
+                                    <div class="bar"></div>
                                 </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="item">
+                        <i class="large bar chart middle aligned icon"></i>
+                        <div class="content" style="width: 100%">
+                            <div class="header">{% trans 'Memory' %}</div>
+                            <div>{% trans 'Total' %}: <span style="font-weight: bold" id="getMemoryTotal"></span></div>
+                            <div>{% trans 'Used' %}: <span style="font-weight: bold" id="getMemoryUsed"></span></div>
+                            <div>{% trans 'Free' %}: <span style="font-weight: bold" id="getMemoryFree"></span></div>
+                            <div>{% trans 'Cached' %}: <span style="font-weight: bold" id="getMemoryCached"></span></div>
+                            <div>{% trans 'Load' %}</div>
+                            <div class="ui indicating tiny progress" id="getMemory" style="margin: 0.1em 0 0.1em;">
+                                <div class="bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <i class="large bar chart middle aligned icon"></i>
+                        <div class="content" style="width: 100%">
+                            <div class="header">{% trans 'Swap' %}</div>
+                            <div>{% trans 'Total' %}: <span style="font-weight: bold" id="getSwapTotal"></span></div>
+                            <div>{% trans 'Used' %}: <span style="font-weight: bold" id="getSwapUsed"></span></div>
+                            <div>{% trans 'Free' %}: <span style="font-weight: bold" id="getSwapFree"></span></div>
+                            <div>{% trans 'Cached' %}: <span style="font-weight: bold" id="getMemoryCached"></span></div>
+                            <div>{% trans 'Load' %}</div>
+                            <div class="ui indicating tiny progress" id="getSwap" style="margin: 0.1em 0 0.1em;">
+                                <div class="bar"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="sortable col-xs-8 col-sm-8 col-md-8">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <table class="ui black table table-hover table-striped table-condensed">
-                        <thead>
-                            <tr>
-                                <th>{% trans 'Periodic' %}</th>
-                                <th>{% trans 'Count pay' %}</th>
-                                <th>{% trans 'Sum' %}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{% trans 'Day' %}</td>
-                                <td id="day_sum_count"></td>
-                                <td id="day_sum">{% trans 'Day' %}</td>
-                            </tr>
-                            <tr>
-                                <td>{% trans 'Week' %}</td>
-                                <td id="week_sum_count"></td>
-                                <td id="week_sum">{% trans 'Week' %}</td>
-                            </tr>
-                            <tr>
-                                <td>{% trans 'Month' %}</td>
-                                <td id="month_sum_count"></td>
-                                <td id="month_sum">{% trans 'Month' %}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <div class="twelve wide column">
+            <div class="ui raised segment">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <table class="ui black small very compact selectable striped table">
+                            <thead>
+                                <tr>
+                                    <th>{% trans 'Periodic' %}</th>
+                                    <th>{% trans 'Count pay' %}</th>
+                                    <th>{% trans 'Sum' %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{% trans 'Day' %}</td>
+                                    <td id="day_sum_count"></td>
+                                    <td id="day_sum">{% trans 'Day' %}</td>
+                                </tr>
+                                <tr>
+                                    <td>{% trans 'Week' %}</td>
+                                    <td id="week_sum_count"></td>
+                                    <td id="week_sum">{% trans 'Week' %}</td>
+                                </tr>
+                                <tr>
+                                    <td>{% trans 'Month' %}</td>
+                                    <td id="month_sum_count"></td>
+                                    <td id="month_sum">{% trans 'Month' %}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
+            <div class="ui raised segment">
+                {% include 'dashboard_claims.html' %}
+            </div>
         </div>
-        <script>
-            function dashRefresh() {
-                setTimeout(function(){
-                    for (dash in dashboard) {
-                        dashboard[dash]()
-                    }
-                    dashRefresh();
-                }, 10000);
-            }
-
-            $(document).ready(function(){
-                for (dash in dashboard) {
-                    dashboard[dash]()
-                }
-                dashRefresh();
-            });
-        </script>
     </div>
 {% endblock %}

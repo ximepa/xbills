@@ -2,91 +2,111 @@
 {% load i18n %}
 {% load url %}
 {% load staticfiles %}
-{% block extra_css %}
-    <link href="{% static 'css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet">
-{% endblock %}
-{% block extra_scripts %}
-    <script type="application/javascript">
-        $( document ).ready(function() {
-            $('#right_nav').affix({
-                offset: {
-                    top: 100,
-                    bottom: function () {
-                        return (this.bottom = $('.footer').outerHeight(true))
-                    }
-                }
-            });
-        });
-    </script>
-{% endblock %}
 {% block breadcrumbs %}
-    <ol class="breadcrumb">
-      <li class=""><a href="{% url 'core:index' %}">{% trans 'Dashboard' %}</a></li>
-      <li class="active">{% trans 'Logins' %}</li>
-    </ol>
+    <i class="right angle icon divider"></i>
+    <div class="active section">{% trans 'Logins' %}</div>
+{% endblock %}
+{% block breadcrumbs_sub_header %}
+    {% trans 'Clients list' %}
+{% endblock %}
+{% block menu_clients %}
+    <a href="{% url 'core:clients' %}" class="item"><i class="block add user icon"></i> {% trans 'Add' %}</a>
+    {% check_module 'olltv' as check_module_olltv %}
+    {% if check_module_olltv %}
+        <a href="{% url 'olltv:index' %}" class="item"><i class="block desktop icon"></i> {% trans 'OLLTV' %}</a>
+    {% endif %}
+    {% check_module 'claims' as check_module_claims %}
+    {% if check_module_claims %}
+        <a href="{% url 'claims:claims' %}" class="item"><i class="comment icon"></i> {% trans 'Claims' %} </a>
+    {% endif %}
 {% endblock %}
 {% block content %}
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="well well-sm">
-                <ul class="list-group" data-spy="affix" data-offset-top="200" data-offset-bottom="200">
-                    <li class="list-group-item">
-                        <ul class="pagination pagination-sm">
-                            {% if users.has_previous %}
-                                <li>
-                                    <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
-                                        <span aria-hidden="true">1</span>
-                                    </a>
-                                </li>
-                                {% if users.number > 2 %}
-                                    <li class="disabled">
-                                        <a href="#" aria-label="Previous">
-                                            <span aria-hidden="true">...</span>
-                                        </a>
-                                    </li>
-                                {% endif %}
+        <div class="column">
+            <div class="ui sticky tabled horizontal segments">
+                <div class="ui tabled segment">
+                    <div class="ui mini compact menu">
+                        <div class="header item">{% trans 'Sort By' %}</div>
+                        <a href="?{% url_replace request 'users_status' '0' %}" class="item {% if 'users_status=0' in request.get_full_path %}active{% elif not request.GET or 'order_by' in request.GET and not 'users_status' in request.GET %}active{% endif %}">
+                            {% trans 'All' %}
+                        </a>
+                        <a href="?{% url_replace request 'users_status' '1' %}" class="item {% if 'users_status=1' in request.get_full_path %}active{% endif %}">
+                            {% trans 'Active' %}
+                        </a>
+                        <a href="?{% url_replace request 'users_status' '2' %}" class="item {% if 'users_status=2' in request.get_full_path %}active{% endif %}">
+                            {% trans 'Debtors' %}
+                        </a>
+                        <a href="?{% url_replace request 'users_status' '3' %}" class="item {% if 'users_status=3' in request.get_full_path %}active{% endif %}">
+                            {% trans 'Disabled' %}
+                        </a>
+                        <a href="?{% url_replace request 'users_status' '4' %}" class="item {% if 'users_status=4' in request.get_full_path %}active{% endif %}">
+                            {% trans 'Deleted' %}
+                        </a>
+                        <a href="?{% url_replace request 'users_status' '5' %}" class="item {% if 'users_status=5' in request.get_full_path %}active{% endif %}">
+                            {% trans 'Credit' %}
+                        </a>
+                    </div>
+                </div>
+                <div class="ui tabled segment" style="text-align: center">
+                    <div class="ui mini compact menu">
+                        <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
+                            <i class="gamepad icon"></i>
+                            Xml
+                        </a>
+                        <a href="?{% url_replace request 'csv' '1' %}" class="item">
+                            <i class="video camera icon"></i>
+                            Csv
+                        </a>
+                    </div>
+                </div>
+                <div class="ui tabled segment" style="text-align: right">
+                    <div id="" class="ui pagination mini menu">
+                        {% if users.number == 1 %}
+                            <div class="disabled item">
+                                    1
+                                </div>
+                        {% endif %}
+                        {% if users.has_previous %}
+                            <a href="?{% url_replace_page request 'page' '1' %}" class="item">1</a>
+                            {% if users.number > 7 %}
+                                <div class="disabled item">
+                                    ...
+                                </div>
                             {% endif %}
-                            {% for p in page_list %}
-                                {% if users.number == p %}
-                                    <li class="active">
-                                        <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                    </li>
-                                {% else %}
-                                    <li class="">
-                                        <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                    </li>
-                                {% endif %}
-                            {% endfor %}
-                            {% if users.has_next %}
-                                <li class="disabled">
-                                    <a href="#" aria-label="Previous">
-                                        <span aria-hidden="true">...</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
-                                        <span aria-hidden="true">{{ users.paginator.num_pages }}</span>
-                                    </a>
-                                </li>
+                        {% endif %}
+                        {% for p in page_list %}
+                            {% if p == 1 %}
                             {% else %}
-                                <li class="disabled">
-                                    <a href="#" aria-label="Next">
-                                        <span aria-hidden="true">&raquo;</span>
-                                    </a>
-                                </li>
+                                {% if users.number == p %}
+                                    <a class="item active" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                {% else %}
+                                    <a class="item" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                {% endif %}
                             {% endif %}
-                        </ul>
-                    </li>
-                </ul>
-                <table class="ui black table table-striped table-hover table-condensed">
+                        {% endfor %}
+                        {% if users.has_next %}
+                            {% if users.number < users.paginator.num_pages|add:"-5" %}
+                                <div class="disabled item">
+                                    ...
+                                </div>
+                                    <a class="item" href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
+                                    {{ users.paginator.num_pages }}
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="ui segment">
+                <table class="ui black small very compact selectable striped table">
                     <thead>
                         <tr class="">
-                            <th>{% trans 'Login' %}</th>
-                            <th>{% trans 'FIO' %}</th>
-                            <th>{% trans 'Deposit' %}</th>
-                            <th>{% trans 'Credit' %}</th>
-                            <th>{% trans 'Login status' %}</th>
-                            <th>{% trans 'Deleted' %}</th>
+                            <th><a href="?{% url_replace request 'order_by' 'login' %}">{% trans 'Login' %}</a></th>
+                            <th><a href="?{% url_replace request 'order_by' 'user_pi__fio' %}">{% trans 'FIO' %}</a></th>
+                            <th><a href="?{% url_replace request 'order_by' 'bill__deposit' %}">{% trans 'Deposit' %}</a></th>
+                            <th><a href="?{% url_replace request 'order_by' 'credit' %}">{% trans 'Credit' %}</a></th>
+                            <th><a href="?{% url_replace request 'order_by' 'disabled' %}">{% trans 'Login status' %}</a></th>
+                            <th><a href="?{% url_replace request 'order_by' 'deleted' %}">{% trans 'Deleted' %}</a></th>
                             <th>{% trans '-' %}</th>
                             <th>{% trans '-' %}</th>
                         </tr>
@@ -121,25 +141,17 @@
                         </tr>
                         {% endfor %}
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <th><div class="ui blue tiny label">{% trans 'All' %} <div class="detail">{{ all }}</div></div></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th><div class="ui blue tiny label">{% trans 'Disabled' %}<div class="detail">{{ disabled }}</div></div></th>
+                            <th colspan="3"><div class="ui blue tiny label">{% trans 'Deleted' %}<div class="detail">{{ deleted }}</div></div></th>
+                        </tr>
+                    </tfoot>
                 </table>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-botton">
-                        <span class="badge">{{ all }}</span>
-                        {% trans 'All' %}
-                    </li>
-                    <li class="list-group-item list-group-item-botton">
-                        <span class="badge">{{ end }}</span>
-                        {% trans 'End' %}
-                    </li>
-                    <li class="list-group-item list-group-item-botton">
-                        <span class="badge">{{ disabled }}</span>
-                        {% trans 'Disabled' %}
-                    </li>
-                    <li class="list-group-item list-group-item-botton">
-                        <span class="badge">{{ deleted }}</span>
-                        {% trans 'Deleted' %}
-                    </li>
-                </ul>
             </div>
         </div>
     </div>

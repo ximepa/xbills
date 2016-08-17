@@ -22,8 +22,8 @@ def num_to_ip(number):
     a = int(number/(256**3)) % 256
     return "%s.%s.%s.%s" % (a,b,c,d)
 
-
-class Admin(AbstractBaseUser, PermissionsMixin):
+# PermissionsMixin
+class Admin(AbstractBaseUser):
     login = models.CharField(max_length=50, db_column='id', unique=True)
     name = models.CharField(max_length=50, db_column='name')
     id = models.AutoField(unique=True, primary_key=True, db_column='aid')
@@ -118,18 +118,42 @@ class User(models.Model):
     class Meta:
         db_table = 'users'
         ordering = ['id']
+        permissions = (
+            ("can_view", "Can view"),
+            ("can_edit", "Can edit"),
+            ("can_delete", "Can delete"),
+            ("can_search", "Can search"),
+        )
 
     # @property
-    # def bill(self):
+    # def company(self):
     #     try:
-    #         c = Company.objects.get(id=self.company.id)
-    #         return Bill.objects.get(company_id=c.id)
+    #         b = Bill.objects.get(uid=self.id)
+    #         return Company.objects.get(bill_id=b.id)
     #     except Company.DoesNotExist:
-    #         try:
-    #             return Bill.objects.get(uid=self.id)
-    #         except Bill.DoesNotExist:
-    #             return None
+    #         return None
 
+    def get_deposit(self):
+        try:
+            b = Bill.objects.get(uid=self.pk)
+        except Bill.DoesNotExist:
+            return 'User has no bill'
+        else:
+            return float(b.deposit)
+
+    # @staticmethod
+    # def export_to_csv(queryset, name):
+    #     from django.shortcuts import HttpResponse
+    #     import csv
+    #     response = HttpResponse(content_type='text/csv')
+    #     response['Content-Disposition'] = 'attachment;filename=%s.csv' % name
+    #     opts = queryset.model._meta
+    #     field_names = [field.name for field in opts.fields]
+    #     print field_names
+    #     writer = csv.writer(response)
+    #     for obj in queryset:
+    #         writer.writerow([getattr(obj, field) for field in field_names])
+    #     return response
 
     @property
     def pi(self):

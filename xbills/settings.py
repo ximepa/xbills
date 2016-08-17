@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ws4redis',
     'core',
     'config',
     'telephone',
@@ -64,7 +65,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
+    # 'django.middleware.security.SecurityMiddleware',
     'core.middleware.OnlineNowMiddleware',
 
 )
@@ -82,12 +83,23 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'ws4redis.context_processors.default',
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'xbills.wsgi.application'
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'redis_cache.RedisCache',
+#         'LOCATION': 'localhost:6379',
+#     },
+# }
+
+WSGI_APPLICATION = 'ws4redis.django_runserver.application'
+#WSGI_APPLICATION = 'xbills.wsgi.application'
 
 
 # Database
@@ -175,6 +187,22 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
 
+WEBSOCKET_URL = '/ws/'
+# SESSION_ENGINE = 'redis_sessions.session'
+
+# SESSION_REDIS_PREFIX = 'session'
+
+WS4REDIS_EXPIRE = 3600
+
+WS4REDIS_HEARTBEAT = '--heartbeat--'
+WS4REDIS_PREFIX = 'xbills'
+
+WS4REDIS_CONNECTION = {
+    'host': '127.0.0.1',
+    'port': 6379,
+    'db': 0,
+    'password': 'mypass'
+}
 
 try:
     from settings_local import *

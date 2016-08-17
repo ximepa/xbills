@@ -43,7 +43,7 @@ def dhcps(request):
 
 def user_dhcp(request, uid, host_id=None):
     net_dhcp = Dhcphosts_networks.objects.all()
-    user = User.objects.get(id=uid)
+    client = User.objects.get(id=uid)
     hosts = Dhcphosts_hosts.objects.filter(uid=uid)
     if host_id:
         host = Dhcphosts_hosts.objects.get(pk=host_id)
@@ -80,14 +80,14 @@ def user_dhcp(request, uid, host_id=None):
                 parsed_list.append(int(hostnames[-1]))
         if len(parsed_list) == 0:
             dhcphosts_hostsform = Dhcphosts_hostsForm(initial={
-                'hostname': str(user.login) + '_' + str(100 + 1),
-                'uid': user.id,
+                'hostname': str(client.login) + '_' + str(100 + 1),
+                'uid': client.id,
                 'disable': 0
             })
         else:
             dhcphosts_hostsform = Dhcphosts_hostsForm(initial={
-                'hostname': str(user.login) + '_' + str(max(parsed_list) + 1),
-                'uid': user.id,
+                'hostname': str(client.login) + '_' + str(max(parsed_list) + 1),
+                'uid': client.id,
                 'disable': 0
             })
         if 'action' in request.POST and request.POST['action'] == 'add':

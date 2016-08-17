@@ -209,7 +209,7 @@
                         warning: 'toast-warning'
                     },
                     iconClass: 'toast-info',
-                    positionClass: 'toast-top-right',
+                    positionClass: 'toast-top-center',
                     timeOut: 7000, // Set timeOut and extendedTimeOut to 0 to make it sticky
                     uidClass: 'toast-title',
                     aidClass: 'toast-title',

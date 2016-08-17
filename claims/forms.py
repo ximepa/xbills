@@ -1,6 +1,6 @@
 # # -*- coding: utf-8 -*-
-# from django import forms
-# from claims.models import User, Claims, Comments, Workers, ClaimState, Priority, Queue
+from django import forms
+from .models import User, Claims, Comments, Workers, ClaimState, Priority, Queue
 # from django.utils.translation import ugettext_lazy as _
 # from django.contrib.auth.forms import UserCreationForm as AuthUserCreationForm, UserChangeForm as AuthUserChangeForm, AuthenticationForm
 #
@@ -118,3 +118,19 @@
 #     logs_per_page = forms.CharField(required=True)
 #     queue = forms.ModelChoiceField(queryset=Queue.objects.all(),widget=forms.Select(), required=True)
 #     email = forms.CharField(required=False)
+
+
+class SearchForm(forms.Form):
+    # DISABLED = (
+    #    ('', _("All")),
+    #    (0, _("Active")),
+    #    (1, _("Disabled")),
+    #    (2, _("Not Active")),
+    # )
+    # login = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control input-sm', 'placeholder': u'Login'}))
+    # uid = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control input-sm', 'placeholder': u'UID'}))
+    # disabled = forms.ChoiceField(widget=forms.RadioSelect(), choices=DISABLED)
+    queue = forms.ModelChoiceField(widget=forms.Select(attrs={'class': '', 'placeholder': u'Queue'}), queryset=Queue.objects.all(), required=False)
+    state = forms.ModelChoiceField(widget=forms.Select(attrs={'class': '', 'placeholder': u'State'}), queryset=ClaimState.objects.all(), required=False)
+    # house = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control input-sm   ', 'placeholder': u'House'}), queryset=House.objects.all(), required=False)
+    # flat = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control input-sm', 'placeholder': u'Flat'}))

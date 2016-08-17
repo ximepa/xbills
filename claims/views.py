@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404, HttpResponse
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from .models import Claims, Queue, Comments, ClaimState, Priority, Log, Workers
-from core.models import Admin as User
+from core.models import Admin, User
 # from .forms import ClaimsCreateForm, CommentAddForm, StateAddForm, PriorityAddForm, QueueAddForm, UserSettingsForm
 from django.conf import settings
 from django.db.models import Count
@@ -16,6 +16,7 @@ from django.views.generic import View
 from django.views.decorators.csrf import csrf_exempt
 from pygeocoder import Geocoder
 from geopy.geocoders import Nominatim
+from.forms import SearchForm
 
 
 @login_required(login_url='/login/')
@@ -52,23 +53,17 @@ def name(request):
     return redirect('dashboard')
 
 
-def index(request):
-    if 'claim_notifi' in request.GET:
-        claim = Claims.objects.filter(state=1).last()
-        pay_list = {}
-        pay_list['claim'] = claim.problem, claim.uid, claim.owner.login, claim.queue.name, claim.address
-        res_json = json.dumps(pay_list)
-        return HttpResponse(res_json)
-    queue = Queue.objects.all()
-    claims_list_opened = Claims.objects.filter(state=1).count()
-    claims_list_closed = Claims.objects.filter(state=2).count()
-    list = []
-    list1 = []
-    for q in queue:
-        list.append({'name': q.name, 'opened': q.claims.filter(state=1).count(), 'closed': q.claims.filter(state=2).count(), 'all': q.claims.all().count()})
-    list1.append({'all_opened': claims_list_opened, 'all_closed': claims_list_closed})
-    users = User.objects.all()
-    return render(request, 'claims.html', locals())
+# def index(request):
+#     queue = Queue.objects.all()
+#     claims_list_opened = Claims.objects.filter(state=1).count()
+#     claims_list_closed = Claims.objects.filter(state=2).count()
+#     list = []
+#     list1 = []
+#     for q in queue:
+#         list.append({'name': q.name, 'opened': q.claims.filter(state=1).count(), 'closed': q.claims.filter(state=2).count(), 'all': q.claims.all().count()})
+#     list1.append({'all_opened': claims_list_opened, 'all_closed': claims_list_closed})
+#     users = User.objects.all()
+#     return render(request, 'claims.html', locals())
 
 
 def logout_view(request):
@@ -77,21 +72,58 @@ def logout_view(request):
 
 
 @login_required(login_url='/login/')
-def claims_list(request, template_name='claims/claims_list.html'):
+def index(request, template_name='claims/claims_list.html'):
+    if 'claim_notifi' in request.GET:
+        claim = Claims.objects.filter(state=1).last()
+        pay_list = {}
+        pay_list['claim'] = claim.problem, claim.uid, claim.owner.login, claim.queue.name, claim.address
+        res_json = json.dumps(pay_list)
+        return HttpResponse(res_json)
+    filter_params = {}
+    # search_form = SearchForm()
+    search_form = SearchForm(initial={'state': 1, 'queue': 1})
     order_by = request.GET.get('order_by', 'created')
+    queue = request.GET.get('queue', 1)
+    state = request.GET.get('state', 1)
     print request.GET
+    if 'submit' in request.GET:
+        search_form = SearchForm(request.GET, initial=request.GET)
+    if queue:
+        filter_params.update({'queue_id': queue})
+    if state:
+        filter_params.update({'state_id': state})
     qu = Queue.objects.get(pk=1)
-    filter_by = request.GET.get('filter_by', qu.id)
-    claims = Claims.objects.filter(state=1, queue_id=filter_by).order_by('-priority', order_by)
+    claims = Claims.objects.filter(**filter_params).order_by('-priority', order_by).reverse()[:100]
     claims_count = Queue.objects.filter(claims__state=1).order_by('id').values('name', 'id').annotate(Count('claims'))
+    claims_state = ClaimState.objects.all()
     user_claims_count = Queue.objects.filter(claims__queue=1, claims__state=1).values('name', 'id').annotate(Count('claims'))
     if request.method == 'GET' and 'search' in request.GET:
         if request.GET['search'] != '':
             claims = Claims.objects.filter(Q(state=1), Q(address__icontains=request.GET['search']) |
-                Q(login__icontains=request.GET['search']) | Q(owner__username__icontains=request.GET['search']) |
+                Q(login__icontains=request.GET['search']) | #Q(owner__username__icontains=request.GET['search']) |
                 Q(problem__icontains=request.GET['search']) | Q(uid__icontains=request.GET['search']))
-    paginator = Paginator(claims, 20)
-    page = request.GET.get('page')
+    paginator = Paginator(claims, 100)
+    page = request.GET.get('page', 1)
+    try:
+        users = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        users = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        users = paginator.page(paginator.num_pages)
+    if int(page) > 5:
+        start = str(int(page)-5)
+    else:
+        start = 1
+    if int(page) < paginator.num_pages-5:
+        end = str(int(page)+5+1)
+    else:
+        end = paginator.num_pages+1
+    page_range = range(int(start), int(end)),
+    for p in page_range:
+        page_list = p
+    pre_end = users.paginator.num_pages - 2
 
     return render(request, 'claims_list.html', locals())
 
@@ -127,6 +159,40 @@ def claims_list_all(request, template_name='claims/claims_list.html'):
 
     })
 
+
+@login_required(login_url='/login/')
+def user_claims(request, uid, template_name='user_claims.html'):
+    order_by = request.GET.get('order_by', '-created')
+    qu = Queue.objects.get(pk=1)
+    filter_by = request.GET.get('filter_by', qu.id)
+    client = User.objects.get(pk=uid)
+    cur_queue = Queue.objects.get(pk=filter_by)
+    claims = Claims.objects.filter(queue_id=filter_by).order_by(order_by)
+    claims_count = Queue.objects.order_by('id').values('name', 'id').annotate(Count('claims'))
+    # user_claims_count = Queue.objects.filter(claims__queue=request.user.queue).values('name', 'id').annotate(Count('claims'))
+    if request.method == 'GET' and 'search' in request.GET:
+        if request.GET['search'] != '':
+            claims = Claims.objects.filter(Q(address__icontains=request.GET['search']) |
+                Q(login__icontains=request.GET['search']) | Q(owner__username__icontains=request.GET['search']) |
+                Q(problem__icontains=request.GET['search']) | Q(uid__icontains=request.GET['search']))
+    paginator = Paginator(claims, 10)
+    page = request.GET.get('page')
+    try:
+        claims_list = paginator.page(page)
+    except PageNotAnInteger:
+        claims_list = paginator.page(1)
+    except EmptyPage:
+        claims_list = paginator.page(paginator.num_pages)
+    return render(request, template_name, {
+        'claims': claims_list,
+        'claims_count': claims_count,
+        'cur_queue': cur_queue,
+        'uid': uid,
+        'client': client
+
+    })
+
+
 # @login_required(login_url='/login/')
 # def claim_create(request, template_name='claims/claim_create_form.html'):
 #     if request.user.has_perm('claims.add_claims'):
@@ -148,6 +214,10 @@ def claims_list_all(request, template_name='claims/claims_list.html'):
 #         return render(request, template_name, {'form': form})
 #     else:
 #         return render(request, 'errors/404.html')
+
+
+
+
 
 # @login_required(login_url='/login/')
 # def claim_edit(request, id):

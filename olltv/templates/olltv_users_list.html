@@ -2,175 +2,121 @@
 {% load url %}
 {% load i18n %}
 {% load staticfiles %}
-{% block title %}
-    Xbills - olltv {% trans 'edit' %} [{{ user.login }}]
+{% block breadcrumbs %}
+    <i class="right angle icon divider"></i>
+    <div class="active section">{% trans 'Olltv' %}</div>
 {% endblock %}
-{% block extra_css %}
-    <link href="{% static 'css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet" />
+{% block breadcrumbs_sub_header %}
+    {% trans 'Olltv clients list' %}
 {% endblock %}
-{% block extra_scripts %}
-{#    <script src="{% static 'olltv/js/olltv.js' %}"></script>#}
-    <script src="{% static 'js/bootstrap-datetimepicker.min.js' %}"></script>
-{#    <script src="{% static 'olltv/js/jquery.maskedinput.min.js' %}"></script>#}
-    <script>
-        $(document).ready(function() {
-            $(function() {
-                $('#datetimepicker1').datetimepicker({
-                    viewMode: 'years',
-                    pickTime: false
-                });
-            });
-            window.setTimeout(function() {
-                $(".alert").fadeTo(1000, 0).slideUp(1000, function(){
-                    $(this).remove();
-                });
-            }, 5000);
-        });
-    </script>
+{% block menu_clients %}
+    <a href="{% url 'core:clients' %}" class="item"><i class="block add user icon"></i> {% trans 'Add' %}</a>
+    {% check_module 'olltv' as check_module_olltv %}
+    {% if check_module_olltv %}
+        <a href="{% url 'olltv:index' %}" class="item active"><i class="block desktop icon"></i> {% trans 'OLLTV' %}</a>
+    {% endif %}
+    {% check_module 'claims' as check_module_claims %}
+    {% if check_module_claims %}
+        <a href="{% url 'claims:claims' %}" class="item"><i class="comment icon"></i> {% trans 'Claims' %} </a>
+    {% endif %}
 {% endblock %}
 {% block content %}
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <ul class="well well-sm">
-                {% if error %}
-                    <div class="alert alert-danger alert-dismissible" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <p class="text-center">{{ error }}</p>
+        <div class="column">
+            <div class="ui sticky tabled horizontal segments">
+                <div class="ui tabled segment">
+                    <div class="ui mini compact menu">
+                        <div class="header item">{% trans 'Sort By' %}</div>
+                        <a href="?{% url_replace request 'users_status' '0' %}" class="item {% if 'users_status=0' in request.get_full_path %}active{% elif not request.GET or 'order_by' in request.GET and not 'users_status' in request.GET %}active{% endif %}">
+                            {% trans 'All' %}
+                        </a>
+                        <a href="?{% url_replace request 'users_status' '3' %}" class="item {% if 'users_status=3' in request.get_full_path %}active{% endif %}">
+                            {% trans 'Disabled' %}
+                        </a>
                     </div>
-                {% endif %}
-                {% if iptv.paginator.num_pages > 1 %}
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <ul class="pagination pagination-sm">
-                                {% if iptv.has_previous %}
-                                    <li>
-                                        <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
-                                            <span aria-hidden="true">1</span>
-                                        </a>
-                                    </li>
-                                    {% if iptv.number > 2 %}
-                                        <li class="disabled">
-                                            <a href="#" aria-label="Previous">
-                                                <span aria-hidden="true">...</span>
-                                            </a>
-                                        </li>
-                                    {% endif %}
-                                {% endif %}
-                                {% for p in page_list %}
-                                    {% if iptv.number == p %}
-                                        <li class="active">
-                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                        </li>
-                                    {% else %}
-                                        <li class="">
-                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
-                                {% if iptv.has_next %}
-                                    <li class="disabled">
-                                        <a href="#" aria-label="Previous">
-                                            <span aria-hidden="true">...</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="?{% url_replace_page request 'page' iptv.paginator.num_pages %}" aria-label="Next">
-                                            <span aria-hidden="true">{{ iptv.paginator.num_pages }}</span>
-                                        </a>
-                                    </li>
-                                {% else %}
-                                    <li class="disabled">
-                                        <a href="#" aria-label="Next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                        </a>
-                                    </li>
-                                {% endif %}
-                            </ul>
-                        </li>
-                    </ul>
-                {% endif %}
-                <table class="ui black table table-striped table-hover table-condensed">
-                    <thead>
-                        <tr>
-                            <th>{% trans 'Login' %}</th>
-                            <th>{% trans 'Tarif' %}</th>
-                            <th>{% trans 'mac' %}</th>
-                            <th>{% trans 'pin' %}</th>
-                            <th>{% trans 'Registration' %}</th>
-                            <th>{% trans 'Disable' %}</th>
-                            <th>{% trans 'Actions' %}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for tv in iptv %}
-                        <tr>
-                            <td><a href="{% url 'core:client' tv.uid.id %}">{{ tv.uid.login }}</a></td>
-                            <td>{{ tv.tp.name }}</td>
-                            <td>{{ tv.mac }}</td>
-                            <td>{{ tv.serial }}</td>
-                            <td>{{ tv.registration }}</td>
-                            {% if tv.disable == 1 %}
-                                <td><span style="color: red">{% trans 'Disabled' %}</span></td>
-                            {% else %}
-                                <td><span style="color: green">{% trans 'Active' %}</span></td>
+                </div>
+                <div class="ui tabled segment" style="text-align: center">
+                    <div class="ui mini compact menu">
+                        <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
+                            <i class="gamepad icon"></i>
+                            Xml
+                        </a>
+                        <a href="?{% url_replace request 'csv' '1' %}" class="item">
+                            <i class="video camera icon"></i>
+                            Csv
+                        </a>
+                    </div>
+                </div>
+                <div class="ui tabled segment" style="text-align: right">
+                    {% if iptv.paginator.num_pages > 1 %}
+                        <div id="" class="ui pagination mini menu">
+                            {% if iptv.number == 1 %}
+                                <div class="disabled item">
+                                        1
+                                    </div>
                             {% endif %}
-                            <td><a href="{% url 'core:user_change' tv.uid.id %}">{% trans 'Change' %}</a></td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                {% if iptv.paginator.num_pages > 1 %}
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <ul class="pagination pagination-sm">
-                                {% if iptv.has_previous %}
-                                    <li>
-                                        <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
-                                            <span aria-hidden="true">1</span>
-                                        </a>
-                                    </li>
-                                    {% if iptv.number > 2 %}
-                                        <li class="disabled">
-                                            <a href="#" aria-label="Previous">
-                                                <span aria-hidden="true">...</span>
-                                            </a>
-                                        </li>
-                                    {% endif %}
+                            {% if iptv.has_previous %}
+                                <a href="?{% url_replace_page request 'page' '1' %}" class="item">1</a>
+                                {% if iptv.number > 7 %}
+                                    <div class="disabled item">
+                                        ...
+                                    </div>
                                 {% endif %}
-                                {% for p in page_list %}
-                                    {% if iptv.number == p %}
-                                        <li class="active">
-                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                        </li>
-                                    {% else %}
-                                        <li class="">
-                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
-                                {% if iptv.has_next %}
-                                    <li class="disabled">
-                                        <a href="#" aria-label="Previous">
-                                            <span aria-hidden="true">...</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="?{% url_replace_page request 'page' iptv.paginator.num_pages %}" aria-label="Next">
-                                            <span aria-hidden="true">{{ iptv.paginator.num_pages }}</span>
-                                        </a>
-                                    </li>
+                            {% endif %}
+                            {% for p in page_list %}
+                                {% if p == 1 %}
                                 {% else %}
-                                    <li class="disabled">
-                                        <a href="#" aria-label="Next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                        </a>
-                                    </li>
+                                    {% if iptv.number == p %}
+                                        <a class="item active" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                    {% else %}
+                                        <a class="item" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                    {% endif %}
                                 {% endif %}
-                            </ul>
-                        </li>
-                    </ul>
-                {% endif %}
-            </ul>
+                            {% endfor %}
+                            {% if iptv.has_next %}
+                                {% if iptv.number < iptv.paginator.num_pages|add:"-5" %}
+                                    <div class="disabled item">
+                                        ...
+                                    </div>
+                                        <a class="item" href="?{% url_replace_page request 'page' iptv.paginator.num_pages %}" aria-label="Next">
+                                        {{ iptv.paginator.num_pages }}
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <table class="ui black small very compact selectable striped table">
+                <thead>
+                    <tr>
+                        <th>{% trans 'Login' %}</th>
+                        <th>{% trans 'Tarif' %}</th>
+                        <th>{% trans 'mac' %}</th>
+                        <th>{% trans 'pin' %}</th>
+                        <th>{% trans 'Registration' %}</th>
+                        <th>{% trans 'Disable' %}</th>
+                        <th>{% trans 'Actions' %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for tv in iptv %}
+                    <tr>
+                        <td><a href="{% url 'core:client' tv.uid.id %}">{{ tv.uid.login }}</a></td>
+                        <td>{{ tv.tp.name }}</td>
+                        <td>{{ tv.mac }}</td>
+                        <td>{{ tv.serial }}</td>
+                        <td>{{ tv.registration }}</td>
+                        {% if tv.disable == 1 %}
+                            <td><span style="color: red">{% trans 'Disabled' %}</span></td>
+                        {% else %}
+                            <td><span style="color: green">{% trans 'Active' %}</span></td>
+                        {% endif %}
+                        <td><a href="{% url 'core:user_change' tv.uid.id %}">{% trans 'Change' %}</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock %}

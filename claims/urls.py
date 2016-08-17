@@ -7,9 +7,10 @@ app_name = 'claims'
 
 urlpatterns = [
     url(r'^$', views.index, name='claims'),
-    url(r'^claims_list/', views.claims_list, name='claims_list'),
+    # url(r'^claims_list/', views.claims_list, name='claims_list'),
     url(r'^name/', views.name, name='name'),
     url(r'^all/', views.claims_list_all, name='list_all'),
+    # url(r'^(?P<uid>.+)/claims/$', views.user_claims, name='list_all'),
     # url(r'^new/', views.claim_create, name='claim_new'),
     # url(r'^(?P<id>.+)/edit/', views.claim_edit, name='claim_edit'),
     # url(r'^(?P<uid>.+)/edit/state/', views.claim_edit, name='claim_state'),

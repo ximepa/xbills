@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+{% load url %}
+{% load i18n %}
+{% block breadcrumbs %}
+    <i class="right angle icon divider"></i>
+    <div class="active section">{% trans 'Chat' %}</div>
+{% endblock %}
+{% block breadcrumbs_sub_header %}
+    {% trans 'There you can talk with enother administrators' %}
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="thirteen wide column">
+            <div class="ui segment">
+                <div class="ui form">
+                  <div class="field">
+                    <textarea readonly id="billboard"></textarea>
+                  </div>
+                    <div class="field">
+                        <div class="fields">
+                          <div class="fourteen wide field">
+                            <input id="text_message" placeholder="Street Address" type="text">
+                          </div>
+                          <div class="two wide field">
+                            <button id="send_message" class="fluid ui primary basic button" type="submit">Submit</button>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </div>
+        <div class="three wide column">
+            <div class="ui segment">
+                {% if admins %}
+                    <div class="ui middle aligned divided list">
+                        {% for admin in admins.users %}
+                          <div class="item">
+                            <div class="content">
+                              <a class="header">{{ admin.login }}</a>
+                            </div>
+                          </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

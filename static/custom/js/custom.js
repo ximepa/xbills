@@ -1,13 +1,16 @@
 var dashboard = {};
 var global = {};
-// $( document ).ready(function() {
-//     $.each($("#show_col li").children(), function (i, item) {
-//         if (item.attributes['checked']) {
-//             console.log(item.attributes['value'])
-//         }
-//
-//     })
-// });
+$( document ).ready(function() {
+    //$('.menu-toggle-button').click(function(){
+    //    $('.sidebar').sidebar('setting', {dimPage: false}).sidebar('toggle');
+    //});
+    //$('.sidebar').sidebar('setting', {dimPage: false}).sidebar({context: '.visible.example .bottom.segment'});
+    $('.ui.dropdown').dropdown();
+    $('.sticky').sticky();
+    $('.popup')
+      .popup()
+    ;
+});
 function setCookie(cname, value) {
     document.cookie = cname + "=" + value + ";"
 }
@@ -35,40 +38,7 @@ function formatBytes(bytes,decimals) {
    var i = Math.floor(Math.log(bytes) / Math.log(k));
    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
-
-dashboard.getCpu = function () {
-    $.getJSON('?cpu', function (data) {
-        $.each(data, function(index, value) {
-            var cores = index +1;
-            if (value.core > 40 && value.core < 60) {
-                $('#core' + cores).css('width', data[index].core + '%').attr('aria-valuenow', data[index].core).removeClass('progress-bar-danger').addClass('progress-bar-warning');
-                $('#core' + cores).text(data[index].core + '%');
-            }
-            else if (value.core > 65) {
-                $('#core' + cores).css('width', data[index].core + '%').attr('aria-valuenow', data[index].core).removeClass('progress-bar-warning').addClass('progress-bar-danger');
-                $('#core' + cores).text(data[index].core + '%');
-            }
-            else {
-                $('#core' + cores).css('width', data[index].core + '%').attr('aria-valuenow', data[index].core).removeClass('progress-bar-warning progress-bar-danger');
-                $('#core' + cores).text(data[index].core + '%');
-            }
-        });
-    });
-};
-
-dashboard.getPay = function () {
-    $.getJSON('?pay', function (data) {
-        $('#day_sum').text(data.pay_day[0].sum__sum);
-        $('#day_sum_count').text(data.pay_day[1]);
-        $('#week_sum').text(data.pay_week[0].sum__sum);
-        $('#week_sum_count').text(data.pay_week[1]);
-        $('#month_sum').text(data.pay_month[0].sum__sum);
-        $('#month_sum_count').text(data.pay_month[1]);
-    })
-};
-
 var uid = "UID";
-
 global.getPayNow = function () {
     $.getJSON('/admin/?pay_now', function (data) {
         if (uid && getCookie('pay_uid') != data.pay_now[3]) {
@@ -81,40 +51,20 @@ global.getPayNow = function () {
 	setCookie('pay_uid', data.pay_now[3])
     })
 };
-
-var claim = "claim";
-
-global.getClaimsNotifi = function () {
-    $.getJSON('/admin/claims/?claim_notifi', function (data) {
-        if (claim && getCookie('cuid') != data.claim[1]) {
-            $.each(data, function (index, value) {
-                toastr.claims(value[0], 'UID: <a style="color: white" href="clients/' + value[1] + '"' + '>' + value[1] + '</a>', value[2], value[3], value[4],
-                    {timeOut: 0, onclick: null, extendedTimeOut: 0})
-            })
-        }
-        claim = data.claim[1];
-	setCookie('cuid', data.claim[1]);
-    })
-
-};
-
-dashboard.getMemory = function () {
-    $.getJSON('?memory', function (data) {
-        $('#uptime').text(data.uptime);
-        $('#getMemory').css('width', data.memory + '%').attr('aria-valuenow', data.memory).removeClass('progress-bar-danger').addClass('progress-bar-warning');
-        $('#getMemory').text(data.memory + '%');
-        $('#getSwap').css('width', data.swap + '%').attr('aria-valuenow', data.swap).removeClass('progress-bar-danger').addClass('progress-bar-warning');
-        $('#getSwap').text(data.swap + '%');
-        $('#getMemoryTotal').text(formatBytes(data.total));
-        $('#getMemoryUsed').text(formatBytes(data.used));
-        $('#getMemoryFree').text(formatBytes(data.free));
-        $('#getMemoryCached').text(formatBytes(data.cached));
-        $('#getSwapTotal').text(formatBytes(data.stotal));
-        $('#getSwapUsed').text(formatBytes(data.sused));
-        $('#getSwapFree').text(formatBytes(data.sfree));
-    })
-};
-
+//var claim = "claim";
+//global.getClaimsNotifi = function () {
+//    $.getJSON('/admin/claims/?claim_notifi', function (data) {
+//        if (claim && getCookie('cuid') != data.claim[1]) {
+//            $.each(data, function (index, value) {
+//                toastr.claims(value[0], 'UID: <a style="color: white" href="clients/' + value[1] + '"' + '>' + value[1] + '</a>', value[2], value[3], value[4],
+//                    {timeOut: 0, onclick: null, extendedTimeOut: 0})
+//            })
+//        }
+//        claim = data.claim[1];
+//	setCookie('cuid', data.claim[1]);
+//    })
+//
+//};
 // dashboard.getProc = function() {
 //       function rowStyle(row, index) {
 //           if (row.cpu > 35 && row.cpu < 50) {

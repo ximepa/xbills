@@ -2,6 +2,7 @@
 from django.utils.translation import gettext as _
 from django import forms
 from .models import Admin, District, Street, House, Group
+from django.db.models import Q
 import os
 
 
@@ -57,9 +58,9 @@ class SearchForm(forms.Form):
     login = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control input-sm', 'placeholder': u'Login'}))
     uid = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control input-sm', 'placeholder': u'UID'}))
     disabled = forms.ChoiceField(widget=forms.RadioSelect(), choices=DISABLED)
-    district = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control input-sm', 'placeholder': u'District'}), queryset=District.objects.all(), required=False)
-    street = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control input-sm', 'placeholder': u'Street'}), queryset=Street.objects.all(), required=False)
-    house = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control input-sm   ', 'placeholder': u'House'}), queryset=House.objects.all(), required=False)
+    district = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'ui search dropdown', 'placeholder': u'District'}), queryset=District.objects.all(), required=False)
+    street = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'ui search dropdown', 'placeholder': u'Street'}), queryset=Street.objects.all(), required=False)
+    house = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'ui search dropdown', 'placeholder': u'House'}), queryset=House.objects.filter(~Q(number="")), required=False,)
     flat = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control input-sm', 'placeholder': u'Flat'}))
 
 

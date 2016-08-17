@@ -3,7 +3,7 @@
 {% load url %}
 {% load staticfiles %}
 {% block extra_js %}
-    <script src="{% static 'djangorpc/js/jquery-1.9.1.min.js' %}"></script>
+{#    <script src="{% static 'djangorpc/js/jquery-1.9.1.min.js' %}"></script>#}
     <script src="{% static 'djangorpc/js/jquery.util.js' %}"></script>
     <script src="{% static 'djangorpc/js/jquery.rpc.js' %}"></script>
     <script src="{% static 'djangorpc/js/jquery.form.js' %}"></script>
@@ -95,28 +95,75 @@ $(document).ready(function() {
 </script>
 {% endblock %}
 {% block breadcrumbs %}
-    <ol class="breadcrumb">
-      <li class=""><a href="{% url 'core:index' %}">{% trans 'Dashboard' %}</a></li>
-      <li class="active"><a href="{% url 'core:search' %}?search_type={{ search_type }}">{% trans 'Search' %}</a></li>
-    </ol>
+    <i class="right angle icon divider"></i>
+    <div class="active section">{% trans 'Search' %}</div>
+{% endblock %}
+{% block breadcrumbs_sub_header %}
+    {% trans 'Search user by criteria' %}
 {% endblock %}
 {% block content %}
     {% if search %}
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="well well-sm">
-                <nav class="navbar navbar-inverse no-brand" data-spy="affix" data-offset-top="60" data-offset-bottom="200">
-                    <div class="container-fluid">
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                            {% if search_type == '1' %}
+        <div class="column">
+            <nav class="navbar navbar-inverse no-brand" data-spy="affix" data-offset-top="60" data-offset-bottom="200">
+                <div class="container-fluid">
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        {% if search_type == '1' %}
+                            <ul class="pagination pagination-sm">
+                                {% if users.has_previous %}
+                                    <li>
+                                        <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
+                                            <span aria-hidden="true">1</span>
+                                        </a>
+                                    </li>
+                                    {% if users.number > 2 %}
+                                        <li class="disabled">
+                                            <a href="#" aria-label="Previous">
+                                                <span aria-hidden="true">...</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
+                                {% endif %}
+                                {% for p in page_list %}
+                                    {% if users.number == p %}
+                                        <li class="active">
+                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="">
+                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if users.has_next %}
+                                    <li class="disabled">
+                                        <a href="#" aria-label="Previous">
+                                            <span aria-hidden="true">...</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
+                                            <span aria-hidden="true">{{ users.paginator.num_pages }}</span>
+                                        </a>
+                                    </li>
+                                {% else %}
+                                    <li class="disabled">
+                                        <a href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        {% elif search_type == '3' %}
+                            <nav style="float: left">
                                 <ul class="pagination pagination-sm">
-                                    {% if users.has_previous %}
+                                    {% if fees.has_previous %}
                                         <li>
                                             <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
                                                 <span aria-hidden="true">1</span>
                                             </a>
                                         </li>
-                                        {% if users.number > 2 %}
+                                        {% if fees.number > 2 %}
                                             <li class="disabled">
                                                 <a href="#" aria-label="Previous">
                                                     <span aria-hidden="true">...</span>
@@ -125,7 +172,7 @@ $(document).ready(function() {
                                         {% endif %}
                                     {% endif %}
                                     {% for p in page_list %}
-                                        {% if users.number == p %}
+                                        {% if fees.number == p %}
                                             <li class="active">
                                                 <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
                                             </li>
@@ -135,15 +182,15 @@ $(document).ready(function() {
                                             </li>
                                         {% endif %}
                                     {% endfor %}
-                                    {% if users.has_next %}
+                                    {% if fees.has_next %}
                                         <li class="disabled">
                                             <a href="#" aria-label="Previous">
                                                 <span aria-hidden="true">...</span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
-                                                <span aria-hidden="true">{{ users.paginator.num_pages }}</span>
+                                            <a href="?{% url_replace_page request 'page' fees.paginator.num_pages %}" aria-label="Next">
+                                                <span aria-hidden="true">{{ fees.paginator.num_pages }}</span>
                                             </a>
                                         </li>
                                     {% else %}
@@ -154,210 +201,163 @@ $(document).ready(function() {
                                         </li>
                                     {% endif %}
                                 </ul>
-                            {% elif search_type == '3' %}
-                                <nav style="float: left">
-                                    <ul class="pagination pagination-sm">
-                                        {% if fees.has_previous %}
-                                            <li>
-                                                <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
-                                                    <span aria-hidden="true">1</span>
-                                                </a>
-                                            </li>
-                                            {% if fees.number > 2 %}
-                                                <li class="disabled">
-                                                    <a href="#" aria-label="Previous">
-                                                        <span aria-hidden="true">...</span>
-                                                    </a>
-                                                </li>
-                                            {% endif %}
-                                        {% endif %}
-                                        {% for p in page_list %}
-                                            {% if fees.number == p %}
-                                                <li class="active">
-                                                    <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                                </li>
-                                            {% else %}
-                                                <li class="">
-                                                    <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                                </li>
-                                            {% endif %}
-                                        {% endfor %}
-                                        {% if fees.has_next %}
+                            </nav>
+                        {% elif search_type == '4' %}
+                            <nav style="float: left">
+                                <ul class="pagination pagination-sm">
+                                    {% if payments.has_previous %}
+                                        <li>
+                                            <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
+                                                <span aria-hidden="true">1</span>
+                                            </a>
+                                        </li>
+                                        {% if payments.number > 2 %}
                                             <li class="disabled">
                                                 <a href="#" aria-label="Previous">
                                                     <span aria-hidden="true">...</span>
                                                 </a>
                                             </li>
-                                            <li>
-                                                <a href="?{% url_replace_page request 'page' fees.paginator.num_pages %}" aria-label="Next">
-                                                    <span aria-hidden="true">{{ fees.paginator.num_pages }}</span>
-                                                </a>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% for p in page_list %}
+                                        {% if payments.number == p %}
+                                            <li class="active">
+                                                <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
                                             </li>
                                         {% else %}
-                                            <li class="disabled">
-                                                <a href="#" aria-label="Next">
-                                                    <span aria-hidden="true">&raquo;</span>
-                                                </a>
+                                            <li class="">
+                                                <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
                                             </li>
                                         {% endif %}
-                                    </ul>
-                                </nav>
-                            {% elif search_type == '4' %}
-                                <nav style="float: left">
-                                    <ul class="pagination pagination-sm">
-                                        {% if payments.has_previous %}
-                                            <li>
-                                                <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
-                                                    <span aria-hidden="true">1</span>
-                                                </a>
-                                            </li>
-                                            {% if payments.number > 2 %}
-                                                <li class="disabled">
-                                                    <a href="#" aria-label="Previous">
-                                                        <span aria-hidden="true">...</span>
-                                                    </a>
-                                                </li>
-                                            {% endif %}
-                                        {% endif %}
-                                        {% for p in page_list %}
-                                            {% if payments.number == p %}
-                                                <li class="active">
-                                                    <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                                </li>
-                                            {% else %}
-                                                <li class="">
-                                                    <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                                </li>
-                                            {% endif %}
-                                        {% endfor %}
-                                        {% if payments.has_next %}
-                                            <li class="disabled">
-                                                <a href="#" aria-label="Previous">
-                                                    <span aria-hidden="true">...</span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="?{% url_replace_page request 'page' payments.paginator.num_pages %}" aria-label="Next">
-                                                    <span aria-hidden="true">{{ payments.paginator.num_pages }}</span>
-                                                </a>
-                                            </li>
-                                        {% else %}
-                                            <li class="disabled">
-                                                <a href="#" aria-label="Next">
-                                                    <span aria-hidden="true">&raquo;</span>
-                                                </a>
-                                            </li>
-                                        {% endif %}
-                                    </ul>
-                                </nav>
-                            {% endif %}
-                            {% if search_type == '1' %}
-                                <ul class="nav navbar-nav navbar-right">
-                                    <button type="" class="btn btn-default btn-sm navbar-btn" data-toggle="modal" data-target="#filter_model" aria-haspopup="true" aria-expanded="false">
-                                        <span><i class="fa fa-plus"></i></span>
-                                    </button>
+                                    {% endfor %}
+                                    {% if payments.has_next %}
+                                        <li class="disabled">
+                                            <a href="#" aria-label="Previous">
+                                                <span aria-hidden="true">...</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="?{% url_replace_page request 'page' payments.paginator.num_pages %}" aria-label="Next">
+                                                <span aria-hidden="true">{{ payments.paginator.num_pages }}</span>
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li class="disabled">
+                                            <a href="#" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                    {% endif %}
                                 </ul>
-                            {% endif %}
-                        </div>
+                            </nav>
+                        {% endif %}
+                        {% if search_type == '1' %}
+                            <ul class="nav navbar-nav navbar-right">
+                                <button type="" class="btn btn-default btn-sm navbar-btn" data-toggle="modal" data-target="#filter_model" aria-haspopup="true" aria-expanded="false">
+                                    <span><i class="fa fa-plus"></i></span>
+                                </button>
+                            </ul>
+                        {% endif %}
                     </div>
-                </nav>
-                <div class="modal fade" id="filter_model" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog modal-title modal-sm">
-                        <div class="modal-content">
-                            <div class="modal-header">Сервер доступа
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                            </div>
-                            <div class="modal-body text-left">
-                                <form class="form-horizontal" method="post" name="fieldform">{% csrf_token %}
-                                    <div class="panel panel-default panel-form">
-                                        {% for item in all_table_choices %}
-                                            <div class="checkbox">
-                                                <label>
-                                                    {% if item == 'user_id__id' %}
-                                                        {% if item in default_table_choices %}
-                                                            <input type="checkbox" value="{{ item }}" checked name="includes"> UID
-                                                        {% else %}
-                                                            <input type="checkbox" value="{{ item }}" name="includes"> UID
-                                                        {% endif %}
-                                                    {% elif 'user_id__login' == item %}
+                </div>
+            </nav>
+            <div class="modal fade" id="filter_model" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-title modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-header">Сервер доступа
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body text-left">
+                            <form class="form-horizontal" method="post" name="fieldform">{% csrf_token %}
+                                <div class="panel panel-default panel-form">
+                                    {% for item in all_table_choices %}
+                                        <div class="checkbox">
+                                            <label>
+                                                {% if item == 'user_id__id' %}
+                                                    {% if item in default_table_choices %}
+                                                        <input type="checkbox" value="{{ item }}" checked name="includes"> UID
+                                                    {% else %}
+                                                        <input type="checkbox" value="{{ item }}" name="includes"> UID
+                                                    {% endif %}
+                                                {% elif 'user_id__login' == item %}
 {#                                                        {% if item in default_table_choices %}#}
-                                                        <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'Login' %}
+                                                    <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'Login' %}
 {#                                                        {% else %}#}
 {#                                                            <input type="checkbox" value="{{ item }}" disabled checked name="includes"> {% trans 'Login' %}#}
 {#                                                        {% endif %}#}
-                                                    {% elif 'district' == item %}
-                                                        {% if item in default_table_choices %}
-                                                            <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'City' %}
-                                                        {% else %}
-                                                            <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'City' %}
-                                                        {% endif %}
-                                                    {% elif 'fio' == item %}
-                                                        {% if item in default_table_choices %}
-                                                            <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'FIO' %}
-                                                        {% else %}
-                                                            <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'FIO' %}
-                                                        {% endif %}
-                                                    {% elif 'street' == item %}
-                                                        {% if item in default_table_choices %}
-                                                            <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'Street' %}
-                                                        {% else %}
-                                                            <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'Street' %}
-                                                        {% endif %}
-                                                    {% elif 'location' == item %}
-                                                        {% if item in default_table_choices %}
-                                                            <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'House' %}
-                                                        {% else %}
-                                                            <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'House' %}
-                                                        {% endif %}
-                                                    {% elif 'kv' == item %}
-                                                        {% if item in default_table_choices %}
-                                                            <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'Kv' %}
-                                                        {% else %}
-                                                            <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'Kv' %}
-                                                        {% endif %}
-                                                    {% elif 'user_id__bill__deposit' == item %}
-                                                        {% if item in default_table_choices %}
-                                                            <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'Deposit' %}
-                                                        {% else %}
-                                                            <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'Deposit' %}
-                                                        {% endif %}
-                                                    {% elif 'user_id__credit' == item %}
-                                                        {% if item in default_table_choices %}
-                                                            <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'Credit' %}
-                                                        {% else %}
-                                                            <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'Credit' %}
-                                                        {% endif %}
-                                                    {% elif 'user_id__disabled' == item %}
-                                                        {% if item in default_table_choices %}
-                                                            <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'Disabled' %}
-                                                        {% else %}
-                                                            <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'Disabled' %}
-                                                        {% endif %}
-                                                    {% elif 'user_id__deleted' == item %}
-                                                        <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'Deleted' %}
+                                                {% elif 'district' == item %}
+                                                    {% if item in default_table_choices %}
+                                                        <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'City' %}
+                                                    {% else %}
+                                                        <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'City' %}
                                                     {% endif %}
-                                                </label>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                    <hr>
-                                    <div class="row text-center">
-                                        <input id="show_cols" name="show_cols" class="btn btn-primary" value="{% trans 'Show' %}" type="submit">
-                                    </div>
-                                </form>
-                            </div>
+                                                {% elif 'fio' == item %}
+                                                    {% if item in default_table_choices %}
+                                                        <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'FIO' %}
+                                                    {% else %}
+                                                        <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'FIO' %}
+                                                    {% endif %}
+                                                {% elif 'street' == item %}
+                                                    {% if item in default_table_choices %}
+                                                        <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'Street' %}
+                                                    {% else %}
+                                                        <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'Street' %}
+                                                    {% endif %}
+                                                {% elif 'location' == item %}
+                                                    {% if item in default_table_choices %}
+                                                        <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'House' %}
+                                                    {% else %}
+                                                        <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'House' %}
+                                                    {% endif %}
+                                                {% elif 'kv' == item %}
+                                                    {% if item in default_table_choices %}
+                                                        <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'Kv' %}
+                                                    {% else %}
+                                                        <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'Kv' %}
+                                                    {% endif %}
+                                                {% elif 'user_id__bill__deposit' == item %}
+                                                    {% if item in default_table_choices %}
+                                                        <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'Deposit' %}
+                                                    {% else %}
+                                                        <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'Deposit' %}
+                                                    {% endif %}
+                                                {% elif 'user_id__credit' == item %}
+                                                    {% if item in default_table_choices %}
+                                                        <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'Credit' %}
+                                                    {% else %}
+                                                        <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'Credit' %}
+                                                    {% endif %}
+                                                {% elif 'user_id__disabled' == item %}
+                                                    {% if item in default_table_choices %}
+                                                        <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'Disabled' %}
+                                                    {% else %}
+                                                        <input type="checkbox" value="{{ item }}" name="includes"> {% trans 'Disabled' %}
+                                                    {% endif %}
+                                                {% elif 'user_id__deleted' == item %}
+                                                    <input type="checkbox" value="{{ item }}" checked name="includes"> {% trans 'Deleted' %}
+                                                {% endif %}
+                                            </label>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <hr>
+                                <div class="row text-center">
+                                    <input id="show_cols" name="show_cols" class="btn btn-primary" value="{% trans 'Show' %}" type="submit">
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
-                {% if search_type == '1' %}
-                    {% include 'table.html' %}
-                {% elif search_type == '3' %}
-                    {% include 'table_fees.html' %}
-                {% elif search_type == '4' %}
-                    {% include 'table_payments.html' %}
-                {% endif %}
+            </div>
+            {% if search_type == '1' %}
+                {% include 'table.html' %}
+            {% elif search_type == '3' %}
+                {% include 'table_fees.html' %}
+            {% elif search_type == '4' %}
+                {% include 'table_payments.html' %}
+            {% endif %}
                 <ul class="list-group">
                     <li class="list-group-item list-group-item-botton">
                         <span class="badge">{{ all }}</span>
@@ -383,139 +383,144 @@ $(document).ready(function() {
     </div>
     {% endif %}
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="well well-sm">
-                <div class="row">
-                    <div class="col-lg-12">
-                        {% if error %}
-                            <div class="alert alert-danger alert-dismissible" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <p class="text-center">{{ error }}</p>
+        <div class="column">
+            {% if error %}
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <p class="text-center">{{ error }}</p>
+                </div>
+            {% endif %}
+            <div class="ui four mini item menu">
+                <a href="{% url 'core:search' %}?search_type=1" class="item {% if search_type == '1' %}active{% endif %}">{% trans 'Clients' %}</a>
+                <a href="{% url 'core:search' %}?search_type=2" class="item {% if search_type == '2' %}active{% endif %}">{% trans 'Company' %}</a>
+                <a href="{% url 'core:search' %}?search_type=3" class="item {% if search_type == '3' %}active{% endif %}">{% trans 'Fees' %}</a>
+                <a href="{% url 'core:search' %}?search_type=4" class="item {% if search_type == '4' %}active{% endif %}">{% trans 'Payments' %}</a>
+            </div>
+            <div class="ui grid">
+                <div class="two wide column"></div>
+                <div class="twelve wide column">
+                    <form class="ui mini form" method="GET">
+                        {% if search_type == '1' %}
+                            <div class="field">
+                                <div class="two fields">
+                                    <div class="field">
+                                        <label>{% trans 'Login' %}</label>
+                                        {{ search_form.login }}
+                                    </div>
+                                    <div class="field">
+                                        <label>{% trans 'UID' %}</label>
+                                        {{ search_form.uid }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="inline fields">
+                                <label for="fruit">Select your favorite fruit:</label>
+                                {% for radio in search_form.disabled %}
+                                    <div class="field">
+                                        <div class="ui radio checkbox">
+                                            {{ radio.tag }}
+                                            <label>{{ radio.choice_label }}</label>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div class="field">
+                                <div class="two fields">
+                                    <div class="field">
+                                        <label>{% trans 'District' %}</label>
+                                        {{ search_form.district }}
+                                    </div>
+                                    <div class="field">
+                                        <label>{% trans 'Street' %}</label>
+                                        {{ search_form.street }}
+                                    </div>
+                                </div>
+                                <div class="two fields">
+                                    <div class="field">
+                                        <label>{% trans 'House' %}</label>
+                                        {{ search_form.house }}
+                                    </div>
+                                    <div class="field">
+                                        <label>{% trans 'Flat' %}</label>
+                                        {{ search_form.flat }}
+                                    </div>
+                                </div>
+                                <input type="hidden" name="search" value="1">
+                                <input type="hidden" name="search_type" value="1">
+                                <hr/>
+                            </div>
+                        {% elif search_type == '3' %}
+                            <div class="field">
+                                <label>Name</label>
+                                <div class="two fields">
+                                    <div class="field">
+                                        <input name="shipping[first-name]" placeholder="First Name" type="text">
+                                    </div>
+                                    <div class="field">
+                                        <input name="shipping[last-name]" placeholder="Last Name" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        {% elif search_type == '4' %}
+                            <div class="field">
+                                <label>Name</label>
+                                <div class="two fields">
+                                    <div class="field">
+                                        <input name="shipping[first-name]" placeholder="First Name" type="text">
+                                    </div>
+                                    <div class="field">
+                                        <input name="shipping[last-name]" placeholder="Last Name" type="text">
+                                    </div>
+                                </div>
                             </div>
                         {% endif %}
-                        <div class="page-header text-center">
-                            <h4><i class="fa fa-search"></i> {% trans 'Search' %}</h4>
-                        </div>
-                        <br/>
-                        <div class="col-md-3"></div>
-                        <div class="col-md-6">
-                            <form method="GET" class="text-center">
-                                <ul class="nav nav-pills nav-justified">
-                                    {% if search_type == '1' %}
-                                        <li role="presentation" class="active"><a href="{% url 'core:search' %}?search_type=1">{% trans 'Clients' %}</a></li>
-                                    {% else %}
-                                        <li role="presentation" class=""><a href="{% url 'core:search' %}?search_type=1">{% trans 'Clients' %}</a></li>
-                                    {% endif %}
-                                    {% if search_type == '2' %}
-                                        <li role="presentation" class="active"><a href="{% url 'core:search' %}?search_type=2">{% trans 'Company' %}</a></li>
-                                    {% else %}
-                                        <li role="presentation"><a href="{% url 'core:search' %}?search_type=2">{% trans 'Company' %}</a></li>
-                                    {% endif %}
-                                    {% if search_type == '3' %}
-                                        <li role="presentation" class="active"><a href="{% url 'core:search' %}?search_type=3">{% trans 'Fees' %}</a></li>
-                                    {% else %}
-                                        <li role="presentation"><a href="{% url 'core:search' %}?search_type=3">{% trans 'Fees' %}</a></li>
-                                    {% endif %}
-                                    {% if search_type == '4' %}
-                                        <li role="presentation" class="active"><a href="{% url 'core:search' %}?search_type=4">{% trans 'Payments' %}</a></li>
-                                    {% else %}
-                                        <li role="presentation"><a href="{% url 'core:search' %}?search_type=4">{% trans 'Payments' %}</a></li>
-                                    {% endif %}
-                                </ul>
-                                <hr>
-                                {% if search_type == '1' %}
-                                    <div class="row">
-                                        <div class="col-lg-6">
-                                            <label>{% trans 'Login' %}</label>
-                                            {{ search_form.login }}
-                                            <label>Password</label>
-                                            <input type="password" name="" class="form-control input-sm" id="" value="">
-                                            <div class="row">
-                                                <div class="col-lg-2">
-                                                    {% trans 'Disabled: ' %}
-                                                </div>
-                                                <div class="col-lg-10">
-
-                                                {% for radio in search_form.disabled %}
-                                                    <label for="{{ radio.id_for_label }}" class="radio-inline">
-                                                        {{ radio.tag }}
-                                                        {{ radio.choice_label }}
-                                                    </label>
-                                                {% endfor %}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <label>{% trans 'UID' %}</label>
-                                            {{ search_form.uid }}
-                                            <label>Email Address</label>
-                                            <input type="" name="" class="form-control input-sm" id="" value="">
-                                        </div>
-                                    </div>
-                                    <hr/>
-                                    <div class="row">
-                                        <div class="col-lg-3"></div>
-                                        <div class="col-lg-6">
-                                            <label>{% trans 'District' %}</label>
-                                            {{ search_form.district }}
-                                            <label>{% trans 'Street' %}</label>
-                                            {{ search_form.street }}
-                                            <label>{% trans 'House' %}</label>
-                                            {{ search_form.house }}
-                                            <label>{% trans 'Flat' %}</label>
-                                            {{ search_form.flat }}
-                                            <input type="hidden" name="search" value="1">
-                                            <input type="hidden" name="search_type" value="1">
-                                            <hr/>
-                                            <button type="submit" class="btn btn-default">Submit</button>
-                                        </div>
-                                        <div class="col-lg-3"></div>
-                                    </div>
-                                {% elif search_type == '3' %}
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <label>{% trans 'Login' %}</label>
-                                            {{ search_fees_form.login }}
-                                            <label>Password</label>
-                                            {{ search_fees_form.group }}
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-3"></div>
-                                        <div class="col-lg-6">
-                                            <input type="hidden" name="search" value="1">
-                                            <input type="hidden" name="search_type" value="3">
-                                            <hr/>
-                                            <button type="submit" class="btn btn-default">Submit</button>
-                                        </div>
-                                        <div class="col-lg-3"></div>
-                                    </div>
-                                {% elif search_type == '4' %}
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <label>{% trans 'Login' %}</label>
-                                            {{ search_payments_form.login }}
-                                            <label>Password</label>
-                                            {{ search_payments_form.group }}
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-3"></div>
-                                        <div class="col-lg-6">
-                                            <input type="hidden" name="search" value="1">
-                                            <input type="hidden" name="search_type" value="4">
-                                            <hr/>
-                                            <button type="submit" class="btn btn-default">Submit</button>
-                                        </div>
-                                        <div class="col-lg-3"></div>
-                                    </div>
-                                {% endif %}
-                            </form>
-                        </div>
-                        <div class="col-md-3"></div>
-                    </div>
+                        <button class="ui submit button" tabindex="0">Submit Order</button>
+                    </form>
                 </div>
+                <div class="two wide column"></div>
             </div>
+                {% if search_type == '1' %}
+
+                {% elif search_type == '3' %}
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label>{% trans 'Login' %}</label>
+                            {{ search_fees_form.login }}
+                            <label>Password</label>
+                            {{ search_fees_form.group }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3"></div>
+                        <div class="col-lg-6">
+                            <input type="hidden" name="search" value="1">
+                            <input type="hidden" name="search_type" value="3">
+                            <hr/>
+                            <button type="submit" class="btn btn-default">Submit</button>
+                        </div>
+                        <div class="col-lg-3"></div>
+                    </div>
+                {% elif search_type == '4' %}
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label>{% trans 'Login' %}</label>
+                            {{ search_payments_form.login }}
+                            <label>Password</label>
+                            {{ search_payments_form.group }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3"></div>
+                        <div class="col-lg-6">
+                            <input type="hidden" name="search" value="1">
+                            <input type="hidden" name="search_type" value="4">
+                            <hr/>
+                            <button type="submit" class="btn btn-default">Submit</button>
+                        </div>
+                        <div class="col-lg-3"></div>
+                    </div>
+                {% endif %}
+            </form>
         </div>
     </div>
 {% endblock %}

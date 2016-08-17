@@ -4,8 +4,8 @@
 {% block breadcrumbs %}
     <ol class="breadcrumb">
       <li class=""><a href="{% url 'core:index' %}">{% trans 'Dashboard' %}</a></li>
-      <li class=""><a href="{% url 'core:client' uid %}">{{ client.login }} (UID: {{ client.id }})</a></li>
-      <li class="active">{% trans 'Fees' %}</li>
+      <li class=""><a href="{% url 'core:client' client.id %}">{{ client.login }} (UID: {{ client.id }})</a></li>
+      <li class="active">{% trans 'Claims' %}</li>
     </ol>
 {% endblock %}
 {% block content %}
@@ -65,7 +65,7 @@
                                         </ul>
                                     </nav>
                                 {% endif %}
-                                <form style="" class="navbar-form" id="export_form" name="export" method="POST" action="{% url 'core:client_fees' uid %}?export">{% csrf_token %}
+                                <form style="" class="navbar-form" id="export_form" name="export" method="POST" action="{% url 'core:client_fees' client.id %}?export">{% csrf_token %}
                                     <div class="form-group form-group-sm">
                                         <div class="input-group date">
                                             <input id="last" data-format="yyyy-MM-dd" type="date" name="Last" placeholder="Last" class="form-control" value="" style="width: 50%; border-right: none;" />
@@ -93,7 +93,7 @@
                     </nav>
                     {% include 'table_fees.html' %}
                 {% else %}
-                    {% trans 'Fees not found' %}
+                    {% trans 'Claims not found' %}
                 {% endif %}
             </div>
         </div>

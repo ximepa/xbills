@@ -12,72 +12,74 @@ msgstr ""
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: \n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: claims/models.py:20
 msgid "The given username must be set"
-msgstr ""
+msgstr "Дане ім'я користувача повинно бути встановлено"
 
 #: claims/models.py:47
 msgid ""
 "Required. 30 characters or fewer. Letters, numbers and @/./+/-/_ characters"
 msgstr ""
+"Вимагається. 30 символів або менше. Букви, цифри і @ / / + / -. / _ Символів"
 
 #: claims/models.py:49
 msgid "first name"
-msgstr ""
+msgstr "ім'я"
 
 #: claims/models.py:50
 msgid "last name"
-msgstr ""
+msgstr "прізвище"
 
 #: claims/models.py:51
 msgid "email address"
-msgstr ""
+msgstr "адреса електронної пошти"
 
 #: claims/models.py:52
 msgid "staff status"
-msgstr ""
+msgstr "статус персоналу"
 
 #: claims/models.py:53
 msgid "Designates whether the user can log into this admin site."
-msgstr ""
+msgstr "Позначає, чи може користувач увійти в цей сайт адміністратора."
 
 #: claims/models.py:54
 msgid "active"
-msgstr ""
+msgstr "активний"
 
 #: claims/models.py:55
 msgid ""
 "Designates whether this user should be treated as active. Unselect this "
 "instead of deleting accounts."
 msgstr ""
+"Позначає чи повинен користувач розглядатися як активний. Скасуйте цей "
+"замість видалення облікових записів."
 
 #: claims/models.py:56
 msgid "date joined"
-msgstr ""
+msgstr "дата приєднався"
 
 #: claims/models.py:57
 msgid "receive newsletter"
-msgstr ""
+msgstr "отримувати новини"
 
 #: claims/models.py:76
 msgid "user"
-msgstr ""
+msgstr "користувач"
 
 #: claims/models.py:77
 msgid "users"
-msgstr ""
+msgstr "користувачі"
 
 #: claims/templates/claim_comment_add.html:7
 #: claims/templates/claim_edit_form.html:21
 msgid "Claim"
-msgstr ""
+msgstr "Заявка"
 
 #: claims/templates/claim_comment_add.html:13
 #: claims/templates/claim_create_form.html:84
@@ -85,22 +87,22 @@ msgstr ""
 #: claims/templates/claim_edit_form.html:144 ipdhcp/templates/dhcp.html:104
 #: ipdhcp/templates/dhcp.html:105
 msgid "Comments"
-msgstr ""
+msgstr "Коментарі"
 
 #: claims/templates/claim_comment_add.html:60
 #: claims/templates/claim_edit_form.html:70
 msgid "Claim information"
-msgstr ""
+msgstr "інформація заявки"
 
 #: claims/templates/claim_comment_add.html:67
 #: claims/templates/claim_edit_form.html:85
 msgid "Created"
-msgstr ""
+msgstr "Створений"
 
 #: claims/templates/claim_comment_add.html:73
 #: claims/templates/claim_edit_form.html:91
 msgid "Owner"
-msgstr ""
+msgstr "власник"
 
 #: claims/templates/claim_comment_add.html:79
 #: claims/templates/claim_create_form.html:49
@@ -109,7 +111,7 @@ msgstr ""
 #: claims/templates/claim_edit_form.html:149
 #: claims/templates/claims_list.html:56 core/templates/user_edit.html:342
 msgid "State"
-msgstr ""
+msgstr "Стан"
 
 #: claims/templates/claim_comment_add.html:85
 #: claims/templates/claim_create_form.html:57
@@ -117,29 +119,29 @@ msgstr ""
 #: claims/templates/claim_edit_form.html:152
 #: claims/templates/claim_edit_form.html:154
 msgid "Priority"
-msgstr ""
+msgstr "Пріоритет"
 
 #: claims/templates/claim_comment_add.html:91
 #: claims/templates/claim_edit_form.html:109
 #: claims/templates/claims_list.html:47 core/templates/search.html:449
 #: core/templates/table.html:8
 msgid "UID"
-msgstr ""
+msgstr "UID"
 
 #: claims/templates/claim_comment_add.html:97
 #: claims/templates/claim_edit_form.html:79 core/templates/admin_edit.html:40
 #: core/templates/administrators.html:55
 msgid "Address"
-msgstr ""
+msgstr "Адреса"
 
 #: claims/templates/claim_create_form.html:10
 msgid "Claim create"
-msgstr ""
+msgstr "Створити заявку"
 
 #: claims/templates/claim_create_form.html:24
 #: claims/templates/claims_list.html:50 core/templates/user_edit.html:339
 msgid "Theme|Address"
-msgstr ""
+msgstr "Тема | Адреса"
 
 #: claims/templates/claim_create_form.html:41
 #: claims/templates/claim_edit_form.html:119
@@ -147,30 +149,30 @@ msgstr ""
 #: claims/templates/claim_edit_form.html:159
 #: claims/templates/claims_list.html:59 core/templates/user_edit.html:345
 msgid "Queue"
-msgstr ""
+msgstr "Черга"
 
 #: claims/templates/claim_create_form.html:67
 #: claims/templates/claims_list.html:53 core/templates/user_edit.html:336
 msgid "Problem"
-msgstr ""
+msgstr "проблема"
 
 #: claims/templates/claim_create_form.html:75
 #: claims/templates/claims_list.html:62 core/templates/user_edit.html:348
 msgid "Worker"
-msgstr ""
+msgstr "Працівник"
 
 #: claims/templates/claim_create_form.html:89
 #: claims/templates/claim_edit_form.html:178
 msgid "Create"
-msgstr ""
+msgstr "Створити"
 
 #: claims/templates/claim_edit_form.html:5
 msgid "Claim edit"
-msgstr ""
+msgstr "Редагувати заявку"
 
 #: claims/templates/claim_edit_form.html:29
 msgid "Claim Comments"
-msgstr ""
+msgstr "Коментарі заявки"
 
 #: claims/templates/claim_edit_form.html:205
 #: claims/templates/claim_edit_form.html:240
@@ -180,13 +182,13 @@ msgstr ""
 #: olltv/templates/olltv_users_list.html:117
 #: telephone/templates/clients.html:122
 msgid "Change"
-msgstr ""
+msgstr "Змінити"
 
 #: claims/templates/claims.html:5 claims/templates/claims.html:10
 #: claims/templates/claims.html:21 claims/templates/claims_list.html:18
 #: templates/base.html:65
 msgid "Claims"
-msgstr ""
+msgstr "Заявки"
 
 #: claims/templates/claims.html:9 core/templates/fees.html:6
 #: core/templates/payments.html:6 core/templates/search.html:99
@@ -196,62 +198,62 @@ msgstr ""
 #: ipdhcp/templates/user_dhcp.html:7 olltv/templates/olltv_user.html:33
 #: templates/base.html:51 templates/base.html:169
 msgid "Dashboard"
-msgstr ""
+msgstr "Панель приладів"
 
 #: claims/templates/claims.html:25 claims/templates/claims_list.html:6
 msgid "Claims list"
-msgstr ""
+msgstr "Список заявок"
 
 #: claims/templates/claims.html:37
 msgid "Summary of queues"
-msgstr ""
+msgstr "Кількість черг"
 
 #: claims/templates/claims.html:43
 msgid "Opened"
-msgstr ""
+msgstr "Відкритий"
 
 #: claims/templates/claims.html:44
 msgid "Closed"
-msgstr ""
+msgstr "Зачинені"
 
 #: claims/templates/claims.html:45 core/forms.py:52
 #: core/templates/nas.html:318 core/templates/search.html:364
 #: core/templates/users.html:128 ipdhcp/templates/user_dhcp.html:194
 #: telephone/templates/clients.html:332
 msgid "All"
-msgstr ""
+msgstr "Всі"
 
 #: claims/templates/claims.html:60 core/templates/index.html:43
 #: core/templates/index.html:71
 msgid "Total"
-msgstr ""
+msgstr "Загальний"
 
 #: claims/templates/claims_list.html:44 ipdhcp/templates/dhcp.html:64
 #: telephone/templates/clients.html:251
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: claims/templates/claims_list.html:65 core/templates/user_edit.html:351
 msgid "Age"
-msgstr ""
+msgstr "Вік"
 
 #: claims/templates/claims_list.html:68
 msgid "Maps"
-msgstr ""
+msgstr "Карти"
 
 #: claims/templates/claims_list.html:82 claims/templates/claims_list.html:90
 #: core/templates/nas.html:110 core/templates/nas.html:152
 #: core/templates/user_edit.html:362 ipdhcp/templates/dhcp.html:141
 msgid "Edit"
-msgstr ""
+msgstr "Редагувати"
 
 #: claims/templates/errors/404.html:11 core/templates/user_errors.html:16
 msgid "Error"
-msgstr ""
+msgstr "Помилка"
 
 #: claims/templates/errors/404.html:12
 msgid "Sorry, the page you are looking for is not found"
-msgstr ""
+msgstr "На жаль, сторінка, яку ви шукаєте не знайдено"
 
 #: claims/templates/login.html:18 claims/templates/login.html:23
 #: core/templates/admin_edit.html:19 core/templates/administrators.html:34
@@ -262,43 +264,43 @@ msgstr ""
 #: core/templates/table_payments.html:8 core/templates/users.html:84
 #: olltv/templates/olltv_users_list.html:95
 msgid "Login"
-msgstr ""
+msgstr "Ввійти"
 
 #: claims/templates/login.html:27 core/templates/login.html:26
 #: core/templates/nas.html:53 core/templates/nas.html:55
 #: core/templates/nas.html:143 core/templates/nas.html:145
 msgid "Password"
-msgstr ""
+msgstr "Пароль"
 
 #: claims/templates/login.html:31
 msgid "Enter"
-msgstr ""
+msgstr "Вхід"
 
 #: claims/templates/maps.html:6
 msgid "Claim map"
-msgstr ""
+msgstr "Карта заявки"
 
 #: claims/templates/maps.html:14
 msgid "Map"
-msgstr ""
+msgstr "Карта"
 
 #: claims/templates/user/settings.html:5 core/templates/admin_edit.html:9
 msgid "Settings"
-msgstr ""
+msgstr "Налаштування"
 
 #: claims/templates/user/settings.html:13
 msgid "Users settings"
-msgstr ""
+msgstr "Налаштування користувача"
 
 #: core/forms.py:19
 msgid "Cookies должны быть включены"
-msgstr ""
+msgstr "Куки повинні бути включені"
 
 #: core/forms.py:53 core/templates/nas.html:102 core/templates/nas.html:253
 #: core/templates/table.html:90 core/templates/users.html:112
 #: olltv/templates/olltv_users_list.html:115
 msgid "Active"
-msgstr ""
+msgstr "Активний"
 
 #: core/forms.py:54 core/templates/nas.html:104 core/templates/nas.html:251
 #: core/templates/search.html:334 core/templates/search.html:336
@@ -308,55 +310,55 @@ msgstr ""
 #: olltv/templates/olltv_users_list.html:113
 #: telephone/templates/clients.html:340
 msgid "Disabled"
-msgstr ""
+msgstr "Відключений"
 
 #: core/forms.py:55 core/templates/table.html:88
 msgid "Not Active"
-msgstr ""
+msgstr "Не активний"
 
 #: core/templates/admin_edit.html:10 templates/base.html:94
 msgid "Administrators"
-msgstr ""
+msgstr "Адміністратори"
 
 #: core/templates/admin_edit.html:11
 msgid "Edit administrator"
-msgstr ""
+msgstr "Редагувати адміністратора"
 
 #: core/templates/admin_edit.html:23 core/templates/administrators.html:38
 #: core/templates/user_edit.html:101 ipdhcp/templates/dhcp.html:65
 #: olltv/templates/olltv_user.html:268
 msgid "Name"
-msgstr ""
+msgstr "Ім'я"
 
 #: core/templates/admin_edit.html:28 core/templates/administrators.html:43
 #: core/templates/user_edit.html:223 ipdhcp/templates/user_dhcp.html:114
 #: olltv/templates/olltv_users_list.html:100
 msgid "Disable"
-msgstr ""
+msgstr "Забороняти"
 
 #: core/templates/admin_edit.html:32 core/templates/administrators.html:47
 #: core/templates/administrators.html:100
 msgid "Theme"
-msgstr ""
+msgstr "Тема"
 
 #: core/templates/admin_edit.html:36 core/templates/administrators.html:51
 #: olltv/templates/olltv_user.html:76 olltv/templates/olltv_user.html:516
 msgid "Email"
-msgstr ""
+msgstr "E-mail"
 
 #: core/templates/admin_edit.html:44 core/templates/administrators.html:59
 msgid "Cell phone"
-msgstr ""
+msgstr "Мобільний телефон"
 
 #: core/templates/admin_edit.html:48 core/templates/administrators.html:63
 #: core/templates/administrators.html:96 core/templates/user_edit.html:505
 #: core/templates/user_edit.html:521
 msgid "Phone"
-msgstr ""
+msgstr "Телефон"
 
 #: core/templates/administrators.html:18 core/templates/administrators.html:24
 msgid "Add administrator"
-msgstr ""
+msgstr "Додати адміністратора"
 
 #: core/templates/administrators.html:95 core/templates/nas.html:224
 #: core/templates/search.html:298 core/templates/search.html:300
@@ -365,148 +367,148 @@ msgstr ""
 #: telephone/templates/clients.html:69 telephone/templates/clients.html:149
 #: telephone/templates/clients.html:252
 msgid "FIO"
-msgstr ""
+msgstr "FIO"
 
 #: core/templates/administrators.html:132
 msgid "Remove admin "
-msgstr ""
+msgstr "Видалити адміністратора"
 
 #: core/templates/fees.html:7 core/templates/layout_edit.html:31
 #: core/templates/layout_edit.html:33 core/templates/search.html:415
 #: core/templates/search.html:417 core/templates/user_fees.html:8
 #: telephone/templates/clients.html:131 templates/base.html:69
 msgid "Fees"
-msgstr ""
+msgstr "Зняття"
 
 #: core/templates/fees.html:73 core/templates/user_fees.html:74
 msgid "Export"
-msgstr ""
+msgstr "Експорт"
 
 #: core/templates/fees.html:95 core/templates/user_fees.html:96
 msgid "Fees not found"
-msgstr ""
+msgstr "Зняття не знайдені"
 
 #: core/templates/index.html:16
 msgid "System"
-msgstr ""
+msgstr "Система"
 
 #: core/templates/index.html:20
 msgid "Uptime"
-msgstr ""
+msgstr "Uptime"
 
 #: core/templates/index.html:24
 msgid "CPU"
-msgstr ""
+msgstr "ЦП"
 
 #: core/templates/index.html:29
 msgid "Core load"
-msgstr ""
+msgstr "Основне навантаження"
 
 #: core/templates/index.html:40
 msgid "Memory"
-msgstr ""
+msgstr "Пам'ять"
 
 #: core/templates/index.html:47 core/templates/index.html:75
 msgid "Used"
-msgstr ""
+msgstr "Використовується"
 
 #: core/templates/index.html:51 core/templates/index.html:79
 msgid "Free"
-msgstr ""
+msgstr "Вільно"
 
 #: core/templates/index.html:55
 msgid "Cached"
-msgstr ""
+msgstr "Збережено в кеші"
 
 #: core/templates/index.html:59 core/templates/index.html:83
 msgid "Load"
-msgstr ""
+msgstr "Навантаження"
 
 #: core/templates/index.html:68
 msgid "Swap"
-msgstr ""
+msgstr "Своп"
 
 #: core/templates/index.html:100
 msgid "Periodic"
-msgstr ""
+msgstr "Періодичний"
 
 #: core/templates/index.html:101
 msgid "Count pay"
-msgstr ""
+msgstr "Кількість платежів"
 
 #: core/templates/index.html:102 core/templates/table_fees.html:15
 #: core/templates/table_payments.html:11
 #: core/templates/user_statistics.html:81
 msgid "Sum"
-msgstr ""
+msgstr "Сума"
 
 #: core/templates/index.html:107 core/templates/index.html:109
 msgid "Day"
-msgstr ""
+msgstr "День"
 
 #: core/templates/index.html:112 core/templates/index.html:114
 msgid "Week"
-msgstr ""
+msgstr "Тиждень"
 
 #: core/templates/index.html:117 core/templates/index.html:119
 msgid "Month"
-msgstr ""
+msgstr "Місяць"
 
 #: core/templates/layout_edit.html:19 core/templates/layout_edit.html:21
 msgid "Base"
-msgstr ""
+msgstr "Основна"
 
 #: core/templates/layout_edit.html:25 core/templates/layout_edit.html:27
 #: core/templates/payments.html:7 core/templates/search.html:420
 #: core/templates/search.html:422 core/templates/user_payments.html:8
 #: telephone/templates/clients.html:129 templates/base.html:71
 msgid "Payments"
-msgstr ""
+msgstr "Платежі"
 
 #: core/templates/layout_edit.html:39 core/templates/layout_edit.html:41
 #: templates/base.html:61
 msgid "OLLTV"
-msgstr ""
+msgstr "OLLTV"
 
 #: core/templates/layout_edit.html:48 core/templates/layout_edit.html:50
 #: ipdhcp/templates/user_dhcp.html:9
 msgid "Dhcp"
-msgstr ""
+msgstr "Dhcp"
 
 #: core/templates/login.html:17
 msgid "Warning"
-msgstr ""
+msgstr "Увага"
 
 #: core/templates/login.html:23
 msgid "Username"
-msgstr ""
+msgstr "Ім'я користувача"
 
 #: core/templates/nas.html:36 core/templates/nas.html:126
 msgid "Server IP"
-msgstr ""
+msgstr "IP-адреса сервера"
 
 #: core/templates/nas.html:38 core/templates/nas.html:40
 #: core/templates/nas.html:128 core/templates/nas.html:130
 msgid "Server name"
-msgstr ""
+msgstr "Ім'я сервера"
 
 #: core/templates/nas.html:49 core/templates/nas.html:51
 msgid "User name"
-msgstr ""
+msgstr "Ім'я користувача"
 
 #: core/templates/nas.html:61 ipdhcp/templates/user_dhcp.html:143
 #: telephone/templates/clients.html:189
 msgid "Add"
-msgstr ""
+msgstr "Додавати"
 
 #: core/templates/nas.html:139 core/templates/nas.html:141
 #: core/templates/user_errors.html:84
 msgid "User"
-msgstr ""
+msgstr "Користувач"
 
 #: core/templates/nas.html:225 core/templates/user_statistics.html:79
 msgid "CID"
-msgstr ""
+msgstr "ІДС"
 
 #: core/templates/nas.html:226 core/templates/search.html:322
 #: core/templates/search.html:324 core/templates/table.html:27
@@ -514,749 +516,749 @@ msgstr ""
 #: core/templates/users.html:86 telephone/templates/clients.html:46
 #: telephone/templates/clients.html:253
 msgid "Deposit"
-msgstr ""
+msgstr "Депозит"
 
 #: core/templates/nas.html:227 core/templates/search.html:328
 #: core/templates/search.html:330 core/templates/table.html:30
 #: core/templates/user_edit.html:123 core/templates/user_edit.html:125
 #: core/templates/users.html:87
 msgid "Credit"
-msgstr ""
+msgstr "Кредит"
 
 #: core/templates/nas.html:228 core/templates/users.html:88
 msgid "Login status"
-msgstr ""
+msgstr "Статус"
 
 #: core/templates/nas.html:229 core/templates/nas.html:330
 #: core/templates/search.html:339 core/templates/search.html:378
 #: core/templates/table.html:35 core/templates/users.html:89
 #: core/templates/users.html:140 telephone/templates/clients.html:344
 msgid "Deleted"
-msgstr ""
+msgstr "Видалений"
 
 #: core/templates/nas.html:230 core/templates/nas.html:231
 #: core/templates/table.html:36 core/templates/table.html:37
 #: core/templates/users.html:90 core/templates/users.html:91
 #: ipdhcp/templates/user_dhcp.html:164 ipdhcp/templates/user_dhcp.html:165
 msgid "-"
-msgstr ""
+msgstr "-"
 
 #: core/templates/nas.html:256 core/templates/table.html:94
 #: core/templates/users.html:115
 msgid "Yes"
-msgstr ""
+msgstr "Так"
 
 #: core/templates/nas.html:258 core/templates/table.html:96
 #: core/templates/users.html:117
 msgid "No"
-msgstr ""
+msgstr "Немає"
 
 #: core/templates/nas.html:322 core/templates/users.html:132
 #: telephone/templates/clients.html:336
 msgid "End"
-msgstr ""
+msgstr "Кінець"
 
 #: core/templates/nas.html:326
 msgid "Guest mode"
-msgstr ""
+msgstr "Гостьовий режим"
 
 #: core/templates/payments.html:68 core/templates/user_payments.html:69
 msgid "Payments not found"
-msgstr ""
+msgstr "Платежі не знайдені"
 
 #: core/templates/search.html:100 core/templates/search.html:397
 #: templates/base.html:123
 msgid "Search"
-msgstr ""
+msgstr "Пошук"
 
 #: core/templates/search.html:292 core/templates/search.html:294
 #: core/templates/table.html:15 telephone/templates/clients.html:254
 msgid "City"
-msgstr ""
+msgstr "Місто"
 
 #: core/templates/search.html:304 core/templates/search.html:306
 #: core/templates/search.html:461 core/templates/table.html:18
 #: core/templates/user_edit.html:473 telephone/templates/clients.html:73
 #: telephone/templates/clients.html:161 telephone/templates/clients.html:255
 msgid "Street"
-msgstr ""
+msgstr "Вулиця"
 
 #: core/templates/search.html:310 core/templates/search.html:312
 #: core/templates/search.html:463 telephone/templates/clients.html:115
 #: telephone/templates/clients.html:167 telephone/templates/clients.html:256
 msgid "House"
-msgstr ""
+msgstr "Будинок"
 
 #: core/templates/search.html:316 core/templates/search.html:318
 #: telephone/templates/clients.html:58 telephone/templates/clients.html:173
 msgid "Kv"
-msgstr ""
+msgstr "Кв"
 
 #: core/templates/search.html:347
 msgid "Show"
-msgstr ""
+msgstr "Показати"
 
 #: core/templates/search.html:370
 msgid "Not active"
-msgstr ""
+msgstr "Не автивно"
 
 #: core/templates/search.html:405 core/templates/search.html:407
 #: telephone/templates/clients.html:27 templates/base.html:57
 msgid "Clients"
-msgstr ""
+msgstr "Клієнти"
 
 #: core/templates/search.html:410 core/templates/search.html:412
 #: core/templates/user_edit.html:136
 msgid "Company"
-msgstr ""
+msgstr "Компанія"
 
 #: core/templates/search.html:435
 msgid "Disabled: "
-msgstr ""
+msgstr "Відключено: "
 
 #: core/templates/search.html:459 telephone/templates/clients.html:52
 #: telephone/templates/clients.html:155
 msgid "District"
-msgstr ""
+msgstr "Район"
 
 #: core/templates/search.html:465 core/templates/table.html:24
 #: telephone/templates/clients.html:257
 msgid "Flat"
-msgstr ""
+msgstr "Квартира"
 
 #: core/templates/table.html:21 core/templates/user_edit.html:491
 msgid "Build"
-msgstr ""
+msgstr "Будувати"
 
 #: core/templates/table_fees.html:8 core/templates/table_payments.html:7
 msgid "Number"
-msgstr ""
+msgstr "Номер"
 
 #: core/templates/table_fees.html:12 core/templates/table_payments.html:9
 #: core/templates/user_errors.html:81
 msgid "Date"
-msgstr ""
+msgstr "Дата"
 
 #: core/templates/table_fees.html:14 core/templates/table_payments.html:10
 #: ipdhcp/templates/dhcp.html:71
 msgid "Description"
-msgstr ""
+msgstr "Опис"
 
 #: core/templates/table_fees.html:17 core/templates/table_payments.html:13
 msgid "Payments type"
-msgstr ""
+msgstr "Тип платежі"
 
 #: core/templates/table_fees.html:18 core/templates/table_payments.html:14
 msgid "Administrator"
-msgstr ""
+msgstr "Адміністратор"
 
 #: core/templates/user_edit.html:38
 msgid "User bill"
-msgstr ""
+msgstr "Рахунок користувача"
 
 #: core/templates/user_edit.html:45
 msgid "Deposit:"
-msgstr ""
+msgstr "Депозит:"
 
 #: core/templates/user_edit.html:70
 msgid "Iptv status"
-msgstr ""
+msgstr "Статус Iptv"
 
 #: core/templates/user_edit.html:80
 msgid "Iptv device"
-msgstr ""
+msgstr "Iptv пристрій"
 
 #: core/templates/user_edit.html:85 core/templates/user_edit.html:87
 #: olltv/templates/olltv_user.html:437
 msgid "MAC"
-msgstr ""
+msgstr "МАК"
 
 #: core/templates/user_edit.html:85 core/templates/user_edit.html:87
 #: olltv/templates/olltv_user.html:436
 msgid "Serial"
-msgstr ""
+msgstr "Серійний номер"
 
 #: core/templates/user_edit.html:97
 msgid "Iptv tarif"
-msgstr ""
+msgstr "Тариф Iptv"
 
 #: core/templates/user_edit.html:101
 msgid "Binding code"
-msgstr ""
+msgstr "Код прив’язки"
 
 #: core/templates/user_edit.html:114 olltv/templates/olltv_user.html:35
 msgid "Olltv"
-msgstr ""
+msgstr "Olltv"
 
 #: core/templates/user_edit.html:133
 msgid "Company:"
-msgstr ""
+msgstr "Компанія:"
 
 #: core/templates/user_edit.html:152 core/templates/user_edit.html:156
 msgid "Credit date"
-msgstr ""
+msgstr "Дата кредиту"
 
 #: core/templates/user_edit.html:169 core/templates/user_edit.html:172
 msgid "Group"
-msgstr ""
+msgstr "Група"
 
 #: core/templates/user_edit.html:185 core/templates/user_edit.html:187
 msgid "Cash account"
-msgstr ""
+msgstr "Касовий рахунок"
 
 #: core/templates/user_edit.html:195 core/templates/user_edit.html:198
 msgid "Reduction"
-msgstr ""
+msgstr "Знижка"
 
 #: core/templates/user_edit.html:206 core/templates/user_edit.html:210
 msgid "Reduction date"
-msgstr ""
+msgstr "Дата знижки"
 
 #: core/templates/user_edit.html:239 telephone/templates/clients.html:98
 msgid "Reason"
-msgstr ""
+msgstr "Причина"
 
 #: core/templates/user_edit.html:258 core/templates/user_edit.html:262
 msgid "Activation"
-msgstr ""
+msgstr "Активація"
 
 #: core/templates/user_edit.html:275 olltv/templates/olltv_users_list.html:99
 msgid "Registration"
-msgstr ""
+msgstr "Реєстрація"
 
 #: core/templates/user_edit.html:283 core/templates/user_edit.html:286
 msgid "Expire"
-msgstr ""
+msgstr "Спливає"
 
 #: core/templates/user_edit.html:302
 msgid "Show password"
-msgstr ""
+msgstr "Показати пароль"
 
 #: core/templates/user_edit.html:304
 msgid "Change password"
-msgstr ""
+msgstr "Зміна пароля"
 
 #: core/templates/user_edit.html:305
 msgid "Send password SMS"
-msgstr ""
+msgstr "Відправити SMS пароль"
 
 #: core/templates/user_edit.html:321 core/templates/user_statistics.html:15
 msgid "Statistics"
-msgstr ""
+msgstr "Статистика"
 
 #: core/templates/user_edit.html:322
 msgid "Errors"
-msgstr ""
+msgstr "Помилки"
 
 #: core/templates/user_edit.html:448 olltv/templates/olltv_user.html:494
 msgid "User info"
-msgstr ""
+msgstr "Інформація про користувача"
 
 #: core/templates/user_edit.html:463
 msgid "Districts"
-msgstr ""
+msgstr "Райони"
 
 #: core/templates/user_edit.html:507 core/templates/user_edit.html:523
 msgid "phone"
-msgstr ""
+msgstr "телефон"
 
 #: core/templates/user_errors.html:82
 msgid "Log type"
-msgstr ""
+msgstr "Тип логу"
 
 #: core/templates/user_errors.html:83 olltv/templates/olltv_user.html:440
 msgid "Action"
-msgstr ""
+msgstr "Дія"
 
 #: core/templates/user_errors.html:85
 msgid "Message"
-msgstr ""
+msgstr "Повідомлення"
 
 #: core/templates/user_errors.html:86
 msgid "Nas ID"
-msgstr ""
+msgstr "Nas ID"
 
 #: core/templates/user_errors.html:109
 msgid "User error not found"
-msgstr ""
+msgstr "Помилка Користувача не знайдена"
 
 #: core/templates/user_statistics.html:74
 msgid "Start Sessions"
-msgstr ""
+msgstr "Старт Сесії"
 
 #: core/templates/user_statistics.html:75
 msgid "Duration"
-msgstr ""
+msgstr "Тривалість"
 
 #: core/templates/user_statistics.html:76
 msgid "Sent"
-msgstr ""
+msgstr "Надісланий"
 
 #: core/templates/user_statistics.html:77
 msgid "Received"
-msgstr ""
+msgstr "Отримано"
 
 #: core/templates/user_statistics.html:78 ipdhcp/templates/user_dhcp.html:66
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: core/templates/user_statistics.html:80
 msgid "Tarif plan"
-msgstr ""
+msgstr "Тарифний план"
 
 #: core/templates/user_statistics.html:82
 msgid "Nas"
-msgstr ""
+msgstr "Nas"
 
 #: core/templates/user_statistics.html:108
 msgid "Statistics not found"
-msgstr ""
+msgstr "Статистики не знайдено"
 
 #: core/templates/users.html:25 templates/base.html:58
 msgid "Logins"
-msgstr ""
+msgstr "Логіни"
 
 #: core/validators.py:22
 #, python-format
 msgid "%(value)s is not a mac address, or unknown format"
-msgstr ""
+msgstr "%(value)s не являється MAC-адресою, або невідомий формат"
 
 #: dv/templates/dv.html:5
 msgid "Dv module"
-msgstr ""
+msgstr "Модуль Dv"
 
 #: dv/templates/dv.html:12
 msgid "Tarif Plans:"
-msgstr ""
+msgstr "Тарифні плани"
 
 #: dv/templates/dv.html:15
 msgid "Tarif Plans"
-msgstr ""
+msgstr "Тарифні плани"
 
 #: dv/templates/dv.html:43
 msgid "Netmask:"
-msgstr ""
+msgstr "Netmask:"
 
 #: dv/templates/dv.html:45
 msgid "netmask"
-msgstr ""
+msgstr "Мережева маска"
 
 #: dv/templates/dv.html:51
 msgid "Speed:"
-msgstr ""
+msgstr "Швидкість:"
 
 #: dv/templates/dv.html:53
 msgid "speed"
-msgstr ""
+msgstr "швидкість"
 
 #: dv/templates/dv.html:59
 msgid "Filter for radius:"
-msgstr ""
+msgstr "Фільтр для радіуса:"
 
 #: dv/templates/dv.html:61
 msgid "FilterId"
-msgstr ""
+msgstr "FilterId"
 
 #: dv/templates/dv.html:67
 msgid "At the same time:"
-msgstr ""
+msgstr "В той самий час:"
 
 #: dv/templates/dv.html:69
 msgid "At the same time"
-msgstr ""
+msgstr "В той самий час"
 
 #: ipdhcp/templates/dhcp.html:66
 msgid "Network"
-msgstr ""
+msgstr "мережу"
 
 #: ipdhcp/templates/dhcp.html:67
 msgid "Netmask"
-msgstr ""
+msgstr "Netmask"
 
 #: ipdhcp/templates/dhcp.html:68
 msgid "Route"
-msgstr ""
+msgstr "маршрут"
 
 #: ipdhcp/templates/dhcp.html:69
 msgid "Dns #1"
-msgstr ""
+msgstr "Dns # 1"
 
 #: ipdhcp/templates/dhcp.html:70
 msgid "Dns #2"
-msgstr ""
+msgstr "Dns # 2"
 
 #: ipdhcp/templates/dhcp.html:85 ipdhcp/templates/dhcp.html:89
 msgid "Edit IP (DHCP) Networks"
-msgstr ""
+msgstr "Edit IP (DHCP) мережі"
 
 #: ipdhcp/templates/dhcp.html:100 ipdhcp/templates/dhcp.html:101
 msgid "Network name"
-msgstr ""
+msgstr "ім'я мережі"
 
 #: ipdhcp/templates/dhcp.html:108 ipdhcp/templates/dhcp.html:109
 msgid "Network address"
-msgstr ""
+msgstr "Мережевий адреса"
 
 #: ipdhcp/templates/dhcp.html:112 ipdhcp/templates/dhcp.html:113
 msgid "Net Mask"
-msgstr ""
+msgstr "Net Mask"
 
 #: ipdhcp/templates/dhcp.html:116 ipdhcp/templates/dhcp.html:117
 msgid "Default router"
-msgstr ""
+msgstr "За замовчуванням маршрутизатор"
 
 #: ipdhcp/templates/dhcp.html:120 ipdhcp/templates/dhcp.html:121
 msgid "IP Range Start"
-msgstr ""
+msgstr "Діапазон IP-Start"
 
 #: ipdhcp/templates/dhcp.html:124 ipdhcp/templates/dhcp.html:125
 msgid "IP Range End"
-msgstr ""
+msgstr "Діапазон IP-End"
 
 #: ipdhcp/templates/dhcp.html:128 ipdhcp/templates/dhcp.html:129
 msgid "Dns"
-msgstr ""
+msgstr "Dns"
 
 #: ipdhcp/templates/dhcp.html:132 ipdhcp/templates/dhcp.html:133
 msgid "Dns 2"
-msgstr ""
+msgstr "Dns 2"
 
 #: ipdhcp/templates/user_dhcp.html:17
 msgid "User Dhcp"
-msgstr ""
+msgstr "Dhcp Користувач"
 
 #: ipdhcp/templates/user_dhcp.html:27
 msgid "Mac not found"
-msgstr ""
+msgstr "Mac не знайдені"
 
 #: ipdhcp/templates/user_dhcp.html:39
 msgid "Host Name"
-msgstr ""
+msgstr "ім'я хоста"
 
 #: ipdhcp/templates/user_dhcp.html:49
 msgid "Networks"
-msgstr ""
+msgstr "мережі"
 
 #: ipdhcp/templates/user_dhcp.html:72
 msgid "Auto Select"
-msgstr ""
+msgstr "Автоматичний вибір"
 
 #: ipdhcp/templates/user_dhcp.html:90
 msgid "Mac"
-msgstr ""
+msgstr "Мак"
 
 #: ipdhcp/templates/user_dhcp.html:98
 msgid "Server Vlan"
-msgstr ""
+msgstr "Vlan сервера"
 
 #: ipdhcp/templates/user_dhcp.html:106
 msgid "Client Vlan"
-msgstr ""
+msgstr "клієнт Vlan"
 
 #: olltv/templates/olltv_user.html:6 olltv/templates/olltv_users_list.html:6
 msgid "edit"
-msgstr ""
+msgstr "редагувати"
 
 #: olltv/templates/olltv_user.html:58
 msgid "OLLTV not active!"
-msgstr ""
+msgstr "OLLTV не активний!"
 
 #: olltv/templates/olltv_user.html:67
 msgid "Заявка:"
-msgstr ""
+msgstr "заявка:"
 
 #: olltv/templates/olltv_user.html:70
 msgid "Пароль"
-msgstr ""
+msgstr "пароль"
 
 #: olltv/templates/olltv_user.html:82 olltv/templates/olltv_user.html:565
 msgid "Дата народження"
-msgstr ""
+msgstr "дата народження"
 
 #: olltv/templates/olltv_user.html:91 olltv/templates/olltv_user.html:572
 msgid "Стать"
-msgstr ""
+msgstr "стати"
 
 #: olltv/templates/olltv_user.html:97
 msgid "Ім’я"
-msgstr ""
+msgstr "Ім'я"
 
 #: olltv/templates/olltv_user.html:103
 msgid "Прізвище"
-msgstr ""
+msgstr "Прізвище"
 
 #: olltv/templates/olltv_user.html:109
 msgid "Місто"
-msgstr ""
+msgstr "місто"
 
 #: olltv/templates/olltv_user.html:115
 msgid "Телефон"
-msgstr ""
+msgstr "Телефон"
 
 #: olltv/templates/olltv_user.html:123
 msgid "Поштовий індекс"
-msgstr ""
+msgstr "поштовий індекс"
 
 #: olltv/templates/olltv_user.html:129
 msgid "Зберегти"
-msgstr ""
+msgstr "Зберегти"
 
 #: olltv/templates/olltv_user.html:135
 msgid "Bind"
-msgstr ""
+msgstr "прив'язувати"
 
 #: olltv/templates/olltv_user.html:151
 msgid "activate"
-msgstr ""
+msgstr "активувати"
 
 #: olltv/templates/olltv_user.html:162
 msgid "Tarif plans"
-msgstr ""
+msgstr "плани Тариф"
 
 #: olltv/templates/olltv_user.html:165 olltv/templates/olltv_user.html:166
 msgid "Add tarif plans"
-msgstr ""
+msgstr "Додати плани TARIF"
 
 #: olltv/templates/olltv_user.html:169 olltv/templates/olltv_user.html:170
 #: olltv/templates/olltv_user.html:230
 msgid "Add extra screen"
-msgstr ""
+msgstr "Додати додатковий екран"
 
 #: olltv/templates/olltv_user.html:181
 msgid "Add tarif"
-msgstr ""
+msgstr "Додати TARIF"
 
 #: olltv/templates/olltv_user.html:183
 msgid "Add tp?"
-msgstr ""
+msgstr "Додати тп?"
 
 #: olltv/templates/olltv_user.html:206
 msgid "Негайно"
-msgstr ""
+msgstr "Негайно"
 
 #: olltv/templates/olltv_user.html:212
 msgid "Share"
-msgstr ""
+msgstr "частка"
 
 #: olltv/templates/olltv_user.html:219 olltv/templates/olltv_user.html:257
 #: olltv/templates/olltv_user.html:324 olltv/templates/olltv_user.html:357
 #: olltv/templates/olltv_user.html:425 olltv/templates/olltv_user.html:475
 #: olltv/templates/olltv_user.html:541 olltv/templates/olltv_user.html:622
 msgid "Submit"
-msgstr ""
+msgstr "уявити"
 
 #: olltv/templates/olltv_user.html:276
 msgid "Status"
-msgstr ""
+msgstr "статус"
 
 #: olltv/templates/olltv_user.html:300 olltv/templates/olltv_user.html:332
 msgid "Unbind tarif"
-msgstr ""
+msgstr "Unbind Tarif"
 
 #: olltv/templates/olltv_user.html:308 olltv/templates/olltv_user.html:340
 msgid "Unbind tp"
-msgstr ""
+msgstr "Unbind Т.П."
 
 #: olltv/templates/olltv_user.html:310 olltv/templates/olltv_user.html:342
 msgid "unbind tarif?"
-msgstr ""
+msgstr "відв'язати TARIF?"
 
 #: olltv/templates/olltv_user.html:376
 msgid "Devices"
-msgstr ""
+msgstr "прилади"
 
 #: olltv/templates/olltv_user.html:377 olltv/templates/olltv_user.html:387
 msgid "Bind device"
-msgstr ""
+msgstr "Bind пристрій"
 
 #: olltv/templates/olltv_user.html:389
 msgid "Bind device?"
-msgstr ""
+msgstr "Bind пристрій?"
 
 #: olltv/templates/olltv_user.html:392
 msgid "Device type"
-msgstr ""
+msgstr "тип пристрою"
 
 #: olltv/templates/olltv_user.html:398
 msgid "Тип"
-msgstr ""
+msgstr "Тип"
 
 #: olltv/templates/olltv_user.html:404
 msgid "MAC адреса"
-msgstr ""
+msgstr "MAC-адреси"
 
 #: olltv/templates/olltv_user.html:410
 msgid "Серійний номер"
-msgstr ""
+msgstr "Серійній номер"
 
 #: olltv/templates/olltv_user.html:416
 msgid "Модель"
-msgstr ""
+msgstr "модель"
 
 #: olltv/templates/olltv_user.html:439
 msgid "Date added"
-msgstr ""
+msgstr "Дату додано"
 
 #: olltv/templates/olltv_user.html:451 olltv/templates/olltv_user.html:459
 msgid "Unbind device"
-msgstr ""
+msgstr "Unbind пристрій"
 
 #: olltv/templates/olltv_user.html:461
 msgid "unbind device?"
-msgstr ""
+msgstr "відв'язати пристрій?"
 
 #: olltv/templates/olltv_user.html:497
 msgid "Unbind user?"
-msgstr ""
+msgstr "Unbind користувач?"
 
 #: olltv/templates/olltv_user.html:500
 msgid "Unbind user"
-msgstr ""
+msgstr "Unbind користувач"
 
 #: olltv/templates/olltv_user.html:507
 msgid "Index"
-msgstr ""
+msgstr "індекс"
 
 #: olltv/templates/olltv_user.html:510
 msgid "Account"
-msgstr ""
+msgstr "рахунки"
 
 #: olltv/templates/olltv_user.html:513
 msgid "Registration date"
-msgstr ""
+msgstr "Дата Реєстрації"
 
 #: olltv/templates/olltv_user.html:528
 msgid "Change email"
-msgstr ""
+msgstr "Змінити адресу електронної пошти"
 
 #: olltv/templates/olltv_user.html:533
 msgid "New email"
-msgstr ""
+msgstr "Нове повідомлення електронної пошти"
 
 #: olltv/templates/olltv_user.html:534
 msgid "Введіть новий email"
-msgstr ""
+msgstr "Введіть Новий електронної пошти"
 
 #: olltv/templates/olltv_user.html:549
 msgid "Information"
-msgstr ""
+msgstr "інформація"
 
 #: olltv/templates/olltv_user.html:560
 msgid "Change information"
-msgstr ""
+msgstr "змінити інформацію"
 
 #: olltv/templates/olltv_user.html:580
 msgid "Чоловіча"
-msgstr ""
+msgstr "Чоловіча"
 
 #: olltv/templates/olltv_user.html:590
 msgid "Жіноча"
-msgstr ""
+msgstr "жіноча"
 
 #: olltv/templates/olltv_user.html:595
 msgid "New password"
-msgstr ""
+msgstr "новий пароль"
 
 #: olltv/templates/olltv_user.html:596
 msgid "password"
-msgstr ""
+msgstr "пароль"
 
 #: olltv/templates/olltv_user.html:599
 msgid "New name"
-msgstr ""
+msgstr "нове найменування"
 
 #: olltv/templates/olltv_user.html:600
 msgid "name"
-msgstr ""
+msgstr "ім'я"
 
 #: olltv/templates/olltv_user.html:603
 msgid "New surname"
-msgstr ""
+msgstr "Нове прізвище"
 
 #: olltv/templates/olltv_user.html:604
 msgid "surname"
-msgstr ""
+msgstr "прізвище"
 
 #: olltv/templates/olltv_user.html:607
 msgid "New phone"
-msgstr ""
+msgstr "новий телефон"
 
 #: olltv/templates/olltv_user.html:608
 msgid "Example:"
-msgstr ""
+msgstr "приклад:"
 
 #: olltv/templates/olltv_user.html:611
 msgid "New region"
-msgstr ""
+msgstr "новий регіон"
 
 #: olltv/templates/olltv_user.html:612
 msgid "region"
-msgstr ""
+msgstr "регіон"
 
 #: olltv/templates/olltv_user.html:615
 msgid "New index"
-msgstr ""
+msgstr "новий індекс"
 
 #: olltv/templates/olltv_user.html:616
 msgid "num"
-msgstr ""
+msgstr "Num"
 
 #: olltv/templates/olltv_user.html:621
 msgid "Close"
-msgstr ""
+msgstr "близько"
 
 #: olltv/templates/olltv_users_list.html:96
 msgid "Tarif"
-msgstr ""
+msgstr "Tarif"
 
 #: olltv/templates/olltv_users_list.html:97
 msgid "mac"
-msgstr ""
+msgstr "Мак"
 
 #: olltv/templates/olltv_users_list.html:98
 msgid "pin"
-msgstr ""
+msgstr "шпилька"
 
 #: olltv/templates/olltv_users_list.html:101
 msgid "Actions"
-msgstr ""
+msgstr "дії"
 
 #: telephone/templates/clients.html:39 telephone/templates/clients.html:144
 msgid "Bills"
-msgstr ""
+msgstr "банкноти"
 
 #: telephone/templates/clients.html:82
 msgid "Juridic"
-msgstr ""
+msgstr "Juridic"
 
 #: telephone/templates/clients.html:182 telephone/templates/clients.html:258
 msgid "Ur"
-msgstr ""
+msgstr "ур"
 
 #: templates/base.html:53
 msgid "Menu"
-msgstr ""
+msgstr "меню"
 
 #: templates/base.html:93
 msgid "Configuration"
-msgstr ""
+msgstr "конфігурація"
 
 #: templates/base.html:95
 msgid "Access servers"
-msgstr ""
+msgstr "сервери доступу"
 
 #: templates/base.html:98
 msgid "IP Dhcp"
-msgstr ""
+msgstr "IP Dhcp"
 
 #: xbills/settings.py:105
 msgid "Russian"
-msgstr ""
+msgstr "російський"
 
 #: xbills/settings.py:106
 msgid "Ukrainian"
-msgstr ""
+msgstr "український"
 
 #: xbills/settings.py:107
 msgid "English"
-msgstr ""
+msgstr "англійська"

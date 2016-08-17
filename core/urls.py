@@ -4,12 +4,14 @@ from . import views
 from .helpers import module_check
 app_name = 'core'
 
-
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'^get_pc_info/$', views.get_pc_info, name='get_pc_info'),
+    url(r'^chat/$', views.chat, name='chat'),
     url(r'^clients/$', views.clients, name='clients'),
     url(r'^clients/(?P<uid>\d+)/$', views.client, name='client'),
     url(r'^search/$', views.search, name='search'),
+    url(r'^test/$', views.test, name='test'),
     url(r'^login/$', views.user_login, name='login'),
     url(r'^logout/$', views.logout_view, name='logout'),
     #url(r'^search/$', views.search, name='search'),
@@ -42,3 +44,10 @@ if module_check('ipdhcp'):
     finally:
         urlpatterns += url(r'^clients/(?P<uid>.+)/dhcp/$', ipdhcp_views.user_dhcp, name='user_dhcp'),
         urlpatterns += url(r'^clients/(?P<uid>.+)/dhcp/(?P<host_id>.+)/$', ipdhcp_views.user_dhcp, name='user_ipdhcp_host_change'),
+if module_check('claims'):
+    try:
+        from claims import views as claims_views
+    except:
+        pass
+    finally:
+        urlpatterns += url(r'^clients/(?P<uid>\d+)/claims/$', claims_views.user_claims, name='user_claims'),

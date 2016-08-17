@@ -18,11 +18,14 @@ from django.contrib import messages
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .commands import strfdelta, sizeof_fmt
+from django.contrib.auth.decorators import permission_required
+from ws4redis.redis_store import RedisMessage, RedisStore
+from ws4redis.publisher import RedisPublisher
 import helpers
 import platform
 import psutil
 import datetime
-
+from django.core import serializers
 
 
 def custom_redirect(url_name, *args, **kwargs):
@@ -33,16 +36,48 @@ def custom_redirect(url_name, *args, **kwargs):
     return HttpResponseRedirect(url + "?%s" % params)
 
 
-@login_required()
-def index(request, settings=settings):
-    print request.user.get_all_permissions()
-    ip_list_r = []
-    ip_list_db = []
-    sys = platform.platform()
+def get_pc_info(request):
     psutil.boot_time()
     boot_time = datetime.datetime.fromtimestamp(psutil.boot_time())
     d2 = datetime.datetime.now()
     diff = abs((d2 - boot_time))
+    if 'action' in request.GET and request.GET['action'] == 'get_pc_info':
+        try:
+            list = []
+            data_dict = {}
+            for getCpu in psutil.cpu_percent(interval=1, percpu=True):
+                pinfo = {}
+                pinfo['core'] = getCpu
+                list.append(pinfo)
+            data_dict.update({
+                "cpu": list,
+                "memory": [{
+                    "cur": psutil.virtual_memory().percent,
+                    "total": psutil.virtual_memory().total,
+                    "used": psutil.virtual_memory().used,
+                    "free": psutil.virtual_memory().free,
+                    "cached": psutil.virtual_memory().cached,
+                    "swap": psutil.swap_memory().percent,
+                    "stotal": psutil.swap_memory().total,
+                    "sused": psutil.swap_memory().used,
+                    "sfree": psutil.swap_memory().free,
+                }],
+                "uptime": strfdelta(diff, settings.UPTIME_FORMAT)
+            })
+            print [data_dict]
+            get_pc_info = json.dumps(data_dict)
+            cpus_info = RedisMessage('%s' % get_pc_info)  # create a welcome message to be sent to everybody
+            RedisPublisher(facility=request.GET['room'], broadcast=True).publish_message(cpus_info)
+        except Exception:
+            pass
+    return HttpResponse('Ok')
+
+
+@login_required()
+def index(request, settings=settings):
+    ip_list_r = []
+    ip_list_db = []
+    sys = platform.platform()
     if 'pay_now' in request.GET:
         payments_now = Payment.objects.filter(date__icontains=datetime.datetime.now().date()).last()
         if payments_now != None:
@@ -63,31 +98,6 @@ def index(request, settings=settings):
         res_json = json.dumps(pay_list)
         return HttpResponse(res_json)
     cpu_load_list = psutil.cpu_percent(interval=1, percpu=True)
-    if 'cpu' in request.GET:
-        try:
-            list = []
-            for getCpu in psutil.cpu_percent(interval=1, percpu=True):
-                pinfo = {}
-                pinfo['core'] = getCpu
-                list.append(pinfo)
-            res_json = json.dumps(list)
-            return HttpResponse(res_json)
-        except Exception:
-            pass
-    if 'memory' in request.GET:
-        memInfo = {}
-        memInfo['memory'] = psutil.virtual_memory().percent
-        memInfo['total'] = psutil.virtual_memory().total
-        memInfo['used'] = psutil.virtual_memory().used
-        memInfo['free'] = psutil.virtual_memory().free
-        memInfo['cached'] = psutil.virtual_memory().cached
-        memInfo['swap'] = psutil.swap_memory().percent
-        memInfo['stotal'] = psutil.swap_memory().total
-        memInfo['sused'] = psutil.swap_memory().used
-        memInfo['sfree'] = psutil.swap_memory().free
-        memInfo['uptime'] = strfdelta(diff, settings.UPTIME_FORMAT)
-        res_json = json.dumps(memInfo)
-        return HttpResponse(res_json)
     root_disk_usage = psutil.disk_usage('/')
     if 'process' in request.GET:
         try:
@@ -103,6 +113,16 @@ def index(request, settings=settings):
             return HttpResponse(res_json)
         except Exception:
             pass
+    if helpers.module_check('claims'):
+        from claims.models import Claims, Queue
+        queue = Queue.objects.all()
+        claims_list_opened = Claims.objects.filter(state=1).count()
+        claims_list_closed = Claims.objects.filter(state=2).count()
+        list = []
+        list1 = []
+        for q in queue:
+            list.append({'name': q.name, 'opened': q.claims.filter(state=1).count(), 'closed': q.claims.filter(state=2).count(), 'all': q.claims.all().count()})
+        list1.append({'all_opened': claims_list_opened, 'all_closed': claims_list_closed})
     return render(request, 'index.html', locals())
 
 @login_required()
@@ -196,7 +216,9 @@ def client_statistics(request, uid):
 
 
 @login_required()
+# @permission_required('users.can_vote')
 def search(request):
+
     all_table_choices = [
         'user_id__id',
         'user_id__login',
@@ -246,7 +268,7 @@ def search(request):
             includes.append('user_id__deleted')
         admin_settings.setting = ', '.join(includes)
         admin_settings.admin_id = request.user.id
-        admin_settings.save()
+        # admin_settings.save()
         return redirect(request.get_full_path())
     try:
         search = request.GET.get('search')
@@ -254,6 +276,7 @@ def search(request):
         search = None
     search_type = request.GET.get('search_type', '1')
     if search_type == '1':
+        print request.GET
         search_form = SearchForm(request.GET, initial=request.GET)
         if request.GET.get('search'):
             order_by = request.GET.get('order_by', 'user_id__login')
@@ -281,21 +304,25 @@ def search(request):
                 if 'flat' in request.GET and request.GET['flat'] != '':
                     filter_params.update({'kv': request.GET['flat']})
                 if 'disabled' in request.GET and request.GET['disabled'] != '':
-                   filter_params.update({'user_id__disabled': request.GET['disabled']})
+                    filter_params.update({'user_id__disabled': 1})
                 try:
+                    print filter_params
+                    print 'try'
                     userpi = UserPi.objects.filter(**filter_params).order_by(order_by)
                     if userpi.count() == 0:
                         error = 'User not found'
                     elif userpi.count() == 1:
                         for u in userpi:
-                            return redirect('core:client', uid=u['user_id'])
+                            return redirect('core:client', uid=u.user_id.id)
                     else:
+                        print 'else'
                         all = userpi.count()
                         disabled = userpi.filter(user_id__disabled=1).count()
                         not_active = userpi.filter(user_id__disabled=2).count()
                         deleted = userpi.filter(user_id__deleted=1).count()
                         paginator = Paginator(userpi, 100)
                         page = request.GET.get('page', 1)
+                        print '1'
                         try:
                             users = paginator.page(page)
                         except PageNotAnInteger:
@@ -306,6 +333,7 @@ def search(request):
                             start = str(int(page)-5)
                         else:
                             start = 1
+                        print '2'
                         if int(page) < paginator.num_pages-5:
                             end = str(int(page)+5+1)
                         else:
@@ -314,6 +342,7 @@ def search(request):
                         for p in page_range:
                             page_list = p
                         pre_end = users.paginator.num_pages - 2
+                        print pre_end
                     return render(request, 'search.html', locals())
                 except User.DoesNotExist:
                     error = 'User not found'
@@ -413,6 +442,7 @@ def search(request):
 
 @login_required()
 def client(request, uid):
+    print uid
     if 'hangup' in request.GET:
         hangup = Hangup(request.GET['nas_id'], request.GET['port_id'], request.GET['acct_session_id'], request.GET['user_name'])
     res1 = '<option selected="selected"></option>'
@@ -437,7 +467,8 @@ def client(request, uid):
             res = '<option value=' + str(item.id) + '>' + item.number.encode('utf8') + '</option>'
             dict_resp.append(res1 + res)
         return HttpResponse(dict_resp)
-    user = User.objects.get(id=uid)
+    client = User.objects.get(id=uid)
+    print client.pi
     streets = Street.objects.all()
     houses = House.objects.all()
     dv_session = Dv_calls.objects.filter(uid=uid)
@@ -463,7 +494,7 @@ def client(request, uid):
                 else:
                     for tp in tp_list_dict:
                         # check_bundle
-                        check_bundle = oll_check_bundle(account=user.id, tp=tp['sub_id'], hash=auth['hash'])
+                        check_bundle = oll_check_bundle(account=client.id, tp=tp['sub_id'], hash=auth['hash'])
                         if check_bundle['mess'] == 'Error':
                             messages.warning(request, check_bundle)
                         else:
@@ -473,7 +504,7 @@ def client(request, uid):
         except Iptv.DoesNotExist:
             olltv_exist = False
     if 'show_password' in request.GET:
-        user_password = user.get_hash_password
+        user_password = client.get_hash_password
     else:
         user_password = ''
     dv = Dv.objects.get(user=uid)
@@ -484,7 +515,19 @@ def client(request, uid):
 
 
 def clients(request):
-    users_list = User.objects.all().order_by('login')
+    filter_by = request.GET.get('users_status', '0')
+    order_by = request.GET.get('order_by', 'login')
+    users_list = User.objects.all().order_by(order_by)
+    if filter_by == '1':
+        users_list = users_list.filter(bill__deposit__gte=0, disabled=False, deleted=False,)
+    if filter_by == '2':
+        users_list = users_list.filter(bill__deposit__lt=0, credit=0)
+    if filter_by == '3':
+        users_list = users_list.filter(disabled=True, deleted=False)
+    if filter_by == '4':
+        users_list = users_list.filter(deleted=True)
+    if filter_by == '5':
+        users_list = users_list.filter(credit__gt=0)
     all = users_list.count()
     end = users_list.filter(deleted=1).count()
     disabled = users_list.filter(disabled=1).count()
@@ -511,6 +554,12 @@ def clients(request):
     for p in page_range:
         page_list = p
     pre_end = users.paginator.num_pages - 2
+    print request.GET
+    if 'xml' in request.GET:
+        xml_data = serializers.serialize("xml", users)
+        return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
+    if 'csv' in request.GET:
+        return helpers.export_to_csv(request, users, fields=('id', 'login'), name='login')
     return render(request, 'users.html', locals())
 
 
@@ -573,8 +622,8 @@ def fees(request):
 
 def client_payments(request, uid):
     order_by = request.GET.get('order_by', '-date')
-    user = User.objects.get(id=uid)
-    payments_list = Payment.objects.filter(uid=user.id).order_by(order_by)
+    client = User.objects.get(id=uid)
+    payments_list = Payment.objects.filter(uid=client.id).order_by(order_by)
     paginator = Paginator(payments_list, settings.PAYMENTS_PER_PAGE)
     page = request.GET.get('page', 1)
     if helpers.module_check('olltv'):
@@ -610,11 +659,11 @@ def client_fees(request, uid):
     out_sum = 0
     order_by = request.GET.get('order_by', '-date')
     try:
-        user = User.objects.get(id=uid)
+        client = User.objects.get(id=uid)
     except User.DoesNotExist:
         error = 'user not found'
         return render(request, 'layout_edit.html', locals())
-    fees_list = Fees.objects.filter(uid=user.id).order_by(order_by)
+    fees_list = Fees.objects.filter(uid=client.id).order_by(order_by)
     for ex_fees in fees_list:
         out_sum = out_sum + ex_fees.sum
     paginator = Paginator(fees_list, settings.FEES_PER_PAGE)
@@ -731,3 +780,20 @@ def administrator_edit(request, uid):
                 admin_form.save()
                 return redirect('core:administrators')
         return render(request, 'admin_edit.html', locals())
+
+
+def test(request, template=".html"):
+    """
+    Show a room.
+    """
+    # context = {"room": get_object_or_404(ChatRoom, slug=slug)}
+    return render(request, template, locals())
+
+
+@csrf_exempt
+def chat(request):
+    admins = helpers.get_all_logged_in_users()
+    print admins['users']
+    if request.method == 'POST' and request.POST != '':
+        print request.POST
+    return render(request, 'chat.html', locals())

@@ -5,7 +5,7 @@
 {% block breadcrumbs %}
     <ol class="breadcrumb">
       <li class=""><a href="{% url 'core:index' %}"><i class="fa fa-dashboard fa-fw"></i>{% trans 'Dashboard' %}</a></li>
-      <li class=""><a href="{% url 'core:client' uid %}"><i class="fa fa-user fa-fw"></i>{{ user.login }} (UID: {{ user.id }})</a></li>
+      <li class=""><a href="{% url 'core:client' uid %}"><i class="fa fa-user fa-fw"></i>{{ client.login }} (UID: {{ client.id }})</a></li>
       <li class="active">{% trans 'Dhcp' %}</li>
     </ol>
 {% endblock %}
@@ -169,7 +169,7 @@
                                 {% for host in hosts %}
                                     <tr>
                                         <td>{{ host.id }}</td>
-                                        <td>{{ user.login }}</td>
+                                        <td>{{ client.login }}</td>
                                         <td>{% ip_convert host.ip %}</td>
                                         <td>{{ host.hostname }}</td>
                                         <td>{{ host.nas }}</td>

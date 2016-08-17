@@ -1,0 +1,36 @@
+{% load i18n %}
+{% load staticfiles %}
+<div class="panel panel-default">
+    <div class="panel-body">
+        <table class="ui black small very compact selectable striped table">
+            <thead>
+                <tr>
+                    <th>{% trans 'Claims summary' %}</th>
+                    <th>{% trans 'Opened' %}</th>
+                    <th>{% trans 'Closed' %}</th>
+                    <th>{% trans 'All' %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for v in list %}
+                <tr>
+                    <td class="two wide column">{{ v.name }}</td>
+                    <td class="two wide column">{{ v.opened }}</td>
+                    <td class="two wide column">{{ v.closed }}</td>
+                    <td class="two wide column">{{ v.all }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot class="full-width">
+                <tr>
+                    <th>{% trans 'Total' %}</th>
+                    {% for v in list1 %}
+                        <th>{{ v.all_opened }}</th>
+                        <th>{{ v.all_closed }}</th>
+                    {% endfor %}
+                    <th></th>
+                </tr>
+              </tfoot>
+        </table>
+    </div>
+</div>
