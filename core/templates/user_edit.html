@@ -34,305 +34,434 @@
     {% trans 'User Info' %}
 {% endblock %}
 {% block content %}
-    <div class="row" id="pop">
-        <div class="ui form">
-                <div class="ui header">
-                    <span class="label label-default"><i class="fa fa-cog"></i> {% trans 'User bill' %}</span>
-                </div>
-                <br/>
-                <form class="ui form" method="post" name="bills_form">{% csrf_token %}
-                    <div class="ui form">
-                        <div class="fields">
-                            <div class="field">
-                                <label>{% trans 'Deposit:' %}</label>
-                                {% if client.credit > client.bill.deposit and client.credit > 0 %}
-                                    <div class="ui label" >{{ client.bill.deposit|floatformat:4 }}</div>
-                                {% elif client.bill.deposit > 50 %}
-                                    <div class="ui green label">{{ client.bill.deposit|floatformat:4 }}</div>
-                                {% elif client.bill.deposit < 50 and client.bill.deposit > 20 %}
-                                    <div class="ui label blue label">{{ client.bill.deposit|floatformat:4 }}</div>
-                                {% elif client.bill.deposit < 20 and client.bill.deposit > 2.50 %}
-                                    <div class="ui label orange label">{{ client.bill.deposit|floatformat:4 }}</div>
-                                {% else %}
-                                    <div class="ui label red label">{{ client.bill.deposit|floatformat:4 }}</div>
-                                {% endif %}
-                            </div>
-                            <div class="field">
-                            </div>
-                        </div>
-                        <div class="two fields">
-                            <div class="field">
-                            </div>
-                            <div class="field">
-                            </div>
+    <div class="ui stackable grid">
+        <div class="row">
+            <div class="three wide column">
+                <a class="ui grey ribbon label">{% trans 'General Information' %}</a>
+                <div class="ui middle aligned divided list">
+                    <div class="item">
+                        <div class="content">
+                            <i class="users icon"></i>{% trans 'Fio' %} :
+                            <span style="font-weight: bold">{{ client.user_pi.fio }}</span>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="column">
-                            <div class="ui form">
-                                <label for="inputEmail3" class="col-sm-4 control-label"></label>
-                                <div class="col-sm-8">
-
-                                    <div class="pull-right">
-                                        <a id="pay" href="{% url 'core:client_payments' uid %}"><i class="fa fa-plus-circle"></i></a>
-                                        <a href="{% url 'core:client_fees' uid %}"><i class="fa fa-minus-circle"></i></a>
-                                        <a><i class="fa fa-print"></i></a>
-                                        {% if olltv_exist %}
-                                            <a href="#" id="olltv"><i class="fa fa-television" aria-hidden="true"></i></a>
-                                            <div id="olltv-content" class="hidden">
-                                                <div>
-                                                    <div class="row">
-                                                        {% if user_olltv.disable == 1 or user_olltv.disable == 2 %}
-                                                            <div class="column">
-                                                                <div class="form-group form-group-sm center-block">
-                                                                    <label class="col-sm-2 control-label">{% trans 'Iptv status' %}:</label>
-                                                                    <div class="col-sm-10">
-                                                                        {{ iptv.mac }}
-                                                                        <span class="label label-danger">{% trans 'Disabled' %}</span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        {% else %}
-                                                            <div class="column">
-                                                                <label for="olltv_device" class="col-sm-2 control-label">{% trans 'Iptv device' %}:</label>
-                                                                <div class="col-sm-10">
-                                                                    <ul class="list-group text-center">
-                                                                        {% for dev in user_olltv_dev %}
-                                                                            {% if dev.status == 1 %}
-                                                                                <li class="list-group-item disabled" data-toggle="tooltip" data-placement="top" title="{{ dev.date_added }} - {{ dev.status }}">{{ dev.id }} - {% trans 'MAC' %}: {{ dev.mac }} | {% trans 'Serial' %}: {{ dev.serial_num }}</li>
-                                                                            {% else %}
-                                                                                <li class="list-group-item" data-toggle="tooltip" data-placement="top" title="{{ dev.date_added }} - {{ dev.status }}">{{ dev.id }} - {% trans 'MAC' %}: {{ dev.mac }} | {% trans 'Serial' %}: {{ dev.serial_num }}</li>
-                                                                            {% endif %}
-                                                                        {% endfor %}
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                            {% if tp_list %}
-                                                                <div class="column">
-                                                                    <div class="form-group form-group-sm">
-                                                                        <label for="expire-date" class="col-sm-2 control-label">{% trans 'Iptv tarif' %}:</label>
-                                                                        <div class="col-sm-10">
-                                                                            <ul class="list-group text-center">
-                                                                                {% for tp in tp_list %}
-                                                                                    <li class="list-group-item" data-toggle="tooltip" data-placement="top" title="{{ tp.start_date }} - {{ tp.expiration_date }}">{% trans 'Name' %}: {{ tp.name }} | {% trans 'Binding code' %}: {{ tp.device_binding_code }}</li>
-                                                                                {% endfor %}
-                                                                            </ul>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            {% endif %}
-                                                        {% endif %}
-                                                    </div>
-
+                    <div class="item">
+                        <div class="content">
+                            <i class="users icon"></i>{% trans 'Deposit' %} :
+                            {% if client.credit > client.bill.deposit and client.credit > 0 %}
+                                <a class="ui grey label" >{{ client.bill.deposit|floatformat:2 }}</a>
+                            {% elif client.bill.deposit > 50 %}
+                                <a class="ui green label">{{ client.bill.deposit|floatformat:2 }}</a>
+                            {% elif client.bill.deposit < 50 and client.bill.deposit > 20 %}
+                                <a class="ui label blue label">{{ client.bill.deposit|floatformat:2 }}</a>
+                            {% elif client.bill.deposit < 20 and client.bill.deposit > 2.50 %}
+                                <a class="ui label orange label">{{ client.bill.deposit|floatformat:2 }}</a>
+                            {% else %}
+                                <a class="ui label red label">{{ client.bill.deposit|floatformat:2 }}</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="content">
+                            <i class="users icon"></i>{% trans 'Credit' %} :
+                            {% if client.credit > 0 %}
+                                <a class="ui green label" >{{ client.credit|floatformat:2 }}</a>
+                            {% else %}
+                                <a class="ui label">{{ client.credit|floatformat:2 }}</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="content">
+                            <i class="users icon"></i>{% trans 'Bill ID' %} :
+                            {% if client.bill.id %}
+                                <a class="ui blue label" >{{ client.bill.id }}</a>
+                            {% else %}
+                                <a class="ui blue label" >{{ client.company.bill_id }}</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if client.company %}
+                    <div class="item">
+                        <div class="content">
+                            <i class="users icon"></i>{% trans 'Company' %} :
+                            <a class="ui blue label">{{ client.company.name }}</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="item">
+                        <div class="content">
+                            <i class="users icon"></i>{% trans 'Group' %} :
+                            <a class="ui blue label" >{{ client.gid }}</a>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <i class="marker icon"></i>
+                        <div class="content">
+                            {{ client.user_pi.city }}
+                            {% if client.user_pi.street %}
+                                , {{ client.user_pi.street.name }}
+                                {% if client.user_pi.location %}
+                                    {{ client.user_pi.location }}
+                                {% endif %}
+                                {% if client.user_pi.kv %}
+                                    {% trans 'flat' %} {{ client.user_pi.kv }}
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="item">
+                        <i class="mail icon"></i>
+                        <div class="content">
+                            <a href="mailto:{{ client.user_pi.email }}">{{ client.user_pi.email }}</a>
+                        </div>
+                    </div>
+                </div>
+                <a class="ui blue ribbon label" script="onClick($('#services').removeAttr('hidden'))">Community</a> User Reviews
+                <div class="ui middle aligned divided list" id="services" hidden>
+                    <div class="item">
+                        <div class="content">
+                            <i class="users icon"></i>{% trans 'Fio' %} :
+                            <span style="font-weight: bold">{{ client.user_pi.fio }}</span>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="content">
+                            <i class="users icon"></i>{% trans 'Deposit' %} :
+                            {% if client.credit > client.bill.deposit and client.credit > 0 %}
+                                <a class="ui grey label" >{{ client.bill.deposit|floatformat:2 }}</a>
+                            {% elif client.bill.deposit > 50 %}
+                                <a class="ui green label">{{ client.bill.deposit|floatformat:2 }}</a>
+                            {% elif client.bill.deposit < 50 and client.bill.deposit > 20 %}
+                                <a class="ui label blue label">{{ client.bill.deposit|floatformat:2 }}</a>
+                            {% elif client.bill.deposit < 20 and client.bill.deposit > 2.50 %}
+                                <a class="ui label orange label">{{ client.bill.deposit|floatformat:2 }}</a>
+                            {% else %}
+                                <a class="ui label red label">{{ client.bill.deposit|floatformat:2 }}</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="content">
+                            <i class="users icon"></i>{% trans 'Credit' %} :
+                            {% if client.credit > 0 %}
+                                <a class="ui green label" >{{ client.credit|floatformat:2 }}</a>
+                            {% else %}
+                                <a class="ui label">{{ client.credit|floatformat:2 }}</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="content">
+                            <i class="users icon"></i>{% trans 'Bill ID' %} :
+                            {% if client.bill.id %}
+                                <a class="ui blue label" >{{ client.bill.id }}</a>
+                            {% else %}
+                                <a class="ui blue label" >{{ client.company.bill_id }}</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% if client.company %}
+                    <div class="item">
+                        <div class="content">
+                            <i class="users icon"></i>{% trans 'Company' %} :
+                            <a class="ui blue label">{{ client.company.name }}</a>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="item">
+                        <div class="content">
+                            <i class="users icon"></i>{% trans 'Group' %} :
+                            <a class="ui blue label" >{{ client.gid }}</a>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <i class="marker icon"></i>
+                        <div class="content">
+                            {{ client.user_pi.city }}
+                            {% if client.user_pi.street %}
+                                , {{ client.user_pi.street.name }}
+                                {% if client.user_pi.location %}
+                                    {{ client.user_pi.location }}
+                                {% endif %}
+                                {% if client.user_pi.kv %}
+                                    {% trans 'flat' %} {{ client.user_pi.kv }}
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="item">
+                        <i class="mail icon"></i>
+                        <div class="content">
+                            <a href="mailto:{{ client.user_pi.email }}">{{ client.user_pi.email }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="thirteen wide column">
+                <form class="ui form" method="post" name="bills_form">{% csrf_token %}
+        <div class="field">
+            <label>{% trans 'Deposit:' %}</label>
+            {% if client.credit > client.bill.deposit and client.credit > 0 %}
+                <div class="ui label" >{{ client.bill.deposit|floatformat:4 }}</div>
+            {% elif client.bill.deposit > 50 %}
+                <div class="ui green label">{{ client.bill.deposit|floatformat:4 }}</div>
+            {% elif client.bill.deposit < 50 and client.bill.deposit > 20 %}
+                <div class="ui label blue label">{{ client.bill.deposit|floatformat:4 }}</div>
+            {% elif client.bill.deposit < 20 and client.bill.deposit > 2.50 %}
+                <div class="ui label orange label">{{ client.bill.deposit|floatformat:4 }}</div>
+            {% else %}
+                <div class="ui label red label">{{ client.bill.deposit|floatformat:4 }}</div>
+            {% endif %}
+        </div>
+        <div class="field">
+        </div>
+        <div class="field">
+            <label for="inputEmail3" class="col-sm-4 control-label"></label>
+            <div class="pull-right">
+                <a id="pay" href="{% url 'core:client_payments' uid %}"><i class="fa fa-plus-circle"></i></a>
+                <a href="{% url 'core:client_fees' uid %}"><i class="fa fa-minus-circle"></i></a>
+                <a><i class="fa fa-print"></i></a>
+                {% if olltv_exist %}
+                    <a href="#" id="olltv"><i class="fa fa-television" aria-hidden="true"></i></a>
+                    <div id="olltv-content" class="hidden">
+                        <div>
+                            <div class="row">
+                                {% if user_olltv.disable == 1 or user_olltv.disable == 2 %}
+                                    <div class="column">
+                                        <div class="form-group form-group-sm center-block">
+                                            <label class="col-sm-2 control-label">{% trans 'Iptv status' %}:</label>
+                                            <div class="col-sm-10">
+                                                {{ iptv.mac }}
+                                                <span class="label label-danger">{% trans 'Disabled' %}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="column">
+                                        <label for="olltv_device" class="col-sm-2 control-label">{% trans 'Iptv device' %}:</label>
+                                        <div class="col-sm-10">
+                                            <ul class="list-group text-center">
+                                                {% for dev in user_olltv_dev %}
+                                                    {% if dev.status == 1 %}
+                                                        <li class="list-group-item disabled" data-toggle="tooltip" data-placement="top" title="{{ dev.date_added }} - {{ dev.status }}">{{ dev.id }} - {% trans 'MAC' %}: {{ dev.mac }} | {% trans 'Serial' %}: {{ dev.serial_num }}</li>
+                                                    {% else %}
+                                                        <li class="list-group-item" data-toggle="tooltip" data-placement="top" title="{{ dev.date_added }} - {{ dev.status }}">{{ dev.id }} - {% trans 'MAC' %}: {{ dev.mac }} | {% trans 'Serial' %}: {{ dev.serial_num }}</li>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    {% if tp_list %}
+                                        <div class="column">
+                                            <div class="form-group form-group-sm">
+                                                <label for="expire-date" class="col-sm-2 control-label">{% trans 'Iptv tarif' %}:</label>
+                                                <div class="col-sm-10">
+                                                    <ul class="list-group text-center">
+                                                        {% for tp in tp_list %}
+                                                            <li class="list-group-item" data-toggle="tooltip" data-placement="top" title="{{ tp.start_date }} - {{ tp.expiration_date }}">{% trans 'Name' %}: {{ tp.name }} | {% trans 'Binding code' %}: {{ tp.device_binding_code }}</li>
+                                                        {% endfor %}
+                                                    </ul>
                                                 </div>
                                             </div>
-                                            <div id="olltv-title" class="hidden">
-                                                <b>{% trans 'Olltv' %}</b>
-                                            </div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group form-group-sm">
-                                <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Credit' %}</label>
-                                <div class="col-sm-8">
-                                    <input type="number" class="form-control" id="credit" name="credit" placeholder="{% trans 'Credit' %}" value="{{ client.credit }}">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group form-group-sm">
-                                <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Company:' %}</label>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="{% trans 'Company' %}" aria-describedby="group" disabled value="{{ client.company }}">
-                                        <span class="input-group-addon" id="group">
-                                            <a href="{% url 'core:user_company' uid %}">
-                                                {% if client.company != 0 %}
-                                                    <i class="fa fa-edit fa-fw"></i>
-                                                {% else %}
-                                                    <i class="fa fa-plus fa-fw"></i>
-                                                {% endif %}
-                                            </a>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group form-group-sm">
-                                <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Credit date' %}</label>
-                                <div class="col-sm-8">
-                                    <div id="credit_date-datepicker" class="">
-                                        <div class="input-group">
-                                            <input type="date" class="form-control" id="credit_date" placeholder="{% trans 'Credit date' %}" value="{{ client.credit_date|default:"0000-00-00" }}">
-                                            <span class="input-group-addon add-on" id="credit-date">
-                                                <i class="fa fa-calendar" data-time-icon="icon-time" data-date-icon="fa-calendar"></i>
-                                            </span>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group form-group-sm">
-                                <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Group' %}</label>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        <input href="#" data-type="text" type="text" class="form-control" placeholder="{% trans 'Group' %}" aria-describedby="group" value="{{ client.gid }}">
-                                        <a href="#" id="projectname{{project.id}}" data-type="text" data-pk="{{project.id}}" data-title="Enter project name" data-url="{% url 'core:user_group' client.id %}" data-params="{csrfmiddlewaretoken:'{{csrf_token}}'}">{{ project.name }}</a>
-                                      <span class="input-group-addon" id="group">
-                                          <a href="#" id="status" data-type="select" data-pk="1" data-url="{% url 'core:user_group' client.id %}">
-                                              <i class="fa fa-edit fa-fw"></i>
-                                          </a>
-                                      </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group form-group-sm">
-                                <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Cash account' %}</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="" placeholder="{% trans 'Cash account' %}" disabled value="{{ bill.id }}">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group form-group-sm">
-                                <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Reduction' %}</label>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="{% trans 'Reduction' %}" aria-describedby="group" value="{{ client.reduction }}">
-                                        <span class="input-group-addon" id="reduction"><i class="fa fa-percent fa-fw"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group form-group-sm">
-                                <label for="reduction-date" class="col-sm-4 control-label">{% trans 'Reduction date' %}</label>
-                                <div class="col-sm-8">
-                                    <div id="reduction_date-datepicker" class="">
-                                        <div class="input-group">
-                                            <input data-format="yyyy-MM-dd" type="date" class="form-control" id="reduction_date" aria-describedby="reduction-date" name="reduction_date" placeholder="{% trans 'Reduction date' %}" value="{{ client.reduction_date|default:"0000-00-00" }}">
-                                            <span class="input-group-addon add-on" id="reduction-date">
-                                                <i class="fa fa-calendar" data-time-icon="icon-time" data-date-icon="fa-calendar"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group form-group-sm">
-                                <label for="disable" class="col-sm-4 control-label">{% trans 'Disable' %}</label>
-                                <div class="col-sm-1">
-                                    {% if client.disabled == True %}
-                                        <input id="disable" type="checkbox" name="disable" value="1" checked onclick="changeValueCheckbox(this)">
-                                    {% else %}
-                                        <input id="disable" type="checkbox" name="disable" onclick="changeValueCheckbox(this)">
                                     {% endif %}
-                                    <input type="text" class="form-control hidden" id="reason" name="reason">
-                                    <script type="application/javascript">
-                                        function changeValueCheckbox(element){
-                                            if(element.checked){
-                                                element.value='1';
-                                            }else{
-                                                element.value='0';
-                                            }
-                                            if (element.value == 1){
-                                                var reason = prompt('{% trans 'Reason' %}');
-                                                if (reason != null){
-                                                    $('#reason').removeClass('hidden');
-                                                    $('#reason').val(reason);
-                                                } else {
-                                                    element.value = '0';
-                                                    $(element).removeAttr('checked')
-                                                }
-                                            } else {
-                                                $('#reason').addClass('hidden');
-                                                element.value = '0';
-                                            }
-                                        }
-                                    </script>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group form-group-sm">
-                                <label for="activation-date" class="col-sm-4 control-label">{% trans 'Activation' %}</label>
-                                <div class="col-sm-8">
-                                    <div id="activation-datepicker" class="">
-                                        <div class="input-group">
-                                            <input data-format="yyyy-MM-dd" type="date" class="form-control" id="activation" aria-describedby="activation-date" name="activation" placeholder="{% trans 'Activation' %}" value="{{ client.activate|default:"0000-00-00" }}">
-                                            <span class="input-group-addon add-on" id="activation-date">
-                                                <i class="fa fa-calendar" data-time-icon="icon-time" data-date-icon="fa-calendar"></i>
-                                            </span>
-                                        </div>
-                                    </div>
-                         <div id="user-bill" class="well well-sm">
-                   </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group form-group-sm">
-                                <label for="registration" class="col-sm-4 control-label">{% trans 'Registration' %}</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="registration" name="registration" placeholder="" disabled value="{{ client.pi.contract_date }}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group form-group-sm">
-                                <label for="expire-date" class="col-sm-4 control-label">{% trans 'Expire' %}</label>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        <input data-format="yyyy-MM-dd" type="date" class="form-control" id="expire" name="expire" placeholder="{% trans 'Expire' %}" value="{{ client.expire|default:"0000-00-00" }}">
-                                        <span class="input-group-addon add-on" id="expire-date">
-                                            <i class="fa fa-calendar" data-time-icon="icon-time" data-date-icon="fa-calendar"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <hr/>
-                            <div class="text-center">
-                                {% if user_password %}
-                                    <span class="label label-success">{{ user_password }}</span>
-                                {% else %}
-                                    <a class="btn btn-default btn-xs" href="{% url 'core:client' uid %}?show_password=1" role="button">{% trans 'Show password' %}</a>
                                 {% endif %}
-                                <button type="button" class="btn btn-default btn-xs">{% trans 'Change password' %}</button>
-                                <button type="button" class="btn btn-default btn-xs">{% trans 'Send password SMS' %}</button>
                             </div>
+
                         </div>
                     </div>
-                    <hr/>
-                    <input type="submit" class="btn btn-primary btn-xs center-block" value="{% trans 'Change' %}">
-                </form>
+                    <div id="olltv-title" class="hidden">
+                        <b>{% trans 'Olltv' %}</b>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="field">
+            <div class="form-group form-group-sm">
+                <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Credit' %}</label>
+                <div class="col-sm-8">
+                    <input type="number" class="form-control" id="credit" name="credit" placeholder="{% trans 'Credit' %}" value="{{ client.credit }}">
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <div class="form-group form-group-sm">
+                <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Company:' %}</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="{% trans 'Company' %}" aria-describedby="group" disabled value="{{ client.company }}">
+                        <span class="input-group-addon" id="group">
+                            <a href="{% url 'core:user_company' uid %}">
+                                {% if client.company != 0 %}
+                                    <i class="fa fa-edit fa-fw"></i>
+                                {% else %}
+                                    <i class="fa fa-plus fa-fw"></i>
+                                {% endif %}
+                            </a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        <div class="field">
+            <div class="form-group form-group-sm">
+                <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Credit date' %}</label>
+                <div class="col-sm-8">
+                    <div id="credit_date-datepicker" class="">
+                        <div class="input-group">
+                            <input type="date" class="form-control" id="credit_date" placeholder="{% trans 'Credit date' %}" value="{{ client.credit_date|default:"0000-00-00" }}">
+                            <span class="input-group-addon add-on" id="credit-date">
+                                <i class="fa fa-calendar" data-time-icon="icon-time" data-date-icon="fa-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <div class="form-group form-group-sm">
+                <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Group' %}</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input href="#" data-type="text" type="text" class="form-control" placeholder="{% trans 'Group' %}" aria-describedby="group" value="{{ client.gid }}">
+                        <a href="#" id="projectname{{project.id}}" data-type="text" data-pk="{{project.id}}" data-title="Enter project name" data-url="{% url 'core:user_group' client.id %}" data-params="{csrfmiddlewaretoken:'{{csrf_token}}'}">{{ project.name }}</a>
+                      <span class="input-group-addon" id="group">
+                          <a href="#" id="status" data-type="select" data-pk="1" data-url="{% url 'core:user_group' client.id %}">
+                              <i class="fa fa-edit fa-fw"></i>
+                          </a>
+                      </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <div class="form-group form-group-sm">
+                <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Cash account' %}</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="" placeholder="{% trans 'Cash account' %}" disabled value="{{ bill.id }}">
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <div class="form-group form-group-sm">
+                <label for="inputPassword3" class="col-sm-4 control-label">{% trans 'Reduction' %}</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="{% trans 'Reduction' %}" aria-describedby="group" value="{{ client.reduction }}">
+                        <span class="input-group-addon" id="reduction"><i class="fa fa-percent fa-fw"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <div class="form-group form-group-sm">
+                <label for="reduction-date" class="col-sm-4 control-label">{% trans 'Reduction date' %}</label>
+                <div class="col-sm-8">
+                    <div id="reduction_date-datepicker" class="">
+                        <div class="input-group">
+                            <input data-format="yyyy-MM-dd" type="date" class="form-control" id="reduction_date" aria-describedby="reduction-date" name="reduction_date" placeholder="{% trans 'Reduction date' %}" value="{{ client.reduction_date|default:"0000-00-00" }}">
+                            <span class="input-group-addon add-on" id="reduction-date">
+                                <i class="fa fa-calendar" data-time-icon="icon-time" data-date-icon="fa-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <div class="form-group form-group-sm">
+                <label for="disable" class="col-sm-4 control-label">{% trans 'Disable' %}</label>
+                <div class="col-sm-1">
+                    {% if client.disabled == True %}
+                        <input id="disable" type="checkbox" name="disable" value="1" checked onclick="changeValueCheckbox(this)">
+                    {% else %}
+                        <input id="disable" type="checkbox" name="disable" onclick="changeValueCheckbox(this)">
+                    {% endif %}
+                    <input type="text" class="form-control hidden" id="reason" name="reason">
+                    <script type="application/javascript">
+                        function changeValueCheckbox(element){
+                            if(element.checked){
+                                element.value='1';
+                            }else{
+                                element.value='0';
+                            }
+                            if (element.value == 1){
+                                var reason = prompt('{% trans 'Reason' %}');
+                                if (reason != null){
+                                    $('#reason').removeClass('hidden');
+                                    $('#reason').val(reason);
+                                } else {
+                                    element.value = '0';
+                                    $(element).removeAttr('checked')
+                                }
+                            } else {
+                                $('#reason').addClass('hidden');
+                                element.value = '0';
+                            }
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <div class="form-group form-group-sm">
+                <label for="activation-date" class="col-sm-4 control-label">{% trans 'Activation' %}</label>
+                <div class="col-sm-8">
+                    <div id="activation-datepicker" class="">
+                        <div class="input-group">
+                            <input data-format="yyyy-MM-dd" type="date" class="form-control" id="activation" aria-describedby="activation-date" name="activation" placeholder="{% trans 'Activation' %}" value="{{ client.activate|default:"0000-00-00" }}">
+                            <span class="input-group-addon add-on" id="activation-date">
+                                <i class="fa fa-calendar" data-time-icon="icon-time" data-date-icon="fa-calendar"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div id="user-bill" class="well well-sm">
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <div class="form-group form-group-sm">
+                <label for="registration" class="col-sm-4 control-label">{% trans 'Registration' %}</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="registration" name="registration" placeholder="" disabled value="{{ client.pi.contract_date }}">
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <div class="form-group form-group-sm">
+                <label for="expire-date" class="col-sm-4 control-label">{% trans 'Expire' %}</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <input data-format="yyyy-MM-dd" type="date" class="form-control" id="expire" name="expire" placeholder="{% trans 'Expire' %}" value="{{ client.expire|default:"0000-00-00" }}">
+                        <span class="input-group-addon add-on" id="expire-date">
+                            <i class="fa fa-calendar" data-time-icon="icon-time" data-date-icon="fa-calendar"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <hr/>
+            <div class="text-center">
+                {% if user_password %}
+                    <span class="label label-success">{{ user_password }}</span>
+                {% else %}
+                    <a class="btn btn-default btn-xs" href="{% url 'core:client' uid %}?show_password=1" role="button">{% trans 'Show password' %}</a>
+                {% endif %}
+                <button type="button" class="btn btn-default btn-xs">{% trans 'Change password' %}</button>
+                <button type="button" class="btn btn-default btn-xs">{% trans 'Send password SMS' %}</button>
+            </div>
+        </div>
+        <input type="submit" class="btn btn-primary btn-xs center-block" value="{% trans 'Change' %}">
+    </form>
+            </div>
         </div>
     </div>
 {% endblock %}
 {% block extra_content %}
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="well well-sm text-center">
+        <div class="column">
+            <div class="ui segment">
                 <ul class="list-inline">
                     <li><a class="btn btn-primary btn-xs" title="{% trans 'Statistics' %}" href="{% url 'core:client_statistics' uid %}">{% trans 'Statistics' %}</a></li>
                     <li><a class="btn btn-danger btn-xs" title="{% trans 'Errors' %}" href="{% url 'core:client_errors' uid %}">{% trans 'Errors' %}</a></li>
@@ -345,8 +474,8 @@
     {% check_module 'claims' as check_module_claims %}
         {% if check_module_claims and claims %}
             <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12">
-                    <div class="well well-sm text-center">
+                <div class="column">
+                    <div class="ui segment">
                         <table class="ui black table">
                             <th>
                                 {% trans 'Problem' %}
@@ -375,7 +504,7 @@
                                 {% else %}
                                     <tr>
                                 {% endif %}
-{#                                    <td><a href="{% url 'claims:claim_edit' c.id%}" title="{% trans 'Edit' %}">{{ c.problem }}</a></td>#}
+                                    <td><a href="{% url 'claims:claim_edit' c.id%}" title="{% trans 'Edit' %}">{{ c.problem }}</a></td>
 
                                     <td>{{ c.address }}</td>
 
@@ -396,8 +525,8 @@
         {% endif %}
     {% if dv_session %}
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="well well-sm text-center">
+            <div class="column">
+                <div class="ui segment">
                     <div class="row">
                         <div class="col-xs-2 ol-sm-2 col-md-2"></div>
                         <div class="col-xs-8 ol-sm-8 col-md-8 text-center">
@@ -451,15 +580,15 @@
         </div>
     {% endif %}
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="well well-sm">
+        <div class="column">
+            <div class="ui segment">
                 {% include 'dv.html' with dv=dv %}
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="well well-sm">
+        <div class="column">
+            <div class="ui segment">
                 <div class="page-header text-center">
                     <span class="label label-default"><i class="fa fa-cog"></i> {% trans 'User info' %}</span>
                 </div>

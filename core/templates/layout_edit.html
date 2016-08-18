@@ -5,58 +5,62 @@
 
 {% block layout %}
     <div class="row">
-        <div class="ui top attached tabular menu">
-            {% url 'core:client' client.id as user_base_url %}
-            {% if request.get_full_path == user_base_url %}
-                <div class="active item"><a href="{% url 'core:client' client.id %}"><i class="fa fa-info" aria-hidden="true"></i> {% trans 'Base' %}</a></div>
-            {% else %}
-                <div class="item"><a href="{% url 'core:client' client.id %}"><i class="fa fa-info" aria-hidden="true"></i> {% trans 'Base' %}</a></div>
-            {% endif %}
-            {% url 'core:client_payments' client.id as user_payments_url %}
-            {% if request.get_full_path == user_payments_url %}
-                <div class="active item"><a href="{% url 'core:client_payments' client.id %}">{% trans 'Payments' %}</a></div>
-            {% else %}
-                <div class="item" ><a href="{% url 'core:client_payments' client.id %}">{% trans 'Payments' %}</a></div>
-            {% endif %}
-            {% url 'core:client_fees' client.id as user_fees_url %}
-            {% if request.get_full_path == user_fees_url %}
-                <div class="active item"><a href="{% url 'core:client_fees' client.id %}">{% trans 'Fees' %}</a></div>
-            {% else %}
-                <div class="item" ><a href="{% url 'core:client_fees' client.id %}">{% trans 'Fees' %}</a></div>
-            {% endif %}
-            {% check_module 'olltv' as check_module_olltv %}
-            {% if check_module_olltv %}
-                {% url 'core:user_change' client.id as user_olltv_url %}
-                {% if request.get_full_path == user_olltv_url %}
-                    <div class="active item"><a href="{% url 'core:user_change' client.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'OLLTV' %}</a></div>
+        <div class="column">
+            <div class="ui top attached tabular menu">
+                {% url 'core:client' client.id as user_base_url %}
+                {% if request.get_full_path == user_base_url %}
+                    <div class="active item"><a href="{% url 'core:client' client.id %}"><i class="fa fa-info" aria-hidden="true"></i> {% trans 'Base' %}</a></div>
                 {% else %}
-                    <div class="item"><a href="{% url 'core:user_change' client.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'OLLTV' %}</a></div>
+                    <div class="item"><a href="{% url 'core:client' client.id %}"><i class="fa fa-info" aria-hidden="true"></i> {% trans 'Base' %}</a></div>
                 {% endif %}
-            {% endif %}
-            {% check_module 'ipdhcp' as check_module_dhcp %}
-            {% if check_module_dhcp %}
-                {% url 'core:user_dhcp' client.id as user_dhcp_url %}
-                {% if request.get_full_path == user_dhcp_url %}
-                    <div class="active item"><a href="{% url 'core:user_dhcp' client.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'Dhcp' %}</a></div>
+                {% url 'core:client_payments' client.id as user_payments_url %}
+                {% if request.get_full_path == user_payments_url %}
+                    <div class="active item"><a href="{% url 'core:client_payments' client.id %}">{% trans 'Payments' %}</a></div>
                 {% else %}
-                    <div class="item"><a href="{% url 'core:user_dhcp' client.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'Dhcp' %}</a></div>
+                    <div class="item" ><a href="{% url 'core:client_payments' client.id %}">{% trans 'Payments' %}</a></div>
                 {% endif %}
-            {% endif %}
-            {% check_module 'claims' as check_module_claims %}
-            {% if check_module_claims %}
-                {% url 'core:user_claims' client.id as user_claims_url %}
-                {% if request.get_full_path == user_claims_url %}
-                    <div class="active item"><a href="{% url 'core:user_claims' client.id %}"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i>{% trans 'Claims' %}</a></div>
+                {% url 'core:client_fees' client.id as user_fees_url %}
+                {% if request.get_full_path == user_fees_url %}
+                    <div class="active item"><a href="{% url 'core:client_fees' client.id %}">{% trans 'Fees' %}</a></div>
                 {% else %}
-                    <div class="item" ><a href="{% url 'core:user_claims' client.id %}"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i>{% trans 'Claims' %}</a></div>
+                    <div class="item" ><a href="{% url 'core:client_fees' client.id %}">{% trans 'Fees' %}</a></div>
                 {% endif %}
-            {% endif %}
-        </div>
-        <div class="ui bottom attached active tab segment">
-            {% block content %}
-            {% endblock %}
+                {% check_module 'olltv' as check_module_olltv %}
+                {% if check_module_olltv %}
+                    {% url 'core:user_change' client.id as user_olltv_url %}
+                    {% if request.get_full_path == user_olltv_url %}
+                        <div class="active item"><a href="{% url 'core:user_change' client.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'OLLTV' %}</a></div>
+                    {% else %}
+                        <div class="item"><a href="{% url 'core:user_change' client.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'OLLTV' %}</a></div>
+                    {% endif %}
+                {% endif %}
+                {% check_module 'ipdhcp' as check_module_dhcp %}
+                {% if check_module_dhcp %}
+                    {% url 'core:user_dhcp' client.id as user_dhcp_url %}
+                    {% if request.get_full_path == user_dhcp_url %}
+                        <div class="active item"><a href="{% url 'core:user_dhcp' client.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'Dhcp' %}</a></div>
+                    {% else %}
+                        <div class="item"><a href="{% url 'core:user_dhcp' client.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'Dhcp' %}</a></div>
+                    {% endif %}
+                {% endif %}
+                {% check_module 'claims' as check_module_claims %}
+                {% if check_module_claims %}
+                    {% url 'core:user_claims' client.id as user_claims_url %}
+                    {% if request.get_full_path == user_claims_url %}
+                        <div class="active item"><a href="{% url 'core:user_claims' client.id %}"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i>{% trans 'Claims' %}</a></div>
+                    {% else %}
+                        <div class="item" ><a href="{% url 'core:user_claims' client.id %}"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i>{% trans 'Claims' %}</a></div>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="ui bottom attached active tab segment">
+                {% block content %}
+                {% endblock %}
+            </div>
         </div>
     </div>
+    <div class="ui stackable grid">
     {% block extra_content %}
     {% endblock %}
+    </div>
 {% endblock %}
