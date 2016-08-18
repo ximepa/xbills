@@ -1,42 +1,61 @@
-{% extends 'base.html' %}
 {% load i18n %}
-{% block extra_css %}
-{% endblock %}
-{% block wrapper %}
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 col-md-offset-4">
-                <div class="login-panel panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Please Sign In</h3>
-                    </div>
-                    <div class="panel-body">
-                        {% if error %}
-                            <div class="alert alert-warning alert-dismissible" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <strong>{% trans 'Warning' %}!</strong> {{ error }}
-                            </div>
-                        {% endif %}
-                        <form role="form" method="POST">{% csrf_token %}
-                            <fieldset>
-                                <div class="form-group">
-                                    <input class="form-control" placeholder="{% trans 'Username' %}" name="username" type="text" autofocus>
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" placeholder="{% trans 'Password' %}" name="password" type="password" value="">
-                                </div>
-{#                                <div class="checkbox">#}
-{#                                    <label>#}
-{#                                        <input name="remember" type="checkbox" value="Remember Me">Remember Me#}
-{#                                    </label>#}
-{#                                </div>#}
-                                <!-- Change this to a button or input when using this as a form -->
-                                <button type="submit" class="btn btn-lg btn-success btn-block">Login</button>
-                            </fieldset>
-                        </form>
-                    </div>
+{% load staticfiles %}
+{% load url %}
+{% load project %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+
+    <title>{% block title %}Xbills v0.0.7{% endblock %}</title>
+
+    <link href="{% static 'semantic-ui/semantic.min.css' %}" rel="stylesheet" type="text/css">
+    <script src="{% static 'semantic-ui/semantic.min.js' %}"></script>
+</head>
+
+<style type="text/css">
+    body {
+        background-color: #DADADA;
+    }
+    body > .grid {
+        height: 100%;
+    }
+    .image {
+        margin-top: -100px;
+    }
+    .column {
+        max-width: 450px;
+    }
+</style>
+
+<body id="content" class="texture">
+    <div class="ui middle aligned center aligned grid">
+        <div class="column">
+            {% if error %}
+                <div class="ui negative message">
+                    <i class="close icon"></i>
+                    <div class="header">{% trans 'Warning' %}!</div>
+                    <p>{{ error }}</p>
                 </div>
-            </div>
+            {% endif %}
+            <form class="ui large form" method="post">{% csrf_token %}
+                <div class="ui stacked segment">
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="user icon"></i>
+                            <input name="username" placeholder="{% trans 'Username' %}" type="text">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="lock icon"></i>
+                            <input name="password" placeholder="{% trans 'Password' %}" type="password">
+                        </div>
+                    </div>
+                    <button class="ui fluid large teal submit button" type="submit">Login</button>
+                </div>
+            </form>
         </div>
     </div>
-{% endblock %}
+</body>
+</html>

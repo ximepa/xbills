@@ -64,7 +64,7 @@ def get_pc_info(request):
                 }],
                 "uptime": strfdelta(diff, settings.UPTIME_FORMAT)
             })
-            print [data_dict]
+
             get_pc_info = json.dumps(data_dict)
             cpus_info = RedisMessage('%s' % get_pc_info)  # create a welcome message to be sent to everybody
             RedisPublisher(facility=request.GET['room'], broadcast=True).publish_message(cpus_info)
