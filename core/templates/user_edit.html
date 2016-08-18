@@ -6,24 +6,6 @@
 {% endblock %}
 {% block extra_css %}
 {% endblock %}
-{% block extra_scripts %}
-<script type="application/javascript">
-    $(function () {
-        $("#olltv").popover({
-            html : true,
-            placement: 'bottom',
-            container: 'body',
-            trigger: 'focus',
-            content: function() {
-              return $("#olltv-content").html();
-            },
-            title: function() {
-              return $("#olltv-title").html();
-            }
-        });
-    });
-</script>
-{% endblock %}
 {% block breadcrumbs %}
     <i class="right angle icon divider"></i>
     <a href="{% url 'core:clients' %}" class="section">{% trans 'Logins' %}</a>
@@ -117,8 +99,8 @@
                         </div>
                     </div>
                 </div>
-                <a class="ui blue ribbon label" script="onClick($('#services').removeAttr('hidden'))">Community</a> User Reviews
-                <div class="ui middle aligned divided list" id="services" hidden>
+                <a class="ui blue ribbon label" onclick="$('#services').toggle()">Community</a> User Reviews
+                <div class="ui middle aligned divided list" id="services" style="display: none">
                     <div class="item">
                         <div class="content">
                             <i class="users icon"></i>{% trans 'Fio' %} :
