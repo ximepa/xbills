@@ -7,13 +7,20 @@ $( document ).ready(function() {
     //$('.sidebar').sidebar('setting', {dimPage: false}).sidebar({context: '.visible.example .bottom.segment'});
     $('.ui.dropdown').dropdown();
     $('.sticky').sticky();
-    $('.popup')
-      .popup()
-    ;
+    $('.popup').popup();
+    document.getElementById("services").style.display = getCookie('services');
 });
-function setCookie(cname, value) {
-    document.cookie = cname + "=" + value + ";"
+
+function servicesToggle() {
+    $('#services').toggle();
+    setCookie('services', $("#services").css('display'))
 }
+
+function setCookie(cname, value) {
+    document.cookie = cname + "=" + value + ";";
+
+}
+
 
 function getCookie(cname) {
     var name = cname + "=";
