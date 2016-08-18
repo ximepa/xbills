@@ -35,28 +35,48 @@
 {% endblock %}
 {% block content %}
     <div class="row" id="pop">
-        <div class="column">
+        <div class="ui form">
                 <div class="ui header">
                     <span class="label label-default"><i class="fa fa-cog"></i> {% trans 'User bill' %}</span>
                 </div>
                 <br/>
-                <form class="form-horizontal" method="post" name="bills_form">{% csrf_token %}
+                <form class="ui form" method="post" name="bills_form">{% csrf_token %}
+                    <div class="ui form">
+                        <div class="fields">
+                            <div class="field">
+                                <label>{% trans 'Deposit:' %}</label>
+                                {% if client.credit > client.bill.deposit and client.credit > 0 %}
+                                    <div class="ui label" >{{ client.bill.deposit|floatformat:4 }}</div>
+                                {% elif client.bill.deposit > 50 %}
+                                    <div class="ui green label" >{{ client.bill.deposit|floatformat:4 }}</div>
+                                {% elif client.bill.deposit < 50 and client.bill.deposit > 20 %}
+                                    <div class="label blue label" >{{ client.bill.deposit|floatformat:4 }}</div>
+                                {% elif client.bill.deposit < 20 and client.bill.deposit > 2.50 %}
+                                    <div class="label orange label" >{{ client.bill.deposit|floatformat:4 }}</div>
+                                {% else %}
+                                    <div class="label red label" >{{ client.bill.deposit|floatformat:4 }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="field">
+                            </div>
+                        </div>
+                        <div class="two fields">
+                            <div class="field">
+                            </div>
+                            <div class="field">
+                            </div>
+                        </div>
+                        <div class="inline field">
+                        </div>
+                        <div class="ui red submit button"> Sign Up </div>
+                        <div class="ui error message"></div>
+                    </div>
                     <div class="row">
                         <div class="column">
                             <div class="ui form">
-                                <label for="inputEmail3" class="col-sm-4 control-label">{% trans 'Deposit:' %}</label>
+                                <label for="inputEmail3" class="col-sm-4 control-label"></label>
                                 <div class="col-sm-8">
-                                    {% if client.credit > client.bill.deposit and client.credit > 0 %}
-                                        <span class="label label-default form-control-static" >{{ client.bill.deposit|floatformat:4 }}</span>
-                                    {% elif client.bill.deposit > 50 %}
-                                        <span class="label label-success form-control-static" >{{ client.bill.deposit|floatformat:4 }}</span>
-                                    {% elif client.bill.deposit < 50 and client.bill.deposit > 20 %}
-                                        <span class="label label-primary form-control-static" >{{ client.bill.deposit|floatformat:4 }}</span>
-                                    {% elif client.bill.deposit < 20 and client.bill.deposit > 2.50 %}
-                                        <span class="label label-warning form-control-static" >{{ client.bill.deposit|floatformat:4 }}</span>
-                                    {% else %}
-                                        <span class="label label-danger form-control-static" >{{ client.bill.deposit|floatformat:4 }}</span>
-                                    {% endif %}
+
                                     <div class="pull-right">
                                         <a id="pay" href="{% url 'core:client_payments' uid %}"><i class="fa fa-plus-circle"></i></a>
                                         <a href="{% url 'core:client_fees' uid %}"><i class="fa fa-minus-circle"></i></a>

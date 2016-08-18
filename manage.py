@@ -4,9 +4,6 @@ import sys
 
 
 
-from voip import call
-
-
 if __name__ == "__main__":
     from twisted.internet import reactor
 
