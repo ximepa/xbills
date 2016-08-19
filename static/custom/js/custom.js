@@ -8,7 +8,14 @@ $( document ).ready(function() {
     $('.ui.dropdown').dropdown();
     $('.sticky').sticky();
     $('.popup').popup();
-    $('.ui.accordion').accordion({
+    $('#sideBar').accordion({
+        onOpen: function () {
+            console.log($('#sideBar'))
+        },
+        onOpening:function (event, ui) {
+            console.log(event)
+            console.log(ui)
+        }
     //    exclusive: false
     });
     if (document.getElementById("services") != null) {

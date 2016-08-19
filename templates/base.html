@@ -21,7 +21,6 @@
     <script src="{{ STATIC_URL }}js/ws4redis.js" type="text/javascript"></script>
     <script src="{% static 'custom/js/jquery.cookie.js' %}"></script>
     <script src="{% static 'semantic-ui/semantic.min.js' %}"></script>
-    <script src="{% static 'custom/js/jquery-ui.min.js' %}"></script>
     <script src="{% static 'custom/js/toastr.js' %}"></script>
     <script src="{% static 'custom/js/bootstrap-datetimepicker.min.js' %}"></script>
     <script src="{% static 'custom/js/custom.js' %}"></script>
@@ -93,10 +92,79 @@
         <div class="ui stackable grid" style="padding: 5px">
             <div class="row">
                 <div class="two wide column">
-                    <div id="sideBar" class="ui sticky vertical menu">
+                    <div id="sideBar" class="ui sticky vertical accordion menu">
                         <div class="item">
-                            <div class="ui input"><input placeholder="Search..." type="text"></div>
-                        </div>
+    <a class="active title">
+      <i class="dropdown icon"></i>
+      Size
+    </a>
+    <div class="active content">
+      <div class="ui form">
+        <div class="grouped fields">
+          <div class="field">
+            <div class="ui radio checkbox">
+              <input name="size" value="small" type="radio">
+              <label>Small</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              <input name="size" value="medium" type="radio">
+              <label>Medium</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              <input name="size" value="large" type="radio">
+              <label>Large</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui radio checkbox">
+              <input name="size" value="x-large" type="radio">
+              <label>X-Large</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="item">
+    <a class="title">
+      <i class="dropdown icon"></i>
+      Colors
+    </a>
+    <div class="content">
+      <div class="ui form">
+        <div class="grouped fields">
+          <div class="field">
+            <div class="ui checkbox">
+              <input name="small" type="checkbox">
+              <label>Red</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui checkbox">
+              <input name="medium" type="checkbox">
+              <label>Orange</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui checkbox">
+              <input name="large" type="checkbox">
+              <label>Green</label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="ui checkbox">
+              <input name="x-large" type="checkbox">
+              <label>Blue</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
                         <div class="item">
                             Home
                             <div class="menu">
