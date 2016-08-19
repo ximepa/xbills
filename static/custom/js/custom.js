@@ -8,7 +8,9 @@ $( document ).ready(function() {
     $('.ui.dropdown').dropdown();
     $('.sticky').sticky();
     $('.popup').popup();
-    document.getElementById("services").style.display = getCookie('services');
+    if (document.getElementById("services") != null) {
+	document.getElementById("services").style.display = getCookie('services');
+    }
 });
 
 function servicesToggle() {
