@@ -540,3 +540,7 @@ h1, h2, h3, h4 .ui.breadcrumb {
 .ui.inmenu.form .fields {
     margin-top: 0.21em;
 }
+
+.main_context {
+    margin-left: 0px;
+}
