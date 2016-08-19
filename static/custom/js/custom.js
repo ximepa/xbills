@@ -23,17 +23,17 @@ function setCookie(cname, value) {
 
 }
 
+
 function hideSidebar() {
     var main_context = document.getElementById("main_context");
     var sideBar = $('.ui.sidebar');
     if ($('#main_context').css('margin-left') == '0px') {
         main_context.style.marginLeft = '260px';
-        sideBar.addClass('visible')
-
-        }
+        sideBar.addClass('visible');
+       }
     else {
         main_context.style.marginLeft = '0px';
-        sideBar.removeClass('visible')
+        sideBar.removeClass('visible');
     }
 }
 
