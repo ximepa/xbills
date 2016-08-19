@@ -5,9 +5,12 @@ $( document ).ready(function() {
     //    $('.sidebar').sidebar('setting', {dimPage: false}).sidebar('toggle');
     //});
     //$('.sidebar').sidebar('setting', {dimPage: false}).sidebar({context: '.visible.example .bottom.segment'});
-    $('.ui.dropdown').dropdown();
+    //$('.ui.dropdown').dropdown();
     $('.sticky').sticky();
     $('.popup').popup();
+    $('.ui.accordion').accordion({
+    //    exclusive: false
+    });
     if (document.getElementById("services") != null) {
 	document.getElementById("services").style.display = getCookie('services');
     }
