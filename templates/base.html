@@ -88,12 +88,10 @@
                     </div>
                 </div>
                 <div class="item">
-                    <form action="{% url 'core:search' %}">
-                        <div class="ui transparent icon input">
-                            <input placeholder="Search..." type="text" name="global_search">
-                            <i class="search link icon"></i>
-                        </div>
-                    </form>
+                    <div class="ui transparent icon input">
+                        <input placeholder="Search..." type="text" name="global_search">
+                        <i class="search link icon"></i>
+                    </div>
                 </div>
             </div>
         </div>
@@ -113,30 +111,6 @@
                                             <a href="{% url 'core:clients' %}" class="item">{% trans 'Logins' %}</a>
                                             <a class="item">Add</a>
                                             <a class="item">Remove</a>
-                                        </div>
-                                        <div class="field">
-                                            <div class="ui radio checkbox">
-                                                <input name="size" value="small" type="radio">
-                                                <label>Small</label>
-                                            </div>
-                                        </div>
-                                        <div class="field">
-                                            <div class="ui radio checkbox">
-                                                <input name="size" value="medium" type="radio">
-                                                <label>Medium</label>
-                                            </div>
-                                        </div>
-                                        <div class="field">
-                                            <div class="ui radio checkbox">
-                                                <input name="size" value="large" type="radio">
-                                                <label>Large</label>
-                                            </div>
-                                        </div>
-                                        <div class="field">
-                                            <div class="ui radio checkbox">
-                                                <input name="size" value="x-large" type="radio">
-                                                <label>X-Large</label>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -176,14 +150,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="item">
-                            Home
-                            <div class="menu">
-                                <a href="{% url 'core:search' %}" class="active item">{% trans 'Search' %}</a>
-                                <a class="item">Add</a>
-                                <a class="item">Remove</a>
                             </div>
                         </div>
                         <a class="item">
