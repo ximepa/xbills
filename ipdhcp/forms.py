@@ -26,7 +26,7 @@ class Dhcphosts_hostsForm(forms.ModelForm):
         empty_label=None,
         widget=forms.Select(
             attrs={
-                'class': 'form-control'
+                'class': 'ui search dropdown'
             }
         )
     )
@@ -45,8 +45,8 @@ class Dhcphosts_hostsForm(forms.ModelForm):
         ]
         widgets = {
             'uid': forms.HiddenInput(),
-            'ip': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Ip', 'aria-describedby': 'select_input', 'id': 'id_ip'}),
-            'hostname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Hostname'}),
-            'vid': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Client vid'}),
-            'server_vid': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Server vid'}),
+            'ip': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Ip', 'aria-describedby': 'select_input', 'id': 'id_ip'}),
+            'hostname': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Hostname'}),
+            'vid': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Client vid'}),
+            'server_vid': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Server vid'}),
         }

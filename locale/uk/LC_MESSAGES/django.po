@@ -200,6 +200,10 @@ msgstr "Заявки"
 msgid "Dashboard"
 msgstr "Панель приладів"
 
+#: templates/base.html:51
+msgid "Search user by criteria"
+msgstr "Пошук користувачів за критеріями"
+
 #: claims/templates/claims.html:25 claims/templates/claims_list.html:6
 msgid "Claims list"
 msgstr "Список заявок"
@@ -264,7 +268,7 @@ msgstr "На жаль, сторінка, яку ви шукаєте не зна�
 #: core/templates/table_payments.html:8 core/templates/users.html:84
 #: olltv/templates/olltv_users_list.html:95
 msgid "Login"
-msgstr "Ввійти"
+msgstr "Логін"
 
 #: claims/templates/login.html:27 core/templates/login.html:26
 #: core/templates/nas.html:53 core/templates/nas.html:55
@@ -367,7 +371,7 @@ msgstr "Додати адміністратора"
 #: telephone/templates/clients.html:69 telephone/templates/clients.html:149
 #: telephone/templates/clients.html:252
 msgid "FIO"
-msgstr "FIO"
+msgstr "ФІО"
 
 #: core/templates/administrators.html:132
 msgid "Remove admin "

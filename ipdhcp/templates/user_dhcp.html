@@ -3,20 +3,19 @@
 {% load staticfiles %}
 {% load url %}
 {% block breadcrumbs %}
-    <ol class="breadcrumb">
-      <li class=""><a href="{% url 'core:index' %}"><i class="fa fa-dashboard fa-fw"></i>{% trans 'Dashboard' %}</a></li>
-      <li class=""><a href="{% url 'core:client' uid %}"><i class="fa fa-user fa-fw"></i>{{ client.login }} (UID: {{ client.id }})</a></li>
-      <li class="active">{% trans 'Dhcp' %}</li>
-    </ol>
+    <i class="right angle icon divider"></i>
+    <a href="{% url 'core:index' %}" class="section">{% trans 'Logins' %}</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section"> <a href="{% url 'core:client' uid %}">{{ client.login }}</a> (UID: {{ uid }}) </div>
+{% endblock %}
+{% block breadcrumbs_sub_header %}
+    {% trans 'Dhcp' %}
 {% endblock %}
 {% block content %}
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="well well-sm">
-                <div class="page-header text-center">
-                    <h4><i class="fa fa-cog"></i> {% trans 'User Dhcp' %}</h4>
-                </div>
-                <br/>
+        <div class="column">
+	    <div class="ui segments">
+		<div class="ui secondary segment">
                 {% if dhcphosts_hostsform.errors %}
                     <script>
                         toastr.error('', '{{ dhcphosts_hostsform.errors }}', {progressBar: true})
@@ -32,16 +31,14 @@
                         toastr.mac_test('{{ response.ping }}', '{{ response.ip }}', '{{ response.mac }}', '{{ response.vlan }}', {progressBar: true, timeOut: 40000, extendedTimeOut: 10000})
                     </script>
                 {% endif %}
-                <form class="form-horizontal" method="post" name="dv_form">{% csrf_token %}
+                <form class="ui form" method="post" name="dv_form">{% csrf_token %}
                     <div class="row">
-                        <div class="col-md-5">
+                        <div class="field">
                             <div class="form-group form-group-sm">
                                 <label for="hostname" class="col-sm-4 control-label">{% trans 'Host Name' %}</label>
-                                <div class="col-sm-8">
                                     {{ dhcphosts_hostsform.hostname }}
                                     {{ dhcphosts_hostsform.uid }}
                                     {{ dhcphosts_hostsform.id }}
-                                </div>
                             </div>
                         </div>
                         <div class="col-md-5">
@@ -49,15 +46,6 @@
                                 <label for="networks" class="col-sm-4 control-label">{% trans 'Networks' %}</label>
                                 <div class="col-sm-8">
                                     {{ dhcphosts_hostsform.network }}
-{#                                    <select name='networks' id='networks' class='form-control'>#}
-{#                                        {% for net in net_dhcp %}#}
-{#                                            <optgroup label="{{ net.name }}"></optgroup>#}
-{#                                            <option value="{{ net.id }}">IP: {% ip_convert net.network %} Mask: {% ip_convert net.mask %}</option>#}
-{#                                        {% endfor %}#}
-{#                                    </select>#}
-{#                                    <script>#}
-{#                                        $("#networks option[value=" + {{ change_dhcp.network }} + "]").attr('selected', 'true')#}
-{#                                    </script>#}
                                 </div>
                             </div>
                         </div>
@@ -67,7 +55,6 @@
                                 <div class="col-sm-8">
                                     <div class="input-group">
                                         {{ dhcphosts_hostsform.ip }}
-{#                                        <input type="text" class="form-control" placeholder="Ip" aria-describedby="select_input" id="id_ip" name="ip" value="{% ip_convert dhcphosts_hostsform.ip.value %}">#}
                                         <span class="input-group-addon" id="select_input">
                                             <input id="auto_select" onchange="se" title="{% trans 'Auto Select' %}" type="checkbox" name="auto_select">
                                         </span>
@@ -143,7 +130,8 @@
                         <button type="submit" class="btn btn-primary btn-xs center-block" name="action" value="add">{% trans 'Add' %}</button>
                     {% endif %}
                 </form>
-            </div>
+		</div>
+	    </div>
         </div>
     </div>
     {% if hosts %}

@@ -6,7 +6,7 @@
 {% block layout %}
     <div class="row">
         <div class="column">
-            <div class="ui stackable top attached tabular menu">
+            <div class="ui stackable top attached mini tabular menu">
                 {% url 'core:client' client.id as user_base_url %}
                 {% if request.get_full_path == user_base_url %}
                     <div class="active item"><a href="{% url 'core:client' client.id %}"><i class="fa fa-info" aria-hidden="true"></i> {% trans 'Base' %}</a></div>

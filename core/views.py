@@ -437,6 +437,8 @@ def search(request):
         except Payment.DoesNotExist:
             error = 'Payments not found'
             return render(request, 'search.html', locals())
+	if 'global_search' in requist.POST:
+	    print 'global'
     return render(request, 'search.html', locals())
 
 
