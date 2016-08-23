@@ -50,19 +50,23 @@ def user_dhcp(request, uid, host_id=None):
         change_dhcp_host = True
         dhcphosts_hostsform = Dhcphosts_hostsForm(instance=host, initial={'ip': num_to_ip(host.ip)})
         if request.method == 'POST':
-            dhcphosts_hostsform = Dhcphosts_hostsForm(request.POST, instance=host)
-            if dhcphosts_hostsform.is_valid():
-                form = dhcphosts_hostsform.save(commit=False)
-                mac = str(request.POST['mac']).strip()
-                if valid_mac(mac):
-                    mac = EUI(mac, dialect=mac_unix_expanded)
-                if 'auto_select' in request.POST:
-                    form.ip = str(ip_to_num(new_ip(request.POST['network'])))
-                else:
-                    form.ip = str(ip_to_num(request.POST['ip']))
-                form.mac = mac
-                form.save()
+            print request.POST
+            if 'action' in request.POST and request.POST['action'] == 'cancel':
                 return redirect(reverse('core:user_dhcp', kwargs={'uid': uid}))
+            else:
+                dhcphosts_hostsform = Dhcphosts_hostsForm(request.POST, instance=host)
+                if dhcphosts_hostsform.is_valid():
+                    form = dhcphosts_hostsform.save(commit=False)
+                    mac = str(request.POST['mac']).strip()
+                    if valid_mac(mac):
+                        mac = EUI(mac, dialect=mac_unix_expanded)
+                    if 'auto_select' in request.POST:
+                        form.ip = str(ip_to_num(new_ip(request.POST['network'])))
+                    else:
+                        form.ip = str(ip_to_num(request.POST['ip']))
+                    form.mac = mac
+                    form.save()
+                    return redirect(reverse('core:user_dhcp', kwargs={'uid': uid}))
         else:
             print dhcphosts_hostsform.errors
     else:
