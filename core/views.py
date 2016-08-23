@@ -718,6 +718,8 @@ def user_login(request):
             if user:
                 user.backend = 'core.auth_backend.AuthBackend'
                 login(request, user)
+                message = RedisMessage('<span style="color: blue; opacity: 0.5;">%s: %s is logged in</span>' % (datetime.datetime.now().strftime("%H:%M:%S"), username))  # create a welcome message to be sent to everybody
+                RedisPublisher(facility='global_chat', broadcast=True).publish_message(message)
                 return HttpResponseRedirect(request.GET['next'])
             else:
                 error = u'Аккаунт заблоковано'
@@ -732,6 +734,8 @@ def user_login(request):
 
 @login_required()
 def logout_view(request):
+    message = RedisMessage('<span style="color: red; opacity: 0.5;">%s: %s is logged out</span>' % (datetime.datetime.now().strftime("%H:%M:%S"), request.user.login))  # create a welcome message to be sent to everybody
+    RedisPublisher(facility='global_chat', broadcast=True).publish_message(message)
     logout(request)
     return redirect('core:index')
 
@@ -794,8 +798,12 @@ def test(request, template=".html"):
 
 @csrf_exempt
 def chat(request):
-    admins = helpers.get_all_logged_in_users()
-    print admins['users']
+    admins = helpers.get_online()
     if request.method == 'POST' and request.POST != '':
         print request.POST
+        if request.POST['message']:
+            message = RedisMessage('<span style="">%s: %s</span>' % (datetime.datetime.now().strftime("%H:%M:%S"), request.POST['message']))  # create a welcome message to be sent to everybody
+            RedisPublisher(facility=request.POST['room'], broadcast=True).publish_message(message)
+        else:
+            print 'no message'
     return render(request, 'chat.html', locals())

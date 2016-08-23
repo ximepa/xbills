@@ -14,12 +14,12 @@
             <div class="ui segment">
                 <div class="ui form">
                   <div class="field">
-                    <textarea readonly id="billboard"></textarea>
+                    <pre style="overflow-y: auto; height: 24em; padding: 10px; border-radius: .28571429rem; border: 1px solid rgba(34,36,38,.15);" id="billboard"></pre>
                   </div>
                     <div class="field">
                         <div class="fields">
                           <div class="fourteen wide field">
-                            <input id="text_message" placeholder="Street Address" type="text">
+                            <input id="text_message" placeholder="{% trans 'Endter a message' %}" type="text" autofocus>
                           </div>
                           <div class="two wide field">
                             <button id="send_message" class="fluid ui primary basic button" type="submit">Submit</button>
@@ -33,7 +33,7 @@
             <div class="ui segment">
                 {% if admins %}
                     <div class="ui middle aligned divided list">
-                        {% for admin in admins.users %}
+                        {% for admin in admins %}
                           <div class="item">
                             <div class="content">
                               <a class="header">{{ admin.login }}</a>

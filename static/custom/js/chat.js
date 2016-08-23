@@ -6,7 +6,6 @@ $(document).ready(function($) {
 	});
 	var billboard = $('#billboard');
 
-	// send message though the Websocket to the server
 	$("#text_message").keydown(function(event) {
 		if (event.keyCode === 13) {
 			event.preventDefault();
@@ -15,14 +14,24 @@ $(document).ready(function($) {
 		}
 	});
 
+	function get_pc_info() {
+        $.post('/admin/chat/', {
+            room: 'global_chat',
+            action: 'send_msg',
+            message: $('#text_message').val()
+        });
+    }
+
 	$('#send_message').click(function() {
-		ws4redis1.send_message($('#text_message').val());
+		get_pc_info();
+		//ws4redis1.send_message($('#text_message').val());
 		$('#text_message').val("")
 	});
 
 	// receive a message though the Websocket from the server
 	function receiveMessage(msg) {
-		billboard.append('&#13;&#10;' + msg);
+		console.log(msg)
+		billboard.append('<br/>' + msg);
 		billboard.scrollTop(billboard.scrollTop() + 25);
 	}
 });
