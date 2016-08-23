@@ -563,7 +563,6 @@ def clients(request):
     for p in page_range:
         page_list = p
     pre_end = users.paginator.num_pages - 2
-    print request.GET
     if 'xml' in request.GET:
         xml_data = serializers.serialize("xml", users)
         return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
@@ -678,6 +677,11 @@ def client_payments(request, uid):
         #log.save()
         #print log.admin
         #del_payment.delete()
+    if 'xml' in request.GET:
+        xml_data = serializers.serialize("xml", payments)
+        return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
+    if 'csv' in request.GET:
+        return helpers.export_to_csv(request, payments, fields=('id', 'uid'), name='login')
     return render(request, 'user_payments.html', locals())
 
 
