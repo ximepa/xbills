@@ -35,7 +35,7 @@ if module_check('olltv'):
     except:
         pass
     finally:
-        urlpatterns += url(r'^clients/(?P<uid>\d+)/olltv/$', olltv_views.user_change, name='user_change'),
+        urlpatterns += url(r'^clients/(?P<uid>\d+)/olltv/$', olltv_views.user_change, name='user_olltv'),
 if module_check('ipdhcp'):
     try:
         from ipdhcp import views as ipdhcp_views

@@ -3,6 +3,7 @@ from datetime import datetime
 import binascii
 from django import template
 import math
+from django.core.urlresolvers import reverse
 from core.models import num_to_ip, Admin
 from django.conf import settings
 import os
@@ -13,7 +14,7 @@ register = template.Library()
 @register.simple_tag
 def check_module(module):
     modules = settings.INSTALLED_APPS
-    module_path = os.path.join(settings.BASE_DIR,  module)
+    module_path = os.path.join(settings.BASE_DIR, module)
     if module in modules and os.path.exists(module_path):
         return True
     else:
@@ -27,7 +28,7 @@ def url_replace(request, field, value):
         if dict_[field].startswith('-') and dict_[field].lstrip('-') == value:
             dict_[field] = value
         else:
-            dict_[field] = "-"+value
+            dict_[field] = "-" + value
     else:
         dict_[field] = value
     return dict_.urlencode()
@@ -52,7 +53,6 @@ def theme(request, static_file):
         return '/static/default/' + static_file
 
 
-
 @register.simple_tag
 def ip_convert(value):
     return num_to_ip(value)
@@ -71,7 +71,7 @@ def convert_timestamp_to_time(timestamp):
 
 @register.simple_tag
 def sizeof_fmt(num, suffix='B'):
-    for unit in ['','Ki','Mi','Gi','Ti','Pi','Ei','Zi']:
+    for unit in ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi']:
         if abs(num) < 1024.0:
             return "%3.1f %s%s" % (num, unit, suffix)
         num /= 1024.0
@@ -94,34 +94,26 @@ def sizify(value):
 
 @register.simple_tag
 def convert_bytes(value, giga):
-    #print value
-    #print giga
+    # print value
+    # print giga
     if value != 0:
         if giga == 0:
             value = value
         else:
-            value = value + 4294967296 * giga
+            value += 4294967296 * giga
         size_name = ("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB")
-        i = int(math.floor(math.log(value,1024)))
-        p = math.pow(1024,i)
-        s = round(value/p,2)
+        i = int(math.floor(math.log(value, 1024)))
+        p = math.pow(1024, i)
+        s = round(value / p, 2)
         return '%s %s' % (s, size_name[i])
     else:
         print value
         return '%s %s' % (str(value), 'B')
 
 
-# @register.simple_tag
-# def get_field_verbose_name(instance, arg):
-#     verbose_name = instance._meta.get_field(arg).verbose_name.title()
-#     name = instance._meta.get_field(arg).name
-#     return instance._meta.get_field(arg).verbose_name.title()
-# #register.filter('field_verbose_name', get_field_verbose_name)
-#
-#
-# @register.simple_tag
-# def get_queryset_field_verbose_name(queryset, arg):
-#     verbose_name = queryset.model._meta.get_field(arg).verbose_name.title()
-#     name = queryset.model._meta.get_field(arg).name
-#     return queryset.model._meta.get_field(arg).verbose_name.title()
-# #register.filter('queryset_field_verbose_name', get_queryset_field_verbose_name)
+@register.simple_tag
+def active(request, url, *args):
+    print request.path.startswith(reverse(url, args=args))
+    if request.path == (reverse(url, args=args)):
+        return 'active'
+    return ''
