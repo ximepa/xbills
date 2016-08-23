@@ -22,6 +22,7 @@ def num_to_ip(number):
     a = int(number/(256**3)) % 256
     return "%s.%s.%s.%s" % (a,b,c,d)
 
+
 # PermissionsMixin
 class Admin(AbstractBaseUser):
     login = models.CharField(max_length=50, db_column='id', unique=True)
@@ -63,6 +64,8 @@ class Admin(AbstractBaseUser):
     def get_full_name(self):
         return str(self.login)
 
+    def get_short_name(self):
+        return str(self.login)
 
     class Meta:
         db_table = 'admins'

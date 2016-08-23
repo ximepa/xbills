@@ -687,8 +687,7 @@ def client_fees(request, uid):
     try:
         client = User.objects.get(id=uid)
     except User.DoesNotExist:
-        error = 'user not found'
-        return render(request, 'layout_edit.html', locals())
+        return render(request, '404.html', locals())
     fees_list = Fees.objects.filter(uid=client.id).order_by(order_by)
     for ex_fees in fees_list:
         out_sum = out_sum + ex_fees.sum
