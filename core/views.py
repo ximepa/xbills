@@ -729,6 +729,11 @@ def client_fees(request, uid):
             out_sum = out_sum + ex_fees.sum
         writer.writerow(['', out_sum])
         return response
+    if 'xml' in request.GET:
+        xml_data = serializers.serialize("xml", fees)
+        return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
+    if 'csv' in request.GET:
+        return helpers.export_to_csv(request, fees, fields=('id', 'uid'), name='login')
     return render(request, 'user_fees.html', locals())
 
 
