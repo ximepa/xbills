@@ -632,7 +632,10 @@ def fees(request):
 def client_payments(request, uid):
     out_sum = 0
     order_by = request.GET.get('order_by', '-date')
-    client = User.objects.get(id=uid)
+    try:
+        client = User.objects.get(id=uid)
+    except User.DoesNotExist:
+        return render(request, '404.html', locals())
     payments_list = Payment.objects.filter(uid=client.id).order_by(order_by)
     for ex_payments in payments_list:
         out_sum = out_sum + ex_payments.sum
