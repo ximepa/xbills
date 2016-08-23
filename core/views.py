@@ -11,7 +11,8 @@ from django.views.decorators.csrf import csrf_exempt
 from dv.helpers import Hangup
 from ipdhcp.models import Dhcphosts_networks, Dhcphosts_hosts
 from .auth_backend import AuthBackend
-from .models import User, Payment, Fees, Dv, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog, Dv_log, Admin, num_to_ip, AdminSettings
+from .models import User, Payment, Fees, Dv, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog, Dv_log, Admin, num_to_ip, AdminSettings, \
+    AdminLog, ip_to_num
 from ipdhcp.models import ipRange
 from .forms import AdministratorForm, SearchForm, SearchFeesForm, SearchPaymentsForm
 from django.contrib import messages
@@ -629,9 +630,12 @@ def fees(request):
 
 
 def client_payments(request, uid):
+    out_sum = 0
     order_by = request.GET.get('order_by', '-date')
     client = User.objects.get(id=uid)
     payments_list = Payment.objects.filter(uid=client.id).order_by(order_by)
+    for ex_payments in payments_list:
+        out_sum = out_sum + ex_payments.sum
     paginator = Paginator(payments_list, settings.PAYMENTS_PER_PAGE)
     page = request.GET.get('page', 1)
     if helpers.module_check('olltv'):
@@ -659,7 +663,18 @@ def client_payments(request, uid):
         page_list = p
     pre_end = payments.paginator.num_pages - 2
     if 'del' in request.GET:
-        return redirect(request.GET['return_url'])
+        del_payment = Payment.objects.get(id=request.GET['del'])
+        print request.GET
+        log = AdminLog(
+            actions='test',
+            datetime=datetime.datetime.now(),
+            ip=ip_to_num('127.0.0.1'),
+            user_id=uid,
+            admin_id=40,
+        )
+        #log.save()
+        #print log.admin
+        #del_payment.delete()
     return render(request, 'user_payments.html', locals())
 
 
