@@ -31,7 +31,6 @@ $(document).ready(function($) {
 
 	// receive a message though the Websocket from the server
 	function receiveMessage(msg) {
-		console.log(msg)
 		billboard.append('<br/>' + msg);
 		billboard.scrollTop(billboard.scrollTop() + 25);
 	}
