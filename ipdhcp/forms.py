@@ -16,7 +16,7 @@ class Dhcphosts_hostsForm(forms.ModelForm):
     mac = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                'class': 'form-control', 'placeholder': u'Mac'
+                'class': 'ui small input', 'placeholder': u'Mac'
             }
         ),
         validators=[validate_mac]

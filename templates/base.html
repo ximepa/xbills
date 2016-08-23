@@ -109,7 +109,12 @@
                                 <div class="ui form">
                                     <div class="grouped fields">
                                         <div class="menu">
-                                            <a href="{% url 'core:clients' %}" class="item">{% trans 'Logins' %}</a>
+                                            {% url 'core:clients' as clients %}
+                                            {% if request.get_full_path == clients %}
+                                                <a href="{% url 'core:clients' %}" class="item active">{% trans 'Logins' %}</a>
+                                            {% else %}
+                                                <a href="{% url 'core:clients' %}" class="item">{% trans 'Logins' %}</a>
+                                            {% endif %}
                                             <a class="item">Add</a>
                                             <a class="item">Remove</a>
                                         </div>
@@ -174,23 +179,23 @@
                     <div class="ui stackable grid">
                         <div class="row">
                             <div class="column">
-                            <div class="mini ui segment">
-                                <h4 class="ui header">
-                                    <i class="dashboard icon"></i>
-                                    <div class="content">
-                                        <div class="ui breadcrumb">
-                                            <a href="{% url 'core:index' %}" class="section">{% trans 'Dashboard' %}</a>
-                                            {% block breadcrumbs %}
-                                            {% endblock %}
+                                <div class="ui raised segment">
+                                    <h4 class="ui header">
+                                        <i class="dashboard icon"></i>
+                                        <div class="content">
+                                            <div class="ui breadcrumb">
+                                                <a href="{% url 'core:index' %}" class="section">{% trans 'Dashboard' %}</a>
+                                                {% block breadcrumbs %}
+                                                {% endblock %}
+                                            </div>
+                                            <div class="sub header">
+                                                {% block breadcrumbs_sub_header %}
+                                                    {% trans 'System info and monitoring' %}
+                                                {% endblock %}
+                                            </div>
                                         </div>
-                                        <div class="sub header">
-                                            {% block breadcrumbs_sub_header %}
-                                                {% trans 'System info and monitoring' %}
-                                            {% endblock %}
-                                        </div>
-                                    </div>
-                                </h4>
-                            </div>
+                                    </h4>
+                                </div>
                             </div>
                         </div>
                         {% block layout %}

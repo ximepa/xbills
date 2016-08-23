@@ -17,7 +17,7 @@
             <div class="five wide column">
             </div>
             <div class="six wide column">
-                <div class="ui segment">
+                <div class="ui raised segment">
                     {% if dhcphosts_hostsform.errors %}
                         <script>
                             toastr.error('', '{{ dhcphosts_hostsform.errors }}', {progressBar: true})
@@ -103,43 +103,43 @@
         <div class="ui stackable grid">
             <div class="row">
                 <div class="column">
-                    <div class="ui segments">
-                        <div class="ui segment">
-                            <table class="ui blue small very compact selectable striped table">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>{% trans 'Login' %}</th>
-                                        <th>IP</th>
-                                        <th>{% trans 'Hostname' %}</th>
-                                        <th>{% trans 'Network name' %}</th>
-                                        <th>MAC</th>
-                                        <th>{% trans '-' %}</th>
-                                        <th>{% trans '-' %}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {% for host in hosts %}
-                                    <tr>
-                                        <td>{{ host.id }}</td>
-                                        <td>{{ client.login }}</td>
-                                        <td>{% ip_convert host.ip %}</td>
-                                        <td>{{ host.hostname }}</td>
-                                        <td>{{ host.nas }}</td>
-                                        <td>
-                                            <form name="mac_test" method="post">{% csrf_token %}
-                                                <button type="submit" class="tiny ui green button" name="mac_test" value="{{ host.mac }}">{{ host.mac }}</button>
-                                            </form>
-                                        </td>
-                                        <td>
-                                            <a href="{% url 'core:user_ipdhcp_host_change' uid host.id %}"><span class='fa fa-pencil'></span></a>
-                                        </td>
-                                        <td><a href="{% url 'core:user_dhcp' host.uid %}?action=remove&host_id={{ host.id }}"><span class='fa fa-trash'></span></a></td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="ui raised segment">
+                        <table class="ui blue small very compact selectable striped table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>{% trans 'Login' %}</th>
+                                    <th>IP</th>
+                                    <th>{% trans 'Hostname' %}</th>
+                                    <th>{% trans 'Network name' %}</th>
+                                    <th>MAC</th>
+                                    <th>{% trans '-' %}</th>
+                                    <th>{% trans '-' %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for host in hosts %}
+                                <tr>
+                                    <td>{{ host.id }}</td>
+                                    <td>{{ client.login }}</td>
+                                    <td>{% ip_convert host.ip %}</td>
+                                    <td>{{ host.hostname }}</td>
+                                    <td>{{ host.nas }}</td>
+                                    <td>
+                                        <form name="mac_test" method="post">{% csrf_token %}
+                                            <button type="submit" class="tiny ui green button" name="mac_test" value="{{ host.mac }}">{{ host.mac }}</button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'core:user_ipdhcp_host_change' uid host.id %}"><span class='fa fa-pencil'></span></a>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'core:user_dhcp' host.uid %}?action=remove&host_id={{ host.id }}"><span class='fa fa-trash'></span></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
