@@ -19,19 +19,100 @@
     <div class="ui stackable grid">
 	    <div class="row">
             <div class="three wide column">
-                <div class="ui segments">
-                    <div class="ui secondary segment">
-                        <div class="ui form">
-                            <div class="field">
-                                <a class="ui grey ribbon label">{% trans 'General Information' %}</a>
-                                <div class="ui middle aligned divided list">
-                                    <div class="item">
-                                        <div class="content">
-                                            <i class="users icon"></i>{% trans 'FIO' %} :
-                                            <span style="font-weight: bold">{{ client.user_pi.fio }}</span>
-                                        </div>
+                <div class="ui secondary raised segment">
+                    <div class="ui form">
+                        <div class="field">
+                            <a class="ui grey ribbon label">{% trans 'General Information' %}</a>
+                            <div class="ui middle aligned divided list">
+                                <div class="item">
+                                    <div class="content">
+                                        <i class="users icon"></i>{% trans 'FIO' %} :
+                                        <span style="font-weight: bold">{{ client.user_pi.fio }}</span>
                                     </div>
-                                    <div class="item">
+                                </div>
+                                <div class="item">
+                                <div class="content">
+                                    <i class="users icon"></i>{% trans 'Deposit' %} :
+                                    {% if client.credit > client.bill.deposit and client.credit > 0 %}
+                                        <a class="ui grey label" >{{ client.bill.deposit|floatformat:2 }}</a>
+                                    {% elif client.bill.deposit > 50 %}
+                                        <a class="ui green label">{{ client.bill.deposit|floatformat:2 }}</a>
+                                    {% elif client.bill.deposit < 50 and client.bill.deposit > 20 %}
+                                        <a class="ui label blue label">{{ client.bill.deposit|floatformat:2 }}</a>
+                                    {% elif client.bill.deposit < 20 and client.bill.deposit > 2.50 %}
+                                        <a class="ui label orange label">{{ client.bill.deposit|floatformat:2 }}</a>
+                                    {% else %}
+                                        <a class="ui label red label">{{ client.bill.deposit|floatformat:2 }}</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="content">
+                                    <i class="users icon"></i>{% trans 'Credit' %} :
+                                    {% if client.credit > 0 %}
+                                        <a class="ui green label" >{{ client.credit|floatformat:2 }}</a>
+                                    {% else %}
+                                        <a class="ui label">{{ client.credit|floatformat:2 }}</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="content">
+                                    <i class="users icon"></i>{% trans 'Bill ID' %} :
+                                    {% if client.bill.id %}
+                                        <a class="ui blue label" >{{ client.bill.id }}</a>
+                                    {% else %}
+                                        <a class="ui blue label" >{{ client.company.bill_id }}</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% if client.company %}
+                            <div class="item">
+                                <div class="content">
+                                    <i class="users icon"></i>{% trans 'Company' %} :
+                                    <a class="ui blue label">{{ client.company.name }}</a>
+                                </div>
+                            </div>
+                            {% endif %}
+                            <div class="item">
+                                <div class="content">
+                                    <i class="users icon"></i>{% trans 'Group' %} :
+                                    <a class="ui blue label" >{{ client.gid }}</a>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <i class="marker icon"></i>
+                                <div class="content">
+                                    {{ client.user_pi.city }}
+                                    {% if client.user_pi.street %}
+                                        , {{ client.user_pi.street.name }}
+                                        {% if client.user_pi.location %}
+                                            {{ client.user_pi.location }}
+                                        {% endif %}
+                                        {% if client.user_pi.kv %}
+                                            {% trans 'Flat' %} {{ client.user_pi.kv }}
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="item">
+                                <i class="mail icon"></i>
+                                <div class="content">
+                                    <a href="mailto:{{ client.user_pi.email }}">{{ client.user_pi.email }}</a>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="field">
+                            <a class="ui blue ribbon label" onclick="servicesToggle()">Community</a>
+                            <div class="ui middle aligned divided list" id="services" style="display: none">
+                                <div class="item">
+                                    <div class="content">
+                                        <i class="users icon"></i>{% trans 'FIO' %} :
+                                        <span style="font-weight: bold">{{ client.user_pi.fio }}</span>
+                                    </div>
+                                </div>
+                                <div class="item">
                                     <div class="content">
                                         <i class="users icon"></i>{% trans 'Deposit' %} :
                                         {% if client.credit > client.bill.deposit and client.credit > 0 %}
@@ -91,7 +172,7 @@
                                                 {{ client.user_pi.location }}
                                             {% endif %}
                                             {% if client.user_pi.kv %}
-                                                {% trans 'Flat' %} {{ client.user_pi.kv }}
+                                                {% trans 'flat' %} {{ client.user_pi.kv }}
                                             {% endif %}
                                         {% endif %}
                                     </div>
@@ -103,89 +184,6 @@
                                     </div>
                                 </div>
                             </div>
-                            </div>
-                            <div class="field">
-                                <a class="ui blue ribbon label" onclick="servicesToggle()">Community</a>
-                                <div class="ui middle aligned divided list" id="services" style="display: none">
-                                    <div class="item">
-                                        <div class="content">
-                                            <i class="users icon"></i>{% trans 'FIO' %} :
-                                            <span style="font-weight: bold">{{ client.user_pi.fio }}</span>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="content">
-                                            <i class="users icon"></i>{% trans 'Deposit' %} :
-                                            {% if client.credit > client.bill.deposit and client.credit > 0 %}
-                                                <a class="ui grey label" >{{ client.bill.deposit|floatformat:2 }}</a>
-                                            {% elif client.bill.deposit > 50 %}
-                                                <a class="ui green label">{{ client.bill.deposit|floatformat:2 }}</a>
-                                            {% elif client.bill.deposit < 50 and client.bill.deposit > 20 %}
-                                                <a class="ui label blue label">{{ client.bill.deposit|floatformat:2 }}</a>
-                                            {% elif client.bill.deposit < 20 and client.bill.deposit > 2.50 %}
-                                                <a class="ui label orange label">{{ client.bill.deposit|floatformat:2 }}</a>
-                                            {% else %}
-                                                <a class="ui label red label">{{ client.bill.deposit|floatformat:2 }}</a>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="content">
-                                            <i class="users icon"></i>{% trans 'Credit' %} :
-                                            {% if client.credit > 0 %}
-                                                <a class="ui green label" >{{ client.credit|floatformat:2 }}</a>
-                                            {% else %}
-                                                <a class="ui label">{{ client.credit|floatformat:2 }}</a>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <div class="content">
-                                            <i class="users icon"></i>{% trans 'Bill ID' %} :
-                                            {% if client.bill.id %}
-                                                <a class="ui blue label" >{{ client.bill.id }}</a>
-                                            {% else %}
-                                                <a class="ui blue label" >{{ client.company.bill_id }}</a>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    {% if client.company %}
-                                    <div class="item">
-                                        <div class="content">
-                                            <i class="users icon"></i>{% trans 'Company' %} :
-                                            <a class="ui blue label">{{ client.company.name }}</a>
-                                        </div>
-                                    </div>
-                                    {% endif %}
-                                    <div class="item">
-                                        <div class="content">
-                                            <i class="users icon"></i>{% trans 'Group' %} :
-                                            <a class="ui blue label" >{{ client.gid }}</a>
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <i class="marker icon"></i>
-                                        <div class="content">
-                                            {{ client.user_pi.city }}
-                                            {% if client.user_pi.street %}
-                                                , {{ client.user_pi.street.name }}
-                                                {% if client.user_pi.location %}
-                                                    {{ client.user_pi.location }}
-                                                {% endif %}
-                                                {% if client.user_pi.kv %}
-                                                    {% trans 'flat' %} {{ client.user_pi.kv }}
-                                                {% endif %}
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                    <div class="item">
-                                        <i class="mail icon"></i>
-                                        <div class="content">
-                                            <a href="mailto:{{ client.user_pi.email }}">{{ client.user_pi.email }}</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -194,22 +192,65 @@
                 <i class="user icon"></i>
             </div>
             <div class="thirteen wide column">
-                <div class="ui segments">
-                    <div class="ui secondary segment">
-                        <div class="ui top attached tabular menu">
-                            <a class="item active" data-tab="first">First</a>
-                            <a class="item" data-tab="second">Second</a>
-                            <a class="item" data-tab="third">Third</a>
-                        </div>
-                        <div class="ui bottom attached tab segment active" data-tab="first">
-                            First
-                        </div>
-                        <div class="ui bottom attached tab segment" data-tab="second">
-                            Second
-                        </div>
-                        <div class="ui bottom attached tab segment" data-tab="third">
-                            Third
-                        </div>
+                <div class="ui secondary raised segment">
+                    <div class="ui top attached tabular menu">
+                        <a class="item active" data-tab="first">{% trans 'Sessions' %}</a>
+                        <a class="item" data-tab="second">Second</a>
+                        <a class="item" data-tab="third">Third</a>
+                    </div>
+                    <div class="ui bottom attached tab segment active" data-tab="first">
+                        {% if dv_session %}
+                            <table class="ui blue table ">
+                                <thead class="">
+                                    <tr>
+                                        <th>IP</th>
+                                        <th>Session time</th>
+                                        <th>Trafic in</th>
+                                        <th>Trafic out</th>
+                                        <th>Server</th>
+                                        <th>Zap</th>
+                                        <th>Hangup</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for s in dv_session %}
+                                        <tr>
+                                            <td>
+                                                {% ip_convert s.framed_ip_address %}
+                                            </td>
+                                            <td>
+                                                {% convert_timestamp_to_time s.started %}
+                                            </td>
+                                            <td>
+                                                {% convert_bytes s.acct_input_octets s.acct_input_gigawords%}
+                                            </td>
+                                            <td>
+                                                {% convert_bytes s.acct_output_octets s.acct_output_gigawords%}
+                                            </td>
+                                            <td>
+                                                {{ s.nas.name }}
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-xs btn-link" href="#">
+                                                    <span class="fa fa-times fa-fw"></span>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-xs btn-link" href="?hangup&acct_session_id={{ s.acct_session_id }}&nas_id={{ s.nas_id }}&port_id={{ s.nas_port_id }}&user_name={{ s.user_name }}"><span class="fa fa-power-off fa-fw"></span></a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            {% trans 'No Sessions' %}
+                        {% endif %}
+                    </div>
+                    <div class="ui bottom attached tab segment" data-tab="second">
+                        Second
+                    </div>
+                    <div class="ui bottom attached tab segment" data-tab="third">
+                        Third
                     </div>
                 </div>
 	        </div>
