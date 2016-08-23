@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load url %}
 {% load staticfiles %}
-<table class="ui black bordered table table-striped table-hover table-condensed">
+<table class="ui small black bordered table table-striped table-hover table-condensed">
     <thead>
         <tr class="">
             <th>{% trans 'Number' %}</th>
@@ -20,7 +20,7 @@
         {% for payment in payments %}
         <tr>
             <td>{{ payment.id }}</td>
-            <td><a href="{% url 'core:index' %}?index=clients&uid={{ payment.uid.id }}">{{ payment.uid.login }}</a></td>
+            <td><a href="{% url 'core:clients' %}{{ payment.uid.id }}">{{ payment.uid.login }}</a></td>
             <td>{{ payment.date }}</td>
             <td>{{ payment.dsc }}</td>
             <td>{{ payment.sum }}</td>
@@ -32,17 +32,51 @@
             <td>{{ payment.method }}</td>
             <td>{{ payment.aid.login }}</td>
             <td>{{ payment.uid.id }}</td>
-            <td><i class="fa fa-remove"></i></td>
+            <td><a href="{% url 'core:client_payments' client.id %}?del={{ payment.id }}" onclick="return confirm('Удалить?');"><i class="fa fa-remove"></i></a></td>
+            {#<td><a href="{% url 'core:client_payments' client.id %}?del={{ payment.id }}"><i class="fa fa-remove"></i></a></td>#}
+	    <td>
+		
+		<div class="ui basic modal">
+  <i class="close icon"></i>
+  <div class="header">
+    Archive Old Messages
+  </div>
+  <div class="image content">
+    <div class="image">
+      <i class="archive icon"></i>
+    </div>
+    <div class="description">
+      <p>Your inbox is getting full, would you like us to enable automatic archiving of old messages?</p>
+    </div>
+  </div>
+  <div class="actions">
+    <div class="two fluid ui inverted buttons">
+      <div class="ui cancel red basic inverted button">
+        <i class="remove icon"></i>
+        No
+      </div>
+      <div class="ui ok green basic inverted button">
+        <i class="checkmark icon"></i>
+        Yes
+      </div>
+    </div>
+  </div>
+</div>
+		</td>
         </tr>
         {% endfor %}
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="9">
-            </td>
-            <td>
-                <span class="badge">{{ payments_list.count }}</span>
-            </td>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th><div class="ui blue tiny label">{% trans 'Sum' %}<div class="detail">{{ out_sum }}</div></div></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th><div class="ui blue tiny label">{% trans 'All' %} <div class="detail">{{ payments_list.count }}</div></div></th>
         </tr>
     </tfoot>
 </table>

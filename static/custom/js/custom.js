@@ -6,6 +6,7 @@ $( document ).ready(function() {
     //});
     //$('.sidebar').sidebar('setting', {dimPage: false}).sidebar({context: '.visible.example .bottom.segment'});
     $('.ui.dropdown').dropdown();
+    $('.menu .item').tab();
     $('.sticky').sticky();
     $('.popup').popup();
     $('#sideBar').accordion({
@@ -57,6 +58,7 @@ function formatBytes(bytes,decimals) {
    var i = Math.floor(Math.log(bytes) / Math.log(k));
    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
+
 var uid = "UID";
 global.getPayNow = function () {
     $.getJSON('/admin/?pay_now', function (data) {
@@ -70,6 +72,24 @@ global.getPayNow = function () {
 	setCookie('pay_uid', data.pay_now[3])
     })
 };
+
+function comments_add (theLink, Message, CustomMsg) {
+    console.log(Message);
+  Q=prompt(Message);
+
+  if (Q == '' || Q == null) {
+  	var is_confirmed = alert('Enter comments');
+  }
+  else {
+    Q=' &comments='+Q;
+    theLink.href += Q;
+      console.log(Q)
+  }
+
+  return is_confirmed;
+}
+
+
 //var claim = "claim";
 //global.getClaimsNotifi = function () {
 //    $.getJSON('/admin/claims/?claim_notifi', function (data) {
