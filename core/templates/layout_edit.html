@@ -14,6 +14,7 @@
                     <div class="item"><a href="{% url 'core:client' client.id %}"><i class="fa fa-info" aria-hidden="true"></i> {% trans 'Base' %}</a></div>
                 {% endif %}
                 {% url 'core:client_payments' client.id as user_payments_url %}
+                {% request. %}
                 {% if request.get_full_path == user_payments_url %}
                     <div class="active item"><a href="{% url 'core:client_payments' client.id %}">{% trans 'Payments' %}</a></div>
                 {% else %}
