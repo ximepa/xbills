@@ -12,178 +12,143 @@
     {% trans 'Dhcp' %}
 {% endblock %}
 {% block content %}
-    <div class="row">
-        <div class="column">
-	    <div class="ui segments">
-		<div class="ui secondary segment">
-                {% if dhcphosts_hostsform.errors %}
-                    <script>
-                        toastr.error('', '{{ dhcphosts_hostsform.errors }}', {progressBar: true})
-                    </script>
-                {% endif %}
-                {% if error == 1 %}
-                     <script>
-                        toastr.error('', '{% trans 'Mac not found' %}', {progressBar: true})
-                    </script>
-                {% endif %}
-                {% if response != None %}
-                    <script>
-                        toastr.mac_test('{{ response.ping }}', '{{ response.ip }}', '{{ response.mac }}', '{{ response.vlan }}', {progressBar: true, timeOut: 40000, extendedTimeOut: 10000})
-                    </script>
-                {% endif %}
-                <form class="ui form" method="post" name="dv_form">{% csrf_token %}
-                    <div class="row">
-                        <div class="field">
-                            <div class="form-group form-group-sm">
-                                <label for="hostname" class="col-sm-4 control-label">{% trans 'Host Name' %}</label>
+    <div class="ui stackable grid">
+        <div class="row">
+            <div class="five wide column">
+            </div>
+            <div class="six wide column">
+                <div class="ui segments">
+                    <div class="ui segment">
+                        {% if dhcphosts_hostsform.errors %}
+                            <script>
+                                toastr.error('', '{{ dhcphosts_hostsform.errors }}', {progressBar: true})
+                            </script>
+                        {% endif %}
+                        {% if error == 1 %}
+                             <script>
+                                toastr.error('', '{% trans 'Mac not found' %}', {progressBar: true})
+                            </script>
+                        {% endif %}
+                        {% if response != None %}
+                            <script>
+                                toastr.mac_test('{{ response.ping }}', '{{ response.ip }}', '{{ response.mac }}', '{{ response.vlan }}', {progressBar: true, timeOut: 40000, extendedTimeOut: 10000})
+                            </script>
+                        {% endif %}
+                        <form class="ui form" method="post" name="dv_form">{% csrf_token %}
+                            <div class="row">
+                                <div class="field">
+                                    <label>{% trans 'Host Name' %}</label>
                                     {{ dhcphosts_hostsform.hostname }}
                                     {{ dhcphosts_hostsform.uid }}
                                     {{ dhcphosts_hostsform.id }}
-                            </div>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="form-group form-group-sm">
-                                <label for="networks" class="col-sm-4 control-label">{% trans 'Networks' %}</label>
-                                <div class="col-sm-8">
+                                </div>
+                                <div class="field">
+                                    <label>{% trans 'Networks' %}</label>
                                     {{ dhcphosts_hostsform.network }}
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="form-group form-group-sm">
-                                <label for="id_ip" class="col-sm-4 control-label">{% trans 'IP' %}</label>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        {{ dhcphosts_hostsform.ip }}
-                                        <span class="input-group-addon" id="select_input">
-                                            <input id="auto_select" onchange="se" title="{% trans 'Auto Select' %}" type="checkbox" name="auto_select">
-                                        </span>
-                                        <script>
-                                            var se = $('#auto_select').change(function(){
-                                                if ($('#auto_select').is(':checked')){
-                                                    document.getElementById('id_ip').readOnly = true;
-                                                    $('#id_ip').val('0.0.0.0')
-                                                } else {
-                                                    document.getElementById('id_ip').readOnly = false;
-                                                }
-                                            });
-                                        </script>
-                                    </div>
+                                <div class="field">
+                                    <label>{% trans 'IP' %}</label>
+                                    {{ dhcphosts_hostsform.ip }}
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="form-group form-group-sm">
-                                <label for="mac" class="col-sm-4 control-label">{% trans 'Mac' %}</label>
-                                <div class="col-sm-8">
+                                <div class="field">
+                                    <label>{% trans 'Mac' %}</label>
                                     {{ dhcphosts_hostsform.mac }}
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="form-group form-group-sm">
-                                <label for="svlan" class="col-sm-4 control-label">{% trans 'Server Vlan' %}</label>
-                                <div class="col-sm-8">
+                                <div class="field">
+                                    <label>{% trans 'Server Vlan' %}</label>
                                     {{ dhcphosts_hostsform.server_vid }}
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="form-group form-group-sm">
-                                <label for="cvlan" class="col-sm-4 control-label">{% trans 'Client Vlan' %}</label>
-                                <div class="col-sm-8">
+                                <div class="field">
+                                    <label>{% trans 'Client Vlan' %}</label>
                                     {{ dhcphosts_hostsform.vid }}
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="form-group form-group-sm">
-                                <label for="mac" class="col-sm-4 control-label">{% trans 'Disable' %}</label>
-                                <div class="col-sm-8">
+                                <div class="field">
+                                    <label>{% trans 'Disable' %}</label>
                                     {{ dhcphosts_hostsform.disable }}
-                                </div>
-                                <script type="application/javascript">
-                                    var ipdhcp_disable = $('#id_disable').change(function(){
-                                        console.log($(this));
-                                        if ($(this).is(':checked')){
-                                            $(this).attr('value', 1);
-                                            $(this).attr('checked', true);
+                                    <script type="application/javascript">
+                                        var ipdhcp_disable = $('#id_disable').change(function(){
+                                            console.log($(this));
+                                            if ($(this).is(':checked')){
+                                                $(this).attr('value', 1);
+                                                $(this).attr('checked', true);
+                                            } else {
+                                                $(this).attr('value', 0);
+                                                $(this).attr('checked', false);
+                                            }
+                                        });
+                                        if ('{{ dhcphosts_hostsform.disable.value }}' == 0){
+                                            $('#id_disable').attr('value', 0);
+                                            $('#id_disable').attr('checked', false)
                                         } else {
-                                            $(this).attr('value', 0);
-                                            $(this).attr('checked', false);
+                                            $('#id_disable').attr('value', 1);
+                                            $('#id_disable').attr('checked', true)
                                         }
-                                    });
-                                    if ('{{ dhcphosts_hostsform.disable.value }}' == 0){
-                                        $('#id_disable').attr('value', 0);
-                                        $('#id_disable').attr('checked', false)
-                                    } else {
-                                        $('#id_disable').attr('value', 1);
-                                        $('#id_disable').attr('checked', true)
-                                    }
-                                </script>
+                                    </script>
+                                </div>
                             </div>
-                        </div>
+                                {% if change_dhcp_host %}
+                                    <div class="ui buttons">
+                                        <button type="submit" class="ui positive button" name="action" value="change">{% trans 'Change' %}</button>
+                                        <div class="or"></div>
+                                        <button href="#" class="ui button">{% trans 'Cancel' %}</button>
+                                    </div>
+                                {% else %}
+                                    <button type="submit" class="mini ui primary button" name="action" value="add">{% trans 'Add' %}</button>
+                                {% endif %}
+                        </form>
                     </div>
-                    {% if change_dhcp_host %}
-                        <button type="submit" class="btn btn-primary btn-xs center-block" name="action" value="change">{% trans 'Change' %}</button>
-                    {% else %}
-                        <button type="submit" class="btn btn-primary btn-xs center-block" name="action" value="add">{% trans 'Add' %}</button>
-                    {% endif %}
-                </form>
-		</div>
-	    </div>
+                </div>
+            </div>
         </div>
     </div>
     {% if hosts %}
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="well well-sm">
-                    <div class="row">
-                        <div class="col-md-12 text-center">
-                            <table class="ui black table table-striped table-hover table-condensed">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Login</th>
-                                        <th>IP</th>
-                                        <th>Hostname</th>
-                                        <th>netwirk_name</th>
-                                        <th>MAC</th>
-                                        <th>{% trans '-' %}</th>
-                                        <th>{% trans '-' %}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                {% for host in hosts %}
-                                    <tr>
-                                        <td>{{ host.id }}</td>
-                                        <td>{{ client.login }}</td>
-                                        <td>{% ip_convert host.ip %}</td>
-                                        <td>{{ host.hostname }}</td>
-                                        <td>{{ host.nas }}</td>
-                                        <td>
-                                            <form name="mac_test" method="post">{% csrf_token %}
-                                                <button type="submit" class="btn-link" name="mac_test" value="{{ host.mac }}">{{ host.mac }}</button>
-                                            </form>
-                                        </td>
-                                        <td>
-                                            <a href="{% url 'core:user_ipdhcp_host_change' uid host.id %}"><span class='fa fa-pencil'></span></a>
-                                        </td>
-                                        <td><a href="{% url 'core:user_dhcp' host.uid %}?action=remove&host_id={{ host.id }}"><span class='fa fa-trash'></span></a></td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+            <div class="column">
+                <div class="ui segments">
+                    <div class="ui segment">
+                        <table class="ui black small very compact selectable striped table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Login</th>
+                                    <th>IP</th>
+                                    <th>Hostname</th>
+                                    <th>netwirk_name</th>
+                                    <th>MAC</th>
+                                    <th>{% trans '-' %}</th>
+                                    <th>{% trans '-' %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for host in hosts %}
+                                <tr>
+                                    <td>{{ host.id }}</td>
+                                    <td>{{ client.login }}</td>
+                                    <td>{% ip_convert host.ip %}</td>
+                                    <td>{{ host.hostname }}</td>
+                                    <td>{{ host.nas }}</td>
+                                    <td>
+                                        <form name="mac_test" method="post">{% csrf_token %}
+                                            <button type="submit" class="tiny ui green button" name="mac_test" value="{{ host.mac }}">{{ host.mac }}</button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'core:user_ipdhcp_host_change' uid host.id %}"><span class='fa fa-pencil'></span></a>
+                                    </td>
+                                    <td><a href="{% url 'core:user_dhcp' host.uid %}?action=remove&host_id={{ host.id }}"><span class='fa fa-trash'></span></a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
-                    <ul class="list-group">
-                        <li class="list-group-item list-group-item-botton">
-                            <span class="badge">{{ host.count }}</span>
-                            {% trans 'All' %}
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>
+{#                    <ul class="list-group">#}
+{#                        <li class="list-group-item list-group-item-botton">#}
+{#                            <span class="badge">{{ host.count }}</span>#}
+{#                            {% trans 'All' %}#}
+{#                        </li>#}
+{#                    </ul>#}
     {% endif %}
 {% endblock %}

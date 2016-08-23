@@ -50,14 +50,14 @@
                     {% get_available_languages as LANGUAGES %}
                     {% get_current_language_bidi as LANGUAGE_BIDI %}
                     {% get_language_info for LANGUAGE_CODE as lang %}
-		    {% if lang.code == 'en' %}
-			<i class="us flag"></i>{{ lang.name_local }}<i class="dropdown icon"></i>
+                    {% if lang.code == 'en' %}
+                        <i class="us flag"></i>{{ lang.name_local }}<i class="dropdown icon"></i>
                     {% elif lang.code == 'uk' %}
                         <i class="ua flag"></i>{{ lang.name_local }}<i class="dropdown icon"></i>
                     {% else %}
                         <i class="ru flag"></i>{{ lang.name_local }}<i class="dropdown icon"></i>
                     {% endif %}
-		    <div class="menu">
+                    <div class="menu">
                         {% for lang in LANGUAGES %}
                             <form name="setLang{{ lang.1}}" action="/i18n/setlang/" method="POST">{% csrf_token %}
                                 <input name="next" type="hidden" value="{{ request.get_full_path }}">
@@ -88,17 +88,10 @@
                     </div>
                 </div>
                 <div class="item">
-		    <form>
-			<div class="ui transparent input">
-                            <input placeholder="Search..." type="text">
-                            <select class="ui compact dropdown">
-                                <option value="all">All</option>
-                                <option selected="" value="articles">Articles</option>
-                                <option value="products">Products</option>
-                            </select>
-                        </div>
-
-		    </form>
+                    <div class="ui transparent icon input">
+                        <input placeholder="Search..." type="text" name="global_search">
+                        <i class="search link icon"></i>
+                    </div>
                 </div>
             </div>
         </div>
@@ -107,88 +100,56 @@
                 <div class="two wide column">
                     <div id="sideBar" class="ui sticky vertical accordion menu">
                         <div class="item">
-    <a class="active title">
-      <i class="dropdown icon"></i>
-      {% trans 'Clients' %}
-    </a>
-    <div class="active content">
-      <div class="ui form">
-        <div class="grouped fields">
-	  <div class="menu">
-            <a href="{% url 'core:clients' %}" class="item">{% trans 'Logins' %}</a>
-            <a class="item">Add</a>
-            <a class="item">Remove</a>
-          </div>
-          <div class="field">
-            <div class="ui radio checkbox">
-              <input name="size" value="small" type="radio">
-              <label>Small</label>
-            </div>
-          </div>
-          <div class="field">
-            <div class="ui radio checkbox">
-              <input name="size" value="medium" type="radio">
-              <label>Medium</label>
-            </div>
-          </div>
-          <div class="field">
-            <div class="ui radio checkbox">
-              <input name="size" value="large" type="radio">
-              <label>Large</label>
-            </div>
-          </div>
-          <div class="field">
-            <div class="ui radio checkbox">
-              <input name="size" value="x-large" type="radio">
-              <label>X-Large</label>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="item">
-    <a class="title">
-      <i class="dropdown icon"></i>
-      Colors
-    </a>
-    <div class="content">
-      <div class="ui form">
-        <div class="grouped fields">
-          <div class="field">
-            <div class="ui checkbox">
-              <input name="small" type="checkbox">
-              <label>Red</label>
-            </div>
-          </div>
-          <div class="field">
-            <div class="ui checkbox">
-              <input name="medium" type="checkbox">
-              <label>Orange</label>
-            </div>
-          </div>
-          <div class="field">
-            <div class="ui checkbox">
-              <input name="large" type="checkbox">
-              <label>Green</label>
-            </div>
-          </div>
-          <div class="field">
-            <div class="ui checkbox">
-              <input name="x-large" type="checkbox">
-              <label>Blue</label>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+                            <a class="active title">
+                                <i class="dropdown icon"></i>
+                                {% trans 'Clients' %}
+                            </a>
+                            <div class="active content">
+                                <div class="ui form">
+                                    <div class="grouped fields">
+                                        <div class="menu">
+                                            <a href="{% url 'core:clients' %}" class="item">{% trans 'Logins' %}</a>
+                                            <a class="item">Add</a>
+                                            <a class="item">Remove</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="item">
-                            Home
-                            <div class="menu">
-                                <a href="{% url 'core:search' %}" class="active item">{% trans 'Search' %}</a>
-                                <a class="item">Add</a>
-                                <a class="item">Remove</a>
+                            <a class="title">
+                                <i class="dropdown icon"></i>
+                                Colors
+                            </a>
+                            <div class="content">
+                                <div class="ui form">
+                                    <div class="grouped fields">
+                                        <div class="field">
+                                            <div class="ui checkbox">
+                                                <input name="small" type="checkbox">
+                                                <label>Red</label>
+                                            </div>
+                                        </div>
+                                        <div class="field">
+                                            <div class="ui checkbox">
+                                                <input name="medium" type="checkbox">
+                                                <label>Orange</label>
+                                            </div>
+                                        </div>
+                                        <div class="field">
+                                            <div class="ui checkbox">
+                                                <input name="large" type="checkbox">
+                                                <label>Green</label>
+                                            </div>
+                                        </div>
+                                        <div class="field">
+                                            <div class="ui checkbox">
+                                                <input name="x-large" type="checkbox">
+                                                <label>Blue</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <a class="item">
@@ -208,31 +169,29 @@
                         </div>
                     </div>
                 </div>
-                    <div id="main_context" class="fourteen wide column">
-                        <div class="ui stackable grid">
-                            <div class="row">
-                                <div class="column">
-                                    <h4 class="ui header">
-                                        <i class="dashboard icon"></i>
-                                        <div class="content">
-                                            <div class="ui breadcrumb">
-                                                <a href="{% url 'core:index' %}" class="section">{% trans 'Dashboard' %}</a>
-                                                {% block breadcrumbs %}
-                                                {% endblock %}
-                                            </div>
-
-                                            <div class="sub header">
-                                                {% block breadcrumbs_sub_header %}
-                                                    {% trans 'System info and monitoring' %}
-                                                {% endblock %}
-                                            </div>
+                <div id="main_context" class="fourteen wide column">
+                    <div class="ui stackable grid">
+                        <div class="row">
+                            <div class="column">
+                                <h4 class="ui header">
+                                    <i class="dashboard icon"></i>
+                                    <div class="content">
+                                        <div class="ui breadcrumb">
+                                            <a href="{% url 'core:index' %}" class="section">{% trans 'Dashboard' %}</a>
+                                            {% block breadcrumbs %}
+                                            {% endblock %}
                                         </div>
-                                    </h4>
-                                </div>
+                                        <div class="sub header">
+                                            {% block breadcrumbs_sub_header %}
+                                                {% trans 'System info and monitoring' %}
+                                            {% endblock %}
+                                        </div>
+                                    </div>
+                                </h4>
                             </div>
-                            {% block layout %}
-                            {% endblock %}
                         </div>
+                        {% block layout %}
+                        {% endblock %}
                     </div>
                 </div>
             </div>

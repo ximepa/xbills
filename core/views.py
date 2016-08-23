@@ -343,6 +343,7 @@ def search(request):
                             page_list = p
                         pre_end = users.paginator.num_pages - 2
                         print pre_end
+                        print locals()
                     return render(request, 'search.html', locals())
                 except User.DoesNotExist:
                     error = 'User not found'
@@ -437,8 +438,13 @@ def search(request):
         except Payment.DoesNotExist:
             error = 'Payments not found'
             return render(request, 'search.html', locals())
-	if 'global_search' in requist.POST:
-	    print 'global'
+    if 'global_search' in request.GET:
+        global_list = {}
+        userpi = UserPi.objects.all()
+        userpi.filter(fio=request.GET['global_search'])
+        print userpi.fio
+        print 'global'
+        print locals()
     return render(request, 'search.html', locals())
 
 
