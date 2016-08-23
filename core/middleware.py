@@ -3,7 +3,7 @@ from django.conf import settings
 
 from core.models import Admin
 
-ONLINE_THRESHOLD = getattr(settings, 'ONLINE_THRESHOLD', 60 * 15)
+ONLINE_THRESHOLD = getattr(settings, 'ONLINE_THRESHOLD', 60 * 0.5)
 ONLINE_MAX = getattr(settings, 'ONLINE_MAX', 50)
 
 def get_online_now(self):
@@ -11,6 +11,7 @@ def get_online_now(self):
     l = []
     for a in admin:
         l.append(a.login)
+    print l
     return l
 
 

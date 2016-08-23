@@ -69,6 +69,12 @@ MIDDLEWARE_CLASSES = (
     'core.middleware.OnlineNowMiddleware',
 
 )
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'default-cache'
+    }
+}
 
 ROOT_URLCONF = 'xbills.urls'
 
@@ -196,6 +202,8 @@ WS4REDIS_EXPIRE = 3600
 
 WS4REDIS_HEARTBEAT = '--heartbeat--'
 WS4REDIS_PREFIX = 'xbills'
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 WS4REDIS_CONNECTION = {
     'host': '127.0.0.1',

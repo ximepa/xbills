@@ -56,6 +56,10 @@ class Admin(AbstractBaseUser):
         row = cursor.fetchone()
         self.password = row[0]
 
+    def is_online(self):
+        from django.core.cache import cache
+        return cache.get('online-%s' % self.pk)
+
     def get_full_name(self):
         return str(self.login)
 
@@ -132,6 +136,7 @@ class User(models.Model):
     #         return Company.objects.get(bill_id=b.id)
     #     except Company.DoesNotExist:
     #         return None
+
 
     def get_deposit(self):
         try:

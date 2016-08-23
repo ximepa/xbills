@@ -45,7 +45,7 @@
             <a href="{% url 'core:search' %}" class="item popup" data-content="{% trans 'Search user by criteria' %}"><i class="search icon"></i>{% trans 'Search' %}</a>
             <a href="{% url 'core:chat' %}" class="item popup" data-content="{% trans 'Enter to chat' %}"><i class="comments outline icon"></i>{% trans 'Chat' %}</a>
             <div class="right menu">
-                <div class="ui fluid selection dropdown">
+                <div class="ui dropdown item">
                     {% get_current_language as LANGUAGE_CODE %}
                     {% get_available_languages as LANGUAGES %}
                     {% get_current_language_bidi as LANGUAGE_BIDI %}
