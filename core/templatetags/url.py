@@ -113,7 +113,6 @@ def convert_bytes(value, giga):
 
 @register.simple_tag
 def active(request, url, *args):
-    print request.path.startswith(reverse(url, args=args))
     if request.path == (reverse(url, args=args)):
         return 'active'
     return ''
