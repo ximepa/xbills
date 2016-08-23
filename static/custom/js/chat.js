@@ -9,7 +9,8 @@ $(document).ready(function($) {
 	$("#text_message").keydown(function(event) {
 		if (event.keyCode === 13) {
 			event.preventDefault();
-			ws4redis1.send_message($('#text_message').val());
+			get_pc_info();
+			//ws4redis1.send_message($('#text_message').val());
 			$('#text_message').val("")
 		}
 	});

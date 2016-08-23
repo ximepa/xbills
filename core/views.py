@@ -808,7 +808,7 @@ def chat(request):
     if request.method == 'POST' and request.POST != '':
         print request.POST
         if request.POST['message']:
-            message = RedisMessage('<span style="">%s: %s</span>' % (datetime.datetime.now().strftime("%H:%M:%S"), request.POST['message']))  # create a welcome message to be sent to everybody
+            message = RedisMessage('<span style="">%s(%s): %s</span>' % (request.user.login, datetime.datetime.now().strftime("%H:%M:%S"), request.POST['message']))  # create a welcome message to be sent to everybody
             RedisPublisher(facility=request.POST['room'], broadcast=True).publish_message(message)
         else:
             print 'no message'
