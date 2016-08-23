@@ -194,7 +194,12 @@
             <div class="thirteen wide column">
                 <div class="ui secondary raised segment">
                     <div class="ui top attached tabular menu">
-                        <a class="item active" data-tab="first">{% trans 'Sessions' %}</a>
+                        <a class="item active" data-tab="first">
+                            {% trans 'Sessions' %}
+                            {% if dv_session %}
+                                <div class="floating ui mini red label">{{ dv_session.count }}</div>
+                            {% endif %}
+                        </a>
                         <a class="item" data-tab="second">Second</a>
                         <a class="item" data-tab="third">Third</a>
                     </div>
