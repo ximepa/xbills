@@ -7,7 +7,7 @@
 {% block extra_css %}
 {% endblock %}
 {% block breadcrumbs %}
-    <i class="right angle icon divider"></i>
+    <i class="right angle icon divider" xmlns="http://www.w3.org/1999/html"></i>
     <a href="{% url 'core:clients' %}" class="section">{% trans 'Logins' %}</a>
     <i class="right angle icon divider"></i>
     <div class="active section"> <a href="{% url 'core:client' uid %}">{{ client.login }}</a> (UID: {{ uid }}) </div>
@@ -26,13 +26,13 @@
                             <div class="ui middle aligned divided list">
                                 <div class="item">
                                     <div class="content">
-                                        <i class="users icon"></i>{% trans 'FIO' %} :
+                                        <i class="user icon"></i>{% trans 'FIO' %} :
                                         <span style="font-weight: bold">{{ client.user_pi.fio }}</span>
                                     </div>
                                 </div>
                                 <div class="item">
                                 <div class="content">
-                                    <i class="users icon"></i>{% trans 'Deposit' %} :
+                                    <i class="money icon"></i>{% trans 'Deposit' %} :
                                     {% if client.credit > client.bill.deposit and client.credit > 0 %}
                                         <a class="ui grey label" >{{ client.bill.deposit|floatformat:2 }}</a>
                                     {% elif client.bill.deposit > 50 %}
@@ -48,7 +48,7 @@
                             </div>
                             <div class="item">
                                 <div class="content">
-                                    <i class="users icon"></i>{% trans 'Credit' %} :
+                                    <i class="credit card alternative icon"></i>{% trans 'Credit' %} :
                                     {% if client.credit > 0 %}
                                         <a class="ui green label" >{{ client.credit|floatformat:2 }}</a>
                                     {% else %}
@@ -99,6 +99,12 @@
                                 <i class="mail icon"></i>
                                 <div class="content">
                                     <a href="mailto:{{ client.user_pi.email }}">{{ client.user_pi.email }}</a>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="content">
+                                    <i class="registered icon"></i>{% trans 'Registration' %} :
+                                    <label>{{ client.registration }}</label>
                                 </div>
                             </div>
                         </div>
@@ -194,62 +200,60 @@
             <div class="thirteen wide column">
                 <div class="ui secondary raised segment">
                     <div class="ui top attached tabular menu">
-                        <a class="item active" data-tab="first">
-                            {% trans 'Sessions' %}
-                            {% if dv_session %}
-                                <div class="floating ui mini red label">{{ dv_session.count }}</div>
-                            {% endif %}
-                        </a>
+                        <a class="active item" data-tab="first">First</a>
                         <a class="item" data-tab="second">Second</a>
                         <a class="item" data-tab="third">Third</a>
                     </div>
-                    <div class="ui bottom attached tab segment active" data-tab="first">
-                        {% if dv_session %}
-                            <table class="ui blue table ">
-                                <thead class="">
-                                    <tr>
-                                        <th>IP</th>
-                                        <th>Session time</th>
-                                        <th>Trafic in</th>
-                                        <th>Trafic out</th>
-                                        <th>Server</th>
-                                        <th>Zap</th>
-                                        <th>Hangup</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for s in dv_session %}
-                                        <tr>
-                                            <td>
-                                                {% ip_convert s.framed_ip_address %}
-                                            </td>
-                                            <td>
-                                                {% convert_timestamp_to_time s.started %}
-                                            </td>
-                                            <td>
-                                                {% convert_bytes s.acct_input_octets s.acct_input_gigawords%}
-                                            </td>
-                                            <td>
-                                                {% convert_bytes s.acct_output_octets s.acct_output_gigawords%}
-                                            </td>
-                                            <td>
-                                                {{ s.nas.name }}
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-xs btn-link" href="#">
-                                                    <span class="fa fa-times fa-fw"></span>
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-xs btn-link" href="?hangup&acct_session_id={{ s.acct_session_id }}&nas_id={{ s.nas_id }}&port_id={{ s.nas_port_id }}&user_name={{ s.user_name }}"><span class="fa fa-power-off fa-fw"></span></a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        {% else %}
-                            {% trans 'No Sessions' %}
-                        {% endif %}
+                    <div class="ui bottom attached active tab segment" data-tab="first">
+                        <form class="ui form" method="post">{% csrf_token %}
+                            <div class="ui tiny stacked segment">
+                                {# fields top #}
+                                <div class="two fields">
+                                    <div class="field">
+                                        <label>{% trans 'Credit' %}</label>
+                                        <div class="ui left icon input">
+                                            <i class="user icon"></i>
+                                            <input name="credit" placeholder="{% trans 'Credit' %}" type="text" value="{{ client.credit }}">
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label>{% trans 'Start credit date' %}</label>
+                                        <div class="ui left icon input">
+                                            <i class="user icon"></i>
+                                            <input name="credit" placeholder="{% trans 'Start credit date' %}" type="text" value="{{ client.credit_date }}">
+                                        </div>
+                                    </div>
+
+                                </div>
+                                {# fields bottom #}
+                                <div class="two fields">
+                                    <div class="field">
+                                        <label>{% trans 'Groups' %}</label>
+                                        <select class="ui dropdown">
+                                            {% for g in group %}
+                                                <option value="{{ g.id }}">{{ g.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="field">
+                                        <label>{% trans 'Company' %}</label>
+                                        <select class="ui dropdown">
+                                            <option value="{{ client.company_id }}">{{ client.company }}</option>
+{#                                            {% for g in group %}#}
+{#                                                <option value="{{ g.id }}">{{ g.name }}</option>#}
+{#                                            {% endfor %}#}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="inline field">
+                                    <div class="ui checkbox">
+                                        <input name="disable" type="checkbox">
+                                        <label>{% trans 'Disable' %}</label>
+                                    </div>
+                                </div>
+                                <button class="tiny ui teal submit button" type="submit">{% trans 'Change' %}</button>
+                            </div>
+                        </form>
                     </div>
                     <div class="ui bottom attached tab segment" data-tab="second">
                         Second

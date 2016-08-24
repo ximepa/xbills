@@ -136,8 +136,8 @@
                             {% else %}
                                 <td><span class="label label-success">{% trans 'No' %}</span></td>
                             {% endif %}
-                            <td><a href="{% url 'core:client_payments' user.id %}"><img src="{% static 'custom/images/button_payments.png' %}" /></a></td>
-                            <td><a href="{% url 'core:client_fees' user.id %}"><img src="{% static 'custom/images/button_fees.png' %}" /></a></td>
+                            <td><a href="{% url 'core:client_payments' user.id %}"><i class="fa fa-euro"></i></a></td>
+                            <td><a href="{% url 'core:client_fees' user.id %}"><i class="fa fa-remove"></i></a></td>
                         </tr>
                         {% endfor %}
                     </tbody>

@@ -12,7 +12,7 @@ from dv.helpers import Hangup
 from ipdhcp.models import Dhcphosts_networks, Dhcphosts_hosts
 from .auth_backend import AuthBackend
 from .models import User, Payment, Fees, Dv, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog, Dv_log, Admin, num_to_ip, AdminSettings, \
-    AdminLog, ip_to_num
+    AdminLog, ip_to_num, Group
 from ipdhcp.models import ipRange
 from .forms import AdministratorForm, SearchForm, SearchFeesForm, SearchPaymentsForm
 from django.contrib import messages
@@ -451,7 +451,6 @@ def search(request):
 
 @login_required()
 def client(request, uid):
-    print uid
     if 'hangup' in request.GET:
         hangup = Hangup(request.GET['nas_id'], request.GET['port_id'], request.GET['acct_session_id'], request.GET['user_name'])
     res1 = '<option selected="selected"></option>'
@@ -477,9 +476,9 @@ def client(request, uid):
             dict_resp.append(res1 + res)
         return HttpResponse(dict_resp)
     client = User.objects.get(id=uid)
-    print client.pi
     streets = Street.objects.all()
     houses = House.objects.all()
+    group = Group.objects.all()
     dv_session = Dv_calls.objects.filter(uid=uid)
     if helpers.module_check('olltv'):
         from olltv.models import Iptv, IptvDevice, IptvDeviceType
@@ -629,6 +628,7 @@ def fees(request):
 
 
 def client_payments(request, uid):
+    dv_session = Dv_calls.objects.filter(uid=uid)
     out_sum = 0
     order_by = request.GET.get('order_by', '-date')
     try:
@@ -686,6 +686,7 @@ def client_payments(request, uid):
 
 
 def client_fees(request, uid):
+    dv_session = Dv_calls.objects.filter(uid=uid)
     out_sum = 0
     order_by = request.GET.get('order_by', '-date')
     try:
