@@ -3,7 +3,9 @@ from datetime import datetime
 import binascii
 from django import template
 import math
+
 from django.core.urlresolvers import reverse
+
 from core.models import num_to_ip, Admin
 from django.conf import settings
 import os
@@ -114,5 +116,12 @@ def convert_bytes(value, giga):
 @register.simple_tag
 def active(request, url, *args):
     if request.path == (reverse(url, args=args)):
+        return 'active'
+    return ''
+
+
+@register.simple_tag
+def active_startwith(request, url, *args):
+    if request.path.startswith(reverse(url)):
         return 'active'
     return ''

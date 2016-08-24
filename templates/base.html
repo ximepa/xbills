@@ -36,15 +36,10 @@
             <div class="header item">
                 XBills {% version %}
             </div>
-            {% url 'core:index' as dashboard %}
-            {% if request.get_full_path == dashboard %}
-                <a href="{% url 'core:index' %}" class="active item"><i class="fa fa-dashboard fa-fw"></i> {% trans 'Dashboard' %} </a>
-            {% else %}
-                <a href="{% url 'core:index' %}" class="item"><i class="fa fa-dashboard fa-fw"></i> {% trans 'Dashboard' %} </a>
-            {% endif %}
+            <a href="{% url 'core:index' %}" class="{% active request 'core:index' %} item"><i class="fa fa-dashboard fa-fw"></i> {% trans 'Dashboard' %} </a>
             <a class="item menu-toggle-button" onclick="hideSidebar()"><i class="list layout icon"></i>{% trans 'Menu' %}</a>
-            <a href="{% url 'core:search' %}" class="item popup" data-content="{% trans 'Search user by criteria' %}"><i class="search icon"></i>{% trans 'Search' %}</a>
-            <a href="{% url 'core:chat' %}" class="item popup" data-content="{% trans 'Enter to chat' %}"><i class="comments outline icon"></i>{% trans 'Chat' %}</a>
+            <a href="{% url 'core:search' %}" class="{% active request 'core:search' %} item popup" data-content="{% trans 'Search user by criteria' %}"><i class="search icon"></i>{% trans 'Search' %}</a>
+            <a href="{% url 'core:chat' %}" class="{% active request 'core:chat' %} item popup" data-content="{% trans 'Enter to chat' %}"><i class="comments outline icon"></i>{% trans 'Chat' %}</a>
             <div class="right menu">
                 <div class="ui dropdown item">
                     {% get_current_language as LANGUAGE_CODE %}
@@ -101,20 +96,15 @@
                 <div class="two wide column">
                     <div id="sideBar" class="ui sticky vertical accordion menu">
                         <div class="item">
-                            <a class="active title">
+                            <a class="{% active_startwith request 'core:clients' %} title">
                                 <i class="dropdown icon"></i>
                                 {% trans 'Clients' %}
                             </a>
-                            <div class="active content">
+                            <div class="{% active_startwith request 'core:clients' %} content">
                                 <div class="ui form">
                                     <div class="grouped fields">
                                         <div class="menu">
-                                            {% url 'core:clients' as clients %}
-                                            {% if request.get_full_path == clients %}
-                                                <a href="{% url 'core:clients' %}" class="item active">{% trans 'Logins' %}</a>
-                                            {% else %}
-                                                <a href="{% url 'core:clients' %}" class="item">{% trans 'Logins' %}</a>
-                                            {% endif %}
+                                                <a href="{% url 'core:clients' %}" class="{% active request 'core:clients' %} item">{% trans 'Logins' %}</a>
                                             <a class="item">Add</a>
                                             <a class="item">Remove</a>
                                         </div>

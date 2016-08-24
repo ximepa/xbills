@@ -451,7 +451,6 @@ def search(request):
 
 @login_required()
 def client(request, uid):
-    print uid
     if 'hangup' in request.GET:
         hangup = Hangup(request.GET['nas_id'], request.GET['port_id'], request.GET['acct_session_id'], request.GET['user_name'])
     res1 = '<option selected="selected"></option>'
@@ -476,7 +475,10 @@ def client(request, uid):
             res = '<option value=' + str(item.id) + '>' + item.number.encode('utf8') + '</option>'
             dict_resp.append(res1 + res)
         return HttpResponse(dict_resp)
-    client = User.objects.get(id=uid)
+    try:
+        client = User.objects.get(id=uid)
+    except User.DoesNotExist:
+        return render(request, '404.html')
     print client.pi
     streets = Street.objects.all()
     houses = House.objects.all()
