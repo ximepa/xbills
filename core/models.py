@@ -117,6 +117,7 @@ class User(models.Model):
     activate = models.DateField(db_column='activate', default='0000-00-00', blank=True)
     expire = models.DateField(db_column='expire', default='0000-00-00', blank=True)
     deleted = models.BooleanField(db_column='deleted')
+    registration =models.DateField(default='0000-00-00', blank=True)
     bill = models.ForeignKey('Bill')
 
     def __unicode__(self):

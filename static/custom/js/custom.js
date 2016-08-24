@@ -19,6 +19,20 @@ $( document ).ready(function() {
         }
     //    exclusive: false
     });
+    $('#session').popup({
+        popup : $('#browse'),
+        on    : 'click',
+        inline     : false,
+        hoverable  : false,
+        position   : 'bottom left',
+        delay: {
+            show: 300,
+            hide: 800
+        }
+    });
+
+
+
     if (document.getElementById("services") != null) {
 	document.getElementById("services").style.display = getCookie('services');
     }
