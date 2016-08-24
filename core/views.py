@@ -475,7 +475,10 @@ def client(request, uid):
             res = '<option value=' + str(item.id) + '>' + item.number.encode('utf8') + '</option>'
             dict_resp.append(res1 + res)
         return HttpResponse(dict_resp)
-    client = User.objects.get(id=uid)
+    try:
+        client = User.objects.get(id=uid)
+    except User.DoesNotExist:
+        return render(request, '404.html', locals())
     streets = Street.objects.all()
     houses = House.objects.all()
     group = Group.objects.all()
