@@ -113,7 +113,7 @@
                                             <div class="item">
                                                 <div class="content">
                                                     <i class="user icon"></i>{% trans 'Tarif' %}:
-                                                    <span style="font-weight: bold">{{ client.dv.tp.name }} ({{ client.dv.tp.cost }})</span>
+                                                    <span style="font-weight: bold">{{ client.dv.tp.name }} {% if client.dv.tp.month_fee != 0 %}({{ client.dv.tp.month_fee }})M{% else %}({{ client.dv.tp.day_fee }})D{% endif %}</span>
                                                 </div>
                                             </div>
                                             {% endif %}
