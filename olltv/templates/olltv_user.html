@@ -29,27 +29,24 @@
     </script>
 {% endblock %}
 {% block breadcrumbs %}
-    <ol class="breadcrumb">
-        <li class=""><a href="{% url 'core:index' %}">{% trans 'Dashboard' %}</a></li>
-        <li class=""><a href="{% url 'core:client' uid %}">{{ user.login }} (UID: {{ user.id }})</a></li>
-        <li class="active">{% trans 'Olltv' %}</li>
-    </ol>
+    <i class="right angle icon divider"></i>
+    <a href="{% url 'core:index' %}" class="section">{% trans 'Logins' %}</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section"> <a href="{% url 'core:client' uid %}">{{ client.login }}</a> (UID: {{ uid }}) </div>
+{% endblock %}
+{% block breadcrumbs_sub_header %}
+    {% trans 'Olltv' %}
 {% endblock %}
 {% block content %}
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="well well-sm">
+        <div class="columns">
                 {% if user != False %}
                     {% if messages %}
-                        <div class="row">
-                            <div class="col-lg-12">
-                                {% for message in messages %}
-                                    <script>
-                                        toastr.{{ message.tags }}('{{ message }}', '{{ message.tags }}', {progressBar: true});
-                                    </script>
-                                {% endfor %}
-                            </div>
-                        </div>
+                        {% for message in messages %}
+                            <script>
+                                toastr.{{ message.tags }}('{{ message }}', '{{ message.tags }}', {progressBar: true});
+                            </script>
+                        {% endfor %}
                     {% endif %}
                     {% if user_info.status == 505 %}
                     {% elif user_info.status == 404 %}
@@ -60,10 +57,10 @@
                         <div class="row">
                             <div class="col-lg-2">
                             </div>
-                            <div class="col-lg-6">
-                                <div class="well well-sm">
+                            <div class="column">
+                                <div class="ui segment">
                                     {% if check_user.data == 0 %}
-                                        <form method="post" class="form-horizontal main_form" role="form" id="main_form">{% csrf_token %}
+                                        <form method="post" class="ui form" role="form" id="main_form">{% csrf_token %}
                                             <h3>{% trans 'Заявка:' %}</h3>
                                             <input hidden type="text" name="account" value="{{ user.id }}">
                                             <div class="form-group">
