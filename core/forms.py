@@ -148,10 +148,10 @@ class DvForm(forms.ModelForm):
         widgets = {
             'user': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'UID'}),
             'cid': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
-            'speed': forms.CheckboxInput(attrs={'class': 'ui checkbox'}),
+            'speed': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Speed (kb)', 'value': '0'}),
             'ip': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'IP', 'value': '0.0.0.0'}),
             'netmask': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Credit'}),
             'logins': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
-            'filter_id': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
+            'filter_id': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Filter ID'}),
             'tp': forms.Select(attrs={'class': 'ui dropdown'}),
         }

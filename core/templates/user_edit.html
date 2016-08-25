@@ -83,50 +83,61 @@
         <form class="ui form" method="post">{% csrf_token %}
             <div class="ui tiny stacked segment">
                 {# fields 1 #}
-                <div class="two fields">
+                <div class="three fields">
                     <div class="field">
-                        <label>{% trans 'Credit' %}</label>
+                        <label>{% trans 'Tarif plan' %}</label>
                         {{ dv_form.tp }}
                     </div>
                     <div class="field">
-                        <label>{% trans 'Start credit date' %}</label>
-                        {{ client_form.credit_date }}
+                        <label>{% trans 'Speed' %}</label>
+                        {{ dv_form.speed }}
                     </div>
-
+                    <div class="field">
+                        <label>{% trans 'Simultaneously' %}</label>
+                        {{ dv_form.logins   }}
+                    </div>
                 </div>
                 {# fields 2 #}
-                <div class="two fields">
+                <div class="three fields">
                     <div class="field">
-                        <label>{% trans 'Groups' %}</label>
-                        {{ client_form.gid }}
+                        <label>{% trans 'IP' %}</label>
+                        {{ dv_form.ip }}
                     </div>
                     <div class="field">
-                        <label>{% trans 'Company' %}</label>
-                        {{ client_form.company }}
+                        <label>{% trans 'Netmask' %}</label>
+                        {{ dv_form.netmask }}
+                    </div>
+                    <div class="field">
+                        <label>{% trans 'CID' %}</label>
+                        {{ dv_form.cid }}
                     </div>
                 </div>
                 {# fields 3 #}
-                <div class="two fields">
-                    <div class="field">
-                        <label>{% trans 'Discount' %} (%)</label>
-                        {{ client_form.reduction }}
-                    </div>
-                    <div class="field">
-                        <label>{% trans 'Start discount date' %}</label>
-                        {{ client_form.reduction_date }}
-                    </div>
-                </div>
+{#                <div class="three fields">#}
+{#                    <div class="field">#}
+{#                        <label>{% trans 'IP' %}</label>#}
+{#                        {{ dv_form.ip }}#}
+{#                    </div>#}
+{#                    <div class="field">#}
+{#                        <label>{% trans 'Netmask' %}</label>#}
+{#                        {{ dv_form.netmask }}#}
+{#                    </div>#}
+{#                    <div class="field">#}
+{#                        <label>{% trans 'CID' %}</label>#}
+{#                        {{ dv_form.cid }}#}
+{#                    </div>#}
+{#                </div>#}
                 {# fields 4 #}
-                <div class="two fields">
-                    <div class="field">
-                        <label>{% trans 'Activation' %} (%)</label>
-                        {{ client_form.activate }}
-                    </div>
-                    <div class="field">
-                        <label>{% trans 'Expired' %}</label>
-                        {{ client_form.expire }}
-                    </div>
-                </div>
+{#                <div class="two fields">#}
+{#                    <div class="field">#}
+{#                        <label>{% trans 'Activation' %} (%)</label>#}
+{#                        {{ client_form.activate }}#}
+{#                    </div>#}
+{#                    <div class="field">#}
+{#                        <label>{% trans 'Expired' %}</label>#}
+{#                        {{ client_form.expire }}#}
+{#                    </div>#}
+{#                </div>#}
                 <div class="inline field">
                     <div class="ui checkbox">
                         {{ client_form.disabled }}

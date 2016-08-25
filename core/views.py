@@ -458,7 +458,8 @@ def client(request, uid):
     except User.DoesNotExist:
         return render(request, '404.html', locals())
     client_form = ClientForm(instance=client)
-    dv_form = DvForm(instance=Dv.objects.get(user=uid))
+    dv = Dv.objects.get(user=uid)
+    dv_form = DvForm(instance=dv, initial={'ip': num_to_ip(dv.ip), 'netmask': num_to_ip(dv.netmask)})
     print dv_form
     streets = Street.objects.all()
     houses = House.objects.all()
