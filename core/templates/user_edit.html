@@ -16,244 +16,57 @@
     {% trans 'User Info' %}
 {% endblock %}
 {% block content %}
-    <div class="ui stackable grid">
-	    <div class="row">
-            <div class="three wide column">
-                <div class="ui secondary raised segment">
-                    <div class="ui form">
-                        <div class="field">
-                            <a class="ui grey ribbon label">{% trans 'General Information' %}</a>
-                            <div class="ui middle aligned divided list">
-                                <div class="item">
-                                    <div class="content">
-                                        <i class="user icon"></i>{% trans 'FIO' %} :
-                                        <span style="font-weight: bold">{{ client.user_pi.fio }}</span>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                <div class="content">
-                                    <i class="money icon"></i>{% trans 'Deposit' %} :
-                                    {% if client.credit > client.bill.deposit and client.credit > 0 %}
-                                        <a class="ui grey label" >{{ client.bill.deposit|floatformat:2 }}</a>
-                                    {% elif client.bill.deposit > 50 %}
-                                        <a class="ui green label">{{ client.bill.deposit|floatformat:2 }}</a>
-                                    {% elif client.bill.deposit < 50 and client.bill.deposit > 20 %}
-                                        <a class="ui label blue label">{{ client.bill.deposit|floatformat:2 }}</a>
-                                    {% elif client.bill.deposit < 20 and client.bill.deposit > 2.50 %}
-                                        <a class="ui label orange label">{{ client.bill.deposit|floatformat:2 }}</a>
-                                    {% else %}
-                                        <a class="ui label red label">{{ client.bill.deposit|floatformat:2 }}</a>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="item">
-                                <div class="content">
-                                    <i class="credit card alternative icon"></i>{% trans 'Credit' %} :
-                                    {% if client.credit > 0 %}
-                                        <a class="ui green label" >{{ client.credit|floatformat:2 }}</a>
-                                    {% else %}
-                                        <a class="ui label">{{ client.credit|floatformat:2 }}</a>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="item">
-                                <div class="content">
-                                    <i class="users icon"></i>{% trans 'Bill ID' %} :
-                                    {% if client.bill.id %}
-                                        <a class="ui blue label" >{{ client.bill.id }}</a>
-                                    {% else %}
-                                        <a class="ui blue label" >{{ client.company.bill_id }}</a>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            {% if client.company %}
-                            <div class="item">
-                                <div class="content">
-                                    <i class="users icon"></i>{% trans 'Company' %} :
-                                    <a class="ui blue label">{{ client.company.name }}</a>
-                                </div>
-                            </div>
-                            {% endif %}
-                            <div class="item">
-                                <div class="content">
-                                    <i class="users icon"></i>{% trans 'Group' %} :
-                                    <a class="ui blue label" >{{ client.gid }}</a>
-                                </div>
-                            </div>
-                            <div class="item">
-                                <i class="marker icon"></i>
-                                <div class="content">
-                                    {{ client.user_pi.city }}
-                                    {% if client.user_pi.street %}
-                                        , {{ client.user_pi.street.name }}
-                                        {% if client.user_pi.location %}
-                                            {{ client.user_pi.location }}
-                                        {% endif %}
-                                        {% if client.user_pi.kv %}
-                                            {% trans 'Flat' %} {{ client.user_pi.kv }}
-                                        {% endif %}
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="item">
-                                <i class="mail icon"></i>
-                                <div class="content">
-                                    <a href="mailto:{{ client.user_pi.email }}">{{ client.user_pi.email }}</a>
-                                </div>
-                            </div>
-                            <div class="item">
-                                <div class="content">
-                                    <i class="registered icon"></i>{% trans 'Registration' %} :
-                                    <label>{{ client.registration }}</label>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                        <div class="field">
-                            <a class="ui blue ribbon label" onclick="servicesToggle()">Community</a>
-                            <div class="ui middle aligned divided list" id="services" style="display: none">
-                                <div class="item">
-                                    <div class="content">
-                                        <i class="users icon"></i>{% trans 'FIO' %} :
-                                        <span style="font-weight: bold">{{ client.user_pi.fio }}</span>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="content">
-                                        <i class="users icon"></i>{% trans 'Deposit' %} :
-                                        {% if client.credit > client.bill.deposit and client.credit > 0 %}
-                                            <a class="ui grey label" >{{ client.bill.deposit|floatformat:2 }}</a>
-                                        {% elif client.bill.deposit > 50 %}
-                                            <a class="ui green label">{{ client.bill.deposit|floatformat:2 }}</a>
-                                        {% elif client.bill.deposit < 50 and client.bill.deposit > 20 %}
-                                            <a class="ui label blue label">{{ client.bill.deposit|floatformat:2 }}</a>
-                                        {% elif client.bill.deposit < 20 and client.bill.deposit > 2.50 %}
-                                            <a class="ui label orange label">{{ client.bill.deposit|floatformat:2 }}</a>
-                                        {% else %}
-                                            <a class="ui label red label">{{ client.bill.deposit|floatformat:2 }}</a>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="content">
-                                        <i class="users icon"></i>{% trans 'Credit' %} :
-                                        {% if client.credit > 0 %}
-                                            <a class="ui green label" >{{ client.credit|floatformat:2 }}</a>
-                                        {% else %}
-                                            <a class="ui label">{{ client.credit|floatformat:2 }}</a>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <div class="content">
-                                        <i class="users icon"></i>{% trans 'Bill ID' %} :
-                                        {% if client.bill.id %}
-                                            <a class="ui blue label" >{{ client.bill.id }}</a>
-                                        {% else %}
-                                            <a class="ui blue label" >{{ client.company.bill_id }}</a>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                {% if client.company %}
-                                <div class="item">
-                                    <div class="content">
-                                        <i class="users icon"></i>{% trans 'Company' %} :
-                                        <a class="ui blue label">{{ client.company.name }}</a>
-                                    </div>
-                                </div>
-                                {% endif %}
-                                <div class="item">
-                                    <div class="content">
-                                        <i class="users icon"></i>{% trans 'Group' %} :
-                                        <a class="ui blue label" >{{ client.gid }}</a>
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <i class="marker icon"></i>
-                                    <div class="content">
-                                        {{ client.user_pi.city }}
-                                        {% if client.user_pi.street %}
-                                            , {{ client.user_pi.street.name }}
-                                            {% if client.user_pi.location %}
-                                                {{ client.user_pi.location }}
-                                            {% endif %}
-                                            {% if client.user_pi.kv %}
-                                                {% trans 'flat' %} {{ client.user_pi.kv }}
-                                            {% endif %}
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <div class="item">
-                                    <i class="mail icon"></i>
-                                    <div class="content">
-                                        <a href="mailto:{{ client.user_pi.email }}">{{ client.user_pi.email }}</a>
-                                    </div>
-                                </div>
-                            </div>
+    <div class="ui top attached tabular menu">
+        <a class="active item" data-tab="first">First</a>
+        <a class="item" data-tab="second">Second</a>
+        <a class="item" data-tab="third">Third</a>
+    </div>
+    <div class="ui bottom attached active tab segment" data-tab="first">
+        <form class="ui form" method="post">{% csrf_token %}
+            <div class="ui tiny stacked segment">
+                {# fields top #}
+                <div class="two fields">
+                    <div class="field">
+                        <label>{% trans 'Credit' %}</label>
+                        <div class="ui left icon input">
+                            <i class="user icon"></i>
+                            <input name="credit" placeholder="{% trans 'Credit' %}" type="text" value="{{ client.credit }}">
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="ui vertical divider">
-                <i class="user icon"></i>
-            </div>
-            <div class="thirteen wide column">
-                <div class="ui secondary raised segment">
-                    <div class="ui top attached tabular menu">
-                        <a class="active item" data-tab="first">First</a>
-                        <a class="item" data-tab="second">Second</a>
-                        <a class="item" data-tab="third">Third</a>
+                    <div class="field">
+                        <label>{% trans 'Start credit date' %}</label>
+                        <div class="ui left icon input">
+                            <i class="user icon"></i>
+                            {{ client_form.credit_date }}
+                        </div>
                     </div>
-                    <div class="ui bottom attached active tab segment" data-tab="first">
-                        <form class="ui form" method="post">{% csrf_token %}
-                            <div class="ui tiny stacked segment">
-                                {# fields top #}
-                                <div class="two fields">
-                                    <div class="field">
-                                        <label>{% trans 'Credit' %}</label>
-                                        <div class="ui left icon input">
-                                            <i class="user icon"></i>
-                                            <input name="credit" placeholder="{% trans 'Credit' %}" type="text" value="{{ client.credit }}">
-                                        </div>
-                                    </div>
-                                    <div class="field">
-                                        <label>{% trans 'Start credit date' %}</label>
-                                        <div class="ui left icon input">
-                                            <i class="user icon"></i>
-                                            {{ client_form.credit_date }}
-                                        </div>
-                                    </div>
 
-                                </div>
-                                {# fields bottom #}
-                                <div class="two fields">
-                                    <div class="field">
-                                        <label>{% trans 'Groups' %}</label>
-                                        {{ client_form.gid }}
-                                    </div>
-                                    <div class="field">
-                                        <label>{% trans 'Company' %}</label>
-                                        {{ client_form.company }}
-                                    </div>
-                                </div>
-                                <div class="inline field">
-                                    <div class="ui checkbox">
-                                        {{ client_form.disabled }}
-                                        <label>{% trans 'Disable' %}</label>
-                                    </div>
-                                </div>
-                                <button class="tiny ui teal submit button" type="submit">{% trans 'Change' %}</button>
-                            </div>
-                        </form>
+                </div>
+                {# fields bottom #}
+                <div class="two fields">
+                    <div class="field">
+                        <label>{% trans 'Groups' %}</label>
+                        {{ client_form.gid }}
                     </div>
-                    <div class="ui bottom attached tab segment" data-tab="second">
-                        Second
-                    </div>
-                    <div class="ui bottom attached tab segment" data-tab="third">
-                        Third
+                    <div class="field">
+                        <label>{% trans 'Company' %}</label>
+                        {{ client_form.company }}
                     </div>
                 </div>
-	        </div>
-        </div>
+                <div class="inline field">
+                    <div class="ui checkbox">
+                        {{ client_form.disabled }}
+                        <label>{% trans 'Disable' %}</label>
+                    </div>
+                </div>
+                <button class="tiny ui teal submit button" type="submit">{% trans 'Change' %}</button>
+            </div>
+        </form>
+    </div>
+    <div class="ui bottom attached tab segment" data-tab="second">
+        Second
+    </div>
+    <div class="ui bottom attached tab segment" data-tab="third">
+        Third
     </div>
 {% endblock %}
