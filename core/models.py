@@ -353,7 +353,8 @@ class Tp(models.Model):
     name = models.CharField(max_length=120, unique=True)
     module = models.CharField(max_length=120)
     tp_id = models.IntegerField()
-    cost = models.PositiveIntegerField(db_column='month_fee')
+    month_fee = models.PositiveIntegerField(db_column='month_fee')
+    day_fee = models.PositiveIntegerField(db_column='day_fee')
     gid = models.ForeignKey('TpGroups', db_column='gid')
 
     class Meta:

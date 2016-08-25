@@ -24,7 +24,7 @@
                 {% endif %}
             </div>
             <div class="ui bottom attached active tab segment">
-                <div class="ui stackable mini menu">
+                <div class="ui sticky stackable mini menu">
                     <a class="item" id="session">
                         {% if dv_session %}
                             <div class="floating ui mini green label">
@@ -99,10 +99,24 @@
                                         <div class="ui middle aligned divided list">
                                             <div class="item">
                                                 <div class="content">
-                                                    <i class="user icon"></i>{% trans 'FIO' %} :
+                                                    <i class="user icon"></i>
                                                     <span style="font-weight: bold">{{ client.user_pi.fio }}</span>
                                                 </div>
                                             </div>
+                                            <div class="item">
+                                                <div class="content">
+                                                    <i class="user icon"></i>{% trans 'Username' %}:
+                                                    <span style="font-weight: bold">{{ client.login }}</span>
+                                                </div>
+                                            </div>
+                                            {% if client.dv %}
+                                            <div class="item">
+                                                <div class="content">
+                                                    <i class="user icon"></i>{% trans 'Tarif' %}:
+                                                    <span style="font-weight: bold">{{ client.dv.tp.name }} {% if client.dv.tp.month_fee != 0 %}({{ client.dv.tp.month_fee }})M{% else %}({{ client.dv.tp.day_fee }})D{% endif %}</span>
+                                                </div>
+                                            </div>
+                                            {% endif %}
                                             <div class="item">
                                                 <div class="content">
                                                     <i class="money icon"></i>{% trans 'Deposit' %} :
@@ -163,7 +177,7 @@
                                                             {{ client.user_pi.location }}
                                                         {% endif %}
                                                         {% if client.user_pi.kv %}
-                                                            {% trans 'Flat' %} {{ client.user_pi.kv }}
+                                                            _ {{ client.user_pi.kv }}
                                                         {% endif %}
                                                     {% endif %}
                                                 </div>
