@@ -480,7 +480,6 @@ def client(request, uid):
     except User.DoesNotExist:
         return render(request, '404.html', locals())
     client_form = ClientForm(instance=client)
-    print client_form
     streets = Street.objects.all()
     houses = House.objects.all()
     group = Group.objects.all()
