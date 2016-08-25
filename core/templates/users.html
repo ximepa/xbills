@@ -23,7 +23,7 @@
 {% block content %}
     <div class="row">
         <div class="column">
-            <div class="ui segment">
+            <div class="ui blue segment">
                 <div class="ui sticky mini fluid pagination menu">
                     <div class="header item">{% trans 'Sort By' %}</div>
                     <a href="?{% url_replace request 'users_status' '0' %}" class="item {% if 'users_status=0' in request.get_full_path %}active{% elif not request.GET or 'order_by' in request.GET and not 'users_status' in request.GET %}active{% endif %}">
