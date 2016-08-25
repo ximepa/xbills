@@ -14,7 +14,7 @@ from .auth_backend import AuthBackend
 from .models import User, Payment, Fees, Dv, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog, Dv_log, Admin, num_to_ip, AdminSettings, \
     AdminLog, ip_to_num, Group
 from ipdhcp.models import ipRange
-from .forms import AdministratorForm, SearchForm, SearchFeesForm, SearchPaymentsForm, ClientForm
+from .forms import AdministratorForm, SearchForm, SearchFeesForm, SearchPaymentsForm, ClientForm, DvForm
 from django.contrib import messages
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -453,34 +453,13 @@ def search(request):
 def client(request, uid):
     if 'hangup' in request.GET:
         hangup = Hangup(request.GET['nas_id'], request.GET['port_id'], request.GET['acct_session_id'], request.GET['user_name'])
-    res1 = '<option selected="selected"></option>'
-    if 'district' in request.GET:
-        district = District.objects.all()
-        dict_resp= []
-        for item  in district:
-            res = '<option value=' + str(item.id) + '>' + item.name + '</option>'
-            dict_resp.append(res1 + res)
-        return HttpResponse(dict_resp)
-    if 'DISTRICT' in request.GET:
-        street = Street.objects.filter(district_id=request.GET['DISTRICT'])
-        dict_resp = []
-        for item in street:
-            res = '<option value=' + str(item.id) + '>' + item.name + '</option>'
-            dict_resp.append(res1 + res)
-        return HttpResponse(dict_resp)
-    if 'STREET' in request.GET:
-        house = House.objects.filter(street_id=request.GET['STREET'])
-        dict_resp= []
-        for item in house:
-            res = '<option value=' + str(item.id) + '>' + item.number.encode('utf8') + '</option>'
-            dict_resp.append(res1 + res)
-        return HttpResponse(dict_resp)
     try:
         client = User.objects.get(id=uid)
     except User.DoesNotExist:
         return render(request, '404.html', locals())
     client_form = ClientForm(instance=client)
-    print client_form
+    dv_form = DvForm(instance=Dv.objects.get(user=uid))
+    print dv_form
     streets = Street.objects.all()
     houses = House.objects.all()
     group = Group.objects.all()

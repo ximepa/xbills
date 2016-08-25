@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import gettext as _
 from django import forms
-from .models import Admin, District, Street, House, Group, User, Company
+from .models import Admin, District, Street, House, Group, User, Company, Dv, Tp
 from django.db.models import Q
 import os
 
@@ -91,7 +91,7 @@ class ClientForm(forms.ModelForm):
     #     widget=forms.Select(
     #
     #     )
-    # )
+    # )\
 
     class Meta:
         model = User
@@ -120,9 +120,38 @@ class ClientForm(forms.ModelForm):
             'credit_date': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
             'reduction': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
             'reduction_date': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
-            'activate': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Activation'}),
-            'expire': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Expired'}),
+            'activate': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
+            'expire': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
             'deleted': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
             'registration': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
             'bill': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
+        }
+
+
+class DvForm(forms.ModelForm):
+
+
+    class Meta:
+        model = Dv
+        fields = [
+            'user',
+            'cid',
+            'speed',
+            'ip',
+            'netmask',
+            'logins',
+            'filter_id',
+            'tp',
+
+        ]
+
+        widgets = {
+            'user': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'UID'}),
+            'cid': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
+            'speed': forms.CheckboxInput(attrs={'class': 'ui checkbox'}),
+            'ip': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'IP', 'value': '0.0.0.0'}),
+            'netmask': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Credit'}),
+            'logins': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
+            'filter_id': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
+            'tp': forms.Select(attrs={'class': 'ui dropdown'}),
         }
