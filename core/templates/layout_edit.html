@@ -34,7 +34,7 @@
                         <i class="idea icon"></i>
                         {% trans 'Sessions' %}
                     </a>
-                    <div id="browse" class="ui very wide mini popup">
+                    <div id="browse" class="ui flowing mini popup">
                         <div class="ui column stacked grid">
                             <div class="ui segment">
                                 {% if dv_session %}
@@ -86,6 +86,8 @@
                             </div>
                         </div>
                     </div>
+                    {% block client_options %}
+                    {% endblock client_options %}
                 </div>
                 <div class="ui stackable grid">
 	                <div class="row">

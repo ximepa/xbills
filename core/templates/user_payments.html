@@ -10,54 +10,59 @@
 {% block breadcrumbs_sub_header %}
     {% trans 'Payments' %}
 {% endblock %}
+{% block client_options %}
+    {% if payments %}
+        <div class="right header item">
+            {% trans 'Options' %}:
+        </div>
+        <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
+            <i class="gamepad icon"></i>
+            Xml
+        </a>
+        <a href="?{% url_replace request 'csv' '1' %}" class="item">
+            <i class="video camera icon"></i>
+            Csv
+        </a>
+        {% if payments.number == 1 %}
+            <div class="disabled item">
+                    1
+                </div>
+        {% endif %}
+        {% if payments.has_previous %}
+            <a href="?{% url_replace_page request 'page' '1' %}" class="item">1</a>
+            {% if payments.number > 7 %}
+                <div class="disabled item">
+                    ...
+                </div>
+            {% endif %}
+        {% endif %}
+        {% for p in page_list %}
+            {% if p == 1 %}
+            {% else %}
+                {% if payments.number == p %}
+                    <a class="item active" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                {% else %}
+                    <a class="item" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        {% if payments.has_next %}
+            {% if payments.number < payments.paginator.num_pages|add:"-5" %}
+                <div class="disabled item">
+                    ...
+                </div>
+                    <a class="item" href="?{% url_replace_page request 'page' fees.paginator.num_pages %}" aria-label="Next">
+                    {{ payments.paginator.num_pages }}
+                </a>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% endblock client_options %}
 {% block content %}
     {% if payments %}
     <div class="ui stackable grid">
         <div class="row">
             <div class="column">
-                <div class="ui sticky mini fluid pagination menu">
-                    <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
-                        <i class="gamepad icon"></i>
-                        Xml
-                    </a>
-                    <a href="?{% url_replace request 'csv' '1' %}" class="item">
-                        <i class="video camera icon"></i>
-                        Csv
-                    </a>
-                    {% if payments.number == 1 %}
-                        <div class="right floated disabled item">
-                                1
-                            </div>
-                    {% endif %}
-                    {% if payments.has_previous %}
-                        <a href="?{% url_replace_page request 'page' '1' %}" class="right floated item">1</a>
-                        {% if payments.number > 7 %}
-                            <div class="disabled item">
-                                ...
-                            </div>
-                        {% endif %}
-                    {% endif %}
-                    {% for p in page_list %}
-                        {% if p == 1 %}
-                        {% else %}
-                            {% if payments.number == p %}
-                                <a class="item active" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                            {% else %}
-                                <a class="item" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                            {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                    {% if payments.has_next %}
-                        {% if payments.number < payments.paginator.num_pages|add:"-5" %}
-                            <div class="disabled item">
-                                ...
-                            </div>
-                                <a class="item" href="?{% url_replace_page request 'page' fees.paginator.num_pages %}" aria-label="Next">
-                                {{ payments.paginator.num_pages }}
-                            </a>
-                        {% endif %}
-                    {% endif %}
-                </div>
                 {% include 'table_payments.html' %}
             </div>
         </div>
@@ -66,7 +71,7 @@
         <div class="ui stackable grid">
             <div class="row">
                 <div class="column">
-                        {% trans 'Payments not found' %}
+                    {% trans 'Payments not found' %}
                 </div>
             </div>
         </div>
