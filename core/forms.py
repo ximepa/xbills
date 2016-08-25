@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import gettext as _
 from django import forms
-from .models import Admin, District, Street, House, Group
+from .models import Admin, District, Street, House, Group, User, Company
 from django.db.models import Q
 import os
 
@@ -72,3 +72,57 @@ class SearchFeesForm(forms.Form):
 class SearchPaymentsForm(forms.Form):
     login = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control input-sm', 'placeholder': u'Login'}))
     group = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control input-sm', 'placeholder': u'District'}), queryset=Group.objects.all(), required=False)
+
+
+class ClientForm(forms.ModelForm):
+    gid = forms.ModelChoiceField(
+        queryset=Group.objects.all(),
+        empty_label=None,
+        widget=forms.Select(
+            attrs={
+                'class': 'ui search dropdown'
+            }
+        )
+    )
+
+    # company = forms.ModelChoiceField(
+    #     queryset=Company.objects.all(),
+    #     empty_label=None,
+    #     widget=forms.Select(
+    #
+    #     )
+    # )
+
+    class Meta:
+        model = User
+        fields = [
+            'id',
+            'login',
+            'disabled',
+            'company',
+            'credit',
+            'credit_date',
+            'gid',
+            'reduction',
+            'reduction_date',
+            'activate',
+            'expire',
+            'deleted',
+            'registration',
+            'bill',
+        ]
+        widgets = {
+            'id': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'UID'}),
+            'login': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
+            'disabled': forms.CheckboxInput(attrs={'class': 'ui checkbox'}),
+            'company': forms.Select(attrs={'class': 'ui dropdown'}),
+            'credit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Credit'}),
+            'credit_date': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
+            'reduction': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
+            'reduction_date': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
+            'activate': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Activation'}),
+            'expire': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Expired'}),
+            'deleted': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
+            'registration': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
+            'bill': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
+        }

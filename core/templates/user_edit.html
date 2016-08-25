@@ -220,7 +220,7 @@
                                         <label>{% trans 'Start credit date' %}</label>
                                         <div class="ui left icon input">
                                             <i class="user icon"></i>
-                                            <input name="credit" placeholder="{% trans 'Start credit date' %}" type="text" value="{{ client.credit_date }}">
+                                            {{ client_form.credit_date }}
                                         </div>
                                     </div>
 
@@ -229,25 +229,16 @@
                                 <div class="two fields">
                                     <div class="field">
                                         <label>{% trans 'Groups' %}</label>
-                                        <select class="ui dropdown">
-                                            {% for g in group %}
-                                                <option value="{{ g.id }}">{{ g.name }}</option>
-                                            {% endfor %}
-                                        </select>
+                                        {{ client_form.gid }}
                                     </div>
                                     <div class="field">
                                         <label>{% trans 'Company' %}</label>
-                                        <select class="ui dropdown">
-                                            <option value="{{ client.company_id }}">{{ client.company }}</option>
-{#                                            {% for g in group %}#}
-{#                                                <option value="{{ g.id }}">{{ g.name }}</option>#}
-{#                                            {% endfor %}#}
-                                        </select>
+                                        {{ client_form.company }}
                                     </div>
                                 </div>
                                 <div class="inline field">
                                     <div class="ui checkbox">
-                                        <input name="disable" type="checkbox">
+                                        {{ client_form.disabled }}
                                         <label>{% trans 'Disable' %}</label>
                                     </div>
                                 </div>
