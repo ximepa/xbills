@@ -25,30 +25,29 @@
             </div>
             <div class="ui bottom attached active tab segment">
                 <div class="ui stackable mini menu">
-                    <div class="item">
+                    <a class="item" id="session">
                         {% if dv_session %}
                             <div class="floating ui mini green label">
                                 {{ dv_session.count }}
                             </div>
                         {% endif %}
-                        <button id="session" class="ui green button">
-                            {% trans 'Sessions' %}
-                        </button>
-                    </div>
-                    <div id="browse" class="ui very wide popup bottom left transition hidden">
+                        <i class="idea icon"></i>
+                        {% trans 'Sessions' %}
+                    </a>
+                    <div id="browse" class="ui very wide mini popup bottom left transition hidden">
                         <div class="ui column stacked grid">
-                            <div class="ui raised segment">
+                            <div class="ui segment">
                                 {% if dv_session %}
                                     <table class="ui blue small selectable striped table">
                                         <thead class="">
                                             <tr>
                                                 <th>IP</th>
-                                                <th>Session time</th>
-                                                <th>Trafic in</th>
-                                                <th>Trafic out</th>
-                                                <th>Server</th>
-                                                <th>Zap</th>
-                                                <th>Hangup</th>
+                                                <th>{% trans 'Time' %}</th>
+                                                <th>In</th>
+                                                <th>Out</th>
+                                                <th>{% trans 'Server' %}</th>
+                                                <th>{% trans 'Zap' %}</th>
+                                                <th>{% trans 'Hangup' %}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
