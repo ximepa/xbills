@@ -44,7 +44,7 @@ function servicesToggle() {
 }
 
 function setCookie(cname, value) {
-    document.cookie = cname + "=" + value + ";";
+    $.cookie(cname, value, { path:'/' } );
 
 }
 
@@ -58,11 +58,13 @@ function getCookie(cname) {
             c = c.substring(1);
         }
         if (c.indexOf(name) == 0) {
+            console.log(c.substring(name.length,c.length))
             return c.substring(name.length,c.length);
         }
     }
     return "";
 }
+
 
 function formatBytes(bytes,decimals) {
    if(bytes == 0) return '0 Byte';

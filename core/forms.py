@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import gettext as _
 from django import forms
-from .models import Admin, District, Street, House, Group, User, Company, Dv, Tp
+from .models import Admin, District, Street, House, Group, User, Company, Dv, Tp, UserPi
 from django.db.models import Q
 import os
 
@@ -130,7 +130,6 @@ class ClientForm(forms.ModelForm):
 
 class DvForm(forms.ModelForm):
 
-
     class Meta:
         model = Dv
         fields = [
@@ -154,4 +153,37 @@ class DvForm(forms.ModelForm):
             'logins': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
             'filter_id': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Filter ID'}),
             'tp': forms.Select(attrs={'class': 'ui dropdown'}),
+        }
+
+
+
+class UserPiForm(forms.ModelForm):
+
+    class Meta:
+        model = UserPi
+        fields = [
+            'user_id',
+            'fio',
+            'email',
+            'street',
+            'kv',
+            'phone',
+            'phone2',
+            'city',
+            'location',
+            'contract_date',
+
+        ]
+
+        widgets = {
+            'user_id': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'UID'}),
+            'fio': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
+            'email': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Speed (kb)', 'value': '0'}),
+            'kv': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Credit'}),
+            'phone': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
+            'phone2': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
+            'city': forms.Select(attrs={'class': 'ui dropdown'}),
+            'street': forms.Select(attrs={'class': 'ui dropdown'}),
+            'location': forms.Select(attrs={'class': 'ui dropdown'}),
+            'contract_date': forms.Select(attrs={'class': 'ui dropdown'}),
         }

@@ -14,7 +14,7 @@ from .auth_backend import AuthBackend
 from .models import User, Payment, Fees, Dv, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog, Dv_log, Admin, num_to_ip, AdminSettings, \
     AdminLog, ip_to_num, Group
 from ipdhcp.models import ipRange
-from .forms import AdministratorForm, SearchForm, SearchFeesForm, SearchPaymentsForm, ClientForm, DvForm
+from .forms import AdministratorForm, SearchForm, SearchFeesForm, SearchPaymentsForm, ClientForm, DvForm, UserPiForm
 from django.contrib import messages
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -460,7 +460,7 @@ def client(request, uid):
     client_form = ClientForm(instance=client)
     dv = Dv.objects.get(user=uid)
     dv_form = DvForm(instance=dv, initial={'ip': num_to_ip(dv.ip), 'netmask': num_to_ip(dv.netmask)})
-    print dv_form
+    user_pi_form = UserPiForm(UserPi.objects.get(user_id=uid))
     streets = Street.objects.all()
     houses = House.objects.all()
     group = Group.objects.all()

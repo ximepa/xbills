@@ -149,6 +149,46 @@
         </form>
     </div>
     <div class="ui bottom attached tab segment" data-tab="third">
-        Third
+        <form class="ui form" method="post">{% csrf_token %}
+            <div class="ui tiny stacked segment">
+                {# fields 1 #}
+                <div class="three fields">
+                    <div class="field">
+                        <label>{% trans 'Tarif plan' %}</label>
+                        {{ user_pi_form.street }}
+                    </div>
+                    <div class="field">
+                        <label>{% trans 'Speed' %}</label>
+                        {{ dv_form.speed }}
+                    </div>
+                    <div class="field">
+                        <label>{% trans 'Simultaneously' %}</label>
+                        {{ dv_form.logins   }}
+                    </div>
+                </div>
+                {# fields 2 #}
+                <div class="three fields">
+                    <div class="field">
+                        <label>{% trans 'IP' %}</label>
+                        {{ dv_form.ip }}
+                    </div>
+                    <div class="field">
+                        <label>{% trans 'Netmask' %}</label>
+                        {{ dv_form.netmask }}
+                    </div>
+                    <div class="field">
+                        <label>{% trans 'CID' %}</label>
+                        {{ dv_form.cid }}
+                    </div>
+                </div>
+                <div class="inline field">
+                    <div class="ui checkbox">
+                        {{ client_form.disabled }}
+                        <label>{% trans 'Disable' %}</label>
+                    </div>
+                </div>
+                <button class="tiny ui teal submit button" type="submit">{% trans 'Change' %}</button>
+            </div>
+        </form>
     </div>
 {% endblock %}
