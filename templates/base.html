@@ -36,10 +36,10 @@
             <div class="header item">
                 XBills {% version %}
             </div>
-            <a href="{% url 'core:index' %}" class="{% active request 'core:index' %} item"><i class="fa fa-dashboard fa-fw"></i> {% trans 'Dashboard' %} </a>
-            <a class="item menu-toggle-button" onclick="hideSidebar()"><i class="list layout icon"></i>{% trans 'Menu' %}</a>
-            <a href="{% url 'core:search' %}" class="{% active request 'core:search' %} item popup" data-content="{% trans 'Search user by criteria' %}"><i class="search icon"></i>{% trans 'Search' %}</a>
-            <a href="{% url 'core:chat' %}" class="{% active request 'core:chat' %} item popup" data-content="{% trans 'Enter to chat' %}"><i class="comments outline icon"></i>{% trans 'Chat' %}</a>
+            <a href="{% url 'core:index' %}" class="{% active request 'core:index' %} blue item"><i class="fa fa-dashboard fa-fw"></i> {% trans 'Dashboard' %} </a>
+            <a class="blue item menu-toggle-button" onclick="hideSidebar()"><i class="list layout icon"></i>{% trans 'Menu' %}</a>
+            <a href="{% url 'core:search' %}" class="{% active request 'core:search' %} blue item popup" data-content="{% trans 'Search user by criteria' %}"><i class="search icon"></i>{% trans 'Search' %}</a>
+            <a href="{% url 'core:chat' %}" class="{% active request 'core:chat' %} blue item popup" data-content="{% trans 'Enter to chat' %}"><i class="comments outline icon"></i>{% trans 'Chat' %}</a>
             <div class="right menu">
                 <div class="ui dropdown item">
                     {% get_current_language as LANGUAGE_CODE %}
@@ -169,7 +169,7 @@
                     <div class="ui stackable grid">
                         <div class="row">
                             <div class="column">
-                                <div class="ui raised segment">
+                                <div class="ui blue segment">
                                     <h4 class="ui header">
                                         <i class="dashboard icon"></i>
                                         <div class="content">

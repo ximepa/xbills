@@ -544,3 +544,12 @@
 /*.main_context {*/
     /*margin-left: 0px;*/
 /*}*/
+.ui.basic.segments {
+    background: none;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+}
+.ui.noborder.horizontal.segments > .segment {
+    border-left: none;
+}
