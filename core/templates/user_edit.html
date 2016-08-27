@@ -73,6 +73,25 @@
                     <div class="ui checkbox">
                         {{ client_form.disabled }}
                         <label>{% trans 'Disable' %}</label>
+                        <script type="application/javascript">
+                            var ipdhcp_disable = $('#id_disabled').change(function(){
+                                console.log($(this));
+                                if ($(this).is(':checked')){
+                                    $(this).attr('value', 1);
+                                    $(this).attr('checked', true);
+                                } else {
+                                    $(this).attr('value', 0);
+                                    $(this).attr('checked', false);
+                                }
+                            });
+                            if ('{{ client_form.disabled.value }}' == 0){
+                                $('#id_disabled').attr('value', 0);
+                                $('#id_disabled').attr('checked', false)
+                            } else {
+                                $('#id_disabled').attr('value', 1);
+                                $('#id_disabled').attr('checked', true)
+                            }
+                        </script>
                     </div>
                 </div>
                 <button class="tiny ui teal submit button" type="submit">{% trans 'Change' %}</button>
@@ -148,37 +167,41 @@
             </div>
         </form>
     </div>
-    <div class="ui bottom attached tab segment" data-tab="third">
+    <div id="third" class="ui bottom attached tab segment" data-tab="third">
         <form class="ui form" method="post">{% csrf_token %}
             <div class="ui tiny stacked segment">
                 {# fields 1 #}
                 <div class="three fields">
                     <div class="field">
-                        <label>{% trans 'Tarif plan' %}</label>
-                        {{ user_pi_form.street }}
+                        <label>{% trans 'FIO' %}</label>
+                        {{ user_pi_form.fio }}
                     </div>
                     <div class="field">
-                        <label>{% trans 'Speed' %}</label>
-                        {{ dv_form.speed }}
+                        <label>{% trans 'Phone' %}</label>
+                        {{ user_pi_form.phone }}
                     </div>
                     <div class="field">
-                        <label>{% trans 'Simultaneously' %}</label>
-                        {{ dv_form.logins   }}
+                        <label>{% trans 'Phone' %} (2)</label>
+                        {{ user_pi_form.phone2   }}
                     </div>
                 </div>
                 {# fields 2 #}
                 <div class="three fields">
                     <div class="field">
                         <label>{% trans 'IP' %}</label>
-                        {{ dv_form.ip }}
+                        {{ user_pi_form.city }}
                     </div>
                     <div class="field">
                         <label>{% trans 'Netmask' %}</label>
-                        {{ dv_form.netmask }}
+                        {{ user_pi_form.street }}
                     </div>
                     <div class="field">
                         <label>{% trans 'CID' %}</label>
-                        {{ dv_form.cid }}
+                        {{ user_pi_form.location }}
+                    </div>
+                    <div class="field">
+                        <label>{% trans 'CID' %}</label>
+                        {{ user_pi_form.kv }}
                     </div>
                 </div>
                 <div class="inline field">

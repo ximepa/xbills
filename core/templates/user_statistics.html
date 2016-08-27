@@ -9,105 +9,105 @@
 {% block extra_scripts %}
 {% endblock %}
 {% block breadcrumbs %}
-    <ol class="breadcrumb">
-      <li class=""><a href="{% url 'core:index' %}"><i class="fa fa-dashboard fa-fw"></i>{% trans 'Dashboard' %}</a></li>
-      <li class=""><a href="{% url 'core:client' uid %}"><i class="fa fa-user fa-fw"></i>{{ user.login }} (UID: {{ user.id }})</a></li>
-      <li class="active">{% trans 'Statistics' %}</li>
-    </ol>
+    <i class="right angle icon divider"></i>
+    <a href="{% url 'core:index' %}" class="section">{% trans 'Logins' %}</a>
+    <i class="right angle icon divider"></i>
+    <div class="active section"> <a href="{% url 'core:client' uid %}">{{ client.login }}</a> (UID: {{ uid }}) </div>
 {% endblock %}
+{% block breadcrumbs_sub_header %}
+    {% trans 'User statistics' %}
+{% endblock %}
+{% block client_options %}
+    {% if statistics %}
+        <div class="right header item">
+            {% trans 'Options' %}:
+        </div>
+        <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
+            <i class="gamepad icon"></i>
+            Xml
+        </a>
+        <a href="?{% url_replace request 'csv' '1' %}" class="item">
+            <i class="video camera icon"></i>
+            Csv
+        </a>
+        {% if statistics.number == 1 %}
+            <div class="disabled item">
+                    1
+                </div>
+        {% endif %}
+        {% if statistics.has_previous %}
+            <a href="?{% url_replace_page request 'page' '1' %}" class="item">1</a>
+            {% if payments.number > 7 %}
+                <div class="disabled item">
+                    ...
+                </div>
+            {% endif %}
+        {% endif %}
+        {% for p in page_list %}
+            {% if p == 1 %}
+            {% else %}
+                {% if statistics.number == p %}
+                    <a class="item active" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                {% else %}
+                    <a class="item" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+        {% if statistics.has_next %}
+            {% if statistics.number < statistics.paginator.num_pages|add:"-5" %}
+                <div class="disabled item">
+                    ...
+                </div>
+                    <a class="item" href="?{% url_replace_page request 'page' statistics.paginator.num_pages %}" aria-label="Next">
+                    {{ statistics.paginator.num_pages }}
+                </a>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+{% endblock client_options %}
 {% block content %}
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="well well-sm">
-                {% if statistics.paginator.num_pages > 1 %}
-                    <ul class="list-group" data-spy="affix" data-offset-top="200" data-offset-bottom="200">
-                        <li class="list-group-item">
-                            <ul class="pagination pagination-sm">
-                                {% if statistics.has_previous %}
-                                    {% if statistics.number > 5 %}
-                                        <li>
-                                            <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
-                                                <span aria-hidden="true">1</span>
-                                            </a>
-                                        </li>
-                                        <li class="disabled">
-                                            <a href="#" aria-label="Previous">
-                                                <span aria-hidden="true">...</span>
-                                            </a>
-                                        </li>
-                                    {% endif %}
-                                {% endif %}
-                                {% for p in page_list %}
-                                    {% if statistics.number == p %}
-                                        <li class="active">
-                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                        </li>
-                                    {% else %}
-                                        <li class="">
-                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
-                                {% if statistics.has_next %}
-                                    {% if statistics.paginator.num_pages < 5 %}
-                                    {% else %}
-                                        <li class="disabled">
-                                            <a href="#" aria-label="Previous">
-                                                <span aria-hidden="true">...</span>
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="?{% url_replace_page request 'page' statistics.paginator.num_pages %}" aria-label="Next">
-                                                <span aria-hidden="true">{{ statistics.paginator.num_pages }}</span>
-                                            </a>
-                                        </li>
-                                    {% endif %}
-                                {% endif %}
-                            </ul>
-                        </li>
-                    </ul>
-                {% endif %}
-                {% if statistics %}
-                <table class="ui black bordered table table-striped table-hover table-condensed">
-                    <thead>
-                        <tr>
-                            <th><a href="?{% url_replace request 'order_by' 'start' %}">{% trans 'Start Sessions' %}</a></th>
-                            <th><a href="?{% url_replace request 'order_by' 'duration' %}">{% trans 'Duration' %}</a></th>
-                            <th><a href="?{% url_replace request 'order_by' 'sent' %}">{% trans 'Sent' %}</a></th>
-                            <th><a href="?{% url_replace request 'order_by' 'received' %}">{% trans 'Received' %}</a></th>
-                            <th><a href="?{% url_replace request 'order_by' 'ip' %}">{% trans 'IP' %}</a></th>
-                            <th><a href="?{% url_replace request 'order_by' 'cid' %}">{% trans 'CID' %}</a></th>
-                            <th><a href="?{% url_replace request 'order_by' 'tarif_plan' %}">{% trans 'Tarif plan' %}</a></th>
-                            <th><a href="?{% url_replace request 'order_by' 'sum' %}">{% trans 'Sum' %}</a></th>
-                            <th><a href="?{% url_replace request 'order_by' 'nas' %}">{% trans 'Nas' %}</a></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for s in statistics %}
-                        <tr>
-                            <td>{{ s.start }}</td>
-                            <td>{{ s.duration }}</td>
-                            <td>{% sizify s.sent  %}</td>
-                            <td>{% sizify s.recv  %}</td>
-                            <td>{% ip_convert s.ip %}</td>
-                            <td>{{ s.CID }}</td>
-                            <td>{{ s.tp_id }}</td>
-                            <td>{{ s.sum }}</td>
-                            <td>{{ s.nas_info.name }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="8"></td>
-                            <td><span class="badge">{{ user_statistics.count }}</span></td>
-                        </tr>
-                    </tfoot>
-                </table>
-                {% else %}
-                    {% trans 'Statistics not found' %}
-                {% endif %}
+        <div class="column">
+            {% if statistics %}
+            <table class="ui blue small very compact selectable striped table">
+                <thead>
+                    <tr>
+                        <th><a href="?{% url_replace request 'order_by' 'start' %}">{% trans 'Start Sessions' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'duration' %}">{% trans 'Duration' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'sent' %}">{% trans 'Sent' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'received' %}">{% trans 'Received' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'ip' %}">{% trans 'IP' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'cid' %}">{% trans 'CID' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'tarif_plan' %}">{% trans 'Tarif plan' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'sum' %}">{% trans 'Sum' %}</a></th>
+                        <th><a href="?{% url_replace request 'order_by' 'nas' %}">{% trans 'Nas' %}</a></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in statistics %}
+                    <tr>
+                        <td>{{ s.start }}</td>
+                        <td>{{ s.duration }}</td>
+                        <td>{% sizify s.sent  %}</td>
+                        <td>{% sizify s.recv  %}</td>
+                        <td>{% ip_convert s.ip %}</td>
+                        <td>{{ s.CID }}</td>
+                        <td>{{ s.tp_id }}</td>
+                        <td>{{ s.sum }}</td>
+                        <td>{{ s.nas_info.name }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="8"></td>
+                        <td><div class="ui blue tiny label">{% trans 'All' %} <div class="detail">{{ user_statistics.count }}</div></td>
+                    </tr>
+                </tfoot>
+            </table>
+            {% else %}
+                {% trans 'Statistics not found' %}
+            {% endif %}
             </div>
         </div>
-    </div>
 {% endblock %}

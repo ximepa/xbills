@@ -85,14 +85,6 @@ class ClientForm(forms.ModelForm):
         )
     )
 
-    # company = forms.ModelChoiceField(
-    #     queryset=Company.objects.all(),
-    #     empty_label=None,
-    #     widget=forms.Select(
-    #
-    #     )
-    # )\
-
     class Meta:
         model = User
         fields = [
@@ -114,7 +106,7 @@ class ClientForm(forms.ModelForm):
         widgets = {
             'id': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'UID'}),
             'login': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
-            'disabled': forms.CheckboxInput(attrs={'class': 'ui checkbox'}),
+            'disabled': forms.CheckboxInput(attrs={'class': 'ui checkbox', 'onclick': 'ipdhcp_disable'}),
             'company': forms.Select(attrs={'class': 'ui dropdown'}),
             'credit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Credit'}),
             'credit_date': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
@@ -177,11 +169,11 @@ class UserPiForm(forms.ModelForm):
 
         widgets = {
             'user_id': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'UID'}),
-            'fio': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
-            'email': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Speed (kb)', 'value': '0'}),
+            'fio': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'FIO'}),
+            'email': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Mail'}),
             'kv': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Credit'}),
-            'phone': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
-            'phone2': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
+            'phone': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Phone'}),
+            'phone2': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Phone'}),
             'city': forms.Select(attrs={'class': 'ui dropdown'}),
             'street': forms.Select(attrs={'class': 'ui dropdown'}),
             'location': forms.Select(attrs={'class': 'ui dropdown'}),

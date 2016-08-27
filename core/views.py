@@ -160,10 +160,14 @@ def nas(request):
 
 @login_required()
 def client_errors(request, uid):
-    user = User.objects.get(id=uid)
-    user_errors = ErrorsLog.objects.filter(user=user.login)
+    try:
+        client = User.objects.get(id=uid)
+    except User.DoesNotExist:
+        return render(request, '404.html', locals())
+    user_errors = ErrorsLog.objects.filter(user=client.login)
     paginator = Paginator(user_errors, settings.USER_ERRORS_PER_PAGE)
     page = request.GET.get('page', 1)
+
     try:
         errors = paginator.page(page)
     except PageNotAnInteger:
@@ -184,12 +188,20 @@ def client_errors(request, uid):
     for p in page_range:
         page_list = p
     pre_end = errors.paginator.num_pages - 2
+    if 'xml' in request.GET:
+        xml_data = serializers.serialize("xml", errors)
+        return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
+    if 'csv' in request.GET:
+        return helpers.export_to_csv(request, errors, fields=('id', 'login'), name='login')
     return render(request, 'user_errors.html', locals())
 
 @login_required()
 def client_statistics(request, uid):
+    try:
+        client = User.objects.get(id=uid)
+    except User.DoesNotExist:
+        return render(request, '404.html', locals())
     order_by = request.GET.get('order_by', '-start')
-    user = User.objects.get(id=uid)
     user_statistics = Dv_log.objects.filter(uid=uid).order_by(order_by)
     paginator = Paginator(user_statistics, settings.USER_ERRORS_PER_PAGE)
     page = request.GET.get('page', 1)
@@ -213,6 +225,11 @@ def client_statistics(request, uid):
     for p in page_range:
         page_list = p
     pre_end = statistics.paginator.num_pages - 2
+    if 'xml' in request.GET:
+        xml_data = serializers.serialize("xml", statistics)
+        return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
+    if 'csv' in request.GET:
+        return helpers.export_to_csv(request, statistics, fields=('id', 'login'), name='login')
     return render(request, 'user_statistics.html', locals())
 
 
@@ -457,10 +474,17 @@ def client(request, uid):
         client = User.objects.get(id=uid)
     except User.DoesNotExist:
         return render(request, '404.html', locals())
+    if client.disabled == 1:
+        disabled = 0
+    else:
+        disabled = 1
+    print client.disabled
+    print disabled
     client_form = ClientForm(instance=client)
     dv = Dv.objects.get(user=uid)
     dv_form = DvForm(instance=dv, initial={'ip': num_to_ip(dv.ip), 'netmask': num_to_ip(dv.netmask)})
-    user_pi_form = UserPiForm(UserPi.objects.get(user_id=uid))
+    user_pi = UserPi.objects.get(user_id=uid)
+    user_pi_form = UserPiForm(instance=user_pi)
     streets = Street.objects.all()
     houses = House.objects.all()
     group = Group.objects.all()
