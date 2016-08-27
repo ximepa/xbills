@@ -32,7 +32,7 @@
             <td>{{ payment.method }}</td>
             <td>{{ payment.aid.login }}</td>
             <td>{{ payment.uid.id }}</td>
-            <td><a href="{% url 'core:client_payments' client.id %}?del={{ payment.id }}" onclick="return confirm('{% trans 'Delete' %}?');"><i class="fa fa-remove"></i></a></td>
+            <td><a href="{% url 'core:client_payments' payment.uid.id %}?del={{ payment.id }}" onclick="return confirm('{% trans 'Delete' %}?');"><i class="fa fa-remove"></i></a></td>
         </tr>
         {% endfor %}
     </tbody>
