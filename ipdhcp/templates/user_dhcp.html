@@ -14,9 +14,7 @@
 {% block content %}
     <div class="ui stackable grid">
         <div class="row">
-            <div class="five wide column">
-            </div>
-            <div class="six wide column">
+            <div class="column">
                 <div class="ui raised segment">
                     {% if dhcphosts_hostsform.errors %}
                         <script>
@@ -34,31 +32,35 @@
                         </script>
                     {% endif %}
                     <form class="ui form" method="post" name="dv_form">{% csrf_token %}
-                        <div class="field">
-                            <label>{% trans 'Host Name' %}</label>
-                            {{ dhcphosts_hostsform.hostname }}
-                            {{ dhcphosts_hostsform.uid }}
-                            {{ dhcphosts_hostsform.id }}
+                        <div class="three fields">
+                            <div class="field">
+                                <label>{% trans 'Host Name' %}</label>
+                                {{ dhcphosts_hostsform.hostname }}
+                                {{ dhcphosts_hostsform.uid }}
+                                {{ dhcphosts_hostsform.id }}
+                            </div>
+                            <div class="field">
+                                <label>{% trans 'Networks' %}</label>
+                                {{ dhcphosts_hostsform.network }}
+                            </div>
+                            <div class="field">
+                                <label>{% trans 'IP' %}</label>
+                                {{ dhcphosts_hostsform.ip }}
+                            </div>
                         </div>
-                        <div class="field">
-                            <label>{% trans 'Networks' %}</label>
-                            {{ dhcphosts_hostsform.network }}
-                        </div>
-                        <div class="field">
-                            <label>{% trans 'IP' %}</label>
-                            {{ dhcphosts_hostsform.ip }}
-                        </div>
-                        <div class="field">
-                            <label>{% trans 'Mac' %}</label>
-                            {{ dhcphosts_hostsform.mac }}
-                        </div>
-                        <div class="field">
-                            <label>{% trans 'Server Vlan' %}</label>
-                            {{ dhcphosts_hostsform.server_vid }}
-                        </div>
-                        <div class="field">
-                            <label>{% trans 'Client Vlan' %}</label>
-                            {{ dhcphosts_hostsform.vid }}
+                        <div class="three fields">
+                            <div class="field">
+                                <label>{% trans 'Mac' %}</label>
+                                {{ dhcphosts_hostsform.mac }}
+                            </div>
+                            <div class="field">
+                                <label>{% trans 'Server Vlan' %}</label>
+                                {{ dhcphosts_hostsform.server_vid }}
+                            </div>
+                            <div class="field">
+                                <label>{% trans 'Client Vlan' %}</label>
+                                {{ dhcphosts_hostsform.vid }}
+                            </div>
                         </div>
                         <div class="field">
                             <label>{% trans 'Disable' %}</label>
@@ -94,8 +96,6 @@
                         {% endif %}
                     </form>
                 </div>
-            </div>
-            <div class="five wide column">
             </div>
         </div>
     </div>

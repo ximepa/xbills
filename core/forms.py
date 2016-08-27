@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import gettext as _
 from django import forms
-from .models import Admin, District, Street, House, Group, User, Company, Dv, Tp
+from .models import Admin, District, Street, House, Group, User, Company, Dv, Tp, UserPi
 from django.db.models import Q
 import os
 
@@ -85,14 +85,6 @@ class ClientForm(forms.ModelForm):
         )
     )
 
-    # company = forms.ModelChoiceField(
-    #     queryset=Company.objects.all(),
-    #     empty_label=None,
-    #     widget=forms.Select(
-    #
-    #     )
-    # )\
-
     class Meta:
         model = User
         fields = [
@@ -114,7 +106,7 @@ class ClientForm(forms.ModelForm):
         widgets = {
             'id': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'UID'}),
             'login': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
-            'disabled': forms.CheckboxInput(attrs={'class': 'ui checkbox'}),
+            'disabled': forms.CheckboxInput(attrs={'class': 'ui checkbox', 'onclick': 'ipdhcp_disable'}),
             'company': forms.Select(attrs={'class': 'ui dropdown'}),
             'credit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Credit'}),
             'credit_date': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
@@ -129,7 +121,6 @@ class ClientForm(forms.ModelForm):
 
 
 class DvForm(forms.ModelForm):
-
 
     class Meta:
         model = Dv
@@ -154,4 +145,37 @@ class DvForm(forms.ModelForm):
             'logins': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
             'filter_id': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Filter ID'}),
             'tp': forms.Select(attrs={'class': 'ui dropdown'}),
+        }
+
+
+
+class UserPiForm(forms.ModelForm):
+
+    class Meta:
+        model = UserPi
+        fields = [
+            'user_id',
+            'fio',
+            'email',
+            'street',
+            'kv',
+            'phone',
+            'phone2',
+            'city',
+            'location',
+            'contract_date',
+
+        ]
+
+        widgets = {
+            'user_id': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'UID'}),
+            'fio': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'FIO'}),
+            'email': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Mail'}),
+            'kv': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Credit'}),
+            'phone': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Phone'}),
+            'phone2': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Phone'}),
+            'city': forms.Select(attrs={'class': 'ui dropdown'}),
+            'street': forms.Select(attrs={'class': 'ui dropdown'}),
+            'location': forms.Select(attrs={'class': 'ui dropdown'}),
+            'contract_date': forms.Select(attrs={'class': 'ui dropdown'}),
         }

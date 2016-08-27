@@ -1,6 +1,7 @@
 var dashboard = {};
 var global = {};
 $( document ).ready(function() {
+
     //$('.menu-toggle-button').click(function(){
     //    $('.sidebar').sidebar('setting', {dimPage: false}).sidebar('toggle');
     //});
@@ -44,7 +45,7 @@ function servicesToggle() {
 }
 
 function setCookie(cname, value) {
-    document.cookie = cname + "=" + value + ";";
+    $.cookie(cname, value, { path:'/' } );
 
 }
 
@@ -64,6 +65,7 @@ function getCookie(cname) {
     return "";
 }
 
+
 function formatBytes(bytes,decimals) {
    if(bytes == 0) return '0 Byte';
    var k = 1024; // or 1024 for binary
@@ -78,7 +80,7 @@ global.getPayNow = function () {
     $.getJSON('/admin/?pay_now', function (data) {
         if (uid && getCookie('pay_uid') != data.pay_now[3]) {
             $.each(data, function (index, value) {
-                toastr.pay(value[0] + ' грн.  ' + value[1], value[2] + ' (UID: <a style="color: white" href="clients/' + value[3] + '"' + '>' + value[3] + '</a>' + ')', value[4],
+                toastr.pay(value[0] + ' грн.  ' + value[1], value[2] + ' (UID: <a style="color: blue" href="clients/' + value[3] + '"' + '>' + value[3] + '</a>' + ')', value[4],
                     {progressBar: true, timeOut: 40000, extendedTimeOut: 10000})
             })
         }
@@ -104,20 +106,20 @@ function comments_add (theLink, Message, CustomMsg) {
 }
 
 
-//var claim = "claim";
-//global.getClaimsNotifi = function () {
-//    $.getJSON('/admin/claims/?claim_notifi', function (data) {
-//        if (claim && getCookie('cuid') != data.claim[1]) {
-//            $.each(data, function (index, value) {
-//                toastr.claims(value[0], 'UID: <a style="color: white" href="clients/' + value[1] + '"' + '>' + value[1] + '</a>', value[2], value[3], value[4],
-//                    {timeOut: 0, onclick: null, extendedTimeOut: 0})
-//            })
-//        }
-//        claim = data.claim[1];
-//	setCookie('cuid', data.claim[1]);
-//    })
-//
-//};
+var claim = "claim";
+global.getClaimsNotifi = function () {
+   $.getJSON('/admin/claims/?claim_notifi', function (data) {
+       if (claim && getCookie('cuid') != data.claim[1]) {
+           $.each(data, function (index, value) {
+               toastr.claims(value[0], 'UID: <a style="color: white" href="clients/' + value[1] + '"' + '>' + value[1] + '</a>', value[2], value[3], value[4],
+                   {timeOut: 0, onclick: null, extendedTimeOut: 0})
+           })
+       }
+       claim = data.claim[1];
+	setCookie('cuid', data.claim[1]);
+   })
+
+};
 // dashboard.getProc = function() {
 //       function rowStyle(row, index) {
 //           if (row.cpu > 35 && row.cpu < 50) {

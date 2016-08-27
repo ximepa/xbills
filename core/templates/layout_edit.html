@@ -2,7 +2,6 @@
 {% load i18n %}
 {% load url %}
 {% load staticfiles %}
-
 {% block layout %}
     <div class="row">
         <div class="column">
@@ -30,9 +29,19 @@
                             <div class="floating ui mini green label">
                                 {{ dv_session.count }}
                             </div>
+                            <i class="idea orange icon"></i>
+                        {% else %}
+                            <i class="idea icon"></i>
                         {% endif %}
-                        <i class="idea icon"></i>
                         {% trans 'Sessions' %}
+                    </a>
+                    <a href="{% url 'core:client_statistics' client.id %}" class="{% active request 'core:client_statistics' client.id %} item">
+                        <i class="idea icon"></i>
+                        {% trans 'Statistics' %}
+                    </a>
+                    <a href="{% url 'core:client_errors' client.id %}" class="{% active request 'core:client_errors' client.id %} item">
+                        <i class="idea icon"></i>
+                        {% trans 'Error' %}
                     </a>
                     <div id="browse" class="ui flowing mini popup">
                         <div class="ui column stacked grid">
