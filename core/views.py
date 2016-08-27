@@ -555,6 +555,7 @@ def clients(request):
     return render(request, 'users.html', locals())
 
 
+@login_required()
 def payments(request):
     order_by = request.GET.get('order_by', '-date')
     payments_list = Payment.objects.all().order_by(order_by)
@@ -612,6 +613,7 @@ def fees(request):
     return render(request, 'fees.html', locals())
 
 
+@login_required()
 def client_payments(request, uid):
     dv_session = Dv_calls.objects.filter(uid=uid)
     out_sum = 0
@@ -670,6 +672,7 @@ def client_payments(request, uid):
     return render(request, 'user_payments.html', locals())
 
 
+@login_required()
 def client_fees(request, uid):
     dv_session = Dv_calls.objects.filter(uid=uid)
     out_sum = 0
