@@ -1,0 +1,43 @@
+{% load i18n %}
+{% load url %}
+{% load staticfiles %}
+<table class="ui blue small very compact selectable striped table">
+    <thead>
+        <tr>
+            <th><a href="?{% url_replace request 'order_by' 'id' %}">{% trans 'ID' %}</a></th>
+            <th>{% trans 'Name' %}</th>
+            <th><a href="?{% url_replace request 'order_by' 'network' %}">{% trans 'Network' %}</a></th>
+            <th><a href="?{% url_replace request 'order_by' 'netmask' %}">{% trans 'Netmask' %}</a></th>
+            <th><a href="?{% url_replace request 'order_by' 'route' %}">{% trans 'Route' %}</a></th>
+            <th><a href="?{% url_replace request 'order_by' 'dns1' %}">{% trans 'Dns #1' %}</a></th>
+            <th><a href="?{% url_replace request 'order_by' 'dns2' %}">{% trans 'Dns #2' %}</a></th>
+            <th><a href="?{% url_replace request 'order_by' 'desc' %}">{% trans 'Description' %}</a></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for dhcp in dhcp_page %}
+            <tr>
+                <td>{{ dhcp.id }}</td>
+                <td>{{ dhcp.name }}</td>
+                <td>{% ip_convert dhcp.network %}</td>
+                <td>{% ip_convert dhcp.mask %}</td>
+                <td>{% ip_convert dhcp.routers %}</td>
+                <td>{{ dhcp.dns }}</td>
+                <td>{{ dhcp.dns2 }}</td>
+                <td>{{ dhcp.id }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th><div class="ui blue tiny label">{% trans 'All' %} <div class="detail">{{ net_dhcp.count }}</div></div></th>
+        </tr>
+    </tfoot>
+</table>
