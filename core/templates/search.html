@@ -384,100 +384,102 @@ $(document).ready(function() {
     {% endif %}
     <div class="row">
         <div class="column">
-            {% if error %}
-                <div class="alert alert-danger alert-dismissible" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <p class="text-center">{{ error }}</p>
+            <div class="ui blue segment">
+                {% if error %}
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <p class="text-center">{{ error }}</p>
+                    </div>
+                {% endif %}
+                <div class="ui four mini item menu">
+                    <a href="{% url 'core:search' %}?search_type=1" class="item {% if search_type == '1' %}active{% endif %}">{% trans 'Clients' %}</a>
+                    <a href="{% url 'core:search' %}?search_type=2" class="item {% if search_type == '2' %}active{% endif %}">{% trans 'Company' %}</a>
+                    <a href="{% url 'core:search' %}?search_type=3" class="item {% if search_type == '3' %}active{% endif %}">{% trans 'Fees' %}</a>
+                    <a href="{% url 'core:search' %}?search_type=4" class="item {% if search_type == '4' %}active{% endif %}">{% trans 'Payments' %}</a>
                 </div>
-            {% endif %}
-            <div class="ui four mini item menu">
-                <a href="{% url 'core:search' %}?search_type=1" class="item {% if search_type == '1' %}active{% endif %}">{% trans 'Clients' %}</a>
-                <a href="{% url 'core:search' %}?search_type=2" class="item {% if search_type == '2' %}active{% endif %}">{% trans 'Company' %}</a>
-                <a href="{% url 'core:search' %}?search_type=3" class="item {% if search_type == '3' %}active{% endif %}">{% trans 'Fees' %}</a>
-                <a href="{% url 'core:search' %}?search_type=4" class="item {% if search_type == '4' %}active{% endif %}">{% trans 'Payments' %}</a>
-            </div>
-            <div class="ui grid">
-                <div class="two wide column"></div>
-                <div class="twelve wide column">
-                    <form class="ui mini form" method="GET">
-                        {% if search_type == '1' %}
-                            <div class="field">
-                                <div class="two fields">
-                                    <div class="field">
-                                        <label>{% trans 'Login' %}</label>
-                                        {{ search_form.login }}
-                                    </div>
-                                    <div class="field">
-                                        <label>{% trans 'UID' %}</label>
-                                        {{ search_form.uid }}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="inline fields">
-                                <label for="fruit">Select your favorite fruit:</label>
-                                {% for radio in search_form.disabled %}
-                                    <div class="field">
-                                        <div class="ui radio checkbox">
-                                            {{ radio.tag }}
-                                            <label>{{ radio.choice_label }}</label>
+                <div class="ui grid">
+                    <div class="two wide column"></div>
+                    <div class="twelve wide column">
+                        <form class="ui mini form" method="GET">
+                            {% if search_type == '1' %}
+                                <div class="field">
+                                    <div class="two fields">
+                                        <div class="field">
+                                            <label>{% trans 'Login' %}</label>
+                                            {{ search_form.login }}
+                                        </div>
+                                        <div class="field">
+                                            <label>{% trans 'UID' %}</label>
+                                            {{ search_form.uid }}
                                         </div>
                                     </div>
-                                {% endfor %}
-                            </div>
-                            <div class="field">
-                                <div class="two fields">
-                                    <div class="field">
-                                        <label>{% trans 'District' %}</label>
-                                        {{ search_form.district }}
+                                </div>
+                                <div class="inline fields">
+                                    <label for="fruit">Select your favorite fruit:</label>
+                                    {% for radio in search_form.disabled %}
+                                        <div class="field">
+                                            <div class="ui radio checkbox">
+                                                {{ radio.tag }}
+                                                <label>{{ radio.choice_label }}</label>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="field">
+                                    <div class="two fields">
+                                        <div class="field">
+                                            <label>{% trans 'District' %}</label>
+                                            {{ search_form.district }}
+                                        </div>
+                                        <div class="field">
+                                            <label>{% trans 'Street' %}</label>
+                                            {{ search_form.street }}
+                                        </div>
                                     </div>
-                                    <div class="field">
-                                        <label>{% trans 'Street' %}</label>
-                                        {{ search_form.street }}
+                                    <div class="two fields">
+                                        <div class="field">
+                                            <label>{% trans 'House' %}</label>
+                                            {{ search_form.house }}
+                                        </div>
+                                        <div class="field">
+                                            <label>{% trans 'Flat' %}</label>
+                                            {{ search_form.flat }}
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="search" value="1">
+                                    <input type="hidden" name="search_type" value="1">
+                                    <hr/>
+                                </div>
+                            {% elif search_type == '3' %}
+                                <div class="field">
+                                    <label>Name</label>
+                                    <div class="two fields">
+                                        <div class="field">
+                                            <input name="shipping[first-name]" placeholder="First Name" type="text">
+                                        </div>
+                                        <div class="field">
+                                            <input name="shipping[last-name]" placeholder="Last Name" type="text">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="two fields">
-                                    <div class="field">
-                                        <label>{% trans 'House' %}</label>
-                                        {{ search_form.house }}
-                                    </div>
-                                    <div class="field">
-                                        <label>{% trans 'Flat' %}</label>
-                                        {{ search_form.flat }}
-                                    </div>
-                                </div>
-                                <input type="hidden" name="search" value="1">
-                                <input type="hidden" name="search_type" value="1">
-                                <hr/>
-                            </div>
-                        {% elif search_type == '3' %}
-                            <div class="field">
-                                <label>Name</label>
-                                <div class="two fields">
-                                    <div class="field">
-                                        <input name="shipping[first-name]" placeholder="First Name" type="text">
-                                    </div>
-                                    <div class="field">
-                                        <input name="shipping[last-name]" placeholder="Last Name" type="text">
+                            {% elif search_type == '4' %}
+                                <div class="field">
+                                    <label>Name</label>
+                                    <div class="two fields">
+                                        <div class="field">
+                                            <input name="shipping[first-name]" placeholder="First Name" type="text">
+                                        </div>
+                                        <div class="field">
+                                            <input name="shipping[last-name]" placeholder="Last Name" type="text">
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        {% elif search_type == '4' %}
-                            <div class="field">
-                                <label>Name</label>
-                                <div class="two fields">
-                                    <div class="field">
-                                        <input name="shipping[first-name]" placeholder="First Name" type="text">
-                                    </div>
-                                    <div class="field">
-                                        <input name="shipping[last-name]" placeholder="Last Name" type="text">
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                        <button class="ui submit button" tabindex="0">Submit Order</button>
-                    </form>
+                            {% endif %}
+                            <button class="ui submit button" tabindex="0">Submit Order</button>
+                        </form>
+                    </div>
+                    <div class="two wide column"></div>
                 </div>
-                <div class="two wide column"></div>
             </div>
                 {% if search_type == '1' %}
 
