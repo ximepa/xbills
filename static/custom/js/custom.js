@@ -106,20 +106,20 @@ function comments_add (theLink, Message, CustomMsg) {
 }
 
 
-var claim = "claim";
-global.getClaimsNotifi = function () {
-   $.getJSON('/admin/claims/?claim_notifi', function (data) {
-       if (claim && getCookie('cuid') != data.claim[1]) {
-           $.each(data, function (index, value) {
-               toastr.claims(value[0], 'UID: <a style="color: white" href="clients/' + value[1] + '"' + '>' + value[1] + '</a>', value[2], value[3], value[4],
-                   {timeOut: 0, onclick: null, extendedTimeOut: 0})
-           })
-       }
-       claim = data.claim[1];
-	setCookie('cuid', data.claim[1]);
-   })
-
-};
+// var claim = "claim";
+// global.getClaimsNotifi = function () {
+//    $.getJSON('/admin/claims/?claim_notifi', function (data) {
+//        if (claim && getCookie('cuid') != data.claim[1]) {
+//            $.each(data, function (index, value) {
+//                toastr.claims(value[0], 'UID: <a style="color: white" href="clients/' + value[1] + '"' + '>' + value[1] + '</a>', value[2], value[3], value[4],
+//                    {timeOut: 0, onclick: null, extendedTimeOut: 0})
+//            })
+//        }
+//        claim = data.claim[1];
+// 	setCookie('cuid', data.claim[1]);
+//    })
+//
+// };
 // dashboard.getProc = function() {
 //       function rowStyle(row, index) {
 //           if (row.cpu > 35 && row.cpu < 50) {

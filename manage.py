@@ -5,7 +5,6 @@ import sys
 
 
 if __name__ == "__main__":
-    from twisted.internet import reactor
 
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "xbills.settings")
 

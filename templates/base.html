@@ -121,6 +121,23 @@
                         <div class="item">
                             <a class="title">
                                 <i class="dropdown icon"></i>
+                                {% trans 'Monitoring' %}
+                            </a>
+                            <div class="{% active_startwith request 'core:clients' %} content">
+                                <div class="ui form">
+                                    <div class="grouped fields">
+                                        <div class="menu">
+                                                <a href="{% url 'ipdhcp:mon_dhcp' %}" class="item">{% trans 'Logins1' %}</a>
+                                            <a class="item">Add</a>
+                                            <a class="item">Remove</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <a class="title">
+                                <i class="dropdown icon"></i>
                                 Colors
                             </a>
                             <div class="content">

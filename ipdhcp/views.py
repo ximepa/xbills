@@ -1,7 +1,7 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
-from core.models import num_to_ip, ip_to_num
+from core.models import num_to_ip, ip_to_num, Dv_calls, Nas
 from .models import Dhcphosts_networks, Dhcphosts_hosts, User, new_ip
 from xbills import settings
 from .forms import Dhcphosts_hostsForm
@@ -31,6 +31,7 @@ def dhcps(request):
         end = str(int(page)+5+1)
     else:
         end = paginator.num_pages+1
+    print dhcp_page
     page_range = range(int(start), int(end)),
     for p in page_range:
         page_list = p
@@ -113,3 +114,26 @@ def user_dhcp(request, uid, host_id=None):
         host.delete()
         return redirect(reverse('core:user_dhcp', kwargs={'uid': uid}))
     return render(request, 'user_dhcp.html', locals())
+
+
+def remove_duplicates(values):
+    output = []
+    seen = set()
+    for value in values:
+        # If value has not been encountered yet,
+        # ... add it to both list and set.
+        if value.nas_id not in seen:
+            output.append(value.nas_id)
+            seen.add(value.nas_id)
+    return output
+
+
+def mon_dhcp(request):
+    nas = []
+    sess = Dv_calls.objects.all()
+    nas_list = remove_duplicates(sess)
+    for nass in nas_list:
+        nas.append(Nas.objects.filter(id=nass).values())
+        print nas
+
+    return render(request, 'mon_dhcp.html', locals())

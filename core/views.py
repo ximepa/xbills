@@ -167,7 +167,7 @@ def client_errors(request, uid):
     user_errors = ErrorsLog.objects.filter(user=client.login)
     paginator = Paginator(user_errors, settings.USER_ERRORS_PER_PAGE)
     page = request.GET.get('page', 1)
-
+    dv_session = Dv_calls.objects.filter(uid=uid)
     try:
         errors = paginator.page(page)
     except PageNotAnInteger:
@@ -205,6 +205,7 @@ def client_statistics(request, uid):
     user_statistics = Dv_log.objects.filter(uid=uid).order_by(order_by)
     paginator = Paginator(user_statistics, settings.USER_ERRORS_PER_PAGE)
     page = request.GET.get('page', 1)
+    dv_session = Dv_calls.objects.filter(uid=uid)
     try:
         statistics = paginator.page(page)
     except PageNotAnInteger:
