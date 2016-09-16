@@ -8,11 +8,15 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import RedirectView
+from django.views.generic import TemplateView
+from django.views.generic import View
+
 from dv.helpers import Hangup
 from ipdhcp.models import Dhcphosts_networks, Dhcphosts_hosts
 from .auth_backend import AuthBackend
 from .models import User, Payment, Fees, Dv, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog, Dv_log, Admin, num_to_ip, AdminSettings, \
-    AdminLog, ip_to_num, Group
+    AdminLog, ip_to_num, Group, Company
 from ipdhcp.models import ipRange
 from .forms import AdministratorForm, SearchForm, SearchFeesForm, SearchPaymentsForm, ClientForm, DvForm, UserPiForm
 from django.contrib import messages
@@ -532,6 +536,119 @@ def client(request, uid):
     return render(request, 'user_edit.html', locals())
 
 
+@login_required()
+def client_payments(request, uid):
+    dv_session = Dv_calls.objects.filter(uid=uid)
+    out_sum = 0
+    order_by = request.GET.get('order_by', '-date')
+    try:
+        client = User.objects.get(id=uid)
+    except User.DoesNotExist:
+        return render(request, '404.html', locals())
+    payments_list = Payment.objects.filter(uid=client.id).order_by(order_by)
+    for ex_payments in payments_list:
+        out_sum = out_sum + ex_payments.sum
+    paginator = Paginator(payments_list, settings.PAYMENTS_PER_PAGE)
+    page = request.GET.get('page', 1)
+    if helpers.module_check('olltv'):
+        olltv_module = True
+    else:
+        olltv_module = False
+    try:
+        payments = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        payments = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        payments = paginator.page(paginator.num_pages)
+    if int(page) > 5:
+        start = str(int(page)-5)
+    else:
+        start = 1
+    if int(page) < paginator.num_pages-5:
+        end = str(int(page)+5+1)
+    else:
+        end = paginator.num_pages+1
+    page_range = range(int(start), int(end)),
+    for p in page_range:
+        page_list = p
+    pre_end = payments.paginator.num_pages - 2
+    if 'del' in request.GET:
+        del_payment = Payment.objects.get(id=request.GET['del'])
+        print request.GET
+        log = AdminLog(
+            actions='test',
+            datetime=datetime.datetime.now(),
+            ip=ip_to_num('127.0.0.1'),
+            user_id=uid,
+            admin_id=40,
+        )
+        #log.save()
+        #print log.admin
+        #del_payment.delete()
+    if 'xml' in request.GET:
+        xml_data = serializers.serialize("xml", payments)
+        return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
+    if 'csv' in request.GET:
+        return helpers.export_to_csv(request, payments, fields=('id', 'uid'), name='login')
+    return render(request, 'user_payments.html', locals())
+
+
+@login_required()
+def client_fees(request, uid):
+    dv_session = Dv_calls.objects.filter(uid=uid)
+    out_sum = 0
+    order_by = request.GET.get('order_by', '-date')
+    try:
+        client = User.objects.get(id=uid)
+    except User.DoesNotExist:
+        return render(request, '404.html', locals())
+    fees_list = Fees.objects.filter(uid=client.id).order_by(order_by)
+    for ex_fees in fees_list:
+        out_sum = out_sum + ex_fees.sum
+    paginator = Paginator(fees_list, settings.FEES_PER_PAGE)
+    page = request.GET.get('page', 1)
+    try:
+        fees = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        fees = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        fees = paginator.page(paginator.num_pages)
+    if int(page) > 5:
+        start = str(int(page)-5)
+    else:
+        start = 1
+    if int(page) < paginator.num_pages-5:
+        end = str(int(page)+5+1)
+    else:
+        end = paginator.num_pages+1
+    page_range = range(int(start), int(end)),
+    for p in page_range:
+        page_list = p
+    pre_end = fees.paginator.num_pages - 2
+    if 'del' in request.GET:
+        return redirect(request.GET['return_url'])
+    if 'export_submit' in request.POST:
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
+        writer = csv.writer(response)
+        writer.writerow(['Service', 'Sum'])
+        for ex_fees in fees_list.filter(uid=uid, date__range=(request.POST['Last'], request.POST['First'])):
+            writer.writerow([ex_fees.dsc.encode('utf-8'), ex_fees.sum])
+            out_sum = out_sum + ex_fees.sum
+        writer.writerow(['', out_sum])
+        return response
+    if 'xml' in request.GET:
+        xml_data = serializers.serialize("xml", fees)
+        return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
+    if 'csv' in request.GET:
+        return helpers.export_to_csv(request, fees, fields=('id', 'uid'), name='login')
+    return render(request, 'user_fees.html', locals())
+
+
 def clients(request):
     filter_by = request.GET.get('users_status', '0')
     order_by = request.GET.get('order_by', 'login')
@@ -644,31 +761,21 @@ def fees(request):
 
 
 @login_required()
-def client_payments(request, uid):
-    dv_session = Dv_calls.objects.filter(uid=uid)
-    out_sum = 0
-    order_by = request.GET.get('order_by', '-date')
-    try:
-        client = User.objects.get(id=uid)
-    except User.DoesNotExist:
-        return render(request, '404.html', locals())
-    payments_list = Payment.objects.filter(uid=client.id).order_by(order_by)
-    for ex_payments in payments_list:
-        out_sum = out_sum + ex_payments.sum
-    paginator = Paginator(payments_list, settings.PAYMENTS_PER_PAGE)
+def company(request):
+    order_by = request.GET.get('order_by', '-name')
+    company_list = Company.objects.all().order_by(order_by)
+    for c in company_list:
+        print c.bill.uid
+    paginator = Paginator(company_list, 20)
     page = request.GET.get('page', 1)
-    if helpers.module_check('olltv'):
-        olltv_module = True
-    else:
-        olltv_module = False
     try:
-        payments = paginator.page(page)
+        company = paginator.page(page)
     except PageNotAnInteger:
         # If page is not an integer, deliver first page.
-        payments = paginator.page(1)
+        company = paginator.page(1)
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
-        payments = paginator.page(paginator.num_pages)
+        company = paginator.page(paginator.num_pages)
     if int(page) > 5:
         start = str(int(page)-5)
     else:
@@ -680,80 +787,8 @@ def client_payments(request, uid):
     page_range = range(int(start), int(end)),
     for p in page_range:
         page_list = p
-    pre_end = payments.paginator.num_pages - 2
-    if 'del' in request.GET:
-        del_payment = Payment.objects.get(id=request.GET['del'])
-        print request.GET
-        log = AdminLog(
-            actions='test',
-            datetime=datetime.datetime.now(),
-            ip=ip_to_num('127.0.0.1'),
-            user_id=uid,
-            admin_id=40,
-        )
-        #log.save()
-        #print log.admin
-        #del_payment.delete()
-    if 'xml' in request.GET:
-        xml_data = serializers.serialize("xml", payments)
-        return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
-    if 'csv' in request.GET:
-        return helpers.export_to_csv(request, payments, fields=('id', 'uid'), name='login')
-    return render(request, 'user_payments.html', locals())
-
-
-@login_required()
-def client_fees(request, uid):
-    dv_session = Dv_calls.objects.filter(uid=uid)
-    out_sum = 0
-    order_by = request.GET.get('order_by', '-date')
-    try:
-        client = User.objects.get(id=uid)
-    except User.DoesNotExist:
-        return render(request, '404.html', locals())
-    fees_list = Fees.objects.filter(uid=client.id).order_by(order_by)
-    for ex_fees in fees_list:
-        out_sum = out_sum + ex_fees.sum
-    paginator = Paginator(fees_list, settings.FEES_PER_PAGE)
-    page = request.GET.get('page', 1)
-    try:
-        fees = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        fees = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        fees = paginator.page(paginator.num_pages)
-    if int(page) > 5:
-        start = str(int(page)-5)
-    else:
-        start = 1
-    if int(page) < paginator.num_pages-5:
-        end = str(int(page)+5+1)
-    else:
-        end = paginator.num_pages+1
-    page_range = range(int(start), int(end)),
-    for p in page_range:
-        page_list = p
-    pre_end = fees.paginator.num_pages - 2
-    if 'del' in request.GET:
-        return redirect(request.GET['return_url'])
-    if 'export_submit' in request.POST:
-        response = HttpResponse(content_type='text/csv')
-        response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'
-        writer = csv.writer(response)
-        writer.writerow(['Service', 'Sum'])
-        for ex_fees in fees_list.filter(uid=uid, date__range=(request.POST['Last'], request.POST['First'])):
-            writer.writerow([ex_fees.dsc.encode('utf-8'), ex_fees.sum])
-            out_sum = out_sum + ex_fees.sum
-        writer.writerow(['', out_sum])
-        return response
-    if 'xml' in request.GET:
-        xml_data = serializers.serialize("xml", fees)
-        return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
-    if 'csv' in request.GET:
-        return helpers.export_to_csv(request, fees, fields=('id', 'uid'), name='login')
-    return render(request, 'user_fees.html', locals())
+    pre_end = company.paginator.num_pages - 2
+    return render(request, 'company.html', locals())
 
 
 def user_login(request):

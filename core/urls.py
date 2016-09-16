@@ -18,6 +18,7 @@ urlpatterns = [
     #url(r'^users/$', views.users, name='users'),
     url(r'^payments/$', views.payments, name='payments'),
     url(r'^fees/$', views.fees, name='fees'),
+    url(r'^company/$', views.company, name='company'),
     url(r'^settings/administrators/$', views.administrators, name='administrators'),
     url(r'^settings/administrators/(?P<uid>\d+)/$', views.administrator_edit, name='administrator_edit'),
     url(r'^settings/nas/$', views.nas, name='nas'),

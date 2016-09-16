@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <title>{% block title %}Xbills v0.0.7{% endblock %}</title>
     <link rel="shortcut icon" href="{% static 'custom/images/favicon.ico' %}" type="image/x-icon">
-    <link href="{% static 'semantic-ui/semantic.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'semantic-ui/semantic.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'custom/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'custom/css/jquery-ui.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'custom/css/toastr.css' %}" rel="stylesheet" type="text/css">
@@ -32,7 +32,7 @@
 </head>
 <body id="content" class="texture">
     {% block wrapper %}
-        <div class="ui stackable small menu">
+        <div class="ui stackable small menu" style="margin-left: 0.5em; margin-right: 0.5em">
             <div class="header item">
                 XBills {% version %}
             </div>
@@ -92,75 +92,75 @@
             </div>
         </div>
         <div class="ui stackable grid" style="padding: 5px">
-            <div class="row">
-                <div class="two wide column">
-                    <div id="sideBar" class="ui sticky vertical accordion menu">
-                        <div class="item">
-                            <a class="{% active_startwith request 'core:clients' %} title">
-                                <i class="dropdown icon"></i>
-                                {% trans 'Clients' %}
-                            </a>
-                            <div class="{% active_startwith request 'core:clients' %} content">
-                                <div class="ui form">
-                                    <div class="grouped fields">
-                                        <div class="menu">
-                                                <a href="{% url 'core:clients' %}" class="{% active request 'core:clients' %} item">{% trans 'Logins' %}</a>
-                                            <a class="item">Add</a>
-                                            <a class="item">Remove</a>
-                                        </div>
+            <div class="two wide column">
+                <div id="sideBar" class="ui sticky vertical accordion menu">
+                    <div class="item">
+                        <a class="{% active_startwith request 'core:clients' %} title">
+                            <i class="dropdown icon"></i>
+                            {% trans 'Clients' %}
+                        </a>
+                        <div class="{% active_startwith request 'core:clients' %} content">
+                            <div class="ui form">
+                                <div class="grouped fields">
+                                    <div class="menu">
+                                        <a href="{% url 'core:clients' %}" class="{% active request 'core:clients' %} item">{% trans 'Logins' %}</a>
+                                        <a href="{% url 'core:company' %}" class="{% active request 'core:company' %} item">{% trans 'Company' %}</a>
+                                        <a class="item">Add</a>
+                                        <a class="item">Remove</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <a class="item" href="{% url 'core:fees' %}">
-                            {% trans 'Fees' %}
+                    </div>
+                    <a class="item" href="{% url 'core:fees' %}">
+                        {% trans 'Fees' %}
+                    </a>
+                    <a class="item" href="{% url 'core:payments' %}">
+                        {% trans 'Payments' %}
+                    </a>
+                    <div class="item">
+                        <a class="title">
+                            <i class="dropdown icon"></i>
+                            {% trans 'Monitoring' %}
                         </a>
-                        <a class="item" href="{% url 'core:payments' %}">
-                            {% trans 'Payments' %}
-                        </a>
-                        <div class="item">
-                            <a class="title">
-                                <i class="dropdown icon"></i>
-                                {% trans 'Monitoring' %}
-                            </a>
-                            <div class="{% active_startwith request 'core:clients' %} content">
-                                <div class="ui form">
-                                    <div class="grouped fields">
-                                        <div class="menu">
-                                                <a href="{% url 'ipdhcp:mon_dhcp' %}" class="item">{% trans 'Logins1' %}</a>
-                                            <a class="item">Add</a>
-                                            <a class="item">Remove</a>
-                                        </div>
+                        <div class="{% active_startwith request 'core:clients' %} content">
+                            <div class="ui form">
+                                <div class="grouped fields">
+                                    <div class="menu">
+                                            <a href="{% url 'ipdhcp:mon_dhcp' %}" class="item">{% trans 'Logins1' %}</a>
+                                        <a class="item">Add</a>
+                                        <a class="item">Remove</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="item">
-                            <a class="title">
-                                <i class="dropdown icon"></i>
-                                Colors
-                            </a>
-                            <div class="content">
-                                <div class="ui form">
-                                    <div class="grouped fields">
-                                        <div class="field">
-                                            <div class="ui checkbox">
-                                                <input name="small" type="checkbox">
-                                                <label>Red</label>
-                                            </div>
+                    </div>
+                    <div class="item">
+                        <a class="title">
+                            <i class="dropdown icon"></i>
+                            Colors
+                        </a>
+                        <div class="content">
+                            <div class="ui form">
+                                <div class="grouped fields">
+                                    <div class="field">
+                                        <div class="ui checkbox">
+                                            <input name="small" type="checkbox">
+                                            <label>Red</label>
                                         </div>
-                                        <div class="field">
-                                            <div class="ui checkbox">
-                                                <input name="medium" type="checkbox">
-                                                <label>Orange</label>
-                                            </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui checkbox">
+                                            <input name="medium" type="checkbox">
+                                            <label>Orange</label>
                                         </div>
-                                        <div class="field">
-                                            <div class="ui checkbox">
-                                                <input name="large" type="checkbox">
-                                                <label>Green</label>
-                                            </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui checkbox">
+                                            <input name="large" type="checkbox">
+                                            <label>Green</label>
                                         </div>
+                                    </div>
                                         <div class="field">
                                             <div class="ui checkbox">
                                                 <input name="x-large" type="checkbox">
@@ -216,7 +216,6 @@
                     </div>
                 </div>
             </div>
-        </div>
         <script>
             function refresh2() {
                 setTimeout(function(){

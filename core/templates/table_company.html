@@ -1,0 +1,54 @@
+{% load i18n %}
+{% load url %}
+{% load staticfiles %}
+<table class="ui blue small very compact selectable striped table">
+    <thead>
+        <tr>
+            <th><a href="?{% url_replace request 'order_by' 'id' %}">{% trans 'ID' %}</a></th>
+            <th><a href="?{% url_replace request 'order_by' 'name' %}">{% trans 'Name' %}</a></th>
+            <th><a href="?{% url_replace request 'order_by' 'name' %}">{% trans 'Deposit' %}</a></th>
+            <th><a href="?{% url_replace request 'order_by' 'date' %}">{% trans 'Credit' %}</a></th>
+            <th><a href="?{% url_replace request 'order_by' 'dsc' %}">{% trans 'Registration' %}</a></th>
+            <th><a href="?{% url_replace request 'order_by' 'sum' %}">{% trans 'Users' %}</a></th>
+            <th><a href="?{% url_replace request 'order_by' 'last_deposit' %}">{% trans 'Status' %}</a></th>
+            <th>-</th>
+            <th>-</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in company %}
+        <tr>
+            <td>{{ c.id }}</td>
+            <td>{{ c.name }}</td>
+            {% if c.bill < 0 %}
+                <td><span style="color: red">{{ c.bill }}</span></td>
+            {% elif c.bill > 1 %}
+                <td><span style="color: green">{{ c.bill }}</span></td>
+            {% else %}
+                <td>{{ c.bill }}</td>
+            {% endif %}
+            {% if c.credit > 0 %}
+                <td><span style="color: green">{{ c.credit }}</span></td>
+            {% else %}
+                <td>{{ c.credit }}</td>
+            {% endif %}
+        <td>{{ c.name }}</td>
+        <td>{{ c.bill__uid }}</td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+{#            <th><div class="ui blue tiny label">{% trans 'Sum' %}<div class="detail">{{ out_sum }}</div></div></th>#}
+            <th></th>
+            <th></th>
+{#            <th><div class="ui blue tiny label">{% trans 'All' %} <div class="detail">{{ fees_list.count }}</div></div></th>#}
+            <th></th>
+        </tr>
+    </tfoot>
+</table>

@@ -383,28 +383,58 @@
 /* Indicating */
 .ui.indicating.progress[data-percent^="1"] .bar,
 .ui.indicating.progress[data-percent^="2"] .bar {
-
-    background-color: #66DA81;
+    background: rgba(0,255,0,0.5);
+    background: -moz-linear-gradient(top, rgba(0, 255, 0, 0.5) 0%, rgba(0, 255, 0, 0.9) 51%, rgba(0,255,0,0.5) 100%);
+    background: -webkit-linear-gradient(top, rgba(0, 255, 0, 0.5) 0%, rgba(0, 255, 0, 0.9) 51%, rgba(0,255,0,0.5) 100%);
+    background: -o-linear-gradient(top, rgba(0, 255, 0, 0.5) 0%, rgba(0, 255, 0, 0.9) 51%, rgba(0,255,0,0.5) 100%);
+    background: -ms-linear-gradient(top, rgba(0, 255, 0, 0.5) 0%, rgba(0, 255, 0, 0.9) 51%, rgba(0,255,0,0.5) 100%);
+    background: linear-gradient(to bottom, rgba(0, 255, 0, 0.5) 0%, rgba(0, 255, 0, 0.9) 51%, rgba(0,255,0,0.5) 100%);
 }
 .ui.indicating.progress[data-percent^="3"] .bar {
 
-    background-color: #B4D95C;
+    background: rgba(237, 255, 0, 0.5);
+    background: -moz-linear-gradient(top, rgba(237, 255, 0, 0.5) 0%, rgba(237, 255, 0, 0.9) 51%, rgba(237, 255, 0, 0.5) 100%);
+    background: -webkit-linear-gradient(top, rgba(237, 255, 0, 0.5) 0%, rgba(237, 255, 0, 0.9) 51%, rgba(237, 255, 0, 0.5) 100%);
+    background: -o-linear-gradient(top, rgba(237, 255, 0, 0.5) 0%, rgba(237, 255, 0, 0.9) 51%, rgba(237, 255, 0, 0.5) 100%);
+    background: -ms-linear-gradient(top, rgba(237, 255, 0, 0.5) 0%, rgba(237, 255, 0, 0.9) 51%, rgba(237, 255, 0, 0.5) 100%);
+    background: linear-gradient(to bottom, rgba(237, 255, 0, 0.5) 0%, rgba(237, 255, 0, 0.9) 51%, rgba(237, 255, 0, 0.5) 100%);
 }
 .ui.indicating.progress[data-percent^="4"] .bar,
 .ui.indicating.progress[data-percent^="5"] .bar {
 
-    background-color: #DDC928;
+    background: rgba(255, 238, 0, 0.5);
+    background: -moz-linear-gradient(top, rgba(255, 238, 0, 0.5) 0%, rgba(255, 238, 0, 0.9) 50%, rgba(255, 238, 0, 0.5) 100%);
+    background: -webkit-linear-gradient(top, rgba(255, 238, 0, 0.5) 0%, rgba(255, 238, 0, 0.9) 50%, rgba(255, 238, 0, 0.5) 100%);
+    background: -o-linear-gradient(top, rgba(255, 238, 0, 0.5) 0%, rgba(255, 238, 0, 0.9) 50%, rgba(255, 238, 0, 0.5) 100%);
+    background: -ms-linear-gradient(top, rgba(255, 238, 0, 0.5) 0%, rgba(255, 238, 0, 0.9) 50%, rgba(255, 238, 0, 0.5) 100%);
+    background: linear-gradient(to bottom, rgba(255, 238, 0, 0.5) 0%, rgba(255, 238, 0, 0.9) 50%, rgba(255, 238, 0, 0.5) 100%);
 }
 .ui.indicating.progress[data-percent^="6"] .bar {
-    background-color: #E6BB48;
+    background: rgba(255, 148, 0, 0.5);
+    background: -moz-linear-gradient(top, rgba(255, 148, 0, 0.5) 0%, rgba(255, 148, 0, 0.9) 50%, rgba(255, 148, 0, 0.5) 100%);
+    background: -webkit-linear-gradient(top, rgba(255, 148, 0, 0.5) 0%, rgba(255, 148, 0, 0.9) 50%, rgba(255, 148, 0, 0.5) 100%);
+    background: -o-linear-gradient(top, rgba(255, 148, 0, 0.5) 0%, rgba(255, 148, 0, 0.9) 50%, rgba(255, 148, 0, 0.5) 100%);
+    background: -ms-linear-gradient(top, rgba(255, 148, 0, 0.5) 0%, rgba(255, 148, 0, 0.9) 50%, rgba(255, 148, 0, 0.5) 100%);
+    background: linear-gradient(to bottom, rgba(255, 148, 0, 0.5) 0%, rgba(255, 148, 0, 0.9) 50%, rgba(255, 148, 0, 0.5) 100%);
 }
 .ui.indicating.progress[data-percent^="7"] .bar,
 .ui.indicating.progress[data-percent^="8"] .bar {
-    background-color: #EFBC72;
+    background: rgba(255, 80, 0, 0.5);
+    background: -moz-linear-gradient(top, rgba(255, 80, 0, 0.5) 0%, rgba(255, 80, 0, 0.9) 50%, rgba(255, 80, 0, 0.5) 100%);
+    background: -webkit-linear-gradient(top, rgba(255, 80, 0, 0.5) 0%, rgba(255, 80, 0, 0.9) 50%, rgba(255, 80, 0, 0.5) 100%);
+    background: -o-linear-gradient(top, rgba(255, 80, 0, 0.5) 0%, rgba(255, 80, 0, 0.9) 50%, rgba(255, 80, 0, 0.5) 100%);
+    background: -ms-linear-gradient(top, rgba(255, 80, 0, 0.5) 0%, rgba(255, 80, 0, 0.9) 50%, rgba(255, 80, 0, 0.5) 100%);
+    background: linear-gradient(to bottom, rgba(255, 80, 0, 0.5) 0%, rgba(255, 80, 0, 0.9) 50%, rgba(255, 80, 0, 0.5) 100%);
+
 }
 .ui.indicating.progress[data-percent^="9"] .bar,
 .ui.indicating.progress[data-percent^="100"] .bar {
-    background-color: #D95C5C;
+    background: rgba(255, 0, 0, 0.5);
+    background: -moz-linear-gradient(top, rgba(255, 0, 0, 0.5) 0%, rgba(255, 0, 0, 0.9) 50%, rgba(255, 0, 0, 0.5) 100%);
+    background: -webkit-linear-gradient(top, rgba(255, 0, 0, 0.5) 0%, rgba(255, 0, 0, 0.9) 50%, rgba(255, 0, 0, 0.5) 100%);
+    background: -o-linear-gradient(top, rgba(255, 0, 0, 0.5) 0%, rgba(255, 0, 0, 0.9) 50%, rgba(255, 0, 0, 0.5) 100%);
+    background: -ms-linear-gradient(top, rgba(255, 0, 0, 0.5) 0%, rgba(255, 0, 0, 0.9) 50%, rgba(255, 0, 0, 0.5) 100%);
+    background: linear-gradient(to bottom, rgba(255, 0, 0, 0.5) 0%, rgba(255, 0, 0, 0.9) 50%, rgba(255, 0, 0, 0.5) 100%);
 }
 
 /* Indicating Label */
@@ -441,7 +471,12 @@
 .ui.indicating.progress[data-percent="7"] .bar,
 .ui.indicating.progress[data-percent="8"] .bar,
 .ui.indicating.progress[data-percent="9"] .bar {
-  background-color: #00d937;
+    background: rgba(0,255,0,0.5);
+    background: -moz-linear-gradient(top, rgba(0, 255, 0, 0.5) 0%, rgba(0, 255, 0, 0.9) 51%, rgba(0,255,0,0.5) 100%);
+    background: -webkit-linear-gradient(top, rgba(0, 255, 0, 0.5) 0%, rgba(0, 255, 0, 0.9) 51%, rgba(0,255,0,0.5) 100%);
+    background: -o-linear-gradient(top, rgba(0, 255, 0, 0.5) 0%, rgba(0, 255, 0, 0.9) 51%, rgba(0,255,0,0.5) 100%);
+    background: -ms-linear-gradient(top, rgba(0, 255, 0, 0.5) 0%, rgba(0, 255, 0, 0.9) 51%, rgba(0,255,0,0.5) 100%);
+    background: linear-gradient(to bottom, rgba(0, 255, 0, 0.5) 0%, rgba(0, 255, 0, 0.9) 51%, rgba(0,255,0,0.5) 100%);
 }
 .ui.indicating.progress[data-percent="1"] .label,
 .ui.indicating.progress[data-percent="2"] .label,
