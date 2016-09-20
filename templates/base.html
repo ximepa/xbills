@@ -19,6 +19,8 @@
     {% block jquery %}
         <script src="{% static 'custom/js/jquery-2.2.4.min.js' %}"></script>
     {% endblock %}
+    <script src="{% static 'custom/js/jquery-2.2.4.min.js' %}"></script>
+
     <script src="{{ STATIC_URL }}js/ws4redis.js" type="text/javascript"></script>
     <script src="{% static 'custom/js/jquery.cookie.js' %}"></script>
     <script src="{% static 'semantic-ui/semantic.min.js' %}"></script>
@@ -105,6 +107,7 @@
                                     <div class="menu">
                                         <a href="{% url 'core:clients' %}" class="{% active request 'core:clients' %} item">{% trans 'Logins' %}</a>
                                         <a href="{% url 'core:company' %}" class="{% active request 'core:company' %} item">{% trans 'Company' %}</a>
+                                        <a href="{% url 'core:group' %}" class="{% active request 'core:group' %} item">{% trans 'Group' %}</a>
                                         <a class="item">Add</a>
                                         <a class="item">Remove</a>
                                     </div>
@@ -127,7 +130,6 @@
                             <div class="ui form">
                                 <div class="grouped fields">
                                     <div class="menu">
-                                            <a href="{% url 'ipdhcp:mon_dhcp' %}" class="item">{% trans 'Logins1' %}</a>
                                         <a class="item">Add</a>
                                         <a class="item">Remove</a>
                                     </div>

@@ -114,26 +114,3 @@ def user_dhcp(request, uid, host_id=None):
         host.delete()
         return redirect(reverse('core:user_dhcp', kwargs={'uid': uid}))
     return render(request, 'user_dhcp.html', locals())
-
-
-def remove_duplicates(values):
-    output = []
-    seen = set()
-    for value in values:
-        # If value has not been encountered yet,
-        # ... add it to both list and set.
-        if value.nas_id not in seen:
-            output.append(value.nas_id)
-            seen.add(value.nas_id)
-    return output
-
-
-def mon_dhcp(request):
-    nas = []
-    sess = Dv_calls.objects.all()
-    nas_list = remove_duplicates(sess)
-    for nass in nas_list:
-        nas.append(Nas.objects.filter(id=nass).values())
-        print nas
-
-    return render(request, 'mon_dhcp.html', locals())

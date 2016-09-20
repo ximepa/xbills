@@ -92,8 +92,10 @@ class Company(models.Model):
 
     bill = models.ForeignKey(Bill, related_name='companies')
     name = models.CharField(max_length=100, unique=True)
+    registration = models.DateField(default='0000-00-00')
     credit = models.FloatField(default=0)
     credit_date = models.DateField()
+    disable = models.SmallIntegerField(default=0)
 
     def __unicode__(self):
         return self.name

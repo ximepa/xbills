@@ -16,25 +16,14 @@
         </tr>
     </thead>
     <tbody>
-        {% for c in company %}
+        {% for g in group %}
         <tr>
-            <td><a href="{% url 'core:company' %}?change={{ c.id }}">{{ c.id }}</a></td>
-            <td id='company-{{c.id}}'><a href=javascript:getCompany({{c.id}})>{{ c.name }}</a></td>
-            {% if c.bill.deposit > 0 and c.credit > 0 or c.bill.deposit > 0 and c.credit == 0 %}
-                <td><span style="color: green">{{ c.bill.deposit }}</span></td>
-            {% elif c.bill.deposit < 0 and c.credit < 0 or c.bill.deposit < 0 and c.credit == 0 %}
-                <td><span style="color: red">{{ c.bill }}</span></td>
-            {% else %}
-                <td>{{ c.bill }}</td>
-            {% endif %}
-            {% if c.credit > 0 %}
-                <td><span style="color: green">{{ c.credit }}</span></td>
-            {% else %}
-                <td>{{ c.credit }}</td>
-            {% endif %}
-            <td>{{ c.registration }}</td>
-            <td>{% user_company c.id %}</td>
-            <td>{% status c.disable %}</td>
+            <td><a href="{% url 'core:group' %}?change={{ g.id }}">{{ g.id }}</a></td>
+            <td id='company-{{c.id}}'><a href=javascript:getCompany({{g.id}})>{{ g.name }}</a></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{% user_group g.id %}</td>
 
         </tr>
         {% endfor %}

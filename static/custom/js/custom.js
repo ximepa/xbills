@@ -1,7 +1,6 @@
 var dashboard = {};
 var global = {};
 $( document ).ready(function() {
-
     //$('.menu-toggle-button').click(function(){
     //    $('.sidebar').sidebar('setting', {dimPage: false}).sidebar('toggle');
     //});
@@ -49,6 +48,33 @@ function setCookie(cname, value) {
 
 }
 
+function getCompany(id) {
+    $.getJSON('/admin/company/?company_id=' + id, function (data) {
+        var table = document.getElementById("table_test");
+            // var orderArrayHeader = ["Login","UID","Company","Credit"];
+            // var tthead = document.createElement('thead');
+            // table.appendChild(tthead);
+            // for(var n=0;n<orderArrayHeader.length;n++){
+            //     tthead.appendChild(document.createElement("th")).appendChild(document.createTextNode(orderArrayHeader[n]));
+            // }
+            // alert(table.tHead.rows.length);
+
+        if (table.rows.length == 0) {
+        } else {
+            for(var i = table.rows.length; i > 0;i--) {
+                table.deleteRow(i - 1);
+            }
+        }
+        $.each(data, function (index, value) {
+            var row = table.insertRow();
+            row.insertCell(0).innerHTML = value.fields.login;
+            row.insertCell(1).innerHTML = '<a href=/admin/clients/' + value.pk + '>' + value.pk +'</a>';
+            row.insertCell(2).innerHTML = value.fields.company;
+            row.insertCell(3).innerHTML = value.fields.credit;
+        });
+        $('#company_modal').modal('show')
+    });
+}
 
 function getCookie(cname) {
     var name = cname + "=";

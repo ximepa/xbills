@@ -12,55 +12,96 @@
     <div class="row">
         <div class="column">
             <div class="ui blue segment">
-                {% if company %}
-                    <div class="ui sticky mini fluid pagination menu">
-                        <div class="header item">{% trans 'Export' %}</div>
-                        <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
-                            <i class="gamepad icon"></i>
-                            Xml
-                        </a>
-                        <a href="?{% url_replace request 'csv' '1' %}" class="item">
-                            <i class="video camera icon"></i>
-                            Csv
-                        </a>
-                        <div class="header right floated item">{% trans 'Pagination' %}</div>
-                        {% if company.number == 1 %}
-                            <div class="disabled item">
-                                1
+                {% if r_company == 1 %}
+                    {% if company %}
+                        <div id="company_modal" class="ui modal">
+                            <i class="close icon"></i>
+                            <div class="header">
                             </div>
-                        {% endif %}
-                        {% if company.has_previous %}
-                            <a href="?{% url_replace_page request 'page' '1' %}" class="item">1</a>
-                            {% if company.number > 7 %}
+                            <div class="content">
+                                <table id="table_test" class="ui blue small very compact selectable striped table">
+                                </table>
+                            </div>
+                        </div>
+                        <div class="ui sticky mini fluid pagination menu">
+                            <div class="header item">{% trans 'Export' %}</div>
+                            <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
+                                <i class="gamepad icon"></i>
+                                Xml
+                            </a>
+                            <a href="?{% url_replace request 'csv' '1' %}" class="item">
+                                <i class="video camera icon"></i>
+                                Csv
+                            </a>
+                            <div class="header right floated item">{% trans 'Pagination' %}</div>
+                            {% if company.number == 1 %}
                                 <div class="disabled item">
-                                    ...
+                                    1
                                 </div>
                             {% endif %}
-                        {% endif %}
-                        {% for p in page_list %}
-                            {% if p == 1 %}
-                            {% else %}
-                                {% if company.number == p %}
-                                    <a class="item active" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                {% else %}
-                                    <a class="item" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                            {% if company.has_previous %}
+                                <a href="?{% url_replace_page request 'page' '1' %}" class="item">1</a>
+                                {% if company.number > 7 %}
+                                    <div class="disabled item">
+                                        ...
+                                    </div>
                                 {% endif %}
                             {% endif %}
-                        {% endfor %}
-                        {% if company.has_next %}
-                            {% if company.number < company.paginator.num_pages|add:"-5" %}
-                                <div class="disabled item">
-                                    ...
-                                </div>
-                                <a class="item" href="?{% url_replace_page request 'page' company.paginator.num_pages %}" aria-label="Next">
-                                    {{ company.paginator.num_pages }}
-                                </a>
+                            {% for p in page_list %}
+                                {% if p == 1 %}
+                                {% else %}
+                                    {% if company.number == p %}
+                                        <a class="item active" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                    {% else %}
+                                        <a class="item" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                            {% if company.has_next %}
+                                {% if company.number < company.paginator.num_pages|add:"-5" %}
+                                    <div class="disabled item">
+                                        ...
+                                    </div>
+                                    <a class="item" href="?{% url_replace_page request 'page' company.paginator.num_pages %}" aria-label="Next">
+                                        {{ company.paginator.num_pages }}
+                                    </a>
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
-                    </div>
-                    {% include 'table_company.html' %}
-                {% else %}
-                    {% trans 'Company not found' %}
+                        </div>
+                        {% include 'table_company.html' %}
+                    {% else %}
+                        {% trans 'Company not found' %}
+                    {% endif %}
+                {% endif %}
+                {% if r_company == 2 %}
+                    <form class="ui form">
+                        <div class="ui tiny stacked segment">
+                            <div class="fields">
+                                <div class="field">
+                                    <label>{% trans 'Name' %}</label>
+                                    <input placeholder="Name..." type="text" value="{{ edit_company.name }}">
+                                </div>
+                            </div>
+                            <div class="fields">
+                                <div class="field">
+                                    <label>{% trans 'Address' %}</label>
+                                    <input placeholder="Address..." type="text" value="">
+                                </div>
+                            </div>
+                            <div class="one fields">
+                                <div class="field">
+                                    <label>{% trans 'Phone' %}</label>
+                                    <input placeholder="Phone..." type="text" value="">
+                                </div>
+                            </div>
+                            <div class="one fields">
+                                <div class="field">
+                                    <label>{% trans 'Representative' %}</label>
+                                    <input placeholder="Representative..." type="text" value="">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 {% endif %}
             </div>
         </div>

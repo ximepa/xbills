@@ -27,10 +27,10 @@
 {% block content %}
     <div class="row">
         <div class="column">
-            <div class="ui sticky tabled horizontal segments">
-                <div class="ui tabled segment">
-                    <div class="ui sticky compact mini menu">
-                        <form class="ui inmenu mini form" method="get">
+	<div class="ui blue segment">
+            <div class="ui sticky mini fluid pagination menu">
+                    <div class="item">
+                        <form class="ui form" method="get">
                             <div class="fields">
                                 <div class="field">
                                     {{ search_form.queue }}
@@ -53,14 +53,11 @@
                                 </div>
                             </form>
                         </div>
+		  </div>
                         <a class="item" href="#" onclick="$('#export_form').submit();">
                             {% trans 'Export' %}
                         </a>
-                    </div>
-                </div>
-                <div class="ui tabled segment" style="text-align: center"></div>
-                <div class="ui tabled segment" style="text-align: right">
-                    <div id="" class="ui pagination mini menu">
+                                   
                         {% if users.number == 1 %}
                             <div class="disabled item">
                                     1

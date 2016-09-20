@@ -762,11 +762,10 @@ def fees(request):
 
 @login_required()
 def company(request):
-    order_by = request.GET.get('order_by', '-name')
-    company_list = Company.objects.all().order_by(order_by)
-    for c in company_list:
-        print c.bill.uid
-    paginator = Paginator(company_list, 20)
+    r_company = 1
+    order_by = request.GET.get('order_by', 'name')
+    m_company = Company.objects.all().order_by(order_by)
+    paginator = Paginator(m_company, 50)
     page = request.GET.get('page', 1)
     try:
         company = paginator.page(page)
@@ -788,8 +787,54 @@ def company(request):
     for p in page_range:
         page_list = p
     pre_end = company.paginator.num_pages - 2
+    if 'xml' in request.GET:
+        xml_data = serializers.serialize("xml", company)
+        return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
+    if 'csv' in request.GET:
+        return helpers.export_to_csv(request, company, fields=('id', 'bill'), name='bill')
+    if 'change' in request.GET:
+        r_company = 2
+        if request.GET['change'] !='':
+            edit_company= Company.objects.get(id=request.GET['change'])
+    if 'company_id' in request.GET:
+        user = User.objects.filter(company_id=request.GET['company_id'])
+        user_js = serializers.serialize('json', user)
+        return HttpResponse(user_js)
     return render(request, 'company.html', locals())
 
+
+@login_required()
+def group(request):
+    order_by = request.GET.get('order_by', 'id')
+    group = Group.objects.all().order_by(order_by)
+    paginator = Paginator(group, 50)
+    page = request.GET.get('page', 1)
+    try:
+        group = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        group = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        group = paginator.page(paginator.num_pages)
+    if int(page) > 5:
+        start = str(int(page)-5)
+    else:
+        start = 1
+    if int(page) < paginator.num_pages-5:
+        end = str(int(page)+5+1)
+    else:
+        end = paginator.num_pages+1
+    page_range = range(int(start), int(end)),
+    for p in page_range:
+        page_list = p
+    pre_end = group.paginator.num_pages - 2
+    if 'xml' in request.GET:
+        xml_data = serializers.serialize("xml", company)
+        return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
+    if 'csv' in request.GET:
+        return helpers.export_to_csv(request, company, fields=('id', 'bill'), name='bill')
+    return render(request, 'group.html', locals())
 
 def user_login(request):
     context = RequestContext(request)

@@ -6,7 +6,7 @@ import math
 
 from django.core.urlresolvers import reverse
 
-from core.models import num_to_ip, Admin
+from core.models import num_to_ip, Admin, User, Nas
 from django.conf import settings
 import os
 
@@ -125,3 +125,24 @@ def active_startwith(request, url, *args):
     if request.path.startswith(reverse(url)):
         return 'active'
     return ''
+
+
+@register.simple_tag
+def user_company(id):
+    user_count = User.objects.filter(company_id=id).count()
+    return user_count
+
+
+@register.simple_tag
+def user_group(id):
+    user_group = User.objects.filter(gid=id).count()
+    return user_group
+
+
+@register.simple_tag
+def status(value):
+    if value != None:
+        stat = 'Enable'
+    else:
+        stat = 'Disable'
+    return stat
