@@ -809,6 +809,7 @@ def group(request):
     group = Group.objects.all().order_by(order_by)
     paginator = Paginator(group, 50)
     page = request.GET.get('page', 1)
+    print request.GET
     try:
         group = paginator.page(page)
     except PageNotAnInteger:
@@ -834,6 +835,9 @@ def group(request):
         return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
     if 'csv' in request.GET:
         return helpers.export_to_csv(request, company, fields=('id', 'bill'), name='bill')
+    if 'user_list' in request.GET:
+        user = User.objects.filter(gid_id=request.GET['user_list'])
+        return render(request, 'table_user_liset.html', locals())
     return render(request, 'group.html', locals())
 
 def user_login(request):

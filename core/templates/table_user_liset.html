@@ -9,21 +9,20 @@
             <th><a href="?{% url_replace request 'order_by' 'bill__deposit' %}">{% trans 'Deposit' %}</a></th>
             <th><a href="?{% url_replace request 'order_by' 'credit' %}">{% trans 'Credit' %}</a></th>
             <th><a href="?{% url_replace request 'order_by' 'registration' %}">{% trans 'Registration' %}</a></th>
-            <th>{% trans 'Users' %}</th>
-            <th><a href="?{% url_replace request 'order_by' 'last_deposit' %}">{% trans 'Status' %}</a></th>
+            <th>{% trans 'Status' %}</th>
             <th>-</th>
             <th>-</th>
         </tr>
     </thead>
     <tbody>
-        {% for g in group %}
+        {% for u in user %}
         <tr>
-            <td><a href="{% url 'core:group' %}?change={{ g.id }}">{{ g.id }}</a></td>
-            <td id='company-{{c.id}}'><a href=javascript:getCompany({{g.id}})>{{ g.name }}</a></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>{% user_group g.id %}</td>
+            <td>{{ u.id }}</td>
+            <td>{{ u.login }}</td>
+            <td>{{ u.bill.deposit}}</td>
+            <td>{{ u.credit }}</td>
+            <td>{{ u.registration }}</td>
+            <td>{% status u.disabled %}</td>
 
         </tr>
         {% endfor %}

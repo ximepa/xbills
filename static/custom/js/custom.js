@@ -36,6 +36,19 @@ $( document ).ready(function() {
     if (document.getElementById("services") != null) {
 	document.getElementById("services").style.display = getCookie('services');
     }
+
+    $('#table_group td').on('click', function () {
+        var dimmer = $('body');
+        dimmer.dimmer('show')
+        $.ajax({
+            url: "/admin/group/?user_list=" + $(this).parent()[0].childNodes[1].innerText,
+            cache: false,
+            success: function(html){
+                $("#content1").html(html);
+                dimmer.dimmer('hide');
+            }
+        });
+    })
 });
 
 function servicesToggle() {
