@@ -1,36 +1,29 @@
 # -*- encoding: utf-8 -*-
 import csv
 import json
+import platform
 
-import itertools
-from django.shortcuts import render, HttpResponseRedirect, HttpResponse, render_to_response, RequestContext, redirect
+import datetime
+import psutil
+from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Sum
+from django.shortcuts import render, HttpResponseRedirect, HttpResponse, RequestContext, redirect
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import RedirectView
-from django.views.generic import TemplateView
-from django.views.generic import View
+from ws4redis.publisher import RedisPublisher
+from ws4redis.redis_store import RedisMessage
 
+import helpers
 from dv.helpers import Hangup
-from ipdhcp.models import Dhcphosts_networks, Dhcphosts_hosts
 from .auth_backend import AuthBackend
+from .commands import strfdelta
+from .forms import AdministratorForm, SearchForm, SearchFeesForm, SearchPaymentsForm, ClientForm, DvForm, UserPiForm
 from .models import User, Payment, Fees, Dv, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog, Dv_log, Admin, num_to_ip, AdminSettings, \
     AdminLog, ip_to_num, Group, Company
-from ipdhcp.models import ipRange
-from .forms import AdministratorForm, SearchForm, SearchFeesForm, SearchPaymentsForm, ClientForm, DvForm, UserPiForm
-from django.contrib import messages
-from django.conf import settings
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .commands import strfdelta, sizeof_fmt
-from django.contrib.auth.decorators import permission_required
-from ws4redis.redis_store import RedisMessage, RedisStore
-from ws4redis.publisher import RedisPublisher
-import helpers
-import platform
-import psutil
-import datetime
-from django.core import serializers
 
 
 def custom_redirect(url_name, *args, **kwargs):
@@ -241,7 +234,6 @@ def client_statistics(request, uid):
 @login_required()
 # @permission_required('users.can_vote')
 def search(request):
-
     all_table_choices = [
         'user_id__id',
         'user_id__login',
@@ -483,8 +475,6 @@ def client(request, uid):
         disabled = 0
     else:
         disabled = 1
-    print client.disabled
-    print disabled
     client_form = ClientForm(instance=client)
     dv = Dv.objects.get(user=uid)
     dv_form = DvForm(instance=dv, initial={'ip': num_to_ip(dv.ip), 'netmask': num_to_ip(dv.netmask)})
@@ -495,36 +485,33 @@ def client(request, uid):
     group = Group.objects.all()
     dv_session = Dv_calls.objects.filter(uid=uid)
     if helpers.module_check('olltv'):
-        from olltv.models import Iptv, IptvDevice, IptvDeviceType
-        from olltv.api import oll_user_info, oll_check_bundle, olltv_auth
-        try:
-            user_olltv = Iptv.objects.get(uid=uid)
-            olltv_exist = True
-            user_olltv_dev = IptvDevice.objects.filter(uid=uid)
-            try:
-                auth = olltv_auth()
-            except:
-                auth = None
-            if auth != None:
-                user_info = oll_user_info(account=uid, hash=auth['hash'])
-                get_user_info = user_info['data']
-                tp_list_dict = user_info['data']['bought_subs']
-                tp_count = user_info['tp_count']
-                tp_list = []
-                if tp_count < 1:
-                    tp_list = None
-                else:
-                    for tp in tp_list_dict:
-                        # check_bundle
-                        check_bundle = oll_check_bundle(account=client.id, tp=tp['sub_id'], hash=auth['hash'])
-                        if check_bundle['mess'] == 'Error':
-                            messages.warning(request, check_bundle)
-                        else:
-                            get_bundle_status = check_bundle['data']
-                            tp.update({'status': get_bundle_status})
-                            tp_list.append(tp)
-        except Iptv.DoesNotExist:
-            olltv_exist = False
+        from olltv.models import Iptv, IptvDevice
+        from olltv.api import OLLTV
+        olltv = OLLTV()
+        auth = olltv.is_auth()
+        # if olltv.is_auth():
+        #     pass
+        #         # print olltv.email_exist(email='add2@m-tel.net')
+        #         # print olltv.account_exist(account='11112')
+        #         # olltv.get_users_list()
+        #         # print olltv.get_user_info(account='11112')
+        #         # print olltv.get_all_purchases(start_date='2016-09-27')
+        #         # print olltv.device_add(account='11112', serial_number='092014j005871', mac='001a791e0000', device_type='stb', device_model='mag255', type='device_rent')
+        #         # print olltv.devices_get_list(account='11112')
+        #         # print olltv.device_check(mac='001a791e0000', serial_number='092014j005871')
+        #         # print olltv.device_rem(account='11112', mac='001a791e0000', serial_number='092014j005871', type='device_change')
+        #         # print olltv.get_user_devices(account='5973')
+        #         # print olltv.bundle_change(account='11112', old_tp='mtel_oll_opt', new_tp='mtel_oll_start')
+        #         # print olltv.bundle_check(account='11112', tp='mtel_oll_start')
+        #         # print olltv.bundle_remove(account='11112', tp='mtel_oll_start', type='subs_cancel')
+        #         # print olltv.bundle_add(account='11112', tp='mtel_oll_start', type='subs_rent_device')
+        #         # olltv.user_add(email='add2@m-tel.met', account='11112')
+        #         # olltv.user_bind(email='add2@m-tel.met', account='11112')
+        #         # olltv.user_unbind(email='add2@m-tel.met', account=11112)
+        #         # olltv.email_change(email='add2@m-tel.met', new_email='add2@m-tel.net')
+        #     # messages.add_message(request, messages.INFO, olltv.auth())
+        # else:
+        #     print 'no auth'
     if 'show_password' in request.GET:
         user_password = client.get_hash_password
     else:
@@ -588,8 +575,7 @@ def client_payments(request, uid):
         #print log.admin
         #del_payment.delete()
     if 'xml' in request.GET:
-        xml_data = serializers.serialize("xml", payments)
-        return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
+        return helpers.export_to_xml(request, payments)
     if 'csv' in request.GET:
         return helpers.export_to_csv(request, payments, fields=('id', 'uid'), name='login')
     return render(request, 'user_payments.html', locals())

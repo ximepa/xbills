@@ -19,5 +19,6 @@ urlpatterns = [
     # url(r'^logout/', 'logout_view', name='logout_view'),
     # #url(r'^rpc/', include(rpc_router.urls, 'rpc')),
     # url(r'^(?P<uid>.+)/$', views.user_change, name='user_change'),
-    url(r'^$', views.index, name='index'),
+    url(r'^olltv/$', views.index, name='index'),
+    url(r'^clients/(?P<uid>\d+)/olltv/$', views.user_change, name='user_olltv'),
 ]

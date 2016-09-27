@@ -156,7 +156,7 @@ UNIQUE_MAC = True
 COMPANY_NAME = 'Xbills'
 PROJECT_VERSION = '0.0.6'
 SHOW_VERSION = True
-OLLTVAPIVERSION = '2.1.0'
+OLLTVAPIVERSION = '2.1.2'
 OLLTVUSERAUTH = 'http://dev.oll.tv/ispAPI/auth2/'
 OLLTVUSERADDURL = 'http://dev.oll.tv/ispAPI/addUser/'
 OLLTVUSERREMOVEURL = 'http://dev.oll.tv/ispAPI/deleteAccount/'
@@ -171,9 +171,13 @@ OLLTVDEVADDURL = 'http://dev.oll.tv/ispAPI/addDevice/'
 OLLTVDEVREMOVEURL = 'http://dev.oll.tv/ispAPI/delDevice/'
 OLLTVDEVEXISTURL = 'http://dev.oll.tv/ispAPI/deviceExists/'
 OLLTVDEVGETLIST = 'http://dev.oll.tv/ispAPI/getDeviceList/'
+OLLTVGETUSERDEV = 'http://dev.oll.tv/ispAPI/getUserDevices/'
 OLLTVTPACTIVATEURL = 'http://dev.oll.tv/ispAPI/enableBundle/'
+OLLTVTPCHANGEURL = 'http://dev.oll.tv/ispAPI/changeBundle/'
+OLLTVGETALLPURCHASESURL = 'http://dev.oll.tv/ispAPI/getAllPurchases/'
 OLLTVTPDEACTIVATEURL = 'http://dev.oll.tv/ispAPI/disableBundle/'
 OLLTVGETBUNDLESTATUS = 'http://dev.oll.tv/ispAPI/checkBundle/'
+OLLTVPARENTCOONTROLRESET = 'http://dev.oll.tv/ispAPI/resetParentControl/'
 # LOGS
 #Add logs to Abills history
 ABILLS_EMAIL_LOGS = True

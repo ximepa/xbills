@@ -6,12 +6,12 @@
     <div class="row">
         <div class="column">
             <div class="ui stackable top attached mini tabular menu">
-                <div class="{% active request 'core:client' client.id %} item"><a href="{% url 'core:client' client.id %}"><i class="fa fa-info" aria-hidden="true"></i> {% trans 'Base' %}</a></div>
+                <div class="{% active request 'core:client' client.id %} {% active request 'core:client_statistics' client.id %} item"><a href="{% url 'core:client' client.id %}"><i class="fa fa-info" aria-hidden="true"></i> {% trans 'Base' %}</a></div>
                 <div class="{% active request 'core:client_payments' client.id %} item"><a href="{% url 'core:client_payments' client.id %}">{% trans 'Payments' %}</a></div>
                 <div class="{% active request 'core:client_fees' client.id %} item"><a href="{% url 'core:client_fees' client.id %}">{% trans 'Fees' %}</a></div>
                 {% check_module 'olltv' as check_module_olltv %}
                 {% if check_module_olltv %}
-                        <div class="{% active request 'core:user_olltv' client.id %} item"><a href="{% url 'core:user_olltv' client.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'OLLTV' %}</a></div>
+                        <div class="{% if auth %}{% active request 'olltv:user_olltv' client.id %}{% else %}disabled{% endif %} item">{% if auth %}<a href="{% url 'olltv:user_olltv' client.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'OLLTV' %}</a>{% else %}<a href="#"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'OLLTV' %}</a>{% endif %}</div>
                 {% endif %}
                 {% check_module 'ipdhcp' as check_module_dhcp %}
                 {% if check_module_dhcp %}

@@ -18,8 +18,7 @@ import requests
 import datetime
 import dateutils
 from .commands import make_conversion
-from .api import olltv_auth, olltv_users_list, oll_user_check, oll_user_add, oll_user_bind, oll_user_unbind, oll_user_info, oll_check_bundle, oll_get_device, oll_dev_check, oll_dev_add, oll_disable_bundle, oll_dev_remove, oll_add_bundle, olltv_change_email, olltv_change_userinfo, oll_account_check
-
+from .api import OLLTV
 modules = settings.INSTALLED_APPS
 
 
@@ -70,8 +69,9 @@ def index(request):
 
 @login_required(login_url='/login/')
 def user_change(request, uid):
-    auth = olltv_auth()
-    if auth['status'] != 0:
+    olltv = OLLTV()
+    auth = olltv.is_auth()
+    if not auth:
         error = auth
         messages.error(request, auth)
         return render(request, 'index.html', locals())
@@ -84,17 +84,17 @@ def user_change(request, uid):
             return render(request, 'olltv_user.html', locals())
 # user_info
         device_add_form = DeviceAddForm(initial={'uid': client.id})
-        user_info = oll_user_info(account=client.id, hash=auth['hash'])
-        if user_info['status'] == 505:
+        user_info = olltv.get_user_info(account=client.id)
+        if user_info['response']['status'] == 505:
             messages.warning(request, user_info)
             return render(request, 'olltv_user.html', locals())
-        elif user_info['status'] == 404:
+        elif user_info['response']['status'] == 404:
 # oll_user_check
-            check_user = oll_user_check(email=client.email, hash=auth['hash'])
+            check_user = olltv.get_user_info(email=client.email)
             messages.warning(request, check_user)
             if check_user['data'] == 0:
                 if 'save-user' in request.POST:
-                    u_add = oll_user_add(request=request, hash=auth['hash'])
+                    # u_add = olltv.user_add(request=request)
                     try:
                         iptv = Iptv.objects.get(uid=client)
                         messages.success(request, u'User %s was created' % client)
@@ -153,8 +153,8 @@ def user_change(request, uid):
                     return redirect('olltv:user_change', uid=client.id)
                 return render(request, 'olltv_user.html', locals())
 # get bundle
-            get_user_info = user_info['data']
-            tp_list_dict = user_info['data']['bought_subs']
+            get_user_info = user_info['response']['data']
+            tp_list_dict = user_info['response']['data']['bought_subs']
             tp_count = user_info['tp_count']
             tp_list = []
             if tp_count < 1:
@@ -162,24 +162,26 @@ def user_change(request, uid):
             else:
                 for tp in tp_list_dict:
                     # check_bundle
-                    check_bundle = oll_check_bundle(account=client.id, tp=tp['sub_id'], hash=auth['hash'])
-                    if check_bundle['mess'] == 'Error':
+                    check_bundle = olltv.bundle_check(account=client.id, tp=tp['sub_id'])
+                    if check_bundle['status'] == '0':
                         messages.warning(request, check_bundle)
                     else:
                         get_bundle_status = check_bundle['data']
                         tp.update({'status': get_bundle_status})
                         tp_list.append(tp)
 # get_devices
-            get_devices = oll_get_device(account=client.id, hash=auth['hash'])
-            if get_devices['mess'] == 'Error':
+            get_devices = olltv.devices_get_list(account=client.id)
+            if get_devices['status'] != '0':
                 messages.warning(request, get_devices)
             else:
                 get_dev_list = get_devices['data']
-            account_check = oll_account_check(account=client.id, hash=auth['hash'])
-            if account_check['mess'] == 'Error':
+            account_check = olltv.get_user_info(account=client.id)
+            print account_check['response']['status'] != 0
+            print account_check
+            if account_check['response']['status'] != 0:
                 messages.warning(request, account_check)
             else:
-                get_account_info = account_check['data']
+                get_account_info = account_check['response']['data']
             TYPE = (
                 ('subs_free_device', 'Новый контракт - 24 мес и оборудование за 1 грн'),
                 ('subs_buy_device', 'Новый контракт - покупка оборудования'),
