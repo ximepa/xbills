@@ -1,0 +1,33 @@
+{% extends 'layout_edit.html' %}
+{% load url %}
+{% load i18n %}
+{% load staticfiles %}
+{% block content %}
+    <div class="ui top attached mini tabular menu">
+        <a class="{% active_with_get request 'olltv:user_olltv' '' client.id %} item" href="{% url 'olltv:user_olltv' client.id %}">
+            {% trans 'Info' %}
+        </a>
+        <a class="{% active_with_get request 'olltv:user_olltv' '?olltv=bundles' client.id %} item" href="{% url 'olltv:user_olltv' client.id %}?olltv=bundles">
+            {% trans 'Bundles' %}
+        </a>
+        <a class="{% active_with_get request 'olltv:user_olltv' '?olltv=devices' client.id %} item" href="{% url 'olltv:user_olltv' client.id %}?olltv=devices">
+            {% trans 'Devices' %}
+        </a>
+        <div class="right menu">
+            <div class="item">
+                <div class="ui transparent icon input">
+                    <i class="edit icon"></i>
+                </div>
+            </div>
+            <div class="item">
+                <div class="ui transparent icon input">
+                    <i class="remove user icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui bottom attached segment">
+        {% block olltv_content %}
+        {% endblock olltv_content %}
+    </div>
+{% endblock %}

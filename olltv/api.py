@@ -146,7 +146,8 @@ class OLLTV:
                 'hash': self.auth['hash']
             })
             response_content = response.json()
-            data.update({'response': response_content,'tp_count': len(response_content['data']['bought_subs'])})
+            print response_content
+            data.update({'response': response_content})
             return data
         elif email:
             response = requests.post(settings.OLLTVUSERINFO, data={
@@ -154,7 +155,7 @@ class OLLTV:
                 'hash': self.auth['hash']
             })
             response_content = response.json()
-            data.update({'response': response_content,'tp_count': len(response_content['data']['bought_subs'])})
+            data.update({'response': response_content})
             return data
 
     # 1.9. Метод изменения пользовательских данных

@@ -69,28 +69,47 @@ def index(request):
 
 @login_required(login_url='/login/')
 def user_change(request, uid):
+    print request.GET
     olltv = OLLTV()
     auth = olltv.is_auth()
-    if not auth:
-        error = auth
-        messages.error(request, auth)
-        return render(request, 'index.html', locals())
-    else:
+    if auth:
         try:
             client = User.objects.get(id=uid)
         except User.DoesNotExist:
             user = False
             messages.error(request, 'User not found')
             return render(request, 'olltv_user.html', locals())
+        user_info = olltv.get_user_info(account=client.id)
+        print user_info
+        if user_info['response']['status'] != 0:
+            messages.warning(request, user_info)
+        else:
+            get_account_info_list = [u for u in olltv.get_users_list()['data'] if u["account"] == user_info['response']['data']['account']]
+            for g in get_account_info_list:
+                get_account_info = g
+        if 'olltv' in request.GET and request.GET['olltv'] == 'bundles':
+            # get_user_info = user_info['response']['data']
+            # print get_user_info
+            # tp_list_dict = user_info['response']['data']['bought_subs']
+            # tp_count = len(tp_list_dict)
+            # tp_list = []
+            return render(request, 'olltv_user_bundles.html', locals())
+        if 'olltv' in request.GET and request.GET['olltv'] == 'devices':
+            devices_get_list = olltv.devices_get_list(account=client.id)
+            if devices_get_list['status'] != 0:
+                messages.warning(request, devices_get_list)
+            else:
+                devices_get_list_data = devices_get_list['data']
+            return render(request, 'olltv_user_devices.html', locals())
 # user_info
         device_add_form = DeviceAddForm(initial={'uid': client.id})
-        user_info = olltv.get_user_info(account=client.id)
         if user_info['response']['status'] == 505:
             messages.warning(request, user_info)
             return render(request, 'olltv_user.html', locals())
         elif user_info['response']['status'] == 404:
 # oll_user_check
             check_user = olltv.get_user_info(email=client.email)
+            print check_user
             messages.warning(request, check_user)
             if check_user['data'] == 0:
                 if 'save-user' in request.POST:
@@ -153,35 +172,20 @@ def user_change(request, uid):
                     return redirect('olltv:user_change', uid=client.id)
                 return render(request, 'olltv_user.html', locals())
 # get bundle
-            get_user_info = user_info['response']['data']
-            tp_list_dict = user_info['response']['data']['bought_subs']
-            tp_count = user_info['tp_count']
-            tp_list = []
-            if tp_count < 1:
-                tp_list = []
-            else:
-                for tp in tp_list_dict:
-                    # check_bundle
-                    check_bundle = olltv.bundle_check(account=client.id, tp=tp['sub_id'])
-                    if check_bundle['status'] == '0':
-                        messages.warning(request, check_bundle)
-                    else:
-                        get_bundle_status = check_bundle['data']
-                        tp.update({'status': get_bundle_status})
-                        tp_list.append(tp)
+            # if tp_count < 1:
+            #     tp_list = []
+            # else:
+            #     for tp in tp_list_dict:
+            #         # check_bundle
+            #         check_bundle = olltv.bundle_check(account=client.id, tp=tp['sub_id'])
+            #         print check_bundle
+            #         if check_bundle['status'] == 0:
+            #             messages.warning(request, check_bundle)
+            #         else:
+            #             get_bundle_status = check_bundle['data']
+            #             tp.update({'status': get_bundle_status})
+            #             tp_list.append(tp)
 # get_devices
-            get_devices = olltv.devices_get_list(account=client.id)
-            if get_devices['status'] != '0':
-                messages.warning(request, get_devices)
-            else:
-                get_dev_list = get_devices['data']
-            account_check = olltv.get_user_info(account=client.id)
-            print account_check['response']['status'] != 0
-            print account_check
-            if account_check['response']['status'] != 0:
-                messages.warning(request, account_check)
-            else:
-                get_account_info = account_check['response']['data']
             TYPE = (
                 ('subs_free_device', 'Новый контракт - 24 мес и оборудование за 1 грн'),
                 ('subs_buy_device', 'Новый контракт - покупка оборудования'),
@@ -422,6 +426,11 @@ def user_change(request, uid):
                     admin_log.save()
                     return redirect('olltv:user_change', uid=client.id)
             return render(request, 'olltv_user.html', locals())
+    else:
+        error = auth
+        messages.error(request, auth)
+        return render(request, 'index.html', locals())
+
 
 
 @login_required(login_url='/login/')

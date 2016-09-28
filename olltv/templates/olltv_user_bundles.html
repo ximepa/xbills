@@ -1,0 +1,52 @@
+{% extends 'olltv_layout_edit.html' %}
+{% load url %}
+{% load i18n %}
+{% load staticfiles %}
+{% block title %}
+    Xbills - Olltv {% trans 'edit' %} [{{ user.login }}]
+{% endblock %}
+{% block breadcrumbs %}
+    <i class="right angle icon divider"></i>
+    <a href="{% url 'core:index' %}" class="section">{% trans 'Logins' %}</a>
+    <i class="right angle icon divider"></i>
+    <a href="{% url 'core:client' uid %}" class="section">{{ client.login }}</a> (UID: {{ uid }})
+    <i class="right angle icon divider"></i>
+    <div class="active section">{% trans 'Bundles info' %}</div>
+{% endblock %}
+{% block breadcrumbs_sub_header %}
+    {% trans 'Olltv - Television, which is controlled by you' %}
+{% endblock %}
+{% block olltv_content %}
+    <table class="ui small compact table">
+        <thead>
+            <tr>
+                <th>{% trans 'Name' %}</th>
+                <th>{% trans 'sub_id' %}</th>
+                <th>{% trans 'expiration_date' %}</th>
+                <th>{% trans 'ID' %}</th>
+                <th>{% trans 'parent_id' %}</th>
+                <th>{% trans 'device_binding_code' %}</th>
+                <th>{% trans 'service_type' %}</th>
+                <th>{% trans 'start_date' %}</th>
+                <th>{% trans 'Status' %}</th>
+                <th>{% trans 'Actions' %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bundle in user_info.response.data.bought_subs %}
+                <tr>
+                    <td>{{ bundle.name }}</td>
+                    <td>{{ bundle.sub_id }}</td>
+                    <td>{{ bundle.expiration_date }}</td>
+                    <td>{{ bundle.ID }}</td>
+                    <td>{{ bundle.parent_id }}</td>
+                    <td>{{ bundle.device_binding_code }}</td>
+                    <td>{{ bundle.service_type }}</td>
+                    <td>{{ bundle.start_date }}</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock olltv_content %}

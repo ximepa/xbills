@@ -121,6 +121,15 @@ def active(request, url, *args):
 
 
 @register.simple_tag
+def active_with_get(request, url, kwargs=None, *args):
+    url = reverse(url, args=args)
+    full_path = '%s%s' % (url, kwargs)
+    if request.get_full_path() == full_path:
+        return 'active'
+    return ''
+
+
+@register.simple_tag
 def active_startwith(request, url, *args):
     if request.path.startswith(reverse(url)):
         return 'active'
