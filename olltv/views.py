@@ -19,6 +19,7 @@ import datetime
 import dateutils
 from .commands import make_conversion
 from .api import OLLTV
+from nameparser import HumanName
 modules = settings.INSTALLED_APPS
 
 
@@ -69,7 +70,6 @@ def index(request):
 
 @login_required(login_url='/login/')
 def user_change(request, uid):
-    print request.GET
     olltv = OLLTV()
     auth = olltv.is_auth()
     if auth:
@@ -96,39 +96,52 @@ def user_change(request, uid):
             return render(request, 'olltv_user_bundles.html', locals())
         if 'olltv' in request.GET and request.GET['olltv'] == 'devices':
             devices_get_list = olltv.devices_get_list(account=client.id)
+            device_add_form = DeviceAddForm(initial={'uid': client.id})
             if devices_get_list['status'] != 0:
                 messages.warning(request, devices_get_list)
             else:
                 devices_get_list_data = devices_get_list['data']
             return render(request, 'olltv_user_devices.html', locals())
 # user_info
-        device_add_form = DeviceAddForm(initial={'uid': client.id})
         if user_info['response']['status'] == 505:
             messages.warning(request, user_info)
             return render(request, 'olltv_user.html', locals())
         elif user_info['response']['status'] == 404:
 # oll_user_check
-            check_user = olltv.get_user_info(email=client.email)
-            print check_user
-            messages.warning(request, check_user)
-            if check_user['data'] == 0:
-                if 'save-user' in request.POST:
-                    # u_add = olltv.user_add(request=request)
-                    try:
-                        iptv = Iptv.objects.get(uid=client)
-                        messages.success(request, u'User %s was created' % client)
-                        return redirect('olltv:user_change', uid=client.id)
-                    except Iptv.DoesNotExist:
-                        iptv = Iptv.objects.create(
-                            uid=client,
-                            tp_id=69,
-                            #mac='',
-                            #pin='',
-                            disable=1,
-                            registration=datetime.date.today()
-                        )
-                        messages.success(request, u'User %s was created' % client)
-                        return redirect('olltv:user_change', uid=client.id)
+            email_exist = olltv.email_exist(email=client.email)
+            messages.warning(request, '%s email does not exist' % client.email)
+            if email_exist == False:
+                name = HumanName(client.pi.fio)
+                if 'create-user' in request.POST:
+                    print request.POST
+                    u_add = olltv.user_add(
+                        email=client.email,
+                        account=client.id,
+                        birth_date=request.POST['birth_date'],
+                        gender=request.POST['gender'],
+                        firstname=request.POST['firstname'],
+                        password=request.POST['password'],
+                        lastname=request.POST['lastname'],
+                        phone=request.POST['phone'],
+                        region=request.POST['region'],
+                        postcode=request.POST['postcode']
+                    )
+                    # try:
+                    #     iptv = Iptv.objects.get(uid=client)
+                    #     messages.success(request, u'User %s was created' % client)
+                    #     return redirect('olltv:user_change', uid=client.id)
+                    # except Iptv.DoesNotExist:
+                    #     iptv = Iptv.objects.create(
+                    #         uid=client,
+                    #         tp_id=69,
+                    #         #mac='',
+                    #         #pin='',
+                    #         disable=1,
+                    #         registration=datetime.date.today()
+                    #     )
+                    #     messages.success(request, u'User %s was created' % client)
+                    return redirect('olltv:user_olltv', uid=client.id)
+                return render(request, 'olltv_user_create.html', locals())
             else:
 # oll_user_bind
                 if 'bind-user' in request.POST:

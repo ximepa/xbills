@@ -36,7 +36,6 @@ class OLLTV:
     # 1. Работа с пользователями
     # 1.1. Метод проверки существования пользователя с данным email в БД oll.tv
     def email_exist(self, email):
-        print 'email_exist'
         response = requests.post(settings.OLLTVEMILEXISTURL, data={
             'email': email,
             'hash': self.auth['hash'],
@@ -146,7 +145,6 @@ class OLLTV:
                 'hash': self.auth['hash']
             })
             response_content = response.json()
-            print response_content
             data.update({'response': response_content})
             return data
         elif email:

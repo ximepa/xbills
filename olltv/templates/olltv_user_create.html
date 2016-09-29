@@ -1,0 +1,76 @@
+{% extends 'olltv_layout_edit.html' %}
+{% load url %}
+{% load i18n %}
+{% load staticfiles %}
+{% block title %}
+    Xbills - Olltv {% trans 'edit' %} [{{ user.login }}]
+{% endblock %}
+{% block breadcrumbs %}
+    <i class="right angle icon divider"></i>
+    <a href="{% url 'core:index' %}" class="section">{% trans 'Logins' %}</a>
+    <i class="right angle icon divider"></i>
+    <a href="{% url 'core:client' uid %}" class="section">{{ client.login }}</a> (UID: {{ uid }})
+    <i class="right angle icon divider"></i>
+    <div class="active section">{% trans 'User create' %}</div>
+{% endblock %}
+{% block olltv_nav %}
+{% endblock %}
+{% block olltv_content %}
+    <form class="ui mini form" method="POST">{% csrf_token %}
+        <div class="ui message">
+            <div class="header">We had some issues</div>
+            <ul class="list">
+                <li>Please enter your first name</li>
+                <li>Please enter your last name</li>
+            </ul>
+        </div>
+        <div class="field">
+            <label>{% trans 'Birth date' %} - {% trans 'Allowed formats:' %} [YYYY-MM-DD, DD.MM.YYYY]</label>
+            <input name="birth_date" placeholder="{% trans 'Birth date' %}" type="text">
+        </div>
+        <div class="field">
+            <label>{% trans 'Gender' %}</label>
+            <select name="gender">
+                <option value="M" selected>{% trans 'Male' %}</option>
+                <option value="F">{% trans 'Female' %}</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>{% trans 'First name' %}</label>
+            <input name="firstname" placeholder="{% trans 'First name' %}" type="text" value="{{ name.middle }}">
+        </div>
+        <div class="field">
+            <label>{% trans 'Last Name' %}</label>
+            <input name="lastname" placeholder="{% trans 'Last Name' %}" type="text" value="{{ name.first }}">
+        </div>
+        <div class="field">
+            <label>{% trans 'Password' %}</label>
+            <input name="password" placeholder="{% trans 'Password' %}" type="text">
+        </div>
+        <div class="field">
+            <label>{% trans 'Phone' %}</label>
+            <input name="phone" placeholder="{% trans 'Phone' %}" type="password">
+        </div>
+        <div class="field">
+            <label>{% trans 'Region' %}</label>
+            <input name="region" placeholder="{% trans 'Region' %}" type="text" value="{{ client.pi.city }}">
+        </div>
+        <div class="field">
+            <label>{% trans 'Postcode' %}</label>
+            <input name="postcode" placeholder="{% trans 'Postcode' %}" type="text" value="20301">
+        </div>
+        <div class="field">
+            <div class="ui checkbox">
+                <input class="hidden" tabindex="0" type="checkbox">
+                <label>{% trans 'Receive news' %}</label>
+            </div>
+        </div>
+        <div class="field">
+            <div class="ui checkbox">
+                <input class="hidden" tabindex="0" type="checkbox">
+                <label>{% trans 'Send registration email' %}</label>
+            </div>
+        </div>
+        <button class="ui button" type="submit" name="create-user">{% trans 'Create user' %}</button>
+    </form>
+{% endblock olltv_content %}

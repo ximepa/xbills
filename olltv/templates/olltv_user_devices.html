@@ -11,32 +11,33 @@
     <i class="right angle icon divider"></i>
     <a href="{% url 'core:client' uid %}" class="section">{{ client.login }}</a> (UID: {{ uid }})
     <i class="right angle icon divider"></i>
-    <div class="active section">{% trans 'Bundles info' %}</div>
-{% endblock %}
-{% block breadcrumbs_sub_header %}
-    {% trans 'Olltv - Television, which is controlled by you' %}
+    <div class="active section">{% trans 'Devices info' %}</div>
 {% endblock %}
 {% block olltv_content %}
-    <table class="ui small compact table">
-        <thead>
-            <tr>
-                <th>{% trans 'Serial number' %}</th>
-                <th>{% trans 'Mac' %}</th>
-                <th>{% trans 'ID' %}</th>
-                <th>{% trans 'Added' %}</th>
-                <th>{% trans 'Actions' %}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for device in devices_get_list_data %}
+    {% if devices_get_list_data %}
+        <table class="ui small compact table">
+            <thead>
                 <tr>
-                    <td>{{ device.serial_number }}</td>
-                    <td>{{ device.mac }}</td>
-                    <td>{{ device.ID }}</td>
-                    <td>{{ device.date_added }}</td>
-                    <td></td>
+                    <th>{% trans 'Serial number' %}</th>
+                    <th>{% trans 'Mac' %}</th>
+                    <th>{% trans 'ID' %}</th>
+                    <th>{% trans 'Added' %}</th>
+                    <th>{% trans 'Actions' %}</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for device in devices_get_list_data %}
+                    <tr>
+                        <td>{{ device.serial_number }}</td>
+                        <td>{{ device.mac }}</td>
+                        <td>{{ device.ID }}</td>
+                        <td>{{ device.date_added }}</td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        no
+    {% endif %}
 {% endblock olltv_content %}

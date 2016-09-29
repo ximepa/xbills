@@ -17,36 +17,40 @@
     {% trans 'Olltv - Television, which is controlled by you' %}
 {% endblock %}
 {% block olltv_content %}
-    <table class="ui small compact table">
-        <thead>
-            <tr>
-                <th>{% trans 'Name' %}</th>
-                <th>{% trans 'sub_id' %}</th>
-                <th>{% trans 'expiration_date' %}</th>
-                <th>{% trans 'ID' %}</th>
-                <th>{% trans 'parent_id' %}</th>
-                <th>{% trans 'device_binding_code' %}</th>
-                <th>{% trans 'service_type' %}</th>
-                <th>{% trans 'start_date' %}</th>
-                <th>{% trans 'Status' %}</th>
-                <th>{% trans 'Actions' %}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for bundle in user_info.response.data.bought_subs %}
+    {% if user_info.response.data.bought_subs %}
+        <table class="ui small compact table">
+            <thead>
                 <tr>
-                    <td>{{ bundle.name }}</td>
-                    <td>{{ bundle.sub_id }}</td>
-                    <td>{{ bundle.expiration_date }}</td>
-                    <td>{{ bundle.ID }}</td>
-                    <td>{{ bundle.parent_id }}</td>
-                    <td>{{ bundle.device_binding_code }}</td>
-                    <td>{{ bundle.service_type }}</td>
-                    <td>{{ bundle.start_date }}</td>
-                    <td></td>
-                    <td></td>
+                    <th>{% trans 'Name' %}</th>
+                    <th>{% trans 'sub_id' %}</th>
+                    <th>{% trans 'expiration_date' %}</th>
+                    <th>{% trans 'ID' %}</th>
+                    <th>{% trans 'parent_id' %}</th>
+                    <th>{% trans 'device_binding_code' %}</th>
+                    <th>{% trans 'service_type' %}</th>
+                    <th>{% trans 'start_date' %}</th>
+                    <th>{% trans 'Status' %}</th>
+                    <th>{% trans 'Actions' %}</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for bundle in user_info.response.data.bought_subs %}
+                    <tr>
+                        <td>{{ bundle.name }}</td>
+                        <td>{{ bundle.sub_id }}</td>
+                        <td>{{ bundle.expiration_date }}</td>
+                        <td>{{ bundle.ID }}</td>
+                        <td>{{ bundle.parent_id }}</td>
+                        <td>{{ bundle.device_binding_code }}</td>
+                        <td>{{ bundle.service_type }}</td>
+                        <td>{{ bundle.start_date }}</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        no
+    {% endif %}
 {% endblock olltv_content %}
