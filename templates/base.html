@@ -122,6 +122,25 @@
                         {% trans 'Payments' %}
                     </a>
                     <div class="item">
+                        <a class="{% active_startwith request 'olltv:index' %} title">
+                            <i class="dropdown icon"></i>
+                            {% trans 'OLLTV' %}
+                        </a>
+                        <div class="{% active_startwith request 'olltv:index' %} content">
+                            <div class="ui form">
+                                <div class="grouped fields">
+                                    <div class="menu">
+                                        <a href="{% url 'olltv:index' %}" class="{% active request 'olltv:index' %} item">{% trans 'Users' %}</a>
+{#                                        <a href="{% url 'core:company' %}" class="{% active request 'core:company' %} item">{% trans 'Company' %}</a>#}
+{#                                        <a href="{% url 'core:group' %}" class="{% active request 'core:group' %} item">{% trans 'Group' %}</a>#}
+                                        <a class="item">Add</a>
+                                        <a class="item">Remove</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
                         <a class="title">
                             <i class="dropdown icon"></i>
                             {% trans 'Monitoring' %}
