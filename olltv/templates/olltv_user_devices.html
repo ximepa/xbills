@@ -1,0 +1,43 @@
+{% extends 'olltv_layout_edit.html' %}
+{% load url %}
+{% load i18n %}
+{% load staticfiles %}
+{% block title %}
+    Xbills - Olltv {% trans 'edit' %} [{{ user.login }}]
+{% endblock %}
+{% block breadcrumbs %}
+    <i class="right angle icon divider"></i>
+    <a href="{% url 'core:index' %}" class="section">{% trans 'Logins' %}</a>
+    <i class="right angle icon divider"></i>
+    <a href="{% url 'core:client' uid %}" class="section">{{ client.login }}</a> (UID: {{ uid }})
+    <i class="right angle icon divider"></i>
+    <div class="active section">{% trans 'Devices info' %}</div>
+{% endblock %}
+{% block olltv_content %}
+    {% if devices_get_list_data %}
+        <table class="ui small compact table">
+            <thead>
+                <tr>
+                    <th>{% trans 'Serial number' %}</th>
+                    <th>{% trans 'Mac' %}</th>
+                    <th>{% trans 'ID' %}</th>
+                    <th>{% trans 'Added' %}</th>
+                    <th>{% trans 'Actions' %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for device in devices_get_list_data %}
+                    <tr>
+                        <td>{{ device.serial_number }}</td>
+                        <td>{{ device.mac }}</td>
+                        <td>{{ device.ID }}</td>
+                        <td>{{ device.date_added }}</td>
+                        <td></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        no
+    {% endif %}
+{% endblock olltv_content %}

@@ -6,20 +6,20 @@
     <div class="row">
         <div class="column">
             <div class="ui stackable top attached mini tabular menu">
-                <div class="{% active request 'core:client' client.id %} item"><a href="{% url 'core:client' client.id %}"><i class="fa fa-info" aria-hidden="true"></i> {% trans 'Base' %}</a></div>
-                <div class="{% active request 'core:client_payments' client.id %} item"><a href="{% url 'core:client_payments' client.id %}">{% trans 'Payments' %}</a></div>
-                <div class="{% active request 'core:client_fees' client.id %} item"><a href="{% url 'core:client_fees' client.id %}">{% trans 'Fees' %}</a></div>
+                <div class="{% active request 'core:client' uid %} {% active request 'core:client_statistics' uid %} item"><a href="{% url 'core:client' uid %}"><i class="fa fa-info" aria-hidden="true"></i> {% trans 'Base' %}</a></div>
+                <div class="{% active request 'core:client_payments' uid %} item"><a href="{% url 'core:client_payments' uid %}">{% trans 'Payments' %}</a></div>
+                <div class="{% active request 'core:client_fees' uid %} item"><a href="{% url 'core:client_fees' uid %}">{% trans 'Fees' %}</a></div>
                 {% check_module 'olltv' as check_module_olltv %}
                 {% if check_module_olltv %}
-                        <div class="{% active request 'core:user_olltv' client.id %} item"><a href="{% url 'core:user_olltv' client.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'OLLTV' %}</a></div>
+                        <div class="{% if auth %}{% active request 'olltv:user_olltv' uid %}{% else %}disabled{% endif %} item">{% if auth %}<a href="{% url 'olltv:user_olltv' uid %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'OLLTV' %}</a>{% else %}<a href="#"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'OLLTV' %}</a>{% endif %}</div>
                 {% endif %}
                 {% check_module 'ipdhcp' as check_module_dhcp %}
                 {% if check_module_dhcp %}
-                        <div class="{% active request 'core:user_dhcp' client.id %} item"><a href="{% url 'core:user_dhcp' client.id %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'Dhcp' %}</a></div>
+                        <div class="{% active request 'core:user_dhcp' uid %} item"><a href="{% url 'core:user_dhcp' uid %}"><i class="fa fa-television" aria-hidden="true"></i> {% trans 'Dhcp' %}</a></div>
                 {% endif %}
                 {% check_module 'claims' as check_module_claims %}
                 {% if check_module_claims %}
-                        <div class="{% active request 'core:user_claims' client.id %} item"><a href="{% url 'core:user_claims' client.id %}"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i>{% trans 'Claims' %}</a></div>
+                        <div class="{% active request 'core:user_claims' uid %} item"><a href="{% url 'core:user_claims' uid %}"><i class="fa fa-wpforms fa-fw" aria-hidden="true"></i>{% trans 'Claims' %}</a></div>
                 {% endif %}
             </div>
             <div class="ui bottom attached active tab segment">
@@ -35,11 +35,11 @@
                         {% endif %}
                         {% trans 'Sessions' %}
                     </a>
-                    <a href="{% url 'core:client_statistics' client.id %}" class="{% active request 'core:client_statistics' client.id %} item">
+                    <a href="{% url 'core:client_statistics' uid %}" class="{% active request 'core:client_statistics' uid %} item">
                         <i class="idea icon"></i>
                         {% trans 'Statistics' %}
                     </a>
-                    <a href="{% url 'core:client_errors' client.id %}" class="{% active request 'core:client_errors' client.id %} item">
+                    <a href="{% url 'core:client_errors' uid %}" class="{% active request 'core:client_errors' uid %} item">
                         <i class="idea icon"></i>
                         {% trans 'Error' %}
                     </a>

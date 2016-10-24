@@ -14,7 +14,7 @@ urlpatterns = [
 if module_check('ipdhcp'):
     urlpatterns += url(r'^admin/dhcps/', include('ipdhcp.urls')),
 if module_check('olltv'):
-    urlpatterns += url(r'^admin/olltv/', include('olltv.urls')),
+    urlpatterns += url(r'^admin/', include('olltv.urls', 'olltv')),
 if module_check('claims'):
     urlpatterns += url(r'^admin/claims/', include('claims.urls')),
 if module_check('chat'):

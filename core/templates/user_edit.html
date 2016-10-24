@@ -15,7 +15,27 @@
 {% block breadcrumbs_sub_header %}
     {% trans 'User Info' %}
 {% endblock %}
+{% block client_options %}
+    <div class="right header item">
+        {% trans 'Options' %}:
+    </div>
+    <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
+        <i class="gamepad icon"></i>
+        Xml
+    </a>
+    <a href="?{% url_replace request 'csv' '1' %}" class="item">
+        <i class="video camera icon"></i>
+        Csv
+    </a>
+{% endblock client_options %}
 {% block content %}
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
     <div class="ui top attached tabular menu">
         <a class="active item" data-tab="client">{% trans 'User bill' %}</a>
         <a class="item" data-tab="dv">{% trans 'Network' %}</a>

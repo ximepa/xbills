@@ -7,6 +7,8 @@ from .models import Admin
 from django.contrib.sessions.models import Session
 from django.utils import timezone
 from django.core.cache import cache
+from django.core import serializers
+from django.shortcuts import render
 
 
 def randomDigits(digits):
@@ -33,6 +35,12 @@ def export_to_csv(request, queryset, fields, name):
     for obj in queryset:
         writer.writerow([getattr(obj, field) for field in fields])
     return response
+
+
+def export_to_xml(request, queryset):
+    xml_data = serializers.serialize("xml", queryset)
+    print xml_data
+    return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
 
 
 def get_online():

@@ -18,8 +18,8 @@ import requests
 import datetime
 import dateutils
 from .commands import make_conversion
-from .api import olltv_auth, olltv_users_list, oll_user_check, oll_user_add, oll_user_bind, oll_user_unbind, oll_user_info, oll_check_bundle, oll_get_device, oll_dev_check, oll_dev_add, oll_disable_bundle, oll_dev_remove, oll_add_bundle, olltv_change_email, olltv_change_userinfo, oll_account_check
-
+from .api import OLLTV
+from nameparser import HumanName
 modules = settings.INSTALLED_APPS
 
 
@@ -70,46 +70,78 @@ def index(request):
 
 @login_required(login_url='/login/')
 def user_change(request, uid):
-    auth = olltv_auth()
-    if auth['status'] != 0:
-        error = auth
-        messages.error(request, auth)
-        return render(request, 'index.html', locals())
-    else:
+    olltv = OLLTV()
+    auth = olltv.is_auth()
+    if auth:
         try:
             client = User.objects.get(id=uid)
         except User.DoesNotExist:
             user = False
             messages.error(request, 'User not found')
             return render(request, 'olltv_user.html', locals())
+        user_info = olltv.get_user_info(account=client.id)
+        print user_info
+        if user_info['response']['status'] != 0:
+            messages.warning(request, user_info)
+        else:
+            get_account_info_list = [u for u in olltv.get_users_list()['data'] if u["account"] == user_info['response']['data']['account']]
+            for g in get_account_info_list:
+                get_account_info = g
+        if 'olltv' in request.GET and request.GET['olltv'] == 'bundles':
+            # get_user_info = user_info['response']['data']
+            # print get_user_info
+            # tp_list_dict = user_info['response']['data']['bought_subs']
+            # tp_count = len(tp_list_dict)
+            # tp_list = []
+            return render(request, 'olltv_user_bundles.html', locals())
+        if 'olltv' in request.GET and request.GET['olltv'] == 'devices':
+            devices_get_list = olltv.devices_get_list(account=client.id)
+            device_add_form = DeviceAddForm(initial={'uid': client.id})
+            if devices_get_list['status'] != 0:
+                messages.warning(request, devices_get_list)
+            else:
+                devices_get_list_data = devices_get_list['data']
+            return render(request, 'olltv_user_devices.html', locals())
 # user_info
-        device_add_form = DeviceAddForm(initial={'uid': client.id})
-        user_info = oll_user_info(account=client.id, hash=auth['hash'])
-        if user_info['status'] == 505:
+        if user_info['response']['status'] == 505:
             messages.warning(request, user_info)
             return render(request, 'olltv_user.html', locals())
-        elif user_info['status'] == 404:
+        elif user_info['response']['status'] == 404:
 # oll_user_check
-            check_user = oll_user_check(email=client.email, hash=auth['hash'])
-            messages.warning(request, check_user)
-            if check_user['data'] == 0:
-                if 'save-user' in request.POST:
-                    u_add = oll_user_add(request=request, hash=auth['hash'])
-                    try:
-                        iptv = Iptv.objects.get(uid=client)
-                        messages.success(request, u'User %s was created' % client)
-                        return redirect('olltv:user_change', uid=client.id)
-                    except Iptv.DoesNotExist:
-                        iptv = Iptv.objects.create(
-                            uid=client,
-                            tp_id=69,
-                            #mac='',
-                            #pin='',
-                            disable=1,
-                            registration=datetime.date.today()
-                        )
-                        messages.success(request, u'User %s was created' % client)
-                        return redirect('olltv:user_change', uid=client.id)
+            email_exist = olltv.email_exist(email=client.email)
+            messages.warning(request, '%s email does not exist' % client.email)
+            if email_exist == False:
+                name = HumanName(client.pi.fio)
+                if 'create-user' in request.POST:
+                    print request.POST
+                    u_add = olltv.user_add(
+                        email=client.email,
+                        account=client.id,
+                        birth_date=request.POST['birth_date'],
+                        gender=request.POST['gender'],
+                        firstname=request.POST['firstname'],
+                        password=request.POST['password'],
+                        lastname=request.POST['lastname'],
+                        phone=request.POST['phone'],
+                        region=request.POST['region'],
+                        postcode=request.POST['postcode']
+                    )
+                    # try:
+                    #     iptv = Iptv.objects.get(uid=client)
+                    #     messages.success(request, u'User %s was created' % client)
+                    #     return redirect('olltv:user_change', uid=client.id)
+                    # except Iptv.DoesNotExist:
+                    #     iptv = Iptv.objects.create(
+                    #         uid=client,
+                    #         tp_id=69,
+                    #         #mac='',
+                    #         #pin='',
+                    #         disable=1,
+                    #         registration=datetime.date.today()
+                    #     )
+                    #     messages.success(request, u'User %s was created' % client)
+                    return redirect('olltv:user_olltv', uid=client.id)
+                return render(request, 'olltv_user_create.html', locals())
             else:
 # oll_user_bind
                 if 'bind-user' in request.POST:
@@ -153,33 +185,20 @@ def user_change(request, uid):
                     return redirect('olltv:user_change', uid=client.id)
                 return render(request, 'olltv_user.html', locals())
 # get bundle
-            get_user_info = user_info['data']
-            tp_list_dict = user_info['data']['bought_subs']
-            tp_count = user_info['tp_count']
-            tp_list = []
-            if tp_count < 1:
-                tp_list = []
-            else:
-                for tp in tp_list_dict:
-                    # check_bundle
-                    check_bundle = oll_check_bundle(account=client.id, tp=tp['sub_id'], hash=auth['hash'])
-                    if check_bundle['mess'] == 'Error':
-                        messages.warning(request, check_bundle)
-                    else:
-                        get_bundle_status = check_bundle['data']
-                        tp.update({'status': get_bundle_status})
-                        tp_list.append(tp)
+            # if tp_count < 1:
+            #     tp_list = []
+            # else:
+            #     for tp in tp_list_dict:
+            #         # check_bundle
+            #         check_bundle = olltv.bundle_check(account=client.id, tp=tp['sub_id'])
+            #         print check_bundle
+            #         if check_bundle['status'] == 0:
+            #             messages.warning(request, check_bundle)
+            #         else:
+            #             get_bundle_status = check_bundle['data']
+            #             tp.update({'status': get_bundle_status})
+            #             tp_list.append(tp)
 # get_devices
-            get_devices = oll_get_device(account=client.id, hash=auth['hash'])
-            if get_devices['mess'] == 'Error':
-                messages.warning(request, get_devices)
-            else:
-                get_dev_list = get_devices['data']
-            account_check = oll_account_check(account=client.id, hash=auth['hash'])
-            if account_check['mess'] == 'Error':
-                messages.warning(request, account_check)
-            else:
-                get_account_info = account_check['data']
             TYPE = (
                 ('subs_free_device', 'Новый контракт - 24 мес и оборудование за 1 грн'),
                 ('subs_buy_device', 'Новый контракт - покупка оборудования'),
@@ -420,6 +439,11 @@ def user_change(request, uid):
                     admin_log.save()
                     return redirect('olltv:user_change', uid=client.id)
             return render(request, 'olltv_user.html', locals())
+    else:
+        error = auth
+        messages.error(request, auth)
+        return render(request, 'index.html', locals())
+
 
 
 @login_required(login_url='/login/')
