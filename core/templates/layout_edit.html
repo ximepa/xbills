@@ -95,6 +95,50 @@
                             </div>
                         </div>
                     </div>
+                    <div class="ui basic modal">
+                        <i class="close icon"></i>
+                        <div class="header">
+                            {% trans 'Comments' %}
+                        </div>
+                        <form class="ui form" method="post">{% csrf_token %}
+                            <div class="content">
+                                <h4 class="ui dividing header">Give us your feedback</h4>
+                                <div class="field">
+                                    <label>Feedback</label>
+                                    <textarea name="comment" data-value="">{{ user_pi.comments }}</textarea>
+                                </div>
+                                <div class="field">
+                                </div>
+                            </div>
+                            <div class="actions">
+                                <div class="two fluid ui inverted buttons">
+                                    <div class="ui cancel red basic inverted button">
+                                        <i class="remove icon"></i>
+                                        No
+                                    </div>
+                                    <button class="ui ok green basic inverted button" name="comments" value="change" type="submit">
+                                        <i class="checkmark icon"></i>
+                                        Yes
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="centers menu">
+                        <div class="ui dropdown item" onclick="$('.ui.basic.modal').modal('show')">
+                            <i class="fa fa-comment"></i>
+                        </div>
+                    </div>
+                    <div class="right menu">
+                        <div class="ui dropdown item">
+                            {{ request.user.login }}
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <a class="item" href="{% url 'core:administrator_edit' request.user %}">{% trans 'Profile' %}</a>
+                                <a class="item" href="{% url 'core:logout' %}">{% trans 'Logout' %}</a>
+                            </div>
+                        </div>
+                    </div>
                     {% block client_options %}
                     {% endblock client_options %}
                 </div>
@@ -179,7 +223,7 @@
                                             <div class="item">
                                                 <i class="marker icon"></i>
                                                 <div class="content">
-                                                    {{ client.user_pi.city }}
+                                                    {{ client.user_pi.street.district.name }}
                                                     {% if client.user_pi.street %}
                                                         , {{ client.user_pi.street.name }}
                                                         {% if client.user_pi.location %}

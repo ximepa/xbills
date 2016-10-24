@@ -25,6 +25,7 @@ def num_to_ip(number):
 
 # PermissionsMixin
 class Admin(AbstractBaseUser):
+
     login = models.CharField(max_length=50, db_column='id', unique=True)
     name = models.CharField(max_length=50, db_column='name')
     id = models.AutoField(unique=True, primary_key=True, db_column='aid')
@@ -76,7 +77,7 @@ class Bill(models.Model):
 
     deposit = models.FloatField(default=0)
     uid = models.IntegerField(blank=True, null=True)
-    company_id =models.IntegerField(blank=True, null=True)
+    company_id = models.IntegerField(blank=True, null=True, default=0)
     registration = models.DateField(auto_now_add=True)
     #sync = models.FloatField(default=0)
     #linked = models.BooleanField(default=0)
@@ -94,8 +95,15 @@ class Company(models.Model):
     name = models.CharField(max_length=100, unique=True)
     registration = models.DateField(default='0000-00-00')
     credit = models.FloatField(default=0)
-    credit_date = models.DateField()
+    credit_date = models.DateField(default='0000-00-00')
+    address = models.CharField(max_length=100)
+    phone = models.CharField(max_length=20)
+    representative = models.CharField(max_length=120)
     disable = models.SmallIntegerField(default=0)
+    tax_number = models.CharField(max_length=250)
+    bank_account = models.CharField(max_length=250)
+    bank_name = models.CharField(max_length=150)
+    cor_bank_account = models.CharField(max_length=150)
 
     def __unicode__(self):
         return self.name
@@ -109,8 +117,8 @@ class User(models.Model):
 
     id = models.IntegerField(primary_key=True, db_column='uid')
     login = models.CharField(max_length=20, unique=True, db_column='id')
-    disabled = models.SmallIntegerField(db_column='disable', default=2)
-    company = models.ForeignKey(Company, related_name='clients')
+    disable = models.BooleanField(default=0, db_column='disable', blank=True)
+    company = models.ForeignKey(Company, related_name='clients', blank=True, null=True)
     credit = models.FloatField(db_column='credit', default='0.00', blank=True, null=False)
     credit_date = models.DateField(db_column='credit_date', default='0000-00-00', blank=True)
     gid = models.ForeignKey('Group', db_column='gid', related_name='user_group')
@@ -285,13 +293,14 @@ class UserPi(models.Model):
     fio = models.CharField(max_length=100, unique=True)
     #house = models.ForeignKey('House', max_length=100, db_column='address_build', blank=True, default='0')
     email = models.EmailField(db_column='email')
-    street = models.ForeignKey('Street', max_length=100, db_column='address_street')
+    street = models.ForeignKey('Street', max_length=100, db_column='address_street', blank=True, null=True)
     kv = models.CharField(max_length=10, db_column='address_flat')
     phone = models.CharField(max_length=100, db_column='phone')
     phone2 = models.CharField(max_length=100, db_column='phone2')
     city = models.CharField(max_length=100, db_column='city')
-    location = models.ForeignKey('House', db_column='location_id', related_name='location', blank=True, default='0')
+    location = models.ForeignKey('House', db_column='location_id', related_name='location', blank=True, null=True)
     contract_date = models.DateField(db_column='contract_date')
+    comments = models.TextField()
 
     @property
     def pi(self):
@@ -412,8 +421,8 @@ class ErrorsLog(models.Model):
     @property
     def nas_info(self):
         try:
-            return Nas.objects.get(id=self.nas_id)
-        except Nas.DoesNotExist:
+            return Server.objects.get(id=self.nas_id)
+        except Server.DoesNotExist:
             return None
 
 
@@ -426,7 +435,7 @@ class ErrorsLog(models.Model):
 
 
 
-class Nas(models.Model):
+class Server(models.Model):
     id = models.SmallIntegerField(default=0, db_column='id', primary_key=True)
     name = models.CharField(max_length=30, db_column='name')
     nas_identifier = models.CharField(max_length=20, db_column='nas_identifier')
@@ -484,8 +493,8 @@ class Dv_log(models.Model):
     @property
     def nas_info(self):
         try:
-            return Nas.objects.get(id=self.nas_id)
-        except Nas.DoesNotExist:
+            return Server.objects.get(id=self.nas_id)
+        except Server.DoesNotExist:
             return None
 
 
@@ -502,7 +511,7 @@ class Dv_calls(models.Model):
     started = models.DateField(default='0000-00-00 00:00:00', db_column='started')
     nas_ip_address = models.IntegerField(default=0, db_column='nas_ip_address')
     nas_port_id = models.IntegerField(default=0, db_column='nas_port_id')
-    nas = models.ForeignKey('Nas', db_column='nas_id')
+    nas = models.ForeignKey('Server', db_column='nas_id')
     acct_session_id = models.CharField(max_length=25, db_column='acct_session_id', primary_key=True)
     acct_session_time = models.IntegerField(default=0, db_column='acct_session_time')
     acct_input_octets = models.BigIntegerField(default=0, db_column='acct_input_octets')

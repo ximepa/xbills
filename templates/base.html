@@ -14,88 +14,104 @@
     <link href="{% static 'custom/css/toastr.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'custom/css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'custom/css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'custom/css/docs.css' %}" rel="stylesheet">
     {% block extra_css %}
     {% endblock %}
     {% block jquery %}
-        <script src="{% static 'custom/js/jquery-2.2.4.min.js' %}"></script>
+        <script src="{% static 'custom/js/jquery.min.js' %}"></script>
+        <script src="{% static 'custom/js/jquery-ui.js' %}"></script>
     {% endblock %}
-    <script src="{% static 'custom/js/jquery-2.2.4.min.js' %}"></script>
+{#    <script src="{% static 'custom/js/jquery-2.2.4.min.js' %}"></script>#}
 
     <script src="{{ STATIC_URL }}js/ws4redis.js" type="text/javascript"></script>
     <script src="{% static 'custom/js/jquery.cookie.js' %}"></script>
-    <script src="{% static 'semantic-ui/semantic.min.js' %}"></script>
+    <script src="{% static 'semantic-ui/semantic.js' %}"></script>
     <script src="{% static 'custom/js/toastr.js' %}"></script>
     <script src="{% static 'custom/js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script src="{% static 'custom/js/highlight.min.js' %}"></script>
+    <script src="{% static 'custom/js/jQuery-ZenCoding.js' %}"></script>
     <script src="{% static 'custom/js/custom.js' %}"></script>
+    <script src="{% static 'custom/js/jquery.noty.packaged.js' %}"></script>
     {% block extra_js %}
     {% endblock %}
     {% block extra_scripts %}
     {% endblock %}
 </head>
-<body id="content" class="texture">
+<body id="example" class="index" ontouchstart="">
     {% block wrapper %}
-        <div class="ui stackable small menu" style="margin-left: 0.5em; margin-right: 0.5em">
-            <div class="header item">
-                XBills {% version %}
-            </div>
-            <a href="{% url 'core:index' %}" class="{% active request 'core:index' %} blue item"><i class="fa fa-dashboard fa-fw"></i> {% trans 'Dashboard' %} </a>
-            <a class="blue item menu-toggle-button" onclick="hideSidebar()"><i class="list layout icon"></i>{% trans 'Menu' %}</a>
-            <a href="{% url 'core:search' %}" class="{% active request 'core:search' %} blue item popup" data-content="{% trans 'Search user by criteria' %}"><i class="search icon"></i>{% trans 'Search' %}</a>
-            <a href="{% url 'core:chat' %}" class="{% active request 'core:chat' %} blue item popup" data-content="{% trans 'Enter to chat' %}"><i class="comments outline icon"></i>{% trans 'Chat' %}</a>
-            <div class="right menu">
-                <div class="ui dropdown item">
-                    {% get_current_language as LANGUAGE_CODE %}
-                    {% get_available_languages as LANGUAGES %}
-                    {% get_current_language_bidi as LANGUAGE_BIDI %}
-                    {% get_language_info for LANGUAGE_CODE as lang %}
-                    {% if lang.code == 'en' %}
-                        <i class="us flag"></i>{{ lang.name_local }}<i class="dropdown icon"></i>
-                    {% elif lang.code == 'uk' %}
-                        <i class="ua flag"></i>{{ lang.name_local }}<i class="dropdown icon"></i>
-                    {% else %}
-                        <i class="ru flag"></i>{{ lang.name_local }}<i class="dropdown icon"></i>
-                    {% endif %}
-                    <div class="menu">
-                        {% for lang in LANGUAGES %}
-                            <form name="setLang{{ lang.1}}" action="/i18n/setlang/" method="POST">{% csrf_token %}
-                                <input name="next" type="hidden" value="{{ request.get_full_path }}">
-                                <input type="hidden" name="language" value="{{ lang.0 }}">
-                                {% if request.LANGUAGE_CODE == lang.0 %}
-                                    <a href="#" onclick="document.setLang{{ lang.1 }}.submit();return false;" class="active item">
-                                        {% if lang.0 == 'uk' %}
-                                            <i class="ua flag"></i> {{ lang.1 }}
-                                        {% elif lang.0 == 'en' %}
-                                            <i class="us flag"></i> {{ lang.1 }}
-                                        {% else %}
-                                            <i class="{{ lang.0 }} flag"></i> {{ lang.1 }}
-                                        {% endif %}
-                                    </a>
-                                {% else %}
-                                    <a href="#" onclick="document.setLang{{ lang.1 }}.submit();return false;" class="item">
-                                        {% if lang.0 == 'uk' %}
-                                            <i class="ua flag"></i> {{ lang.1 }}
-                                        {% elif lang.0 == 'en' %}
-                                            <i class="us flag"></i> {{ lang.1 }}
-                                        {% else %}
-                                            <i class="{{ lang.0 }} flag"></i> {{ lang.1 }}
-                                        {% endif %}
-                                    </a>
-                                {% endif %}
-                            </form>
-                        {% endfor %}
-                    </div>
+	<div id="panel_menu" class="ui stackable small menu" style="margin-left: 0.5em; margin-right: 0.5em">
+        <div class="header item">
+            <span style="color: orange">X</span><span style="color: red">Bills </span> {% version %}
+        </div>
+        <a href="{% url 'core:index' %}" class="{% active request 'core:index' %} item"><i class="fa fa-dashboard fa-fw"></i> {% trans 'Dashboard' %} </a>
+        <a class="blue item menu-toggle-button" onclick="hideSidebar()"><i class="list layout icon"></i>{% trans 'Menu' %}</a>
+        <a href="{% url 'core:search' %}" class="{% active request 'core:search' %} item popup" data-content="{% trans 'Search user by criteria' %}"><i class="search icon"></i>{% trans 'Search' %}</a>
+        <a href="{% url 'core:chat' %}" class="{% active request 'core:chat' %} item popup" data-content="{% trans 'Enter to chat' %}"><i class="comments outline icon"></i>{% trans 'Chat' %}</a>
+        <a href="javascript:calltest()" class="blue item popup"><i class="comments outline icon"></i>{% trans 'Test' %}</a>
+        <div class="right menu">
+            <div class="ui dropdown item">
+                {% get_current_language as LANGUAGE_CODE %}
+                {% get_available_languages as LANGUAGES %}
+                {% get_current_language_bidi as LANGUAGE_BIDI %}
+                {% get_language_info for LANGUAGE_CODE as lang %}
+                {% if lang.code == 'en' %}
+                    <i class="us flag"></i>{{ lang.name_local }}<i class="dropdown icon"></i>
+                {% elif lang.code == 'uk' %}
+                    <i class="ua flag"></i>{{ lang.name_local }}<i class="dropdown icon"></i>
+                {% else %}
+                    <i class="ru flag"></i>{{ lang.name_local }}<i class="dropdown icon"></i>
+                {% endif %}
+                <div class="menu">
+                    {% for lang in LANGUAGES %}
+                        <form name="setLang{{ lang.1}}" action="/i18n/setlang/" method="POST">{% csrf_token %}
+                            <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                            <input type="hidden" name="language" value="{{ lang.0 }}">
+                            {% if request.LANGUAGE_CODE == lang.0 %}
+                                <a href="#" onclick="document.setLang{{ lang.1 }}.submit();return false;" class="active item">
+                                    {% if lang.0 == 'uk' %}
+                                        <i class="ua flag"></i> {{ lang.1 }}
+                                    {% elif lang.0 == 'en' %}
+                                        <i class="us flag"></i> {{ lang.1 }}
+                                    {% else %}
+                                        <i class="{{ lang.0 }} flag"></i> {{ lang.1 }}
+                                    {% endif %}
+                                </a>
+                            {% else %}
+                                <a href="#" onclick="document.setLang{{ lang.1 }}.submit();return false;" class="item">
+                                    {% if lang.0 == 'uk' %}
+                                        <i class="ua flag"></i> {{ lang.1 }}
+                                    {% elif lang.0 == 'en' %}
+                                        <i class="us flag"></i> {{ lang.1 }}
+                                    {% else %}
+                                        <i class="{{ lang.0 }} flag"></i> {{ lang.1 }}
+                                    {% endif %}
+                                </a>
+                            {% endif %}
+                        </form>
+                    {% endfor %}
                 </div>
-                <div class="item">
+            </div>
+            <div class="item">
+                <form class="ui mini form" action="{% url 'core:search' %}" method="GET">
                     <div class="ui transparent icon input">
                         <input placeholder="Search..." type="text" name="global_search">
                         <i class="search link icon"></i>
                     </div>
+                </form>
+            </div>
+            <div class="ui dropdown item">
+                {{ request.user.login }}
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <a class="item" href="{% url 'core:administrator_edit' request.user %}">{% trans 'Profile' %}</a>
+                    <a class="item" href="{% url 'core:logout' %}">{% trans 'Logout' %}</a>
                 </div>
             </div>
         </div>
+    </div>
         <div class="ui stackable grid" style="padding: 5px">
-            <div class="two wide column">
-                <div id="sideBar" class="ui sticky vertical accordion menu">
+            <div id="sideBar" class="two wide column">
+                <div class="ui sticky vertical accordion menu">
                     <div class="item">
                         <a class="{% active_startwith request 'core:clients' %} title">
                             <i class="dropdown icon"></i>
@@ -115,7 +131,7 @@
                             </div>
                         </div>
                     </div>
-                    <a class="item" href="{% url 'core:fees' %}">
+                    <a class="{% active request 'core:fees' %} item" href="{% url 'core:fees' %}">
                         {% trans 'Fees' %}
                     </a>
                     <a class="item" href="{% url 'core:payments' %}">
@@ -133,6 +149,20 @@
                                         <a class="item">Add</a>
                                         <a class="item">Remove</a>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <a class="title">
+                            <i class="dropdown icon"></i>
+                            {% trans 'Settings' %}
+                        </a>
+                        <div class="{% active_startwith request 'core:administrators' %} content">
+                            <div class="grouped fields">
+                                <div class="menu">
+                                    <a class="{% active request 'core:administrators' %} item" href="{% url 'core:administrators' %}">{% trans 'Administrators' %}</a>
+                                    <a class="{% active request 'core:nas' %} item" href="{% url 'core:nas' %}">{% trans 'Nas' %}</a>
                                 </div>
                             </div>
                         </div>
@@ -163,61 +193,61 @@
                                             <label>Green</label>
                                         </div>
                                     </div>
-                                        <div class="field">
-                                            <div class="ui checkbox">
-                                                <input name="x-large" type="checkbox">
-                                                <label>Blue</label>
-                                            </div>
+                                    <div class="field">
+                                        <div class="ui checkbox">
+                                            <input name="x-large" type="checkbox">
+                                            <label>Blue</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <a class="item">
-                            <i class="grid layout icon"></i> Browse
-                        </a>
-                        <a class="item">
-                            Messages
-                        </a>
-                        <div class="ui dropdown item">
-                            More
-                            <i class="dropdown icon"></i>
-                            <div class="menu">
-                                <a class="item"><i class="edit icon"></i> Edit Profile</a>
-                                <a class="item"><i class="globe icon"></i> Choose Language</a>
-                                <a class="item"><i class="settings icon"></i> Account Settings</a>
-                            </div>
-                        </div>
                     </div>
-                </div>
-                <div id="main_context" class="fourteen wide column">
-                    <div class="ui stackable grid">
-                        <div class="row">
-                            <div class="column">
-                                <div class="ui mini blue segment">
-                                    <h6 class="ui header">
-                                        <i class="dashboard icon"></i>
-                                        <div class="content">
-                                            <div class="ui tiny breadcrumb">
-                                                <a href="{% url 'core:index' %}" class="section">{% trans 'Dashboard' %}</a>
-                                                {% block breadcrumbs %}
-                                                {% endblock %}
-                                            </div>
-                                            <div class="sub header">
-                                                {% block breadcrumbs_sub_header %}
-                                                    {% trans 'System info and monitoring' %}
-                                                {% endblock %}
-                                            </div>
-                                        </div>
-                                    </h6>
-                                </div>
-                            </div>
+                    <a class="item">
+                        <i class="grid layout icon"></i> Browse
+                    </a>
+                    <a class="item">
+                        Messages
+                    </a>
+                    <div class="ui dropdown item">
+                        More
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                            <a class="item"><i class="edit icon"></i> Edit Profile</a>
+                            <a class="item"><i class="globe icon"></i> Choose Language</a>
+                            <a class="item"><i class="settings icon"></i> Account Settings</a>
                         </div>
-                        {% block layout %}
-                        {% endblock %}
                     </div>
                 </div>
             </div>
+            <div id="main_context" class="column" style="width: 87.5%;">
+                <div class="ui stackable grid">
+                    <div class="row">
+                        <div class="column">
+                            <div class="ui mini segment">
+                                <h6 class="ui header">
+                                    <i class="dashboard icon"></i>
+                                    <div class="content">
+                                        <div class="ui tiny breadcrumb">
+                                            <a href="{% url 'core:index' %}" class="section">{% trans 'Dashboard' %}</a>
+                                            {% block breadcrumbs %}
+                                            {% endblock %}
+                                        </div>
+                                        <div class="sub header">
+                                            {% block breadcrumbs_sub_header %}
+                                                {% trans 'System info and monitoring' %}
+                                            {% endblock %}
+                                        </div>
+                                    </div>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    {% block layout %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
         <script>
             function refresh2() {
                 setTimeout(function(){
@@ -235,7 +265,20 @@
                 refresh2();
             });
         </script>
+
         <script src="{% static 'custom/js/chat.js' %}"></script>
+        <script src="{% static 'custom/js/docs.js' %}"></script>
+        <script src="{% static 'custom/js/home.js' %}"></script>
+        <script>
+            window.less = {
+                async        : true,
+                environment  : 'production',
+                fileAsync    : false,
+                onReady      : false,
+                useFileCache : true
+            };
+        </script>
+        <script src="{% static 'custom/js/less.min.js' %}"></script>
     {% endblock %}
 </body>
 </html>

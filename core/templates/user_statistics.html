@@ -10,7 +10,7 @@
 {% endblock %}
 {% block breadcrumbs %}
     <i class="right angle icon divider"></i>
-    <a href="{% url 'core:index' %}" class="section">{% trans 'Logins' %}</a>
+    <a href="{% url 'core:clients' %}" class="section">{% trans 'Logins' %}</a>
     <i class="right angle icon divider"></i>
     <div class="active section"> <a href="{% url 'core:client' uid %}">{{ client.login }}</a> (UID: {{ uid }}) </div>
 {% endblock %}
@@ -37,7 +37,7 @@
         {% endif %}
         {% if statistics.has_previous %}
             <a href="?{% url_replace_page request 'page' '1' %}" class="item">1</a>
-            {% if payments.number > 7 %}
+            {% if statistics.number > 7 %}
                 <div class="disabled item">
                     ...
                 </div>
@@ -87,12 +87,12 @@
                     {% for s in statistics %}
                     <tr>
                         <td>{{ s.start }}</td>
-                        <td>{{ s.duration }}</td>
+                        <td>{% sec_to_time s.duration %}</td>
                         <td>{% sizify s.sent  %}</td>
                         <td>{% sizify s.recv  %}</td>
                         <td>{% ip_convert s.ip %}</td>
                         <td>{{ s.CID }}</td>
-                        <td>{{ s.tp_id }}</td>
+                        <td>{% tp_name s.tp_id %}</td>
                         <td>{{ s.sum }}</td>
                         <td>{{ s.nas_info.name }}</td>
                     </tr>
@@ -101,7 +101,7 @@
                 <tfoot>
                     <tr>
                         <td colspan="8"></td>
-                        <td><div class="ui blue tiny label">{% trans 'All' %} <div class="detail">{{ user_statistics.count }}</div></td>
+                        <td><div class="ui blue tiny label">{% trans 'All' %} <div class="detail">{{ user_statistics.count }}</div></div></td>
                     </tr>
                 </tfoot>
             </table>

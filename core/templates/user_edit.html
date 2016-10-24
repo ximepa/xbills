@@ -17,12 +17,12 @@
 {% endblock %}
 {% block content %}
     <div class="ui top attached tabular menu">
-        <a class="active item" data-tab="first">First</a>
-        <a class="item" data-tab="second">Second</a>
-        <a class="item" data-tab="third">Third</a>
+        <a class="active item" data-tab="client">{% trans 'User bill' %}</a>
+        <a class="item" data-tab="dv">{% trans 'Network' %}</a>
+        <a class="item" data-tab="user_pi">{% trans 'User Information' %}</a>
     </div>
-    <div class="ui bottom attached active tab segment" data-tab="first">
-        <form class="ui form" method="post">{% csrf_token %}
+    <div class="ui bottom attached active tab segment" data-tab="client">
+        <form class="ui form" method="POST">{% csrf_token %}
             <div class="ui tiny stacked segment">
                 {# fields 1 #}
                 <div class="two fields">
@@ -34,7 +34,11 @@
                         <label>{% trans 'Start credit date' %}</label>
                         {{ client_form.credit_date }}
                     </div>
-
+                    <script>
+                        $( function() {
+                            $( "#id_credit_date" ).datepicker({dateFormat: 'yy-mm-dd'});
+                        } );
+                    </script>
                 </div>
                 {# fields 2 #}
                 <div class="two fields">
@@ -57,48 +61,44 @@
                         <label>{% trans 'Start discount date' %}</label>
                         {{ client_form.reduction_date }}
                     </div>
+                    <script>
+                        $( function() {
+                            $( "#id_reduction_date" ).datepicker({dateFormat: 'yy-mm-dd'});
+                        } );
+                    </script>
                 </div>
                 {# fields 4 #}
                 <div class="two fields">
                     <div class="field">
-                        <label>{% trans 'Activation' %} (%)</label>
+                        <label>{% trans 'Activation' %}</label>
                         {{ client_form.activate }}
                     </div>
                     <div class="field">
                         <label>{% trans 'Expired' %}</label>
                         {{ client_form.expire }}
                     </div>
+                    <script>
+                        $( function() {
+                            $( "#id_activate" ).datepicker({dateFormat: 'yy-mm-dd'});
+                        } );
+                    </script>
+                    <script>
+                        $( function() {
+                            $( "#id_expire" ).datepicker({dateFormat: 'yy-mm-dd'});
+                        } );
+                    </script>
                 </div>
                 <div class="inline field">
                     <div class="ui checkbox">
-                        {{ client_form.disabled }}
+                        {{ client_form.disable }}
                         <label>{% trans 'Disable' %}</label>
-                        <script type="application/javascript">
-                            var ipdhcp_disable = $('#id_disabled').change(function(){
-                                console.log($(this));
-                                if ($(this).is(':checked')){
-                                    $(this).attr('value', 1);
-                                    $(this).attr('checked', true);
-                                } else {
-                                    $(this).attr('value', 0);
-                                    $(this).attr('checked', false);
-                                }
-                            });
-                            if ('{{ client_form.disabled.value }}' == 0){
-                                $('#id_disabled').attr('value', 0);
-                                $('#id_disabled').attr('checked', false)
-                            } else {
-                                $('#id_disabled').attr('value', 1);
-                                $('#id_disabled').attr('checked', true)
-                            }
-                        </script>
                     </div>
                 </div>
-                <button class="tiny ui teal submit button" type="submit">{% trans 'Change' %}</button>
+                <button class="tiny ui teal submit button" name="client_form" value="change" type="submit">{% trans 'Change' %}</button>
             </div>
         </form>
     </div>
-    <div class="ui bottom attached tab segment" data-tab="second">
+    <div class="ui bottom attached tab segment" data-tab="dv">
         <form class="ui form" method="post">{% csrf_token %}
             <div class="ui tiny stacked segment">
                 {# fields 1 #}
@@ -159,7 +159,7 @@
 {#                </div>#}
                 <div class="inline field">
                     <div class="ui checkbox">
-                        {{ client_form.disabled }}
+{#                        {{ client_form.disabled }}#}
                         <label>{% trans 'Disable' %}</label>
                     </div>
                 </div>
@@ -167,11 +167,11 @@
             </div>
         </form>
     </div>
-    <div id="third" class="ui bottom attached tab segment" data-tab="third">
+    <div class="ui bottom attached tab segment" data-tab="user_pi">
         <form class="ui form" method="post">{% csrf_token %}
             <div class="ui tiny stacked segment">
                 {# fields 1 #}
-                <div class="three fields">
+                <div class="four fields">
                     <div class="field">
                         <label>{% trans 'FIO' %}</label>
                         {{ user_pi_form.fio }}
@@ -184,33 +184,48 @@
                         <label>{% trans 'Phone' %} (2)</label>
                         {{ user_pi_form.phone2   }}
                     </div>
+                    <div class="field">
+                        <label>{% trans 'Email' %}</label>
+                        {{ user_pi_form.email }}
+                    </div>
                 </div>
                 {# fields 2 #}
-                <div class="three fields">
+                <div class="four fields">
                     <div class="field">
-                        <label>{% trans 'IP' %}</label>
-                        {{ user_pi_form.city }}
+                        <label>{% trans 'City' %}</label>
+                        {{ user_pi_form.district }}
                     </div>
                     <div class="field">
-                        <label>{% trans 'Netmask' %}</label>
+                        <label>{% trans 'Street' %}</label>
                         {{ user_pi_form.street }}
                     </div>
                     <div class="field">
-                        <label>{% trans 'CID' %}</label>
+                        <label>{% trans 'Build' %}</label>
                         {{ user_pi_form.location }}
                     </div>
                     <div class="field">
-                        <label>{% trans 'CID' %}</label>
+                        <label>{% trans 'Flat' %}</label>
                         {{ user_pi_form.kv }}
                     </div>
                 </div>
+                <div class="four fields">
+                    <div class="field">
+                        <label>{% trans 'Contract Date' %}</label>
+                        {{ user_pi_form.contract_date }}
+                    </div>
+                    <script>
+                        $( function() {
+                            $( "#id_contract_date" ).datepicker({dateFormat: 'yy-mm-dd'});
+                        } );
+                    </script>
+                </div>
                 <div class="inline field">
                     <div class="ui checkbox">
-                        {{ client_form.disabled }}
+{#                        {{ client_form.disable }}#}
                         <label>{% trans 'Disable' %}</label>
                     </div>
                 </div>
-                <button class="tiny ui teal submit button" type="submit">{% trans 'Change' %}</button>
+                <button class="tiny ui teal submit button" name="user_pi" value="change" type="submit">{% trans 'Change' %}</button>
             </div>
         </form>
     </div>

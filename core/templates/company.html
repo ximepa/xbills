@@ -11,7 +11,7 @@
 {% block content %}
     <div class="row">
         <div class="column">
-            <div class="ui blue segment">
+{#            <div class="ui blue segment">#}
                 {% if r_company == 1 %}
                     {% if company %}
                         <div id="company_modal" class="ui modal">
@@ -75,35 +75,92 @@
                 {% endif %}
                 {% if r_company == 2 %}
                     <form class="ui form">
-                        <div class="ui tiny stacked segment">
-                            <div class="fields">
+                        <div class="ui sticky stackable mini menu">
+                            <div class="item">
+                                <label>{% trans 'Financial account' %}: </label>
+                                <label>{{ edit_company.bill_id }}</label>
+                            </div>
+                            <div class="item">
+                                <label>{% trans 'Deposit' %}: </label>
+                                {% if edit_company.bill.deposit > 0 %}
+                                    <div class="ui green label">{{ edit_company.bill.deposit }}</div>
+                                {% else %}
+                                    <div class="ui red label">{{ edit_company.bill.deposit }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="item">
+                                <label>{% trans 'Registration' %}: </label>
+                                <label>{{ edit_company.registration }}</label>
+                            </div>
+                        </div>
+                        <div class="ui tiny segment">
+                            <div class="ui sticky stackable mini menu">
+                            </div>
+                            <div class="two fields">
                                 <div class="field">
                                     <label>{% trans 'Name' %}</label>
-                                    <input placeholder="Name..." type="text" value="{{ edit_company.name }}">
+                                         <textarea rows="2" >{{ edit_company.name }}</textarea>
+{#                                            <input placeholder="Name..." type="text" value="">#}
+                                </div>
+                                <div class="field">
+                                    <label>{% trans 'Address' %}</label>
+                                    <textarea rows="2">{{ edit_company.address }}</textarea>
+                                </div>
+                            </div>
+                            <div class="two fields">
+                                <div class="field">
+                                    <label>{% trans 'Credit' %}</label>
+                                    <div class="ui input">
+                                        <input placeholder="Address..." type="text" value="{{ edit_company.address }}">
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <label>{% trans 'Date' %}</label>
+                                    <div class="ui input">
+                                        <input placeholder="Date..." type="text" value="{{ edit_company.credit_date }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="three fields">
+                                <div class="field">
+                                    <label>{% trans 'Phone' %}</label>
+                                    <input placeholder="Phone..." type="text" value="{{ edit_company.phone }}">
+                                </div>
+                                <div class="field">
+                                    <label>{% trans 'Representative' %}</label>
+                                    <input placeholder="Representative..." type="text" value="{{ edit_company.representative }}">
+                                </div>
+                                <div class="field">
+                                    <label>{% trans 'Tax number' %}</label>
+                                    <div class="ui input">
+                                        <input placeholder="Tax number..." type="text" value="{{ edit_company.tax_number }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui sticky stackable mini menu">
+                            </div>
+                            <div class="fields">
+                                <div class="field">
+                                    <label>{% trans 'Account' %}</label>
+                                    <input placeholder="Account..." type="text" value="{{ edit_company.bank_account }}">
                                 </div>
                             </div>
                             <div class="fields">
                                 <div class="field">
-                                    <label>{% trans 'Address' %}</label>
-                                    <input placeholder="Address..." type="text" value="">
+                                    <label>{% trans 'Bank name' %}</label>
+                                    <input placeholder="Bank name..." type="text" value="{{ edit_company.bank_name }}">
                                 </div>
                             </div>
-                            <div class="one fields">
+                            <div class="fields">
                                 <div class="field">
-                                    <label>{% trans 'Phone' %}</label>
-                                    <input placeholder="Phone..." type="text" value="">
-                                </div>
-                            </div>
-                            <div class="one fields">
-                                <div class="field">
-                                    <label>{% trans 'Representative' %}</label>
-                                    <input placeholder="Representative..." type="text" value="">
+                                    <label>{% trans 'Corr. account' %}</label>
+                                    <input placeholder="Corr. account..." type="text" value="{{ edit_company.cor_bank_account }}">
                                 </div>
                             </div>
                         </div>
                     </form>
                 {% endif %}
-            </div>
+{#            </div>#}
         </div>
     </div>
 {% endblock %}

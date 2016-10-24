@@ -1,36 +1,36 @@
 {% load i18n %}
 {% load url %}
 {% load staticfiles %}
-<table class="ui black table table-hover table-striped table-condensed">
+<table class="ui blue small very compact selectable striped table">
     <thead>
         <tr>
             {% if 'user_id__id' in default_table_choices %}
-            <th><a href="?{% url_replace request 'order_by' 'user_id__id' %}">{% trans 'UID' %}</a><i class="fa fa-sort fa-fw"></i></th>
+                <th><a href="?{% url_replace request 'order_by' 'user_id__id' %}">{% trans 'UID' %}</a><i class="fa fa-sort fa-fw"></i></th>
             {% endif %}
             <th><a href="?{% url_replace request 'order_by' 'user_id__login' %}">{% trans 'Login' %}</a><i class="fa fa-sort fa-fw"></i></th>
             {% if 'fio' in default_table_choices %}
-            <th><a href="?{% url_replace request 'order_by' 'fio' %}">{% trans 'FIO' %}</a><i class="fa fa-sort fa-fw"></i></th>
+                <th><a href="?{% url_replace request 'order_by' 'fio' %}">{% trans 'FIO' %}</a><i class="fa fa-sort fa-fw"></i></th>
             {% endif %}
             {% if 'district' in default_table_choices %}
-            <th><a href="?{% url_replace request 'order_by' 'district' %}">{% trans 'City' %}</a><i class="fa fa-sort fa-fw"></i></th>
+                <th><a href="?{% url_replace request 'order_by' 'district' %}">{% trans 'City' %}</a><i class="fa fa-sort fa-fw"></i></th>
             {% endif %}
             {% if 'street' in default_table_choices %}
-            <th><a href="?{% url_replace request 'order_by' 'street' %}">{% trans 'Street' %}</a><i class="fa fa-sort fa-fw"></i></th>
+                <th><a href="?{% url_replace request 'order_by' 'street' %}">{% trans 'Street' %}</a><i class="fa fa-sort fa-fw"></i></th>
             {% endif %}
             {% if 'location' in default_table_choices %}
-            <th><a href="?{% url_replace request 'order_by' 'location' %}">{% trans 'Build' %}</a><i class="fa fa-sort fa-fw"></i></th>
+                <th><a href="?{% url_replace request 'order_by' 'location' %}">{% trans 'Build' %}</a><i class="fa fa-sort fa-fw"></i></th>
             {% endif %}
             {% if 'kv' in default_table_choices %}
-            <th><a href="?{% url_replace request 'order_by' 'kv' %}">{% trans 'Flat' %}</a><i class="fa fa-sort fa-fw"></i></th>
+                <th><a href="?{% url_replace request 'order_by' 'kv' %}">{% trans 'Flat' %}</a><i class="fa fa-sort fa-fw"></i></th>
             {% endif %}
             {% if 'user_id__bill__deposit' in default_table_choices %}
-            <th><a href="?{% url_replace request 'order_by' 'user_id__bill__deposit' %}">{% trans 'Deposit' %}</a><i class="fa fa-sort fa-fw"></i></th>
+                <th><a href="?{% url_replace request 'order_by' 'user_id__bill__deposit' %}">{% trans 'Deposit' %}</a><i class="fa fa-sort fa-fw"></i></th>
             {% endif %}
             {% if 'user_id__credit' in default_table_choices %}
-            <th><a href="?{% url_replace request 'order_by' 'user_id__credit' %}">{% trans 'Credit' %}</a><i class="fa fa-sort fa-fw"></i></th>
+                <th><a href="?{% url_replace request 'order_by' 'user_id__credit' %}">{% trans 'Credit' %}</a><i class="fa fa-sort fa-fw"></i></th>
             {% endif %}
-            {% if 'user_id__disabled' in default_table_choices %}
-            <th><a href="?{% url_replace request 'order_by' 'user_id__disabled' %}">{% trans 'Disabled' %}</a><i class="fa fa-sort fa-fw"></i></th>
+            {% if 'user_id__disable' in default_table_choices %}
+                <th><a href="?{% url_replace request 'order_by' 'user_id__disable' %}">{% trans 'Disabled' %}</a><i class="fa fa-sort fa-fw"></i></th>
             {% endif %}
             <th><a href="?{% url_replace request 'order_by' 'user_id__deleted' %}">{% trans 'Deleted' %}</a><i class="fa fa-sort fa-fw"></i></th>
             <th>{% trans '-' %}</th>
@@ -81,7 +81,7 @@
                     <td><span style="color: grey">{{ u.user_id.credit }}</span></td>
                 {% endif %}
             {% endif %}
-            {% if 'user_id__disabled' in default_table_choices %}
+            {% if 'user_id__disable' in default_table_choices %}
                 {% if u.user_id.disabled == 1 %}
                     <td><span style="color: red">{% trans 'Disabled' %}</span></td>
                 {% elif u.user_id.disabled == 2 %}
@@ -100,4 +100,37 @@
         </tr>
         {% endfor %}
     </tbody>
+    <tfoot>
+        <tr>
+            {% if 'user_id__id' in default_table_choices %}
+                <th></th>
+            {% endif %}
+            <th><div class="ui blue tiny label">{% trans 'All' %}<div class="detail">{{ all }}</div></div></th>
+            {% if 'fio' in default_table_choices %}
+                <th></th>
+            {% endif %}
+            {% if 'district' in default_table_choices %}
+                <th></th>
+            {% endif %}
+            {% if 'street' in default_table_choices %}
+                <th></th>
+            {% endif %}
+            {% if 'location' in default_table_choices %}
+                <th></th>
+            {% endif %}
+            {% if 'kv' in default_table_choices %}
+                <th></th>
+            {% endif %}
+            {% if 'user_id__bill__deposit' in default_table_choices %}
+                <th></th>
+            {% endif %}
+            {% if 'user_id__credit' in default_table_choices %}
+                <th></th>
+            {% endif %}
+            {% if 'user_id__disable' in default_table_choices %}
+                <th><div class="ui blue tiny label">{% trans 'Disabled' %}<div class="detail">{{ disabled }}</div></div></th>
+            {% endif %}
+            <th><div class="ui blue tiny label">{% trans 'Deleted' %}<div class="detail">{{ deleted }}</div></div></th>
+        </tr>
+    </tfoot>
 </table>

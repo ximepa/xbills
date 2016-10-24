@@ -1,30 +1,20 @@
 # -*- encoding: utf-8 -*-
 import csv
 import json
-
-import itertools
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse, render_to_response, RequestContext, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum
+from django.db.models import Sum, Q
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import RedirectView
-from django.views.generic import TemplateView
-from django.views.generic import View
-
 from dv.helpers import Hangup
-from ipdhcp.models import Dhcphosts_networks, Dhcphosts_hosts
 from .auth_backend import AuthBackend
-from .models import User, Payment, Fees, Dv, UserPi, Street, House, District, Dv_calls, Nas, ErrorsLog, Dv_log, Admin, num_to_ip, AdminSettings, \
+from .models import User, Payment, Fees, Dv, UserPi, Street, House, District, Dv_calls, Server, ErrorsLog, Dv_log, Admin, num_to_ip, AdminSettings, \
     AdminLog, ip_to_num, Group, Company
-from ipdhcp.models import ipRange
 from .forms import AdministratorForm, SearchForm, SearchFeesForm, SearchPaymentsForm, ClientForm, DvForm, UserPiForm
 from django.contrib import messages
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .commands import strfdelta, sizeof_fmt
-from django.contrib.auth.decorators import permission_required
-from ws4redis.redis_store import RedisMessage, RedisStore
+from ws4redis.redis_store import RedisMessage
 from ws4redis.publisher import RedisPublisher
 import helpers
 import platform
@@ -39,43 +29,6 @@ def custom_redirect(url_name, *args, **kwargs):
     url = reverse(url_name, args=args)
     params = urllib.urlencode(kwargs)
     return HttpResponseRedirect(url + "?%s" % params)
-
-
-def get_pc_info(request):
-    psutil.boot_time()
-    boot_time = datetime.datetime.fromtimestamp(psutil.boot_time())
-    d2 = datetime.datetime.now()
-    diff = abs((d2 - boot_time))
-    if 'action' in request.GET and request.GET['action'] == 'get_pc_info':
-        try:
-            list = []
-            data_dict = {}
-            for getCpu in psutil.cpu_percent(interval=1, percpu=True):
-                pinfo = {}
-                pinfo['core'] = getCpu
-                list.append(pinfo)
-            data_dict.update({
-                "cpu": list,
-                "memory": [{
-                    "cur": psutil.virtual_memory().percent,
-                    "total": psutil.virtual_memory().total,
-                    "used": psutil.virtual_memory().used,
-                    "free": psutil.virtual_memory().free,
-                    "cached": psutil.virtual_memory().cached,
-                    "swap": psutil.swap_memory().percent,
-                    "stotal": psutil.swap_memory().total,
-                    "sused": psutil.swap_memory().used,
-                    "sfree": psutil.swap_memory().free,
-                }],
-                "uptime": strfdelta(diff, settings.UPTIME_FORMAT)
-            })
-
-            get_pc_info = json.dumps(data_dict)
-            cpus_info = RedisMessage('%s' % get_pc_info)  # create a welcome message to be sent to everybody
-            RedisPublisher(facility=request.GET['room'], broadcast=True).publish_message(cpus_info)
-        except Exception:
-            pass
-    return HttpResponse('Ok')
 
 
 @login_required()
@@ -159,7 +112,7 @@ def nas(request):
         for p in page_range:
             page_list = p
         pre_end = sespage.paginator.num_pages - 2
-    nas_id = Nas.objects.all()
+    nas_id = Server.objects.all()
     return render(request, 'nas.html', locals())
 
 @login_required()
@@ -168,7 +121,8 @@ def client_errors(request, uid):
         client = User.objects.get(id=uid)
     except User.DoesNotExist:
         return render(request, '404.html', locals())
-    user_errors = ErrorsLog.objects.filter(user=client.login)
+    order_by = request.GET.get('order_by', '-date')
+    user_errors = ErrorsLog.objects.filter(user=client.login).order_by(order_by)
     paginator = Paginator(user_errors, settings.USER_ERRORS_PER_PAGE)
     page = request.GET.get('page', 1)
     dv_session = Dv_calls.objects.filter(uid=uid)
@@ -252,7 +206,7 @@ def search(request):
         'location',
         'kv',
         'user_id__credit',
-        'user_id__disabled',
+        'user_id__disable',
         'user_id__deleted',
     ]
     default_table_choices = [
@@ -260,7 +214,7 @@ def search(request):
         'fio',
         'user_id__bill__deposit',
         'user_id__credit',
-        'user_id__disabled',
+        'user_id__disable',
         'user_id__deleted',
     ]
     search_form = SearchForm()
@@ -269,15 +223,15 @@ def search(request):
     districts = District.objects.all()
     filter_params = {}
     includes = []
-    try:
-        admin_settings = AdminSettings.objects.get(admin_id=request.user.id, object='USERS_LIST')
-        default_table_choices = admin_settings.setting.lower().replace(' ', '').split(',')
-    except AdminSettings.DoesNotExist:
-        admin_settings = AdminSettings.objects.create(
-            admin_id=request.user.id,
-            object='USERS_LIST',
-            setting=', '.join(default_table_choices)
-        )
+    # try:
+    #     admin_settings = AdminSettings.objects.get(admin_id=request.user.id, object='USERS_LIST')
+    #     default_table_choices = admin_settings.setting.lower().replace(' ', '').split(',')
+    # except AdminSettings.DoesNotExist:
+    #     admin_settings = AdminSettings.objects.create(
+    #         admin_id=request.user.id,
+    #         object='USERS_LIST',
+    #         setting=', '.join(default_table_choices)
+    #     )
 
     if request.method == 'POST':
         includes = [', '.join(request.POST.getlist('includes'))]
@@ -289,8 +243,8 @@ def search(request):
             pass
         else:
             includes.append('user_id__deleted')
-        admin_settings.setting = ', '.join(includes)
-        admin_settings.admin_id = request.user.id
+        # admin_settings.setting = ', '.join(includes)
+        # admin_settings.admin_id = request.user.id
         # admin_settings.save()
         return redirect(request.get_full_path())
     try:
@@ -299,9 +253,9 @@ def search(request):
         search = None
     search_type = request.GET.get('search_type', '1')
     if search_type == '1':
-        print request.GET
         search_form = SearchForm(request.GET, initial=request.GET)
         if request.GET.get('search'):
+            print request.GET
             order_by = request.GET.get('order_by', 'user_id__login')
             if 'uid' in request.GET and request.GET['uid'] != '':
                 try:
@@ -315,22 +269,20 @@ def search(request):
                     filter_params.update({'user_id__login__contains': request.GET['login']})
                 if 'district' in request.GET and request.GET['district'] != '':
                     city = District.objects.get(id=request.GET['district'])
-                    if 'street' not in request.GET or request.GET['street'] == '':
+                    if 'street' not in request.GET or request.GET['street'] == '0' or request.GET['street'] == '':
                         city_street = Street.objects.values('id').filter(district_id=request.GET['district'])
                         filter_params['street_id__in'] = city_street
                     else:
                         street = Street.objects.values_list('id').get(id=request.GET['street'])
                         filter_params.update({'street_id': street})
-                        if 'house' in request.GET and request.GET['house'] != '':
+                        if 'house' in request.GET and request.GET['house'] != '' and request.GET['house'] != '0':
                             house = House.objects.values_list('id').get(id=request.GET['house'])
                             filter_params.update({'location_id': house})
                 if 'flat' in request.GET and request.GET['flat'] != '':
                     filter_params.update({'kv': request.GET['flat']})
                 if 'disabled' in request.GET and request.GET['disabled'] != '':
-                    filter_params.update({'user_id__disabled': 1})
+                    filter_params.update({'user_id__disable': 1})
                 try:
-                    print filter_params
-                    print 'try'
                     userpi = UserPi.objects.filter(**filter_params).order_by(order_by)
                     if userpi.count() == 0:
                         error = 'User not found'
@@ -338,14 +290,12 @@ def search(request):
                         for u in userpi:
                             return redirect('core:client', uid=u.user_id.id)
                     else:
-                        print 'else'
                         all = userpi.count()
-                        disabled = userpi.filter(user_id__disabled=1).count()
-                        not_active = userpi.filter(user_id__disabled=2).count()
+                        disabled = userpi.filter(user_id__disable=1).count()
+                        not_active = userpi.filter(user_id__disable=2).count()
                         deleted = userpi.filter(user_id__deleted=1).count()
                         paginator = Paginator(userpi, 100)
                         page = request.GET.get('page', 1)
-                        print '1'
                         try:
                             users = paginator.page(page)
                         except PageNotAnInteger:
@@ -356,7 +306,6 @@ def search(request):
                             start = str(int(page)-5)
                         else:
                             start = 1
-                        print '2'
                         if int(page) < paginator.num_pages-5:
                             end = str(int(page)+5+1)
                         else:
@@ -365,7 +314,6 @@ def search(request):
                         for p in page_range:
                             page_list = p
                         pre_end = users.paginator.num_pages - 2
-                        print pre_end
                         print locals()
                     return render(request, 'search.html', locals())
                 except User.DoesNotExist:
@@ -434,8 +382,8 @@ def search(request):
             #         return redirect('core:client', uid=u['user_id'])
             else:
                 all = payments_list.count()
-                disabled = payments_list.filter(uid__disabled=1).count()
-                not_active = payments_list.filter(uid__disabled=2).count()
+                disabled = payments_list.filter(uid__disable=1).count()
+                not_active = payments_list.filter(uid__disable=2).count()
                 deleted = payments_list.filter(uid__deleted=1).count()
                 paginator = Paginator(payments_list, settings.PAYMENTS_PER_PAGE)
                 page = request.GET.get('page', 1)
@@ -462,12 +410,47 @@ def search(request):
             error = 'Payments not found'
             return render(request, 'search.html', locals())
     if 'global_search' in request.GET:
-        global_list = {}
-        userpi = UserPi.objects.all()
-        userpi.filter(fio=request.GET['global_search'])
-        print userpi.fio
-        print 'global'
-        print locals()
+        print request.GET['global_search']
+        search = 1
+        try:
+            userpi = UserPi.objects.filter(Q(user_id=request.GET['global_search']) | Q(phone2__icontains=request.GET['global_search']))
+            print userpi
+        except:
+            userpi = UserPi.objects.filter(Q(user_id__login__icontains=request.GET['global_search']) |
+                                           Q(street__name__icontains=request.GET['global_search']) |
+                                           Q(city__icontains=request.GET['global_search']) |
+                                           Q(fio__icontains=request.GET['global_search']))
+        if userpi.count() == 0:
+            error = 'User not found'
+        elif userpi.count() == 1:
+            for u in userpi:
+                return redirect('core:client', uid=u.user_id.id)
+        else:
+            all = userpi.count()
+            disabled = userpi.filter(user_id__disable=1).count()
+            not_active = userpi.filter(user_id__disable=2).count()
+            deleted = userpi.filter(user_id__deleted=1).count()
+            paginator = Paginator(userpi, 100)
+            page = request.GET.get('page', 1)
+            try:
+                users = paginator.page(page)
+            except PageNotAnInteger:
+                users = paginator.page(1)
+            except EmptyPage:
+                users = paginator.page(paginator.num_pages)
+            if int(page) > 5:
+                start = str(int(page) - 5)
+            else:
+                start = 1
+            if int(page) < paginator.num_pages - 5:
+                end = str(int(page) + 5 + 1)
+            else:
+                end = paginator.num_pages + 1
+            page_range = range(int(start), int(end)),
+            for p in page_range:
+                page_list = p
+            pre_end = users.paginator.num_pages - 2
+        return render(request, 'search.html', locals())
     return render(request, 'search.html', locals())
 
 
@@ -479,20 +462,27 @@ def client(request, uid):
         client = User.objects.get(id=uid)
     except User.DoesNotExist:
         return render(request, '404.html', locals())
-    if client.disabled == 1:
-        disabled = 0
+    if client.disable == 1:
+        disable = 0
     else:
-        disabled = 1
-    print client.disabled
-    print disabled
+        disable = 1
     client_form = ClientForm(instance=client)
+    if 'client_form' in request.POST:
+        client_form = ClientForm(request.POST, instance=client)
+        print client_form
+        if client_form.is_valid():
+            print 'oky'
+        print client_form.errors
     dv = Dv.objects.get(user=uid)
     dv_form = DvForm(instance=dv, initial={'ip': num_to_ip(dv.ip), 'netmask': num_to_ip(dv.netmask)})
     user_pi = UserPi.objects.get(user_id=uid)
-    user_pi_form = UserPiForm(instance=user_pi)
-    streets = Street.objects.all()
-    houses = House.objects.all()
-    group = Group.objects.all()
+    user_pi_form = UserPiForm(instance=user_pi, initial={'district': user_pi.street.district_id})
+    if 'user_pi' in request.POST:
+        user_pi_form = UserPiForm(request.POST, instance=user_pi)
+        print user_pi_form
+    # streets = Street.objects.all()
+    # houses = House.objects.all()
+    # group = Group.objects.all()
     dv_session = Dv_calls.objects.filter(uid=uid)
     if helpers.module_check('olltv'):
         from olltv.models import Iptv, IptvDevice, IptvDeviceType
@@ -547,7 +537,7 @@ def client_payments(request, uid):
         return render(request, '404.html', locals())
     payments_list = Payment.objects.filter(uid=client.id).order_by(order_by)
     for ex_payments in payments_list:
-        out_sum = out_sum + ex_payments.sum
+        out_sum += ex_payments.sum
     paginator = Paginator(payments_list, settings.PAYMENTS_PER_PAGE)
     page = request.GET.get('page', 1)
     if helpers.module_check('olltv'):
@@ -654,18 +644,18 @@ def clients(request):
     order_by = request.GET.get('order_by', 'login')
     users_list = User.objects.all().order_by(order_by)
     if filter_by == '1':
-        users_list = users_list.filter(bill__deposit__gte=0, disabled=False, deleted=False,)
+        users_list = users_list.filter(bill__deposit__gte=0, disable=False, deleted=False,)
     if filter_by == '2':
         users_list = users_list.filter(bill__deposit__lt=0, credit=0)
     if filter_by == '3':
-        users_list = users_list.filter(disabled=True, deleted=False)
+        users_list = users_list.filter(disable=True, deleted=False)
     if filter_by == '4':
         users_list = users_list.filter(deleted=True)
     if filter_by == '5':
         users_list = users_list.filter(credit__gt=0)
     all = users_list.count()
     end = users_list.filter(deleted=1).count()
-    disabled = users_list.filter(disabled=1).count()
+    disabled = users_list.filter(disable=1).count()
     deleted = users_list.filter(deleted=1).count()
     paginator = Paginator(users_list, 100)
     page = request.GET.get('page', 1)
@@ -733,10 +723,13 @@ def payments(request):
 
 @login_required()
 def fees(request):
+    out_sum = 0
     order_by = request.GET.get('order_by', '-date')
     fees_list = Fees.objects.all().order_by(order_by)
     paginator = Paginator(fees_list, settings.FEES_PER_PAGE)
     page = request.GET.get('page', 1)
+    # for ex_fees in fees_list:
+    #     out_sum += ex_fees.sum
     try:
         fees = paginator.page(page)
     except PageNotAnInteger:
@@ -918,6 +911,7 @@ def administrator_edit(request, uid):
         if request.method == 'POST':
             admin_form = AdministratorForm(request.POST, instance=admin)
             if admin_form.is_valid():
+                print admin_form
                 admin_form.save()
                 return redirect('core:administrators')
         return render(request, 'admin_edit.html', locals())
@@ -942,3 +936,20 @@ def chat(request):
         else:
             print 'no message'
     return render(request, 'chat.html', locals())
+
+
+def monitoring_servers(request):
+    servers_list = []
+    servers = Server.objects.filter(disable=0)
+    dv = Dv_calls.objects.filter(nas_id__in=[s.id for s in servers])
+    for s in servers:
+        servers_list.append({'server': s.name, 'id': s.id, 'clients_count': Dv_calls.objects.filter(nas_id=s.id).count()})
+    # for s in servers:
+    #     servers_dict.update({'server': s.name, 'id': s.id, 'clients_count': dv.count()})
+    #
+    print servers_list
+    print request.GET
+    if 'order_by' in request.GET:
+        servers_list = sorted(servers_list, key=lambda k: k['id'], reverse=True)
+    return render(request, 'monitoring_servers.html', locals())
+

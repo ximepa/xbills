@@ -1,13 +1,19 @@
+from core.views import monitoring_servers
+from voip.call import hangup
+
 __author__ = 'ximepa'
-from django.conf.urls import include, url
+from django.conf.urls import url
 from . import views
 from .helpers import module_check
+
 app_name = 'core'
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^get_pc_info/$', views.get_pc_info, name='get_pc_info'),
+    # url(r'^get_pc_info/$', get_responses, name='get_pc_info'),
     url(r'^chat/$', views.chat, name='chat'),
+    url(r'^hangup/$', hangup, name='hangup'),
+    url(r'^monitoring_servers/$', monitoring_servers, name='monitoring_servers'),
     url(r'^clients/$', views.clients, name='clients'),
     url(r'^clients/(?P<uid>\d+)/$', views.client, name='client'),
     url(r'^search/$', views.search, name='search'),

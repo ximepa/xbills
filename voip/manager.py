@@ -1013,7 +1013,7 @@ class AMIFactory(protocol.ClientFactory):
         self.secret = secret
         self.id = id
 
-    def login(self, ip='localhost', port=5038, timeout=5, bindAddress=None):
+    def login(self, ip='172.16.111.22', port=5038, timeout=5, bindAddress=None):
         """Connect and return protocol instance
 
         Connect and return our (singleton) protocol instance with login

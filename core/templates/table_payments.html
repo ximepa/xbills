@@ -29,7 +29,7 @@
             {% else %}
                 <td>{{ payment.last_deposit }}</td>
             {% endif %}
-            <td>{{ payment.method }}</td>
+            <td>{% pay_type  payment.method %}</td>
             <td>{{ payment.aid.login }}</td>
             <td>{{ payment.uid.id }}</td>
             <td><a href="{% url 'core:client_payments' payment.uid.id %}?del={{ payment.id }}" onclick="return confirm('{% trans 'Delete' %}?');"><i class="fa fa-remove"></i></a></td>

@@ -23,10 +23,16 @@ class MainDBRouter(object):
             return False
         if model._meta.app_label == 'claims':
             return False
+        if model._meta.app_label == 'voip':
+            return False
         return True
 
     def allow_migrate(self, db, app_label, model_name=None, **hints):
         if model_name == 'core':
+            return False
+        if model_name == 'claims':
+            return False
+        if model_name == 'voip':
             return False
         return True
 

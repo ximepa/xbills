@@ -37,14 +37,14 @@ class AdministratorForm(forms.ModelForm):
             'phone',
         ]
         widgets = {
-            'login': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Login'}),
-            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Name'}),
+            'login': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
+            'name': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
             'disable': forms.CheckboxInput(),
-            'theme': forms.Select(attrs={'class': 'form-control', 'placeholder': u'Name'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': u'Name'}),
-            'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Name'}),
-            'cell_phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Name'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': u'Name'}),
+            'theme': forms.Select(attrs={'class': 'ui search dropdown'}),
+            'email': forms.EmailInput(attrs={'class': 'ui small input', 'placeholder': u'Email'}),
+            'address': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Address'}),
+            'cell_phone': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Phone'}),
+            'phone': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Phone'}),
         }
 
 
@@ -55,26 +55,27 @@ class SearchForm(forms.Form):
        (1, _("Disabled")),
        (2, _("Not Active")),
     )
-    login = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control input-sm', 'placeholder': u'Login'}))
-    uid = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control input-sm', 'placeholder': u'UID'}))
+    login = forms.CharField(widget=forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}))
+    uid = forms.CharField(widget=forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'UID'}))
     disabled = forms.ChoiceField(widget=forms.RadioSelect(), choices=DISABLED)
     district = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'ui search dropdown', 'placeholder': u'District'}), queryset=District.objects.all(), required=False)
     street = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'ui search dropdown', 'placeholder': u'Street'}), queryset=Street.objects.all(), required=False)
     house = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'ui search dropdown', 'placeholder': u'House'}), queryset=House.objects.filter(~Q(number="")), required=False,)
-    flat = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control input-sm', 'placeholder': u'Flat'}))
+    flat = forms.CharField(widget=forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Flat'}))
 
 
 class SearchFeesForm(forms.Form):
-    login = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control input-sm', 'placeholder': u'Login'}))
-    group = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control input-sm', 'placeholder': u'District'}), queryset=Group.objects.all(), required=False)
+    login = forms.CharField(widget=forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}))
+    group = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'ui search dropdown', 'placeholder': u'District'}), queryset=Group.objects.all(), required=False)
 
 
 class SearchPaymentsForm(forms.Form):
-    login = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control input-sm', 'placeholder': u'Login'}))
-    group = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control input-sm', 'placeholder': u'District'}), queryset=Group.objects.all(), required=False)
+    login = forms.CharField(widget=forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}))
+    group = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'ui search dropdown', 'placeholder': u'District'}), queryset=Group.objects.all(), required=False)
 
 
 class ClientForm(forms.ModelForm):
+    disable = forms.BooleanField(required=False)
     gid = forms.ModelChoiceField(
         queryset=Group.objects.all(),
         empty_label=None,
@@ -88,9 +89,7 @@ class ClientForm(forms.ModelForm):
     class Meta:
         model = User
         fields = [
-            'id',
-            'login',
-            'disabled',
+            'disable',
             'company',
             'credit',
             'credit_date',
@@ -101,13 +100,11 @@ class ClientForm(forms.ModelForm):
             'expire',
             'deleted',
             'registration',
-            'bill',
+            # 'bill',
         ]
         widgets = {
-            'id': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'UID'}),
-            'login': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
-            'disabled': forms.CheckboxInput(attrs={'class': 'ui checkbox', 'onclick': 'ipdhcp_disable'}),
-            'company': forms.Select(attrs={'class': 'ui dropdown'}),
+            'disable': forms.CheckboxInput(),
+            'company': forms.Select(attrs={'class': 'ui search dropdown'}),
             'credit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Credit'}),
             'credit_date': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
             'reduction': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
@@ -116,7 +113,7 @@ class ClientForm(forms.ModelForm):
             'expire': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
             'deleted': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
             'registration': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
-            'bill': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
+            # 'bill': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
         }
 
 
@@ -150,6 +147,15 @@ class DvForm(forms.ModelForm):
 
 
 class UserPiForm(forms.ModelForm):
+    district = forms.ModelChoiceField(
+        queryset=District.objects.all(),
+        empty_label=None,
+        widget=forms.Select(
+            attrs={
+                'class': 'ui search dropdown'
+            }
+        )
+    )
 
     class Meta:
         model = UserPi
@@ -161,21 +167,20 @@ class UserPiForm(forms.ModelForm):
             'kv',
             'phone',
             'phone2',
-            'city',
+            'district',
             'location',
             'contract_date',
 
         ]
 
         widgets = {
-            'user_id': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'UID'}),
+            'user_id': forms.HiddenInput(),
             'fio': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'FIO'}),
             'email': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Mail'}),
-            'kv': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Credit'}),
+            'kv': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Flat'}),
             'phone': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Phone'}),
             'phone2': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Phone'}),
-            'city': forms.Select(attrs={'class': 'ui dropdown'}),
             'street': forms.Select(attrs={'class': 'ui dropdown'}),
             'location': forms.Select(attrs={'class': 'ui dropdown'}),
-            'contract_date': forms.Select(attrs={'class': 'ui dropdown'}),
+            'contract_date': forms.TextInput(attrs={'class': 'ui small input', 'value': '0000-00-00', 'placeholder': '0000-00-00'}),
         }

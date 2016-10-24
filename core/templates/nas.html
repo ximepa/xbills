@@ -2,334 +2,218 @@
 {% load i18n %}
 {% load url %}
 {% load staticfiles %}
-{% block extra_css %}
-    <link href="{% static 'css/bootstrap-datetimepicker.min.css' %}" rel="stylesheet">
+{% block breadcrumbs %}
+    <i class="right angle icon divider"></i>
+    <div class="section">{% trans 'Settings' %}</div>
+    <i class="right angle icon divider"></i>
+    <a href="{% url 'core:nas' %}" class="section">{% trans 'Nas' %}</a>
 {% endblock %}
-{% block extra_js %}
-
-{% endblock %}
-{% block extra_scripts %}
+{% block breadcrumbs_sub_header %}
+    {% trans 'Edit Servers' %}
 {% endblock %}
 {% block layout %}
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="panel panel-default table-responsive">
-                <div class="panel-heading hidden-print">
-                    <div class="btn-group btn-group-xs" role="group">
-                    </div>
-                    <div class="btn-group pull-left">
-                        <a title="Добавить" class="hidden-print" data-toggle="modal" data-target="#nas_add" href="#"><span class="glyphicon glyphicon-plus"></span></a>
-                        <div class="modal fade" id="nas_add" role="dialog" aria-hidden="true">
-                            <div class="modal-dialog modal-title">
-                                <div class="modal-content">
-                                    <div class="modal-header">Сервер доступа
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                    </div>
-                                    <div class="modal-body text-left" id="nestedform">
-                                        <form class="form-horizontal" method="post" name="form_nas">{% csrf_token %}
-                                            <div class="panel panel-default panel-form">
-                                                <div class="form-group">
-                                                    <label class="control-label col-md-3 required" for="nas_ip">IP:</label>
-                                                    <div class="col-md-9">
-                                                        <input id="nas_ip" name="nas_ip" value="" placeholder="{% trans 'Server IP' %}" class="form-control" type="text">
-                                                    </div>
-                                                    <label class="control-label col-md-3" for="server_name">{% trans 'Server name' %}</label>
-                                                    <div class="col-md-9">
-                                                        <input id="server_name" name="server_name" value="" placeholder="{% trans 'Server name' %}" class="form-control" type="text">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label class="col-md-12 bg-primary">Управление</label>
-                                                    <label class="control-label col-md-3" for="nas_ip_port">IP:PORT</label>
-                                                    <div class="col-md-9">
-                                                        <input id="nas_ip_port" name="nas_ip_port" value="" placeholder="" class="form-control" type="text">
-                                                    </div>
-                                                    <label class="control-label col-md-3" for="user_name">{% trans 'User name' %}:</label>
-                                                    <div class="col-md-9">
-                                                        <input id="user_name" name="user_name" value="" placeholder="{% trans 'User name' %}" class="form-control" type="text">
-                                                    </div>
-                                                    <label class="control-label col-md-3" for="nas_password">{% trans 'Password' %}:</label>
-                                                    <div class="col-md-9">
-                                                        <input id="nas_password" name="nas_password" value="" placeholder="{% trans 'Password' %}" class="form-control" type="password">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                            <div class="row text-center">
-                                                <input id="show_cols" name="show_cols" class="btn btn-primary" value="{% trans 'Add' %}" type="submit">
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class=" collapse in" id="p_NAS_LIST">
-                    <table class="table table-bordered text-center table-striped table-hover table-condensed" id="NAS_LIST_">
-                        <thead>
-                        <tr>
-                            <th>
-                                <script>
-                                    $( document ).ready(function() {
-                                        $('#checkAll').click(function () {
-                                            $('input:checkbox[id^="NAS_ID"]').not(this).prop('checked', this.checked);
-                                        })
-                                    });
-                                </script>
-                                <input type='checkbox' id='checkAll'/>
-                            </th>
-                            <th class="text-center"><a title="ID" href="" >ID</a></th>
-                            <th class="text-center"><a title="Название" href="" >Название</a></th>
-                            <th class="text-center"><a title="NAS-Identifier" href="" >NAS-Identifier</a></th>
-                            <th class="text-center"><a title="ip" href="" >ip</a></th>
-                            <th class="text-center"><a title="Тип" href="" >Тип</a></th>
-                            <th class="text-center"><a title="Отключено" href="" >Отключено</a></th>
-                            <th class="text-center"><a title="Описание" href="" >Описание</a></th>
-                        </tr>
-                        </thead>
-                        {% for nas in nas_id %}
-                        <tr>
-                            <td><input type='checkbox' name='NAS_ID' value="{{ admin.id }}" id='NAS_ID'></td>
-                            <td> {{ nas.id }} </td>
-                            <td> {{ nas.name }} </td>
-                            <td> {{ nas.nas_identifier }} </td>
-                            <td> {{ nas.ip }} </td>
-                            <td> {{ nas.nas_type }} </td>
-                            {% if nas.disable == 0 %}
-                                <td><span class="label label-success">{% trans 'Active' %}</span></td>
-                            {% else %}
-                                <td><span class="label label-danger">{% trans 'Disabled' %}</span></td>
-                            {% endif %}
-                            <td> {{ nas.descr }} </td>
-                            <td><a title="Пользователи" class='btn btn-default btn-xs' href="?sessions={{ nas.id }}" >Пользователи</a></td>
-                            <td><a title="IP_Pool" class='btn btn-default btn-xs' href="" >IP_Pool</a></td>
-                            <td>
-                                <a data-toggle="modal" data-target="#edit_nas-{{ nas.id }}" title="{% trans 'Edit' %}" href="#"><span class='glyphicon glyphicon-pencil'></span></a>
-                                <div class="modal fade" id="edit_nas-{{ nas.id }}" role="dialog" aria-hidden="true">
-                                    <div class="modal-dialog modal-title">
-                                        <div class="modal-content">
-                                            <div class="modal-header">Сервер доступа
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                            </div>
-                                            <div class="modal-body text-left" id="nestedform">
-                                                <form class="form-horizontal" method="post" name="form_nas">{% csrf_token %}
-                                                    <div class="panel panel-default panel-form">
-                                                        <div class="panel-body">
-                                                            <div class="form-group">
-                                                                <label class="control-label col-md-3 required" for="nas_ip">IP:</label>
-                                                                <div class="col-md-9">
-                                                                    <input type="text" id="nas_ip" name="nas_ip" value="{{ nas.ip }}" placeholder="{% trans 'Server IP' %}" class="form-control">
-                                                                </div>
-                                                                <label class="control-label col-md-3" for="server_name"> {% trans 'Server name' %} </label>
-                                                                <div class="col-md-9">
-                                                                    <input type="text" id="server_name" name="server_name" value="{{ nas.name }}" placeholder="{% trans 'Server name' %}" class="form-control">
-                                                                </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label class="col-md-12 bg-info">Управление</label>
-                                                                <label class="control-label col-md-3" for="nas_ip_port">IP:PORT</label>
-                                                                <div class="col-md-9">
-                                                                    <input type="text" id="nas_ip_port" name="nas_ip_port" value="{{ nas.mng_host_port }}" placeholder="" class="form-control">
-                                                                </div>
-                                                                <label class="control-label col-md-3" for="user">{% trans 'User' %}:</label>
-                                                                <div class="col-md-9">
-                                                                    <input  type="text" id="user" name="user" value="{{ nas.mng_user }}" placeholder="{% trans 'User' %}" class="form-control">
-                                                                </div>
-                                                                <label class="control-label col-md-3" for="nas_password">{% trans 'Password' %}:</label>
-                                                                <div class="col-md-9">
-                                                                    <input type="password" id="nas_password" name="nas_password" value="{{ nas.mng_password }}" placeholder="{% trans 'Password' %}" class="form-control">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <hr>
-                                                    <div class="row text-center">
-                                                        <input id="edit_nas-{{ nas.id }}" name="edit_nas-{{ nas.id }}" class="btn btn-primary" value="{% trans 'Edit' %}" type="submit">
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td><a title="Удалить" class='hidden-print' href="#"  data-id='' data-toggle='modal' data-uix='Удалить 86?' data-target='#comments_add'><span class='glyphicon glyphicon-trash'></span></a></td>
-                        </tr>
-                        {% endfor %}
-                    </table>
-                </div>
+        <div class="column">
+            <div class="ui tiny stacked segment">
+{#                <div class="panel-heading hidden-print">#}
+{#                    <div class="btn-group btn-group-xs" role="group">#}
+{#                    </div>#}
+{#                    <div class="btn-group pull-left">#}
+{#                        <a title="Добавить" class="hidden-print" data-toggle="modal" data-target="#nas_add" href="#"><span class="glyphicon glyphicon-plus"></span></a>#}
+{#                        <div class="modal fade" id="nas_add" role="dialog" aria-hidden="true">#}
+{#                            <div class="modal-dialog modal-title">#}
+{#                                <div class="modal-content">#}
+{#                                    <div class="modal-header">Сервер доступа#}
+{#                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+{#                                        <span aria-hidden="true">&times;</span>#}
+{#                                    </button>#}
+{#                                    </div>#}
+{#                                    <div class="modal-body text-left" id="nestedform">#}
+{#                                        <form class="form-horizontal" method="post" name="form_nas">{% csrf_token %}#}
+{#                                            <div class="panel panel-default panel-form">#}
+{#                                                <div class="form-group">#}
+{#                                                    <label class="control-label col-md-3 required" for="nas_ip">IP:</label>#}
+{#                                                    <div class="col-md-9">#}
+{#                                                        <input id="nas_ip" name="nas_ip" value="" placeholder="{% trans 'Server IP' %}" class="form-control" type="text">#}
+{#                                                    </div>#}
+{#                                                    <label class="control-label col-md-3" for="server_name">{% trans 'Server name' %}</label>#}
+{#                                                    <div class="col-md-9">#}
+{#                                                        <input id="server_name" name="server_name" value="" placeholder="{% trans 'Server name' %}" class="form-control" type="text">#}
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                                <div class="form-group">#}
+{#                                                    <label class="col-md-12 bg-primary">Управление</label>#}
+{#                                                    <label class="control-label col-md-3" for="nas_ip_port">IP:PORT</label>#}
+{#                                                    <div class="col-md-9">#}
+{#                                                        <input id="nas_ip_port" name="nas_ip_port" value="" placeholder="" class="form-control" type="text">#}
+{#                                                    </div>#}
+{#                                                    <label class="control-label col-md-3" for="user_name">{% trans 'User name' %}:</label>#}
+{#                                                    <div class="col-md-9">#}
+{#                                                        <input id="user_name" name="user_name" value="" placeholder="{% trans 'User name' %}" class="form-control" type="text">#}
+{#                                                    </div>#}
+{#                                                    <label class="control-label col-md-3" for="nas_password">{% trans 'Password' %}:</label>#}
+{#                                                    <div class="col-md-9">#}
+{#                                                        <input id="nas_password" name="nas_password" value="" placeholder="{% trans 'Password' %}" class="form-control" type="password">#}
+{#                                                    </div>#}
+{#                                                </div>#}
+{#                                            </div>#}
+{#                                            <hr>#}
+{#                                            <div class="row text-center">#}
+{#                                                <input id="show_cols" name="show_cols" class="btn btn-primary" value="{% trans 'Add' %}" type="submit">#}
+{#                                            </div>#}
+{#                                        </form>#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+                <table class="ui blue small very compact selectable striped table" id="NAS_LIST_">
+                    <thead>
+                    <tr>
+                        <th>
+                            <script>
+                                $( document ).ready(function() {
+                                    $('#checkAll').click(function () {
+                                        $('input:checkbox[id^="NAS_ID"]').not(this).prop('checked', this.checked);
+                                    })
+                                });
+                            </script>
+                            <input type='checkbox' id='checkAll'/>
+                        </th>
+                        <th class="text-center"><a title="ID" href="" >ID</a></th>
+                        <th class="text-center"><a title="Название" href="" >Название</a></th>
+                        <th class="text-center"><a title="NAS-Identifier" href="" >NAS-Identifier</a></th>
+                        <th class="text-center"><a title="ip" href="" >ip</a></th>
+                        <th class="text-center"><a title="Тип" href="" >Тип</a></th>
+                        <th class="text-center"><a title="Отключено" href="" >Отключено</a></th>
+                        <th class="text-center"><a title="Описание" href="" >Описание</a></th>
+                        <th class="text-center">-</th>
+                        <th class="text-center">-</th>
+                    </tr>
+                    </thead>
+                    {% for nas in nas_id %}
+                    <tr>
+                        <td><input type='checkbox' name='NAS_ID' value="{{ admin.id }}" id='NAS_ID'></td>
+                        <td> {{ nas.id }} </td>
+                        <td> {{ nas.name }} </td>
+                        <td> {{ nas.nas_identifier }} </td>
+                        <td> {{ nas.ip }} </td>
+                        <td> {{ nas.nas_type }} </td>
+                        {% if nas.disable == 0 %}
+                            <td><span class="ui green label">{% trans 'Active' %}</span></td>
+                        {% else %}
+                            <td><span class="ui red label">{% trans 'Disabled' %}</span></td>
+                        {% endif %}
+                        <td> {{ nas.descr }} </td>
+                        <td><a title="Пользователи" class='btn btn-default btn-xs' href="?sessions={{ nas.id }}" >Пользователи</a></td>
+                        <td><a title="IP_Pool" class='btn btn-default btn-xs'>IP_Pool</a></td>
+                    </tr>
+                    {% endfor %}
+                </table>
             </div>
         </div>
     </div>
     {% if sessions %}
         {% if error %}
         {% else %}
-            <div class="pag-nav">
-                <nav class="center-block">
-                    <ul class="pagination pagination-sm">
-                        {% if sespage.has_previous %}
-                            <li>
-                                <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
-                                    <span aria-hidden="true">1</span>
-                                </a>
-                            </li>
-                            {% if sespage.number > 2 %}
-                                <li class="disabled">
-                                    <a href="#" aria-label="Previous">
-                                        <span aria-hidden="true">...</span>
+            <div class="row">
+                <div class="column">
+                    <div class="ui tiny stacked segment">
+                        <div class="ui sticky mini fluid pagination menu">
+                            <div class="header item">{% trans 'Export' %}</div>
+                            <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
+                                <i class="gamepad icon"></i>
+                                Xml
+                            </a>
+                            <a href="?{% url_replace request 'csv' '1' %}" class="item">
+                                <i class="video camera icon"></i>
+                                Csv
+                            </a>
+                            <div class="header right floated item">{% trans 'Pagination' %}</div>
+                            {% if sespage.number == 1 %}
+                                <div class="disabled item">
+                                    1
+                                </div>
+                            {% endif %}
+                            {% if sespage.has_previous %}
+                                <a href="?{% url_replace_page request 'page' '1' %}" class="item">1</a>
+                                {% if sespage.number > 7 %}
+                                    <div class="disabled item">
+                                        ...
+                                    </div>
+                                {% endif %}
+                            {% endif %}
+                            {% for p in page_list %}
+                                {% if p == 1 %}
+                                {% else %}
+                                    {% if sespage.number == p %}
+                                        <a class="item active" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                    {% else %}
+                                        <a class="item" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                            {% if sespage.has_next %}
+                                {% if sespage.number < sespage.paginator.num_pages|add:"-5" %}
+                                    <div class="disabled item">
+                                        ...
+                                    </div>
+                                    <a class="item" href="?{% url_replace_page request 'page' sespage.paginator.num_pages %}" aria-label="Next">
+                                        {{ sespage.paginator.num_pages }}
                                     </a>
-                                </li>
+                                {% endif %}
                             {% endif %}
-                        {% endif %}
-                        {% for p in page_list %}
-                            {% if sespage.number == p %}
-                                <li class="active">
-                                    <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                </li>
-                            {% else %}
-                                <li class="">
-                                    <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                </li>
-                            {% endif %}
-                        {% endfor %}
-                        {% if sespage.has_next %}
-                            <li class="disabled">
-                                <a href="#" aria-label="Previous">
-                                    <span aria-hidden="true">...</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="?{% url_replace_page request 'page' sespage.paginator.num_pages %}" aria-label="Next">
-                                    <span aria-hidden="true">{{ sespage.paginator.num_pages }}</span>
-                                </a>
-                            </li>
-                        {% else %}
-                            <li class="disabled">
-                                <a href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </nav>
+                        </div>
+                        <table class="ui blue small very compact selectable striped table">
+                            <thead>
+                                <tr role="row">
+                                    <th>{% trans 'Login' %}</th>
+                                    <th>{% trans 'FIO' %}</th>
+                                    <th>{% trans 'CID' %}</th>
+                                    <th>{% trans 'Deposit' %}</th>
+                                    <th>{% trans 'Credit' %}</th>
+                                    <th>{% trans 'Login status' %}</th>
+                                    <th>{% trans 'Deleted' %}</th>
+                                    <th>{% trans '-' %}</th>
+                                    <th>{% trans '-' %}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for session in sespage %}
+                                <tr>
+                                    <td><a href="{% url 'core:clients' %}{{ session.uid.id }}">{{ session.user_name }}</a></td>
+                                    <td>{{ session.uid.pi.fio }}</td>
+                                    <td>{{ session.CID }}</td>
+                                    {% if session.uid.bill.deposit < 0 %}
+                                        <td><span class="label label-danger">{{ session.uid.bill.deposit }}</span></td>
+                                    {% else %}
+                                        <td>{{ session.uid.bill.deposit }}</td>
+                                    {% endif %}
+                                    {% if user.credit > 0 %}
+                                        <td><span class="label label-success">{{ user.credit }}</span></td>
+                                    {% else %}
+                                        <td>{{ user.credit }}</td>
+                                    {% endif %}
+                                    {% if user.disabled %}
+                                        <td><span class="ui red label">{% trans 'Disabled' %}</span></td>
+                                    {% else %}
+                                        <td><span class="ui green label">{% trans 'Active' %}</span></td>
+                                    {% endif %}
+                                    {% if user.deleted %}
+                                        <td><span class="ui red label">{% trans 'Yes' %}</span></td>
+                                    {% else %}
+                                        <td><span class="ui green label">{% trans 'No' %}</span></td>
+                                    {% endif %}
+                                    <td><a href="{% url 'core:payments' %}{{ session.uid.id }}"><i class="fa fa-pencil-square-o fa-fw"></i></a></td>
+                                    <td><a href="{% url 'core:fees' %}{{ session.uid.id }}"><i class="fa fa-remove"></i></a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <table class="table table-hover table-striped table-condensed table-bordered">
-                <thead>
-                    <tr role="row">
-                        <th>{% trans 'Login' %}</th>
-                        <th>{% trans 'FIO' %}</th>
-                        <th>{% trans 'CID' %}</th>
-                        <th>{% trans 'Deposit' %}</th>
-                        <th>{% trans 'Credit' %}</th>
-                        <th>{% trans 'Login status' %}</th>
-                        <th>{% trans 'Deleted' %}</th>
-                        <th>{% trans '-' %}</th>
-                        <th>{% trans '-' %}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for session in sespage %}
-                    <tr>
-                        <td><a href="{% url 'core:clients' %}{{ session.uid.id }}">{{ session.user_name }}</a></td>
-                        <td>{{ session.uid.pi.fio }}</td>
-                        <td>{{ session.CID }}</td>
-                        {% if session.uid.bill.deposit < 0 %}
-                            <td><span class="label label-danger">{{ session.uid.bill.deposit }}</span></td>
-                        {% else %}
-                            <td>{{ session.uid.bill.deposit }}</td>
-                        {% endif %}
-                        {% if user.credit > 0 %}
-                            <td><span class="label label-success">{{ user.credit }}</span></td>
-                        {% else %}
-                            <td>{{ user.credit }}</td>
-                        {% endif %}
-                        {% if user.disabled %}
-                            <td><span class="label label-danger">{% trans 'Disabled' %}</span></td>
-                        {% else %}
-                            <td><span class="label label-success">{% trans 'Active' %}</span></td>
-                        {% endif %}
-                        {% if user.deleted %}
-                            <td><span class="label label-danger">{% trans 'Yes' %}</span></td>
-                        {% else %}
-                            <td><span class="label label-success">{% trans 'No' %}</span></td>
-                        {% endif %}
-                        <td><a href="{% url 'core:payments' %}{{ session.uid.id }}"><img src="{% static 'images/button_payments.png' %}" /></a></td>
-                        <td><a href="{% url 'core:fees' %}{{ session.uid.id }}"><img src="{% static 'images/button_fees.png' %}" /></a></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <div class="pag-nav">
-                <nav class="center-block">
-                    <ul class="pagination pagination-sm">
-                        {% if sespage.has_previous %}
-                            <li>
-                                <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
-                                    <span aria-hidden="true">1</span>
-                                </a>
-                            </li>
-                            {% if sespage.number > 2 %}
-                                <li class="disabled">
-                                    <a href="#" aria-label="Previous">
-                                        <span aria-hidden="true">...</span>
-                                    </a>
-                                </li>
-                            {% endif %}
-                        {% endif %}
-                        {% for p in page_list %}
-                            {% if sespage.number == p %}
-                                <li class="active">
-                                    <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                </li>
-                            {% else %}
-                                <li class="">
-                                    <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                </li>
-                            {% endif %}
-                        {% endfor %}
-                        {% if sespage.has_next %}
-                            <li class="disabled">
-                                <a href="#" aria-label="Previous">
-                                    <span aria-hidden="true">...</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="?{% url_replace_page request 'page' sespage.paginator.num_pages %}" aria-label="Next">
-                                    <span aria-hidden="true">{{ sespage.paginator.num_pages }}</span>
-                                </a>
-                            </li>
-                        {% else %}
-                            <li class="disabled">
-                                <a href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </nav>
-            </div>
-            <ul class="list-group">
-                <li class="list-group-item">
-                    <span class="badge">{{ all }}</span>
-                    {% trans 'All' %}
-                </li>
-                <li class="list-group-item">
-                    <span class="badge">{{ end }}</span>
-                    {% trans 'End' %}
-                </li>
-                <li class="list-group-item">
-                    <span class="badge">{{ guest}}</span>
-                    {% trans 'Guest mode' %}
-                </li>
-                <li class="list-group-item">
-                    <span class="badge">{{ deleted }}</span>
-                    {% trans 'Deleted' %}
-                </li>
-            </ul>
         {% endif %}
     {% endif %}
 {% endblock %}
