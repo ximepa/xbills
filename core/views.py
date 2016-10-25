@@ -12,7 +12,8 @@ from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Sum
-from django.shortcuts import render, HttpResponseRedirect, HttpResponse, RequestContext, redirect
+from django.shortcuts import render, HttpResponseRedirect, HttpResponse, redirect
+from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
 from ws4redis.publisher import RedisPublisher
 from ws4redis.redis_store import RedisMessage
