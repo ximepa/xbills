@@ -486,35 +486,35 @@ def client(request, uid):
     dv_session = Dv_calls.objects.filter(uid=uid)
     if helpers.module_check('olltv'):
         from olltv.models import Iptv, IptvDevice, IptvDeviceType
-        from olltv.api import oll_user_info, oll_check_bundle, olltv_auth
-        try:
-            user_olltv = Iptv.objects.get(uid=uid)
-            olltv_exist = True
-            user_olltv_dev = IptvDevice.objects.filter(uid=uid)
-            try:
-                auth = olltv_auth()
-            except:
-                auth = None
-            if auth != None:
-                user_info = oll_user_info(account=uid, hash=auth['hash'])
-                get_user_info = user_info['data']
-                tp_list_dict = user_info['data']['bought_subs']
-                tp_count = user_info['tp_count']
-                tp_list = []
-                if tp_count < 1:
-                    tp_list = None
-                else:
-                    for tp in tp_list_dict:
-                        # check_bundle
-                        check_bundle = oll_check_bundle(account=client.id, tp=tp['sub_id'], hash=auth['hash'])
-                        if check_bundle['mess'] == 'Error':
-                            messages.warning(request, check_bundle)
-                        else:
-                            get_bundle_status = check_bundle['data']
-                            tp.update({'status': get_bundle_status})
-                            tp_list.append(tp)
-        except Iptv.DoesNotExist:
-            olltv_exist = False
+        # from olltv.api import oll_user_info, oll_check_bundle, olltv_auth
+        # try:
+        #     user_olltv = Iptv.objects.get(uid=uid)
+        #     olltv_exist = True
+        #     user_olltv_dev = IptvDevice.objects.filter(uid=uid)
+        #     try:
+        #         auth = olltv_auth()
+        #     except:
+        #         auth = None
+        #     if auth != None:
+        #         user_info = oll_user_info(account=uid, hash=auth['hash'])
+        #         get_user_info = user_info['data']
+        #         tp_list_dict = user_info['data']['bought_subs']
+        #         tp_count = user_info['tp_count']
+        #         tp_list = []
+        #         if tp_count < 1:
+        #             tp_list = None
+        #         else:
+        #             for tp in tp_list_dict:
+        #                 # check_bundle
+        #                 check_bundle = oll_check_bundle(account=client.id, tp=tp['sub_id'], hash=auth['hash'])
+        #                 if check_bundle['mess'] == 'Error':
+        #                     messages.warning(request, check_bundle)
+        #                 else:
+        #                     get_bundle_status = check_bundle['data']
+        #                     tp.update({'status': get_bundle_status})
+        #                     tp_list.append(tp)
+        # except Iptv.DoesNotExist:
+        #     olltv_exist = False
     if 'show_password' in request.GET:
         user_password = client.get_hash_password
     else:
@@ -941,15 +941,12 @@ def chat(request):
 def monitoring_servers(request):
     servers_list = []
     servers = Server.objects.filter(disable=0)
-    dv = Dv_calls.objects.filter(nas_id__in=[s.id for s in servers])
     for s in servers:
         servers_list.append({'server': s.name, 'id': s.id, 'clients_count': Dv_calls.objects.filter(nas_id=s.id).count()})
-    # for s in servers:
-    #     servers_dict.update({'server': s.name, 'id': s.id, 'clients_count': dv.count()})
-    #
-    print servers_list
-    print request.GET
     if 'order_by' in request.GET:
         servers_list = sorted(servers_list, key=lambda k: k['id'], reverse=True)
+    if 'list' in request.GET:
+        dv = Dv_calls.objects.filter(nas_id=request.GET['list'])
+        print dv
     return render(request, 'monitoring_servers.html', locals())
 

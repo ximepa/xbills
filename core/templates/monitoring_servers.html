@@ -7,33 +7,90 @@
         <div class="column">
             <div class="ui blue mini segment">
                 <table class="ui blue small very compact selectable striped table">
-                <thead>
-                    <tr>
-                        <th><a href="?{% url_replace request 'order_by' 'id' %}">{% trans 'ID' %}</a></th>
-                        <th><a href="?{% url_replace request 'order_by' 'name' %}">{% trans 'Name' %}</a></th>
-                        <th><a href="?{% url_replace request 'order_by' 'count' %}">{% trans 'Count' %}</a></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for s in servers_list %}
-                        {% if s.clients_count > 0 %}
-                            <tr>
-                                <td>{{ s.id }}</td>
-                                <td>{{ s.server }}</td>
-                                <td>{{ s.clients_count }}</td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </tfoot>
-            </table>
+                    <thead>
+                        <tr>
+                            <th><a href="?{% url_replace request 'order_by' 'id' %}">{% trans 'ID' %}</a></th>
+                            <th><a href="?{% url_replace request 'order_by' 'name' %}">{% trans 'Name' %}</a></th>
+                            <th><a href="?{% url_replace request 'order_by' 'count' %}">{% trans 'Count' %}</a></th>
+                            <th>{% trans 'Sessions List' %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in servers_list %}
+                            {% if s.clients_count > 0 %}
+                                <tr>
+                                    <td>{{ s.id }}</td>
+                                    <td>{{ s.server }}</td>
+                                    <td>{{ s.clients_count }}</td>
+                                    <td><a href="{% url 'core:monitoring_servers' %}?list={{ s.id }}"><i class="fa fa-list"></i></a></td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
     </div>
+    {% if dv %}
+        <div class="row">
+            <div class="column">
+                <div class="ui blue mini segment">
+                    <table class="ui blue small very compact selectable striped table">
+                        <thead>
+                            <tr>
+                                <th><a href="?{% url_replace request 'order_by' 'id' %}">{% trans 'User name' %}</a></th>
+                                <th><a href="?{% url_replace request 'order_by' 'UID' %}">{% trans 'UID' %}</a></th>
+                                <th><a href="?{% url_replace request 'order_by' 'deposit' %}">{% trans 'Deposit' %}</a></th>
+                                <th><a href="?{% url_replace request 'order_by' 'credit' %}">{% trans 'Credit' %}</a></th>
+                                <th><a href="?{% url_replace request 'order_by' 'cid' %}">{% trans 'CID' %}</a></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for d in dv %}
+                                <tr>
+                                    <td><a href="{% url 'core:client' d.uid.id %}">{{ d.user_name }}</a></td>
+                                    <td><a href="{% url 'core:client' d.uid.id %}">{{ d.uid.id }}</a></td>
+                                    {% if d.uid.credit > d.uid.bill.deposit and d.uid.credit > 0 and d.uid.bill.deposit != 0%}
+                                        <td><span style="color: orange">{{ d.uid.bill.deposit }}</span></td>
+                                    {% elif d.uid.bill.deposit < 0 %}
+                                        <td><span style="color: red">{{ d.uid.bill.deposit }}</span></td>
+                                    {% elif d.uid.bill.deposit == 0 %}
+                                        <td><span style="color: grey">{{ d.uid.bill.deposit }}</span></td>
+                                    {% else %}
+                                        <td><span style="color: green">{{ d.uid.bill.deposit }}</span></td>
+                                    {% endif %}
+                                    {% if d.uid.credit > 0 %}
+                                        <td><span style="color: green">{{ d.uid.credit }}</span></td>
+                                    {% elif d.uid.credit == 0 %}
+                                        <td><span style="color: grey">{{ d.uid.credit }}</span></td>
+                                    {% elif d.uid.credit < 0 %}
+                                        <td><span style="color: red">{{ d.uid.credit }}</span></td>
+                                    {% endif %}
+                                    <td>{{ d.CID }}</td>
+{#                                    <td><a href="{% url 'core:monitoring_servers' %}?list={{ s.id }}"><i class="fa fa-list"></i></a></td>#}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}
