@@ -588,3 +588,50 @@
 .ui.noborder.horizontal.segments > .segment {
     border-left: none;
 }
+
+
+#call-container {
+    display: none;
+    position: fixed;
+    width:30%;
+    margin: 0 0 0 -15%;
+    left:50%;
+    z-index: 99999;
+  /*overrides*/
+}
+
+.ui.menu:not(.vertical) .centers.item,
+.ui.menu:not(.vertical) .centers.menu {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  margin: auto !important;
+}
+
+/*#call-container * {*/
+    /*-moz-box-sizing: border-box;*/
+    /*-webkit-box-sizing: border-box;*/
+    /*box-sizing: border-box;*/
+/*}*/
+/*#call-container > div {*/
+    /*position: relative;*/
+    /*pointer-events: auto;*/
+    /*overflow: hidden;*/
+    /*!*margin: 0 0 6px;*!*/
+    /*padding: 15px 15px 15px 50px;*/
+    /*-moz-border-radius: 5px 5px 5px 5px;*/
+    /*-webkit-border-radius: 5px 5px 5px 5px;*/
+    /*border-radius: 5px 5px 5px 5px;*/
+    /*background-position: 10px center;*/
+    /*background-repeat: no-repeat;*/
+    /*background-color: rgb(255, 255, 255);*/
+    /*-moz-box-shadow: 0 0 12px #999999;*/
+    /*-webkit-box-shadow: 0 0 12px #999999;*/
+    /*box-shadow: 0 0 12px #999999;*/
+    /*color: #000000;*/
+    /*opacity: 0.8;*/
+    /*-ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);*/
+    /*filter: alpha(opacity=80);*/
+/*}*/
+

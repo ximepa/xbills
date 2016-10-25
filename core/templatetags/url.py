@@ -1,12 +1,10 @@
 import datetime
-from datetime import datetime
 import binascii
 from django import template
 import math
-
+from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
-
-from core.models import num_to_ip, Admin, User, Nas
+from core.models import num_to_ip, Admin, User, Tp
 from django.conf import settings
 import os
 
@@ -63,7 +61,7 @@ def ip_convert(value):
 @register.simple_tag
 def convert_timestamp_to_time(timestamp):
     import time
-    session_time = datetime.now() - timestamp
+    session_time = datetime.datetime.now() - timestamp
     days, seconds = session_time.days, session_time.seconds
     hours = days * 24 + seconds // 3600
     minutes = (seconds % 3600) // 60
@@ -155,3 +153,22 @@ def status(value):
     else:
         stat = 'Disable'
     return stat
+
+@register.simple_tag
+def sec_to_time(sec):
+    return str(datetime.timedelta(seconds=sec))
+
+@register.simple_tag
+def tp_name(id):
+    name = Tp.objects.get(id=id)
+    return name.name
+
+@register.simple_tag
+def pay_type(id):
+    type = ''
+    if id == 0: type = _('Cash')
+    elif id == 1: type = _('Bank')
+    elif id == 2: type = _('External Payments')
+    elif id == 3: type = ''
+    elif id == 4: type = _('Bonus')
+    return type

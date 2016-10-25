@@ -1,88 +1,68 @@
-#!/usr/bin/env python
+import json
 from twisted.internet import reactor
-from manager import AMIFactory
-from twisted.internet import task
-from xbills import settings
+import datetime
+from django.conf import settings
+from django.http import HttpResponse
+from ws4redis.publisher import RedisPublisher
+from ws4redis.redis_store import RedisMessage
+from manager import AMIFactory, AMIProtocol
+from twisted.internet import task, defer
 import logging
-
-
-
+from voip.models import AsteriskCall
+from error import AMICommandFailure
+from twisted.internet import error as tw_error
+from voip_events import VoipEvents
 
 extensions={"SIP/72":"monitoring"}
 
- 
-log = logging.getLogger("pyCalledMe2")
- 
+
 timeouttask=None
 timeoutping=5
 timeoutloop=30
- 
+
+
+
 class callMeFactory(AMIFactory):
     cbconnect=None
     def __init__(self):
-        AMIFactory.__init__(self, settings.VOIP_USERNAME, settings.VOIP_SECRET)
+        AMIFactory.__init__(self, settings.VOIP_USER, settings.VOIP_PASSWORD)
     def connect(self):
         df = self.login(settings.VOIP_IP_ADDRESS, settings.VOIP_PORT)
-        if self.cbconnect!=None:
-            df.addCallback(self.cbconnect)
+        df.addCallback(self.cbconnect)
     def clientConnectionLost(self,connector,reason):
-        log.info("connection lost - connecting again")
+        reactor.callLater(1, self.connect)
+        print 'connection lost - connecting again'
     def clientConnectionFailed(self,connector,reason):
-        log.info("connection failed - connecting again")
+        reactor.callLater(1, self.connect)
+        print 'connection failed - connecting again'
 
-def onDial(protocol,event):
-    print event
-    if 'destination' in event:
-        destination=event['destination']
-        print destination
-        print extensions.keys()
-        for s in extensions.keys():
-            if destination.startswith(s):
-                cid=event['calleridnum']
-                cidname=event['calleridname']
-                extname=extensions[s]
-
-def checknetlink(protocol):
-     
-    def ontimeout():
-        log.info("timeout")
-        if dc.active():
-            dc.cancel()
-        timeouttask.stop()
-        protocol.transport.loseConnection()
-         
-         
-    def canceltimeout(*val):
-        if dc.active():
-            dc.cancel()
- 
-        log.info("cancel timeout")
-        #log.info(val)
-         
-    def success(val):
-        log.info("ping")
-        pass
-     
-    log.info("setting timeout")
-    dc = reactor.callLater(timeoutping,ontimeout)
-    df = protocol.ping()
-    df.addBoth(canceltimeout)
-    df.addCallback(success)
-    df.addErrback(ontimeout)
-     
- 
 def onLogin(protocol):
-    df = protocol.registerEvent("Dial",onDial)
-    global timeouttask
-    timeouttask = task.LoopingCall(checknetlink,protocol)
-    timeouttask.start(timeoutloop)
-    return df
- 
-def main():
+    global session
+    session= protocol
+    eventHandlers = VoipEvents().eventHandlers
+    for event, handler in eventHandlers.items():
+        print "Server :: Registering EventHandler for %s" % event
+        protocol.registerEvent(event, handler)
+
+
+    # df = protocol.registerEvent("Dial",onDial)
+    # global timeouttask
+    # timeouttask = task.LoopingCall(checknetlink,protocol)
+    # timeouttask.start(timeoutloop)
+    # return df
+
+
+def call_run():
     cm = callMeFactory()
     cm.cbconnect=onLogin
     cm.connect()
 
-def killapp(*args):
-    reactor.stop()
-    return True
+def hangup(request):
+    print request.GET
+    if 'channel' in request.GET:
+        session.hangup(channel=request.GET['channel'])
+    # session.redirect(channel='', exten='SIP/72', context='default', priority=1)
+
+
+
+

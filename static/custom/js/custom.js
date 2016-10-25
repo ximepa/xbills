@@ -5,10 +5,12 @@ $( document ).ready(function() {
     //    $('.sidebar').sidebar('setting', {dimPage: false}).sidebar('toggle');
     //});
     //$('.sidebar').sidebar('setting', {dimPage: false}).sidebar({context: '.visible.example .bottom.segment'});
+
     $('.ui.dropdown').dropdown();
     $('.menu .item').tab();
     $('.sticky').sticky();
     $('.popup').popup();
+    $('#search_panel').accordion();
     $('#sideBar').accordion({
         onOpen: function () {
             console.log($('#sideBar'))
@@ -34,12 +36,12 @@ $( document ).ready(function() {
 
 
     if (document.getElementById("services") != null) {
-	document.getElementById("services").style.display = getCookie('services');
+        document.getElementById("services").style.display = getCookie('services');
     }
 
     $('#table_group td').on('click', function () {
         var dimmer = $('body');
-        dimmer.dimmer('show')
+        dimmer.dimmer('show');
         $.ajax({
             url: "/admin/group/?user_list=" + $(this).parent()[0].childNodes[1].innerText,
             cache: false,
@@ -48,8 +50,24 @@ $( document ).ready(function() {
                 dimmer.dimmer('hide');
             }
         });
-    })
+    });
+
+    var ws4redis1 = WS4Redis({
+		uri: 'ws://' + document.location.host + '/ws/call_incoming?subscribe-broadcast&publish-broadcast&echo',
+		receive_message: call_incoming,
+		heartbeat_msg: '--heartbeat--'
+	});
 });
+
+function hideSidebar() {
+    var context = $('#main_context');
+    $('#sideBar').toggle();
+    if ($("#sideBar").is(":visible") == true) {
+        context.css({'width': '87.5%'});
+    } else {
+        context.css({'width': '100%'});
+    }
+}
 
 function servicesToggle() {
     $('#services').toggle();
@@ -119,8 +137,8 @@ global.getPayNow = function () {
     $.getJSON('/admin/?pay_now', function (data) {
         if (uid && getCookie('pay_uid') != data.pay_now[3]) {
             $.each(data, function (index, value) {
-                toastr.pay(value[0] + ' грн.  ' + value[1], value[2] + ' (UID: <a style="color: blue" href="clients/' + value[3] + '"' + '>' + value[3] + '</a>' + ')', value[4],
-                    {progressBar: true, timeOut: 40000, extendedTimeOut: 10000})
+                toastr.pay(value[0] + ' грн.  ' + value[1], value[2] + ' (UID: <a style="color: orange" href="/admin/clients/' + value[3] + '"' + '>' + value[3] + '</a>' + ')', value[4],
+                    {progressBar: true, timeOut: 40000, extendedTimeOut: 10000, positionClass: 'toast-top-right'})
             })
         }
         uid = data.pay_now[3];
@@ -142,6 +160,60 @@ function comments_add (theLink, Message, CustomMsg) {
   }
 
   return is_confirmed;
+}
+
+
+function calltest() {
+toastr.info('test','test', {timeOut: 0, onclick: null, extendedTimeOut: 0})
+}
+
+function call_incoming(msg) {
+    var data = jQuery.parseJSON(msg);
+    if (!(data.uni_id in $.noty.store)) {
+        CallNotifi(data.uid, data.login, data.cidname, data.num, data.channel, data.begin, data.uni_id);
+    }
+    if (data.uni_id in $.noty.store && data.begin == 'end') {
+        $.noty.close(data.uni_id);
+    }
+
+
+}
+
+function CallNotifi(uid, login, cidname, num, channel, begin, id) {
+    var layout = 'topCenter';
+    var $uid;
+    if (uid && login) {
+        // $uid = '<a href="/admin/clients/"' + 2512 + '>(UID: ' + uid + ')  ' + login + '</a>'
+        $uid = '(UID: <a style="color: blue" href="/admin/clients/' + uid + '"' + '>' + uid + '</a>' + ') ' + login
+    } else {
+        $uid = cidname
+    }
+    if (begin == 'begin') {
+        noty({
+            uid: $uid,
+            id: id,
+            text: num,
+            type: 'alert',
+            dismissQueue: true,
+            layout: 'topCenter',
+            theme: 'semantic_ui',
+            buttons: [
+                {
+                    addClass: 'mini positive ui button', text: 'Ok', onClick: function ($noty) {
+                    $noty.close();
+                }
+                },
+                {
+                    addClass: 'mini negative ui button', text: 'Cancel', onClick: function ($noty) {
+                    $.get('/admin/hangup/?channel=' + channel, function (request) {
+                        console.log(request)
+                    });
+                    $noty.close();
+                }
+                }
+            ]
+        });
+    }
 }
 
 
@@ -223,3 +295,8 @@ function comments_add (theLink, Message, CustomMsg) {
 //     dashboard.getClaimsNotifi();
 //     refresh();
 // });
+
+
+
+
+

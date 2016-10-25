@@ -1,5 +1,4 @@
-__author__ = 'ximepa'
-from django.conf.urls import *
+from django.conf.urls import patterns, url
 from . import views
 app_name = 'api'
 

@@ -31,7 +31,7 @@ class Dhcphosts_hosts(models.Model):
     hostname = models.CharField(max_length=255, unique=True, blank=False)
     network = models.ForeignKey('Dhcphosts_networks', db_column='network', blank=False)
     mac = models.CharField(max_length=17, default='00:00:00:00:00:00', validators=[validate_mac], unique=True)
-    disable = models.IntegerField(default=0)
+    disable = models.BooleanField(default=0, blank=True)
     vid = models.IntegerField(default=0)
     nas = models.IntegerField(default=0)
     server_vid = models.IntegerField(default=0)

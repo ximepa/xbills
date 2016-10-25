@@ -7,35 +7,20 @@ $(document).ready(function($) {
 	   var i = Math.floor(Math.log(bytes) / Math.log(k));
 	   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 	}
+
 	var ws4redis = WS4Redis({
 		uri: 'ws://' + document.location.host + '/ws/dashboard?subscribe-broadcast&publish-broadcast&echo',
 		receive_message: receive_get_pc_info,
-		heartbeat_msg: '--heartbeat--'
-	});
-    function get_pc_info() {
-        $.get('/admin/get_pc_info/', {
-            room: 'dashboard',
-            action: 'get_pc_info',
-            message: ''
-        });
-    }
+		heartbeat_msg: '--heartbeat--'});
 
-    function refresh() {
-        setTimeout(function(){
-            get_pc_info();
-            refresh();
-        }, 5000);
-    }
-    refresh();
 	function receive_get_pc_info(msg) {
-		var data = jQuery.parseJSON(msg);
-		//var
-		$('#uptime').text(data.uptime);
+        var data = jQuery.parseJSON(msg);
+        $('#uptime').text(data.uptime);
         $.each(data.cpu, function(index, value) {
             var cores = index +1;
             $('#core' + cores).progress({percent: value.core});
         });
-		$.each(data.memory, function(index, value) {
+        $.each(data.memory, function(index, value) {
 			$('#getMemory').progress({percent: value.cur});
         	$('#getSwap').progress({percent: value.swap});
 			$('#getMemoryTotal').text(formatBytes(value.total));

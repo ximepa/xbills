@@ -32,13 +32,20 @@
 #     return _django_app(environ, start_response)
 
 import os
+
+
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'xbills.settings')
 from django.conf import settings
 from django.core.wsgi import get_wsgi_application
 from ws4redis.wsgi_server import WebsocketWSGIServer
+from xbills.threadingtest import ThreadingExample
 
 _django_app = get_wsgi_application()
 _websocket_app = WebsocketWSGIServer()
+
+
+
 
 def application(environ, start_response):
     if environ.get('PATH_INFO').startswith(settings.WEBSOCKET_URL):

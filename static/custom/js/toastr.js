@@ -10,7 +10,8 @@
                 claims: 'claims',
                 pay: 'pay',
                 success: 'success',
-                warning: 'warning'
+                warning: 'warning',
+                call: 'call'
             };
 
             var toastr = {
@@ -22,6 +23,7 @@
                 claims: claims,
                 pay: pay,
                 mac_test: mac_test,
+                call: call,
                 options: {},
                 subscribe: subscribe,
                 success: success,
@@ -128,6 +130,16 @@
                 });
             }
 
+            function call(message, title, optionsOverride) {
+                return notify({
+                    type: toastType.call,
+                    iconClass: getOptions().iconClasses.call,
+                    message: message,
+                    optionsOverride: optionsOverride,
+                    title: title
+                });
+            }
+
             function clear($toastElement, clearOptions) {
                 var options = getOptions();
                 if (!$container) { getContainer(options); }
@@ -138,7 +150,9 @@
 
             function remove($toastElement) {
                 var options = getOptions();
-                if (!$container) { getContainer(options); }
+                if (!$container) { getContainer(options);
+
+                }
                 if ($toastElement && $(':focus', $toastElement).length === 0) {
                     removeToast($toastElement);
                     return;
@@ -206,7 +220,8 @@
                         info: 'toast-info',
                         claims: 'toast-claims',
                         success: 'toast-success',
-                        warning: 'toast-warning'
+                        warning: 'toast-warning',
+                        call: 'ui message'
                     },
                     iconClass: 'toast-info',
                     positionClass: 'toast-top-right',

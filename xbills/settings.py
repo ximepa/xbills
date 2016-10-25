@@ -49,6 +49,7 @@ INSTALLED_APPS = (
     'claims',
     'djangorpc',
     'autotranslate',
+    'voip',
 )
 
 AUTH_USER_MODEL = 'core.Admin'
@@ -67,6 +68,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'django.middleware.security.SecurityMiddleware',
     'core.middleware.OnlineNowMiddleware',
+    'core.middleware.ThreadingDashboardMiddleware',
+    'voip.middleware.ThreadingCallsMiddleware',
 
 )
 CACHES = {

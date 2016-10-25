@@ -5,14 +5,8 @@ from core.validators import validate_mac
 
 
 class Dhcphosts_hostsForm(forms.ModelForm):
-    disable = forms.BooleanField(
-        widget=forms.CheckboxInput(
-            attrs={
-                'onclick': 'ipdhcp_disable'
-            }
-        ),
-        required=False,
-    )
+    disable = forms.BooleanField(required=False)
+
     mac = forms.CharField(
         widget=forms.TextInput(
             attrs={

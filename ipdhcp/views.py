@@ -1,7 +1,7 @@
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
-from core.models import num_to_ip, ip_to_num, Dv_calls, Nas
+from core.models import num_to_ip, ip_to_num
 from .models import Dhcphosts_networks, Dhcphosts_hosts, User, new_ip
 from xbills import settings
 from .forms import Dhcphosts_hostsForm
@@ -56,6 +56,7 @@ def user_dhcp(request, uid, host_id=None):
                 return redirect(reverse('core:user_dhcp', kwargs={'uid': uid}))
             else:
                 dhcphosts_hostsform = Dhcphosts_hostsForm(request.POST, instance=host)
+                print dhcphosts_hostsform
                 if dhcphosts_hostsform.is_valid():
                     form = dhcphosts_hostsform.save(commit=False)
                     mac = str(request.POST['mac']).strip()
@@ -66,6 +67,7 @@ def user_dhcp(request, uid, host_id=None):
                     else:
                         form.ip = str(ip_to_num(request.POST['ip']))
                     form.mac = mac
+                    print form
                     form.save()
                     return redirect(reverse('core:user_dhcp', kwargs={'uid': uid}))
         else:

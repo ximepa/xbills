@@ -632,7 +632,7 @@ msgstr "Квартира"
 
 #: core/templates/table.html:21 core/templates/user_edit.html:491
 msgid "Build"
-msgstr "Будувати"
+msgstr "Будинок"
 
 #: core/templates/table_fees.html:8 core/templates/table_payments.html:7
 msgid "Number"
@@ -812,7 +812,7 @@ msgstr "Тарифний план"
 
 #: core/templates/user_statistics.html:82
 msgid "Nas"
-msgstr "Nas"
+msgstr "Сервер доступа"
 
 #: core/templates/user_statistics.html:108
 msgid "Statistics not found"
@@ -1266,3 +1266,18 @@ msgstr "український"
 #: xbills/settings.py:107
 msgid "English"
 msgstr "англійська"
+
+msgid "days"
+msgstr "днів"
+
+msgid "Cash"
+msgstr "Готівка"
+
+msgid "Bank"
+msgstr "Банк"
+
+msgid "External Payments"
+msgstr "Зовнішні платежі"
+
+msgid "Bonus"
+msgstr "Бонус"
