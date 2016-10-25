@@ -13,7 +13,7 @@ from error import AMICommandFailure
 from twisted.internet import error as tw_error
 from voip_events import VoipEvents
 
-extensions={"SIP/72":"monitoring"}
+extensions={"SIP/78":"monitoring"}
 
 
 timeouttask=None
@@ -58,9 +58,14 @@ def call_run():
     cm.connect()
 
 def hangup(request):
-    print request.GET
+    qdict = request.GET
+    res = qdict.dict()
+    if res.values()[0] == '':
+        f = str(res.values()[1]) + ';' + res.keys()[0]
+    else:
+        f = request.GET['channel']
     if 'channel' in request.GET:
-        session.hangup(channel=request.GET['channel'])
+        session.hangup(channel=f)
     # session.redirect(channel='', exten='SIP/72', context='default', priority=1)
 
 

@@ -8,7 +8,7 @@ from ws4redis.publisher import RedisPublisher
 from ws4redis.redis_store import RedisMessage
 
 
-extensions={"SIP/72":"monitoring"}
+extensions={"SIP/78":"monitoring"}
 log = logging.getLogger( 'hellofastagi' )
 
 
