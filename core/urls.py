@@ -37,18 +37,18 @@ urlpatterns = [
     url(r'^clients/(?P<uid>\d+)/statistics/$', views.client_statistics, name='client_statistics'),
 ]
 
-if module_check('ipdhcp'):
-    try:
-        from ipdhcp import views as ipdhcp_views
-    except:
-        pass
-    finally:
-        urlpatterns += url(r'^clients/(?P<uid>.+)/dhcp/$', ipdhcp_views.user_dhcp, name='user_dhcp'),
-        urlpatterns += url(r'^clients/(?P<uid>.+)/dhcp/(?P<host_id>.+)/$', ipdhcp_views.user_dhcp, name='user_ipdhcp_host_change'),
-if module_check('claims'):
-    try:
-        from claims import views as claims_views
-    except:
-        pass
-    finally:
-        urlpatterns += url(r'^clients/(?P<uid>\d+)/claims/$', claims_views.user_claims, name='user_claims'),
+# if module_check('ipdhcp'):
+#     try:
+#         from ipdhcp import views as ipdhcp_views
+#     except:
+#         pass
+#     finally:
+#         urlpatterns += url(r'^clients/(?P<uid>.+)/dhcp/$', ipdhcp_views.user_dhcp, name='user_dhcp'),
+#         urlpatterns += url(r'^clients/(?P<uid>.+)/dhcp/(?P<host_id>.+)/$', ipdhcp_views.user_dhcp, name='user_ipdhcp_host_change'),
+# if module_check('claims'):
+#     try:
+#         from claims import views as claims_views
+#     except:
+#         pass
+#     finally:
+#         urlpatterns += url(r'^clients/(?P<uid>\d+)/claims/$', claims_views.user_claims, name='user_claims'),

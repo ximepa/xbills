@@ -1,7 +1,8 @@
 # -*- encoding: utf-8 -*-
 import csv
 import json
-from django.shortcuts import render, HttpResponseRedirect, HttpResponse, render_to_response, RequestContext, redirect
+from django.shortcuts import render, HttpResponseRedirect, HttpResponse, render_to_response, redirect
+from django.template import RequestContext
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Q
