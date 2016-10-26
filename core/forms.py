@@ -35,6 +35,7 @@ class AdministratorForm(forms.ModelForm):
             'address',
             'cell_phone',
             'phone',
+            'style',
         ]
         widgets = {
             'login': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
@@ -45,6 +46,7 @@ class AdministratorForm(forms.ModelForm):
             'address': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Address'}),
             'cell_phone': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Phone'}),
             'phone': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Phone'}),
+            'style': forms.Select(attrs={'class': 'ui search dropdown'}),
         }
 
 
