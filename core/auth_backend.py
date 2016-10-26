@@ -1,5 +1,7 @@
 # -*- encoding: utf-8 -*-
 #from django.contrib.auth.models import check_password
+from django.contrib.auth.hashers import check_password
+
 from .models import Admin
 
 
@@ -8,7 +10,8 @@ class AuthBackend(object):
     def authenticate(self, username=None, password=None):
         try:
             admin = Admin.objects.get(login=username)
-            if admin.get_hash_password == password:
+            pwd_valid = check_password(password, admin.password)
+            if pwd_valid:
                 return admin
             else:
                 return None

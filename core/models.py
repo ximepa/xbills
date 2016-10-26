@@ -23,6 +23,32 @@ def num_to_ip(number):
     return "%s.%s.%s.%s" % (a,b,c,d)
 
 
+class UserManager(BaseUserManager):
+    def _create_user(self, login, email, password, is_staff, is_superuser, **extra_fields):
+        now = datetime.date.today()
+        if not login:
+            raise ValueError('The given username must be set')
+        email = self.normalize_email(email)
+        user = self.model(login=login, email=email,
+                          regdate=now,
+                          #is_staff=is_staff,
+                          disable=True,
+                          #is_superuser=is_superuser,
+                          **extra_fields)
+                          #last_login=now,
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_user(self, login, email=None, password=None, **extra_fields):
+        return self._create_user(login, email, password, False, False, **extra_fields)
+
+    def create_superuser(self, login, email, password, **extra_fields):
+        user = self._create_user(login, email, password, True, True, **extra_fields)
+        user.disable = False
+        user.save(using=self._db)
+        return user
+
 # PermissionsMixin
 class Admin(AbstractBaseUser):
 
@@ -36,27 +62,27 @@ class Admin(AbstractBaseUser):
     cell_phone = models.CharField(max_length=20, blank=True)
     email = models.CharField(max_length=35, blank=True)
     address = models.CharField(max_length=60, blank=True)
-    objects = BaseUserManager()
+    objects = UserManager()
     #last_login = models.DateTimeField(blank=True, null=True, db_column='last_login')
-    USERNAME_FIELD = 'id'
-    REQUIRED_FIELDS = []
+    USERNAME_FIELD = 'login'
+    REQUIRED_FIELDS = ['email']
 
     def __unicode__(self):
         return str(self.id)
 
-    @property
-    def get_hash_password(self):
-        q = 'SELECT aid, DECODE(password, "%s") as pwd FROM %s WHERE aid=%s' % (settings.ENCRYPT_KEY, self._meta.db_table, self.id)
-        return self.__class__.objects.raw(q)[0].pwd
-
-    @get_hash_password.setter
-    def get_hash_password(self, value):
-        print value
-        cursor = connection.cursor()
-        q = 'SELECT ENCODE("%s", "%s") as pwd' % (value, settings.ENCRYPT_KEY)
-        cursor.execute(q)
-        row = cursor.fetchone()
-        self.password = row[0]
+    # @property
+    # def get_hash_password(self):
+    #     q = 'SELECT aid, DECODE(password, "%s") as pwd FROM %s WHERE aid=%s' % (settings.ENCRYPT_KEY, self._meta.db_table, self.id)
+    #     return self.__class__.objects.raw(q)[0].pwd
+    #
+    # @get_hash_password.setter
+    # def get_hash_password(self, value):
+    #     print value
+    #     cursor = connection.cursor()
+    #     q = 'SELECT ENCODE("%s", "%s") as pwd' % (value, settings.ENCRYPT_KEY)
+    #     cursor.execute(q)
+    #     row = cursor.fetchone()
+    #     self.password = row[0]
 
     def is_online(self):
         from django.core.cache import cache
