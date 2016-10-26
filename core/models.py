@@ -121,13 +121,13 @@ class User(models.Model):
     company = models.ForeignKey(Company, related_name='clients', blank=True, null=True)
     credit = models.FloatField(db_column='credit', default='0.00', blank=True, null=False)
     credit_date = models.DateField(db_column='credit_date', default='0000-00-00', blank=True)
-    gid = models.ForeignKey('Group', db_column='gid', related_name='user_group')
+    gid = models.ForeignKey('Group', db_column='gid', related_name='user_group', blank=True, null=True)
     reduction = models.FloatField(db_column='reduction', default='0.00', blank=True)
     reduction_date = models.DateField(db_column='reduction_date', default='0000-00-00', blank=True)
     activate = models.DateField(db_column='activate', default='0000-00-00', blank=True)
     expire = models.DateField(db_column='expire', default='0000-00-00', blank=True)
     deleted = models.BooleanField(db_column='deleted')
-    registration =models.DateField(default='0000-00-00', blank=True)
+    registration = models.DateField(default='0000-00-00', blank=True)
     bill = models.ForeignKey('Bill')
 
     def __unicode__(self):
