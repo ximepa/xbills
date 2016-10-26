@@ -634,7 +634,7 @@ class Shedule(models.Model):
 class AdminSettings(models.Model):
 
     admin_id = models.IntegerField(db_column='aid', primary_key=True)
-    object = models.CharField(max_length=20, db_column='object', primary_key=True)
+    object = models.CharField(max_length=20, db_column='object')
     setting = models.CharField(max_length=1000, db_column='setting')
 
     def __unicode__(self):
