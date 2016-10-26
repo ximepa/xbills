@@ -135,6 +135,14 @@ def active_startwith(request, url, *args):
 
 
 @register.simple_tag
+def active_startwith_multiple(request, *args):
+    for url in args:
+        if request.path.startswith(reverse(url)):
+            return 'active'
+    return ''
+
+
+@register.simple_tag
 def user_company(id):
     user_count = User.objects.filter(company_id=id).count()
     return user_count

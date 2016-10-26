@@ -78,8 +78,8 @@
 {#        </div>#}
     <div class="row">
         <div class="column">
-            <div class="ui blue segment">
-                <table class="ui blue small very compact selectable striped table">
+            <div class="ui {{ request.user.theme }} mini segment">
+                <table class="ui {{ request.user.theme }} very compact selectable striped table">
                     <thead>
                     <tr>
                         <th>
@@ -112,7 +112,7 @@
                             <td> {{ admin.name }} </td>
                             <td> {{ admin.cell_phone }} </td>
                             <td> {{ admin.email }} </td>
-                            {% if admin.disable == 0 %}
+                            {% if admin.disable == 1 %}
                                 <td><i class="fa fa-check"></i></td>
                             {% else %}
                                 <td><i class="fa fa-times"></i></td>

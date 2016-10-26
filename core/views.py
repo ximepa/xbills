@@ -85,7 +85,7 @@ def index(request, settings=settings):
     return render(request, 'index.html', locals())
 
 @login_required()
-def nas(request):
+def servers(request):
     if 'sessions' in request.GET:
         sessions = request.GET['sessions']
         session_list = Dv_calls.objects.filter(nas=request.GET['sessions'])
@@ -113,8 +113,8 @@ def nas(request):
         for p in page_range:
             page_list = p
         pre_end = sespage.paginator.num_pages - 2
-    nas_id = Server.objects.all()
-    return render(request, 'nas.html', locals())
+    servers = Server.objects.all()
+    return render(request, 'servers.html', locals())
 
 @login_required()
 def client_errors(request, uid):

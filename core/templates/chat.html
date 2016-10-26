@@ -11,7 +11,7 @@
 {% block content %}
     <div class="row">
         <div class="thirteen wide column">
-            <div class="ui blue segment">
+            <div class="ui {{ request.user.theme }} segment">
                 <div class="ui form">
                   <div class="field">
                     <pre style="overflow-y: auto; height: 24em; padding: 10px; border-radius: .28571429rem; border: 1px solid rgba(34,36,38,.15);" id="billboard"></pre>
@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="three wide column">
-            <div class="ui blue segment">
+            <div class="ui {{ request.user.theme }} segment">
                 {% if admins %}
                     <div class="ui middle aligned divided list">
                         {% for admin in admins %}

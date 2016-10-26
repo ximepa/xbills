@@ -23,6 +23,35 @@ def num_to_ip(number):
     return "%s.%s.%s.%s" % (a,b,c,d)
 
 
+THEME_CHOISES = (
+    ('blank', 'Default'),
+    ('red', 'red'),
+    ('orange', 'orange'),
+    ('yellow', 'yellow'),
+    ('olive', 'olive'),
+    ('green', 'green'),
+    ('teal', 'teal'),
+    ('blue', 'blue'),
+    ('violet', 'violet'),
+    ('purple', 'purple'),
+    ('pink', 'pink'),
+    ('brown', 'brown'),
+    ('grey', 'grey'),
+    ('black', 'black'),
+)
+
+STYLE_CHOISES = (
+    ('blank', 'Default'),
+    ('mini', 'mini'),
+    ('tiny', 'tiny'),
+    ('small', 'small'),
+    ('large', 'large'),
+    ('big', 'big'),
+    ('huge', 'huge'),
+    ('massive', 'massive'),
+)
+
+
 class UserManager(BaseUserManager):
     def _create_user(self, login, email, password, is_staff, is_superuser, **extra_fields):
         now = datetime.date.today()
@@ -49,15 +78,17 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
 # PermissionsMixin
 class Admin(AbstractBaseUser):
-
     login = models.CharField(max_length=50, db_column='id', unique=True)
-    name = models.CharField(max_length=50, db_column='name')
+    name = models.CharField(max_length=50, db_column='name', blank=True)
     id = models.AutoField(unique=True, primary_key=True, db_column='aid')
     regdate = models.DateField(auto_now_add=True, db_column='regdate')
     disable = models.BooleanField(default=0, db_column='disable', blank=True)
-    theme = models.CharField(max_length=40, default='default', choices=[(str(o), str(o)) for o in os.listdir('static') if not o.startswith('custom')])
+    # theme = models.CharField(max_length=40, default='default', choices=[(str(o), str(o)) for o in os.listdir('static') if not o.startswith('custom')])
+    theme = models.CharField(max_length=40, default='default', choices=THEME_CHOISES)
+    style = models.CharField(max_length=40, default='default', choices=STYLE_CHOISES)
     phone = models.CharField(max_length=20, db_column='phone', blank=True)
     cell_phone = models.CharField(max_length=20, blank=True)
     email = models.CharField(max_length=35, blank=True)

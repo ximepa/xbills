@@ -6,7 +6,7 @@
     <i class="right angle icon divider"></i>
     <div class="section">{% trans 'Settings' %}</div>
     <i class="right angle icon divider"></i>
-    <a href="{% url 'core:nas' %}" class="section">{% trans 'Nas' %}</a>
+    <a href="{% url 'core:servers' %}" class="section">{% trans 'Servers' %}</a>
 {% endblock %}
 {% block breadcrumbs_sub_header %}
     {% trans 'Edit Servers' %}
@@ -14,13 +14,13 @@
 {% block layout %}
     <div class="row">
         <div class="column">
-            <div class="ui tiny stacked segment">
+            <div class="ui blue mini segment">
 {#                <div class="panel-heading hidden-print">#}
 {#                    <div class="btn-group btn-group-xs" role="group">#}
 {#                    </div>#}
 {#                    <div class="btn-group pull-left">#}
-{#                        <a title="Добавить" class="hidden-print" data-toggle="modal" data-target="#nas_add" href="#"><span class="glyphicon glyphicon-plus"></span></a>#}
-{#                        <div class="modal fade" id="nas_add" role="dialog" aria-hidden="true">#}
+{#                        <a title="Добавить" class="hidden-print" data-toggle="modal" data-target="#server_add" href="#"><span class="glyphicon glyphicon-plus"></span></a>#}
+{#                        <div class="modal fade" id="server_add" role="dialog" aria-hidden="true">#}
 {#                            <div class="modal-dialog modal-title">#}
 {#                                <div class="modal-content">#}
 {#                                    <div class="modal-header">Сервер доступа#}
@@ -29,12 +29,12 @@
 {#                                    </button>#}
 {#                                    </div>#}
 {#                                    <div class="modal-body text-left" id="nestedform">#}
-{#                                        <form class="form-horizontal" method="post" name="form_nas">{% csrf_token %}#}
+{#                                        <form class="form-horizontal" method="post" name="form_server">{% csrf_token %}#}
 {#                                            <div class="panel panel-default panel-form">#}
 {#                                                <div class="form-group">#}
-{#                                                    <label class="control-label col-md-3 required" for="nas_ip">IP:</label>#}
+{#                                                    <label class="control-label col-md-3 required" for="server_ip">IP:</label>#}
 {#                                                    <div class="col-md-9">#}
-{#                                                        <input id="nas_ip" name="nas_ip" value="" placeholder="{% trans 'Server IP' %}" class="form-control" type="text">#}
+{#                                                        <input id="server_ip" name="server_ip" value="" placeholder="{% trans 'Server IP' %}" class="form-control" type="text">#}
 {#                                                    </div>#}
 {#                                                    <label class="control-label col-md-3" for="server_name">{% trans 'Server name' %}</label>#}
 {#                                                    <div class="col-md-9">#}
@@ -43,17 +43,17 @@
 {#                                                </div>#}
 {#                                                <div class="form-group">#}
 {#                                                    <label class="col-md-12 bg-primary">Управление</label>#}
-{#                                                    <label class="control-label col-md-3" for="nas_ip_port">IP:PORT</label>#}
+{#                                                    <label class="control-label col-md-3" for="server_ip_port">IP:PORT</label>#}
 {#                                                    <div class="col-md-9">#}
-{#                                                        <input id="nas_ip_port" name="nas_ip_port" value="" placeholder="" class="form-control" type="text">#}
+{#                                                        <input id="server_ip_port" name="server_ip_port" value="" placeholder="" class="form-control" type="text">#}
 {#                                                    </div>#}
 {#                                                    <label class="control-label col-md-3" for="user_name">{% trans 'User name' %}:</label>#}
 {#                                                    <div class="col-md-9">#}
 {#                                                        <input id="user_name" name="user_name" value="" placeholder="{% trans 'User name' %}" class="form-control" type="text">#}
 {#                                                    </div>#}
-{#                                                    <label class="control-label col-md-3" for="nas_password">{% trans 'Password' %}:</label>#}
+{#                                                    <label class="control-label col-md-3" for="server_password">{% trans 'Password' %}:</label>#}
 {#                                                    <div class="col-md-9">#}
-{#                                                        <input id="nas_password" name="nas_password" value="" placeholder="{% trans 'Password' %}" class="form-control" type="password">#}
+{#                                                        <input id="server_password" name="server_password" value="" placeholder="{% trans 'Password' %}" class="form-control" type="password">#}
 {#                                                    </div>#}
 {#                                                </div>#}
 {#                                            </div>#}
@@ -68,49 +68,53 @@
 {#                        </div>#}
 {#                    </div>#}
 {#                </div>#}
-                <table class="ui blue small very compact selectable striped table" id="NAS_LIST_">
-                    <thead>
-                    <tr>
-                        <th>
-                            <script>
-                                $( document ).ready(function() {
-                                    $('#checkAll').click(function () {
-                                        $('input:checkbox[id^="NAS_ID"]').not(this).prop('checked', this.checked);
-                                    })
-                                });
-                            </script>
-                            <input type='checkbox' id='checkAll'/>
-                        </th>
-                        <th class="text-center"><a title="ID" href="" >ID</a></th>
-                        <th class="text-center"><a title="Название" href="" >Название</a></th>
-                        <th class="text-center"><a title="NAS-Identifier" href="" >NAS-Identifier</a></th>
-                        <th class="text-center"><a title="ip" href="" >ip</a></th>
-                        <th class="text-center"><a title="Тип" href="" >Тип</a></th>
-                        <th class="text-center"><a title="Отключено" href="" >Отключено</a></th>
-                        <th class="text-center"><a title="Описание" href="" >Описание</a></th>
-                        <th class="text-center">-</th>
-                        <th class="text-center">-</th>
-                    </tr>
-                    </thead>
-                    {% for nas in nas_id %}
-                    <tr>
-                        <td><input type='checkbox' name='NAS_ID' value="{{ admin.id }}" id='NAS_ID'></td>
-                        <td> {{ nas.id }} </td>
-                        <td> {{ nas.name }} </td>
-                        <td> {{ nas.nas_identifier }} </td>
-                        <td> {{ nas.ip }} </td>
-                        <td> {{ nas.nas_type }} </td>
-                        {% if nas.disable == 0 %}
-                            <td><span class="ui green label">{% trans 'Active' %}</span></td>
-                        {% else %}
-                            <td><span class="ui red label">{% trans 'Disabled' %}</span></td>
-                        {% endif %}
-                        <td> {{ nas.descr }} </td>
-                        <td><a title="Пользователи" class='btn btn-default btn-xs' href="?sessions={{ nas.id }}" >Пользователи</a></td>
-                        <td><a title="IP_Pool" class='btn btn-default btn-xs'>IP_Pool</a></td>
-                    </tr>
-                    {% endfor %}
-                </table>
+                {% if servers %}
+                    <table class="ui blue small very compact selectable striped table" id="NAS_LIST_">
+                        <thead>
+                        <tr>
+                            <th>
+                                <script>
+                                    $( document ).ready(function() {
+                                        $('#checkAll').click(function () {
+                                            $('input:checkbox[id^="NAS_ID"]').not(this).prop('checked', this.checked);
+                                        })
+                                    });
+                                </script>
+                                <input type='checkbox' id='checkAll'/>
+                            </th>
+                            <th class="text-center"><a title="ID" href="" >ID</a></th>
+                            <th class="text-center"><a title="Название" href="" >Название</a></th>
+                            <th class="text-center"><a title="NAS-Identifier" href="" >NAS-Identifier</a></th>
+                            <th class="text-center"><a title="ip" href="" >ip</a></th>
+                            <th class="text-center"><a title="Тип" href="" >Тип</a></th>
+                            <th class="text-center"><a title="Отключено" href="" >Отключено</a></th>
+                            <th class="text-center"><a title="Описание" href="" >Описание</a></th>
+                            <th class="text-center">-</th>
+                            <th class="text-center">-</th>
+                        </tr>
+                        </thead>
+                        {% for server in servers %}
+                        <tr>
+                            <td><input type='checkbox' name='NAS_ID' value="{{ admin.id }}" id='NAS_ID'></td>
+                            <td> {{ server.id }} </td>
+                            <td> {{ server.name }} </td>
+                            <td> {{ server.server_identifier }} </td>
+                            <td> {{ server.ip }} </td>
+                            <td> {{ server.server_type }} </td>
+                            {% if server.disable == 0 %}
+                                <td><span class="ui green label">{% trans 'Active' %}</span></td>
+                            {% else %}
+                                <td><span class="ui red label">{% trans 'Disabled' %}</span></td>
+                            {% endif %}
+                            <td> {{ server.descr }} </td>
+                            <td><a title="Пользователи" class='btn btn-default btn-xs' href="?sessions={{ server.id }}" >Пользователи</a></td>
+                            <td><a title="IP_Pool" class='btn btn-default btn-xs'>IP_Pool</a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    {% trans 'Servers not found' %}
+                {% endif %}
             </div>
         </div>
     </div>

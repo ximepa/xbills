@@ -11,7 +11,7 @@
 {% block content %}
     <div class="row">
         <div class="column">
-{#            <div class="ui blue segment">#}
+            <div class="ui {{ request.user.theme }} mini segment">
                 {% if r_company == 1 %}
                     {% if company %}
                         <div id="company_modal" class="ui modal">
@@ -160,7 +160,7 @@
                         </div>
                     </form>
                 {% endif %}
-{#            </div>#}
+            </div>
         </div>
     </div>
 {% endblock %}

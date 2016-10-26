@@ -113,11 +113,11 @@
             <div id="sideBar" class="two wide column">
                 <div class="ui sticky vertical accordion menu">
                     <div class="item">
-                        <a class="{% active_startwith request 'core:clients' %} title">
+                        <a class="title">
                             <i class="dropdown icon"></i>
                             {% trans 'Clients' %}
                         </a>
-                        <div class="{% active_startwith request 'core:clients' %} content">
+                        <div class="{% active_startwith_multiple request 'core:clients' 'core:company' 'core:group' %} content">
                             <div class="ui form">
                                 <div class="grouped fields">
                                     <div class="menu">
@@ -177,11 +177,11 @@
                             <i class="dropdown icon"></i>
                             {% trans 'Settings' %}
                         </a>
-                        <div class="{% active_startwith request 'core:administrators' %} content">
+                        <div class="{% active_startwith_multiple request 'core:administrators' 'core:servers' %} content">
                             <div class="grouped fields">
                                 <div class="menu">
                                     <a class="{% active request 'core:administrators' %} item" href="{% url 'core:administrators' %}">{% trans 'Administrators' %}</a>
-                                    <a class="{% active request 'core:nas' %} item" href="{% url 'core:nas' %}">{% trans 'Nas' %}</a>
+                                    <a class="{% active request 'core:servers' %} item" href="{% url 'core:servers' %}">{% trans 'Servers' %}</a>
                                 </div>
                             </div>
                         </div>
@@ -243,7 +243,7 @@
                 <div class="ui stackable grid">
                     <div class="row">
                         <div class="column">
-                            <div class="ui mini segment">
+                            <div class="ui {{ request.user.theme }} mini segment">
                                 <h6 class="ui header">
                                     <i class="dashboard icon"></i>
                                     <div class="content">

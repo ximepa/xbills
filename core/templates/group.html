@@ -11,7 +11,7 @@
 {% block content %}
     <div class="row">
         <div class="column">
-            <div class="ui blue segment">
+            <div class="ui {{ request.user.theme }} mini segment">
                 {% if group %}
                     <div id="test" class="ui modal">
                         <i class="close icon"></i>

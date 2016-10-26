@@ -5,8 +5,8 @@
 {% block layout %}
     <div class="row">
         <div class="column">
-            <div class="ui blue mini segment">
-                <table class="ui blue small very compact selectable striped table">
+            <div class="ui {{ request.user.theme }} mini segment">
+                <table class="ui {{ request.user.theme }} very compact selectable striped table">
                     <thead>
                         <tr>
                             <th><a href="?{% url_replace request 'order_by' 'id' %}">{% trans 'ID' %}</a></th>
@@ -42,8 +42,8 @@
     {% if dv %}
         <div class="row">
             <div class="column">
-                <div class="ui blue mini segment">
-                    <table class="ui blue small very compact selectable striped table">
+                <div class="ui {{ request.user.theme }} mini segment">
+                    <table class="ui {{ request.user.theme }} small very compact selectable striped table">
                         <thead>
                             <tr>
                                 <th><a href="?{% url_replace request 'order_by' 'id' %}">{% trans 'User name' %}</a></th>
