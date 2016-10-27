@@ -196,7 +196,7 @@ function CallNotifi(uid, login, cidname, num, channel, begin, id) {
             text: num,
             type: 'alert',
             dismissQueue: true,
-            layout: 'topCenter',
+            layout: 'bottomRight',
             theme: 'semantic_ui',
             buttons: [
                 {

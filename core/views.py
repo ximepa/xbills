@@ -6,15 +6,17 @@ from django.template import RequestContext
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Q
+from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from dv.helpers import Hangup
 from .auth_backend import AuthBackend
 from .models import User, Payment, Fees, Dv, UserPi, Street, House, District, Dv_calls, Server, ErrorsLog, Dv_log, Admin, num_to_ip, AdminSettings, \
     AdminLog, ip_to_num, Group, Company
-from .forms import AdministratorForm, SearchForm, SearchFeesForm, SearchPaymentsForm, ClientForm, DvForm, UserPiForm
+from .forms import AdministratorForm, SearchForm, SearchFeesForm, SearchPaymentsForm, ClientForm, DvForm, UserPiForm, AdministratorAddForm
 from django.contrib import messages
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.auth.hashers import make_password
 from ws4redis.redis_store import RedisMessage
 from ws4redis.publisher import RedisPublisher
 import helpers
@@ -916,6 +918,33 @@ def administrator_edit(request, uid):
                 admin_form.save()
                 return redirect('core:administrators')
         return render(request, 'admin_edit.html', locals())
+
+
+@login_required()
+def administrators_add(request):
+    # admins = Admin.objects.all()
+    admin_form = AdministratorAddForm()
+    if request.method == 'POST':
+        print request.POST
+        admin_form = AdministratorAddForm(request.POST)
+        if admin_form.is_valid():
+            admin_form = admin_form.save(commit=False)
+            admin_form.password = make_password(request.POST['password'])
+            admin_form.save()
+            return redirect(reverse('core:administrators'))
+        # if 'admin_remove' in request.POST:
+        #     print 'admin_remove'
+        #     print request.POST
+        #     admin = Admin.objects.get(id=request.POST['uid'])
+        #     admin.delete()
+        # elif 'admin_add' in request.POST:
+        #     print 'admin_add'
+        #     print request.POST
+        #     admin_form = AdministratorForm(request.POST)
+        #     if admin_form.is_valid():
+        #         print 'valid'
+        #         admin_form.save()
+    return render(request, 'administrators_add.html', locals())
 
 
 def test(request, template=".html"):

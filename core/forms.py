@@ -41,13 +41,45 @@ class AdministratorForm(forms.ModelForm):
             'login': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
             'name': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
             'disable': forms.CheckboxInput(),
-            'theme': forms.Select(attrs={'class': 'ui search dropdown'}),
+            'theme': forms.Select(attrs={'class': ''}),
             'email': forms.EmailInput(attrs={'class': 'ui small input', 'placeholder': u'Email'}),
             'address': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Address'}),
             'cell_phone': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Phone'}),
             'phone': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Phone'}),
-            'style': forms.Select(attrs={'class': 'ui search dropdown'}),
+            'style': forms.Select(attrs={'class': ''}),
         }
+
+
+class AdministratorAddForm(forms.ModelForm):
+    disable = forms.BooleanField(required=False)
+
+    class Meta:
+        model = Admin
+        fields = [
+            'login',
+            'password',
+            'name',
+            'disable',
+            'theme',
+            'email',
+            'address',
+            'cell_phone',
+            'phone',
+            'style',
+        ]
+        widgets = {
+            'login': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
+            'password': forms.PasswordInput(attrs={'class': 'ui small input', 'placeholder': u'Password'}),
+            'name': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'disable': forms.CheckboxInput(),
+            'theme': forms.Select(attrs={'class': ''}),
+            'email': forms.EmailInput(attrs={'class': 'ui small input', 'placeholder': u'Email'}),
+            'address': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Address'}),
+            'cell_phone': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Phone'}),
+            'phone': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Phone'}),
+            'style': forms.Select(attrs={'class': ''}),
+        }
+
 
 
 class SearchForm(forms.Form):
