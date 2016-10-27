@@ -176,6 +176,25 @@
                     <div class="item">
                         <a class="title">
                             <i class="dropdown icon"></i>
+                            {% trans 'Claims' %}
+                        </a>
+                        <div class="{% active_startwith request 'claims:claims' %} content">
+                            <div class="ui form">
+                                <div class="grouped fields">
+                                    <div class="menu">
+                                        <a href="{% url 'claims:claims' %}" class="{% active request 'claims:claims' %} item">{% trans 'Claims list' %}</a>
+{#                                        <a href="{% url 'core:company' %}" class="{% active request 'core:company' %} item">{% trans 'Company' %}</a>#}
+{#                                        <a href="{% url 'core:group' %}" class="{% active request 'core:group' %} item">{% trans 'Group' %}</a>#}
+                                        <a class="item">Add</a>
+                                        <a class="item">Remove</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <a class="title">
+                            <i class="dropdown icon"></i>
                             {% trans 'Settings' %}
                         </a>
                         <div class="{% active_startwith_multiple request 'core:administrators' 'core:servers' %} content">
