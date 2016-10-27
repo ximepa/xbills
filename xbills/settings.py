@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-DATABASE_ROUTERS = ['xbills.dbrouter.MainDBRouter']
+#DATABASE_ROUTERS = ['xbills.dbrouter.MainDBRouter']
 
 # Application definition
 
