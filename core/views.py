@@ -846,14 +846,14 @@ def user_login(request):
             error = u'Ім’я користувача або пароль введені невірно'
             return render(request, 'login.html', locals())
         elif user is not None:
-            if user:
+            if not user.disable:
                 user.backend = 'core.auth_backend.AuthBackend'
                 login(request, user)
                 message = RedisMessage('<span style="color: blue; opacity: 0.5;">%s: %s is logged in</span>' % (datetime.datetime.now().strftime("%H:%M:%S"), username))  # create a welcome message to be sent to everybody
                 RedisPublisher(facility='global_chat', broadcast=True).publish_message(message)
                 return HttpResponseRedirect(request.GET['next'])
             else:
-                error = u'Аккаунт заблоковано'
+                error = u'Account is locked'
                 return render(request, 'login.html', locals())
         else:
             # Bad login details were provided. So we can't log the user in.
@@ -889,8 +889,6 @@ def administrators(request):
     admin_form = AdministratorForm()
     if request.method == 'POST':
         if 'admin_remove' in request.POST:
-            print 'admin_remove'
-            print request.POST
             admin = Admin.objects.get(id=request.POST['uid'])
             admin.delete()
         elif 'admin_add' in request.POST:

@@ -177,9 +177,11 @@
                                 <a href="{% url 'core:administrator_edit' admin.id %}"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
                             </td>
                             <td>
-                                <form method="post">{% csrf_token %}
+                                <form method="post" id="admin_remove_form" onsubmit="return confirm('{% trans 'Warning! You can not revert you changes!!!' %}')">{% csrf_token %}
                                     <input type="hidden" name="uid" value="{{ admin.id }}">
-                                    <a name="admin_remove" type="submit" onclick="if(!confirm('{% trans 'Remove admin ' %}{{ admin.login }}?')){return false;}"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                    <button name="admin_remove" type="submit" class="negative mini compact ui icon button" onclick="if(!confirm('{% trans 'Remove admin ' %}{{ admin.login }}?')){return false;}">
+                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                    </button>
                                 </form>
 {#                        <a title="{% trans 'Delete' %}" class='' href="#"  data-id='' data-toggle='modal' ></a>#}
                             </td>
