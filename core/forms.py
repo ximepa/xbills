@@ -92,9 +92,9 @@ class SearchForm(forms.Form):
     login = forms.CharField(widget=forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}))
     uid = forms.CharField(widget=forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'UID'}))
     disabled = forms.ChoiceField(widget=forms.RadioSelect(), choices=DISABLED)
-    district = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'ui search dropdown', 'placeholder': u'District'}), queryset=District.objects.all(), required=False)
-    street = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'ui search dropdown', 'placeholder': u'Street'}), queryset=Street.objects.all(), required=False)
-    house = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'ui search dropdown', 'placeholder': u'House'}), queryset=House.objects.filter(~Q(number="")), required=False,)
+    district = forms.ModelChoiceField(widget=forms.Select(attrs={'class': '', 'placeholder': u'District'}), queryset=District.objects.all(), required=False)
+    street = forms.ModelChoiceField(widget=forms.Select(attrs={'class': '', 'placeholder': u'Street'}), queryset=Street.objects.all(), required=False)
+    house = forms.ModelChoiceField(widget=forms.Select(attrs={'class': '', 'placeholder': u'House'}), queryset=House.objects.filter(~Q(number="")), required=False,)
     flat = forms.CharField(widget=forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Flat'}))
 
 

@@ -20,14 +20,14 @@ $(document).ready(function() {
     if ($('#id_street').val()) {
         getHouses($('#id_street').val())
     }
-    if (!$("#id_street").val()) {
-        $("#id_street option").remove();
-        $('#id_street').append($("<option></option>").attr("value", '0').text('---------'));
-    }
-    if (!$('#id_house').val()) {
-        $("#id_house option").remove();
-        $('#id_house').append($("<option></option>").attr("value", '0').text('---------'));
-    }
+{#    if (!$("#id_street").val()) {#}
+{#        $("#id_street option").remove();#}
+{#        $('#id_street').append($("<option></option>").attr("value", '0').text('---------'));#}
+{#    }#}
+{#    if (!$('#id_house').val()) {#}
+{#        $("#id_house option").remove();#}
+{#        $('#id_house').append($("<option></option>").attr("value", '0').text('---------'));#}
+{#    }#}
     function getStreets(value){
         url = "/api/streets/" + "?district=" + value;
         $.ajax({
