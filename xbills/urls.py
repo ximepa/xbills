@@ -11,7 +11,7 @@ urlpatterns = [
     url(r'^admin/', include('core.urls')),
     url(r'^admin/telephone/', include('telephone.urls')),
     url(r'^i18n/', include('django.conf.urls.i18n')),
-    url(r'^rpc/', include(rpc_router.urls, 'rpc')),
+    # url(r'^rpc/', include(rpc_router.urls, 'rpc')),
 ]
 if module_check('ipdhcp'):
     urlpatterns += url(r'^admin/dhcps/', include('ipdhcp.urls')),

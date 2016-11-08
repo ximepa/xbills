@@ -130,7 +130,8 @@ class SearchForm(forms.Form):
     # login = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control input-sm', 'placeholder': u'Login'}))
     # uid = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control input-sm', 'placeholder': u'UID'}))
     # disabled = forms.ChoiceField(widget=forms.RadioSelect(), choices=DISABLED)
-    queue = forms.ModelChoiceField(widget=forms.Select(attrs={'class': '', 'placeholder': u'Queue'}), queryset=Queue.objects.all(), required=False)
-    state = forms.ModelChoiceField(widget=forms.Select(attrs={'class': '', 'placeholder': u'State'}), queryset=ClaimState.objects.all(), required=False)
+    queue = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'ui small input', 'placeholder': u'Queue'}), queryset=Queue.objects.all(), required=False)
+    state = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'ui small input', 'placeholder': u'State'}), queryset=ClaimState.objects.all(), required=False)
     # house = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'form-control input-sm   ', 'placeholder': u'House'}), queryset=House.objects.all(), required=False)
     # flat = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control input-sm', 'placeholder': u'Flat'}))
+

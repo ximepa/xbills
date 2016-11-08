@@ -8,6 +8,10 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Q
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
+
+from core.func import type_f_list
+from core.vars import list_db
+from core.vars import type_list
 from dv.helpers import Hangup
 from .auth_backend import AuthBackend
 from .models import User, Payment, Fees, Dv, UserPi, Street, House, District, Dv_calls, Server, ErrorsLog, Dv_log, Admin, num_to_ip, AdminSettings, \
@@ -24,7 +28,6 @@ import platform
 import psutil
 import datetime
 from django.core import serializers
-
 
 def custom_redirect(url_name, *args, **kwargs):
     from django.core.urlresolvers import reverse
@@ -646,6 +649,16 @@ def clients(request):
     filter_by = request.GET.get('users_status', '0')
     order_by = request.GET.get('order_by', 'login')
     users_list = User.objects.all().order_by(order_by)
+    client_form = ClientForm()
+    if request.POST:
+        if 'add_client' in request.POST:
+            client_form = ClientForm(request.POST)
+            if client_form.is_valid():
+                print client_form
+                print 'ok'
+                client_form.save()
+            else:
+                print 'no'
     if filter_by == '1':
         users_list = users_list.filter(bill__deposit__gte=0, disable=False, deleted=False,)
     if filter_by == '2':
@@ -885,7 +898,8 @@ def user_company(request, uid):
 
 @login_required()
 def administrators(request):
-    admins = Admin.objects.all()
+    list = list_db
+    admins = Admin.objects.values(('id'), *type_f_list(type_list, list_db)).all()
     admin_form = AdministratorForm()
     if request.method == 'POST':
         if 'admin_remove' in request.POST:
@@ -898,6 +912,7 @@ def administrators(request):
             if admin_form.is_valid():
                 print 'valid'
                 admin_form.save()
+    print locals()
     return render(request, 'administrators.html', locals())
 
 

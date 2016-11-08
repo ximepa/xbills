@@ -11,7 +11,7 @@
 {% block content %}
     <div class="row">
         <div class="column">
-            <div class="ui blue segment">
+            <div class="ui {{ request.user.theme }} mini segment">
                 {% if payments %}
                     <div class="ui sticky mini fluid pagination menu">
                         <div class="header item">{% trans 'Export' %}</div>

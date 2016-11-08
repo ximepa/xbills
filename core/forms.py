@@ -110,15 +110,15 @@ class SearchPaymentsForm(forms.Form):
 
 class ClientForm(forms.ModelForm):
     disable = forms.BooleanField(required=False)
-    gid = forms.ModelChoiceField(
-        queryset=Group.objects.all(),
-        empty_label=None,
-        widget=forms.Select(
-            attrs={
-                'class': 'ui search dropdown'
-            }
-        )
-    )
+    # gid = forms.ModelChoiceField(
+    #     queryset=Group.objects.all(),required=False,
+    #     empty_label=None,
+    #     widget=forms.Select(
+    #         attrs={
+    #             'class': 'ui search dropdown'
+    #         }
+    #     )
+    # )
 
     class Meta:
         model = User
@@ -126,8 +126,8 @@ class ClientForm(forms.ModelForm):
             'disable',
             'company',
             'credit',
+            'login',
             'credit_date',
-            'gid',
             'reduction',
             'reduction_date',
             'activate',
@@ -140,13 +140,14 @@ class ClientForm(forms.ModelForm):
             'disable': forms.CheckboxInput(),
             'company': forms.Select(attrs={'class': 'ui search dropdown'}),
             'credit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Credit'}),
+            'login': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
             'credit_date': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
-            'reduction': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
+            'reduction': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Reduction'}),
             'reduction_date': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
             'activate': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
             'expire': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
             'deleted': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
-            'registration': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
+            'registration': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
             # 'bill': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
         }
 

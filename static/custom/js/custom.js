@@ -11,6 +11,7 @@ $( document ).ready(function() {
     $('.sticky').sticky();
     $('.popup').popup();
     $('#search_panel').accordion();
+    $('#add_panel').accordion();
     $('#sideBar').accordion({
         onOpen: function () {
             console.log($('#sideBar'))

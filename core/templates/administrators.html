@@ -141,13 +141,27 @@
                             <input type='checkbox' id='checkAll'/>
                         </th>
                         <th><a title="ID" href="">ID</a></th>
-                        <th><a title="{% trans 'Login' %}" href="">{% trans 'Login' %}</a></th>
-                        <th><a title="{% trans 'FIO' %}" href="" >{% trans 'FIO' %}</a></th>
-                        <th><a title="Phone" href="" >{% trans 'Phone' %}</a></th>
-                        <th><a title="Email" href="" >Тип</a></th>
-                        <th><a title="Отключено" href="" >Отключено</a></th>
-                        <th><a title="Описание" href="" >Описание</a></th>
-                        <th><a title="{% trans 'Theme' %}" href="" >{% trans 'Theme' %}</a></th>
+                        {% if 'login' in list %}
+                            <th><a title="{% trans 'Login' %}" href="">{% trans 'Login' %}</a></th>
+                        {% endif %}
+                        {% if 'name' in list %}
+                            <th><a title="{% trans 'FIO' %}" href="" >{% trans 'FIO' %}</a></th>
+                        {% endif %}
+                        {% if 'phone' in list %}
+                            <th><a title="Phone" href="" >{% trans 'Phone' %}</a></th>
+                        {% endif %}
+                        {% if 'email' in list %}
+                            <th><a title="Email" href="" >Тип</a></th>
+                        {% endif %}
+                        {% if 'disable' in list %}
+                            <th><a title="Отключено" href="" >Отключено</a></th>
+                        {% endif %}
+                        {% if 'descr' in list %}
+                            <th><a title="Описание" href="" >Описание</a></th>
+                        {% endif %}
+                        {% if 'theme' in list %}
+                            <th><a title="{% trans 'Theme' %}" href="" >{% trans 'Theme' %}</a></th>
+                        {% endif %}
                         <th>{% trans 'Edit' %}</th>
                         <th>{% trans 'Delete' %}</th>
                     </tr>
@@ -156,23 +170,37 @@
                         <tr>
                             <td><input type='checkbox' name='admin_ld' value="{{ admin.id }}" id='admin_ld'></td>
                             <td> {{ admin.id }} </td>
-                            <td> {{ admin.login }} </td>
-                            <td> {{ admin.name }} </td>
-                            <td> {{ admin.cell_phone }} </td>
-                            <td> {{ admin.email }} </td>
-                            {% if admin.disable == 1 %}
-                                <td><i class="fa fa-check"></i></td>
-                            {% else %}
-                                <td><i class="fa fa-times"></i></td>
+                            {% if 'login' in list %}
+                                <td> {{ admin.login }} </td>
                             {% endif %}
-                            <td>{{ nas.descr }}</td>
-                            <td>
-                                {% if admin.theme %}
-                                    {{ admin.theme }}
+                            {% if 'name' in list %}
+                                <td> {{ admin.name }} </td>
+                            {% endif %}
+                            {% if 'phone' in list %}
+                                <td> {{ admin.cell_phone }} </td>
+                            {% endif %}
+                            {% if 'email' in list %}
+                                <td> {{ admin.email }} </td>
+                            {% endif %}
+                            {% if 'disable' in list %}
+                                {% if admin.disable == 1 %}
+                                    <td><i class="fa fa-check"></i></td>
                                 {% else %}
-                                    -
+                                    <td><i class="fa fa-times"></i></td>
                                 {% endif %}
-                            </td>
+                            {% endif %}
+                            {% if 'descr' in list %}
+                                <td>{{ nas.descr }}</td>
+                            {% endif %}
+                            {% if 'theme' in list %}
+                                <td>
+                                    {% if admin.theme %}
+                                        {{ admin.theme }}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                            {% endif %}
                             <td>
                                 <a href="{% url 'core:administrator_edit' admin.id %}"><i class="fa fa-pencil-square-o fa-fw" aria-hidden="true"></i></a>
                             </td>

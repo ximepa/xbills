@@ -11,6 +11,10 @@ from django.conf import settings
 __author__ = 'ximepa'
 
 
+def test(test):
+    print test
+
+
 def ip_to_num(ip_addr):
     sets = map(int, ip_addr.split("."))
     return int(sets[0]*256**3 + sets[1]*256**2 + sets[2]*256 + sets[3])
@@ -170,20 +174,20 @@ class Company(models.Model):
 
 class User(models.Model):
 
-    id = models.IntegerField(primary_key=True, db_column='uid')
+    id = models.IntegerField(primary_key=True, unique=True, db_column='uid')
     login = models.CharField(max_length=20, unique=True, db_column='id')
     disable = models.BooleanField(default=0, db_column='disable', blank=True)
     company = models.ForeignKey(Company, related_name='clients', blank=True, null=True)
     credit = models.FloatField(db_column='credit', default='0.00', blank=True, null=False)
-    credit_date = models.DateField(db_column='credit_date', default='0000-00-00', blank=True)
+    credit_date = models.DateField(db_column='credit_date', default='0000-00-00', blank=True, null=True)
     gid = models.ForeignKey('Group', db_column='gid', related_name='user_group', blank=True, null=True)
     reduction = models.FloatField(db_column='reduction', default='0.00', blank=True)
-    reduction_date = models.DateField(db_column='reduction_date', default='0000-00-00', blank=True)
-    activate = models.DateField(db_column='activate', default='0000-00-00', blank=True)
-    expire = models.DateField(db_column='expire', default='0000-00-00', blank=True)
-    deleted = models.BooleanField(db_column='deleted')
-    registration = models.DateField(default='0000-00-00', blank=True)
-    bill = models.ForeignKey('Bill')
+    reduction_date = models.DateField(db_column='reduction_date', default='0000-00-00', blank=True, null=True)
+    activate = models.DateField(db_column='activate', default='0000-00-00', blank=True, null=True)
+    expire = models.DateField(db_column='expire', default='0000-00-00', blank=True, null=True)
+    deleted = models.BooleanField(db_column='deleted', default=0)
+    registration = models.DateField(default=datetime.date.today(), blank=True, null=True)
+    bill = models.ForeignKey('Bill', default=0)
 
     def __unicode__(self):
         return self.login
