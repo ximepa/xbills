@@ -6,11 +6,5 @@ list_db = {'login', 'phone', 'disable', 'name', 'regdate', 'password', 'gid', 'w
            'max_credit', 'credit_days', 'last_login', 'theme',  'is_superuser', 'is_staff' }
 
 
-type_list = [
-    ('login', 'login'),
-    ('phone', 'cell_phone'),
-    ('disable', 'disable'),
-    ('name', 'name'),
-    ('email', 'email'),
-    ('theme', 'theme'),
-]
+type_list = {'login': 'login', 'phone': 'cell_phone', 'disable': 'disable', 'name': 'name', 'email': 'email', 'theme': 'theme'}
+

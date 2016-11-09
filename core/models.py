@@ -495,12 +495,12 @@ class ErrorsLog(models.Model):
 
 
 class Server(models.Model):
-    id = models.SmallIntegerField(default=0, db_column='id', primary_key=True)
+    id = models.AutoField(unique=True, primary_key=True)
     name = models.CharField(max_length=30, db_column='name')
     nas_identifier = models.CharField(max_length=20, db_column='nas_identifier')
     descr = models.CharField(max_length=250, db_column='descr')
     ip = models.CharField(max_length=15, db_column='ip')
-    nas_type = models.CharField(max_length=20, db_column='nas_type')
+    nas_type = models.CharField(max_length=20, db_column='nas_type', blank=True, null=True)
     auth_type = models.SmallIntegerField(default=0, db_column='auth_type')
     mng_host_port = models.CharField(max_length=25, db_column='mng_host_port')
     mng_user = models.CharField(max_length=20, db_column='mng_user')
@@ -516,8 +516,8 @@ class Server(models.Model):
     city = models.CharField(max_length=20, db_column='city')
     gid = models.SmallIntegerField(default=0, db_column='gid')
     country = models.SmallIntegerField(default=0, db_column='country')
-    mac = models.CharField(max_length=17, db_column='mac')
-    changed = models.DateField(default='0000-00-00 00:00:00', db_column='changed')
+    mac = models.CharField(max_length=17, db_column='mac', blank=True, null=True)
+    changed = models.DateTimeField(auto_now=True, db_column='changed')
     location_id = models.IntegerField(default=0, db_column='location_id')
 
     class Meta:
@@ -694,10 +694,10 @@ class AdminSettings(models.Model):
 
     admin_id = models.IntegerField(db_column='aid', primary_key=True)
     object = models.CharField(max_length=20, db_column='object')
-    setting = models.CharField(max_length=1000, db_column='setting')
+    setting = models.TextField(max_length=1000, db_column='setting')
 
     def __unicode__(self):
-        return str(self.admin_id)
+        return str(self.admin_id, self.setting)
 
     class Meta:
         db_table = 'admin_settings'

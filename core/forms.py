@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.utils.translation import gettext as _
 from django import forms
-from .models import Admin, District, Street, House, Group, User, Company, Dv, Tp, UserPi
+from .models import Admin, District, Street, House, Group, User, Company, Dv, Tp, UserPi, Server
 from django.db.models import Q
 import os
 
@@ -218,4 +218,27 @@ class UserPiForm(forms.ModelForm):
             'street': forms.Select(attrs={'class': 'ui dropdown'}),
             'location': forms.Select(attrs={'class': 'ui dropdown'}),
             'contract_date': forms.TextInput(attrs={'class': 'ui small input', 'value': '0000-00-00', 'placeholder': '0000-00-00'}),
+        }
+
+
+class ServerForm(forms.ModelForm):
+
+    class Meta:
+        model = Server
+        fields = [
+            'ip',
+            'name',
+            'nas_identifier',
+            'descr',
+            'nas_type',
+            'mac',
+        ]
+
+        widgets = {
+            'ip': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'IP'}),
+            'name': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'nas_identifier': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Flat'}),
+            'descr': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'descr'}),
+            'nas_type': forms.Select(attrs={'class': 'ui dropdown'}),
+            'mac': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'mac'}),
         }

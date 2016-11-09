@@ -4,9 +4,11 @@ from django import template
 import math
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
-from core.models import num_to_ip, Admin, User, Tp
+from core.models import num_to_ip, Admin, User, Tp, AdminSettings
 from django.conf import settings
 import os
+
+from core.vars import type_list
 
 register = template.Library()
 
@@ -180,3 +182,11 @@ def pay_type(id):
     elif id == 3: type = ''
     elif id == 4: type = _('Bonus')
     return type
+
+@register.simple_tag
+def checked(id, value):
+    setting = AdminSettings.objects.get(admin_id=id)
+    if type_list[value] in setting.setting:
+        return 'checked'
+    else:
+        return ''

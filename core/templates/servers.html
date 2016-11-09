@@ -14,60 +14,49 @@
 {% block layout %}
     <div class="row">
         <div class="column">
+        {{ server_form.errors }}
             <div class="ui blue mini segment">
-{#                <div class="panel-heading hidden-print">#}
-{#                    <div class="btn-group btn-group-xs" role="group">#}
-{#                    </div>#}
-{#                    <div class="btn-group pull-left">#}
-{#                        <a title="Добавить" class="hidden-print" data-toggle="modal" data-target="#server_add" href="#"><span class="glyphicon glyphicon-plus"></span></a>#}
-{#                        <div class="modal fade" id="server_add" role="dialog" aria-hidden="true">#}
-{#                            <div class="modal-dialog modal-title">#}
-{#                                <div class="modal-content">#}
-{#                                    <div class="modal-header">Сервер доступа#}
-{#                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
-{#                                        <span aria-hidden="true">&times;</span>#}
-{#                                    </button>#}
-{#                                    </div>#}
-{#                                    <div class="modal-body text-left" id="nestedform">#}
-{#                                        <form class="form-horizontal" method="post" name="form_server">{% csrf_token %}#}
-{#                                            <div class="panel panel-default panel-form">#}
-{#                                                <div class="form-group">#}
-{#                                                    <label class="control-label col-md-3 required" for="server_ip">IP:</label>#}
-{#                                                    <div class="col-md-9">#}
-{#                                                        <input id="server_ip" name="server_ip" value="" placeholder="{% trans 'Server IP' %}" class="form-control" type="text">#}
-{#                                                    </div>#}
-{#                                                    <label class="control-label col-md-3" for="server_name">{% trans 'Server name' %}</label>#}
-{#                                                    <div class="col-md-9">#}
-{#                                                        <input id="server_name" name="server_name" value="" placeholder="{% trans 'Server name' %}" class="form-control" type="text">#}
-{#                                                    </div>#}
-{#                                                </div>#}
-{#                                                <div class="form-group">#}
-{#                                                    <label class="col-md-12 bg-primary">Управление</label>#}
-{#                                                    <label class="control-label col-md-3" for="server_ip_port">IP:PORT</label>#}
-{#                                                    <div class="col-md-9">#}
-{#                                                        <input id="server_ip_port" name="server_ip_port" value="" placeholder="" class="form-control" type="text">#}
-{#                                                    </div>#}
-{#                                                    <label class="control-label col-md-3" for="user_name">{% trans 'User name' %}:</label>#}
-{#                                                    <div class="col-md-9">#}
-{#                                                        <input id="user_name" name="user_name" value="" placeholder="{% trans 'User name' %}" class="form-control" type="text">#}
-{#                                                    </div>#}
-{#                                                    <label class="control-label col-md-3" for="server_password">{% trans 'Password' %}:</label>#}
-{#                                                    <div class="col-md-9">#}
-{#                                                        <input id="server_password" name="server_password" value="" placeholder="{% trans 'Password' %}" class="form-control" type="password">#}
-{#                                                    </div>#}
-{#                                                </div>#}
-{#                                            </div>#}
-{#                                            <hr>#}
-{#                                            <div class="row text-center">#}
-{#                                                <input id="show_cols" name="show_cols" class="btn btn-primary" value="{% trans 'Add' %}" type="submit">#}
-{#                                            </div>#}
-{#                                        </form>#}
-{#                                    </div>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
+                <div id="add_panel" class="ui accordion field">
+                    <div class="title"><i class="icon dropdown"></i> {% trans 'Add new server' %} </div>
+                    <div class="content field">
+                        <form class="ui form" method="POST">{% csrf_token %}
+                            <div class="ui tiny stacked segment">
+                                {# fields 1 #}
+                                <div class="five fields">
+                                    <div class="field">
+                                        <label>{% trans 'IP' %}</label>
+                                        {{ server_form.ip }}
+                                    </div>
+                                    <div class="field">
+                                        <label>{% trans 'Name' %}</label>
+                                        {{ server_form.name }}
+                                    </div>
+                                    <div class="field">
+                                        <label>{% trans 'nas_identifier' %}</label>
+                                        {{ server_form.nas_identifier }}
+                                    </div>
+                                    <div class="field">
+                                        <label>{% trans 'Desc' %}</label>
+                                        {{ server_form.descr }}
+                                    </div>
+                                    <div class="field">
+                                        <label>{% trans 'Nas Type' %}</label>
+                                        {{ server_form.nas_type }}
+                                    </div>
+                                </div>
+                                <div class="inline field">
+                                    <div class="ui checkbox">
+                                        {{ client_form.disable }}
+                                        <label>{% trans 'Disable' %}</label>
+                                    </div>
+                                </div>
+                                <button class="tiny ui teal submit button" name="add_server" value="change" type="submit">{% trans 'Change' %}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="ui blue mini segment">
                 {% if servers %}
                     <table class="ui blue small very compact selectable striped table" id="NAS_LIST_">
                         <thead>
@@ -89,8 +78,10 @@
                             <th class="text-center"><a title="Тип" href="" >Тип</a></th>
                             <th class="text-center"><a title="Отключено" href="" >Отключено</a></th>
                             <th class="text-center"><a title="Описание" href="" >Описание</a></th>
-                            <th class="text-center">-</th>
-                            <th class="text-center">-</th>
+                            <th>-</th>
+                            <th>-</th>
+                            <th>-</th>
+                            <th>-</th>
                         </tr>
                         </thead>
                         {% for server in servers %}
@@ -109,6 +100,8 @@
                             <td> {{ server.descr }} </td>
                             <td><a title="Пользователи" class='btn btn-default btn-xs' href="?sessions={{ server.id }}" >Пользователи</a></td>
                             <td><a title="IP_Pool" class='btn btn-default btn-xs'>IP_Pool</a></td>
+                            <td><a title="{% trans 'Edit server' %}" class='fa fa-pencil-square-o fa-fw' href="?edit={{ server.id }}" ></a></td>
+                            <td><a title="{% trans 'Delete server' %}" class='fa fa-trash-o fa-fw' href="?delete={{ server.id }}" ></a></td>
                         </tr>
                         {% endfor %}
                     </table>

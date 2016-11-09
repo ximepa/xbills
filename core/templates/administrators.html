@@ -76,6 +76,59 @@
 {#                </div>#}
 {#            </div>#}
 {#        </div>#}
+    <div id="filter_table" class="ui modal">
+        <i class="close icon"></i>
+        <div class="header">
+            Profile Picture
+        </div>
+        <div class="content">
+            <form class="ui form" action="{% url 'core:administrators' %}" method="get">
+                <div class="fields">
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input name="columns" value="login" {% checked request.user.id 'login' %} type="checkbox">
+                            <label>{% trans 'Login' %}</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input name="columns" value="name" {% checked request.user.id 'name' %}  type="checkbox">
+                            <label>{% trans 'Name' %}</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input name="columns" value="phone" {% checked request.user.id 'phone' %}  type="checkbox">
+                            <label>{% trans 'Phone' %}</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input name="columns" value="email" {% checked request.user.id 'email' %}  type="checkbox">
+                            <label>{% trans 'Email' %}</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input name="columns" type="checkbox">
+                            <label>Twice a day</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="actions">
+                        <div class="ui black deny button">
+                            Nope
+                        </div>
+                        <button type="submit" name="filter" value="filter_table" class="ui positive right labeled icon button">
+                            Yep, that's me
+                            <i class="checkmark icon"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="row">
         <div class="column">
             <div class="ui {{ request.user.theme }} mini segment">
@@ -92,6 +145,9 @@
                     <div class="header right floated item">{% trans 'Pagination' %}</div>
                     <a href="{% url 'core:administrators_add' %}" class="item">
                         <i class="add user icon"></i>
+                    </a>
+                    <a href="#" onClick="$('#filter_table').modal('show');" class="item">
+                        <i class="fa fa-cogs"></i>
                     </a>
                     {% if fees.number == 1 %}
                         <div class="disabled item">
@@ -141,25 +197,25 @@
                             <input type='checkbox' id='checkAll'/>
                         </th>
                         <th><a title="ID" href="">ID</a></th>
-                        {% if 'login' in list %}
+                        {% if 'login' in filter_table.setting %}
                             <th><a title="{% trans 'Login' %}" href="">{% trans 'Login' %}</a></th>
                         {% endif %}
-                        {% if 'name' in list %}
+                        {% if 'name' in filter_table.setting %}
                             <th><a title="{% trans 'FIO' %}" href="" >{% trans 'FIO' %}</a></th>
                         {% endif %}
-                        {% if 'phone' in list %}
+                        {% if 'phone' in filter_table.setting %}
                             <th><a title="Phone" href="" >{% trans 'Phone' %}</a></th>
                         {% endif %}
-                        {% if 'email' in list %}
+                        {% if 'email' in filter_table.setting %}
                             <th><a title="Email" href="" >Тип</a></th>
                         {% endif %}
-                        {% if 'disable' in list %}
+                        {% if 'disable' in filter_table.setting %}
                             <th><a title="Отключено" href="" >Отключено</a></th>
                         {% endif %}
-                        {% if 'descr' in list %}
+                        {% if 'descr' in filter_table.setting %}
                             <th><a title="Описание" href="" >Описание</a></th>
                         {% endif %}
-                        {% if 'theme' in list %}
+                        {% if 'theme' in filter_table.setting %}
                             <th><a title="{% trans 'Theme' %}" href="" >{% trans 'Theme' %}</a></th>
                         {% endif %}
                         <th>{% trans 'Edit' %}</th>
@@ -170,29 +226,29 @@
                         <tr>
                             <td><input type='checkbox' name='admin_ld' value="{{ admin.id }}" id='admin_ld'></td>
                             <td> {{ admin.id }} </td>
-                            {% if 'login' in list %}
+                            {% if 'login' in filter_table.setting %}
                                 <td> {{ admin.login }} </td>
                             {% endif %}
-                            {% if 'name' in list %}
+                            {% if 'name' in filter_table.setting %}
                                 <td> {{ admin.name }} </td>
                             {% endif %}
-                            {% if 'phone' in list %}
+                            {% if 'phone' in filter_table.setting %}
                                 <td> {{ admin.cell_phone }} </td>
                             {% endif %}
-                            {% if 'email' in list %}
-                                <td> {{ admin.email }} </td>
+                            {% if 'email' in filter_table.setting %}
+                                <td> <a href="mailto:{{ admin.email }}">{{ admin.email }}</a></td>
                             {% endif %}
-                            {% if 'disable' in list %}
+                            {% if 'disable' in filter_table.setting %}
                                 {% if admin.disable == 1 %}
                                     <td><i class="fa fa-check"></i></td>
                                 {% else %}
                                     <td><i class="fa fa-times"></i></td>
                                 {% endif %}
                             {% endif %}
-                            {% if 'descr' in list %}
+                            {% if 'descr' in filter_table.setting %}
                                 <td>{{ nas.descr }}</td>
                             {% endif %}
-                            {% if 'theme' in list %}
+                            {% if 'theme' in filter_table.setting %}
                                 <td>
                                     {% if admin.theme %}
                                         {{ admin.theme }}

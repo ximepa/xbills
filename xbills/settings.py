@@ -26,7 +26,7 @@ SECRET_KEY = '32$i_g^5!4ms7(c+etxce+rj$k_=n4&m6_%$7%)nw6kjqnri#4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['172.16.3.16', '127.0.0.1']
 
 #DATABASE_ROUTERS = ['xbills.dbrouter.MainDBRouter']
 

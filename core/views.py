@@ -9,14 +9,15 @@ from django.db.models import Sum, Q
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from core.func import type_f_list
+from core.func import type_f_list, db_filter
 from core.vars import list_db
 from core.vars import type_list
 from dv.helpers import Hangup
 from .auth_backend import AuthBackend
 from .models import User, Payment, Fees, Dv, UserPi, Street, House, District, Dv_calls, Server, ErrorsLog, Dv_log, Admin, num_to_ip, AdminSettings, \
     AdminLog, ip_to_num, Group, Company
-from .forms import AdministratorForm, SearchForm, SearchFeesForm, SearchPaymentsForm, ClientForm, DvForm, UserPiForm, AdministratorAddForm
+from .forms import AdministratorForm, SearchForm, SearchFeesForm, SearchPaymentsForm, ClientForm, DvForm, UserPiForm, AdministratorAddForm, \
+    ServerForm
 from django.contrib import messages
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -119,6 +120,15 @@ def servers(request):
             page_list = p
         pre_end = sespage.paginator.num_pages - 2
     servers = Server.objects.all()
+    server_form = ServerForm()
+    if request.GET:
+        if 'delete' in request.GET:
+            servers.get(id=request.GET['delete'])
+            servers.delete()
+    if request.POST:
+        if 'add_server' in request.POST:
+            server_form = ServerForm(request.POST)
+            server_form.save()
     return render(request, 'servers.html', locals())
 
 @login_required()
@@ -898,21 +908,23 @@ def user_company(request, uid):
 
 @login_required()
 def administrators(request):
-    list = list_db
-    admins = Admin.objects.values(('id'), *type_f_list(type_list, list_db)).all()
     admin_form = AdministratorForm()
+    if request.GET:
+        if 'filter' in request.GET:
+            filter_table = AdminSettings.objects.get(admin_id=request.user.id)
+            filter_table.setting = type_f_list(type_list, request.GET.getlist('columns'))
+            filter_table.save()
     if request.method == 'POST':
         if 'admin_remove' in request.POST:
             admin = Admin.objects.get(id=request.POST['uid'])
             admin.delete()
         elif 'admin_add' in request.POST:
-            print 'admin_add'
-            print request.POST
             admin_form = AdministratorForm(request.POST)
             if admin_form.is_valid():
                 print 'valid'
                 admin_form.save()
-    print locals()
+    filter_table = AdminSettings.objects.get(admin_id=request.user.id)
+    admins = Admin.objects.values(('id'), *tuple(eval(filter_table.setting))).all()
     return render(request, 'administrators.html', locals())
 
 
