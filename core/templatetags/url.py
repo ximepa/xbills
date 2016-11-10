@@ -184,8 +184,9 @@ def pay_type(id):
     return type
 
 @register.simple_tag
-def checked(id, value):
-    setting = AdminSettings.objects.get(admin_id=id)
+def checked(id, object, value):
+    setting = AdminSettings.objects.get(admin_id=id, object=object)
+    print setting.setting
     if type_list[value] in setting.setting:
         return 'checked'
     else:

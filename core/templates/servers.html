@@ -12,6 +12,69 @@
     {% trans 'Edit Servers' %}
 {% endblock %}
 {% block layout %}
+    <div id="filter_table" class="ui small modal">
+        <i class="close icon"></i>
+        <div class="header">
+            Profile Picture
+        </div>
+        <div class="content">
+            <form class="ui form"method="post">{% csrf_token %}
+                <div class="fields">
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input name="columns" value="name" {% checked request.user.id 'server_list' 'name' %} type="checkbox">
+                            <label>{% trans 'Login' %}</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input name="columns" value="identifier" {% checked request.user.id 'server_list' 'identifier' %}  type="checkbox">
+                            <label>{% trans 'Name' %}</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input name="columns" value="ip" {% checked request.user.id 'server_list' 'ip' %}  type="checkbox">
+                            <label>{% trans 'Phone' %}</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input name="columns" value="server_type" {% checked request.user.id 'server_list' 'server_type' %}  type="checkbox">
+                            <label>{% trans 'Email' %}</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input name="columns" value="disable" {% checked request.user.id 'server_list' 'disable' %}  type="checkbox">
+                            <label>{% trans 'Email' %}</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input name="columns" value="descr" {% checked request.user.id 'server_list' 'descr' %}  type="checkbox">
+                            <label>{% trans 'Email' %}</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input name="columns" type="checkbox">
+                            <label>Twice a day</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="inline field">
+                    <div class="ui black deny button">
+                        Nope
+                    </div>
+                    <button type="submit" name="filter" value="filter_table" class="ui positive right labeled icon button">
+                        Yep, that's me
+                        <i class="checkmark icon"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
     <div class="row">
         <div class="column">
         {{ server_form.errors }}
@@ -69,7 +132,7 @@
                                     </div>
                                 </div>
                                 {% if edit %}
-                                    <button class="tiny ui teal submit button" name="edit1" value="change" type="submit">{% trans 'Change' %}</button>
+                                    <button class="tiny ui teal submit button" name="edit_server" value="change" type="submit">{% trans 'Change' %}</button>
                                 {% else %}
                                     <button class="tiny ui teal submit button" name="add_server" value="change" type="submit">{% trans 'Add' %}</button>
                                 {% endif %}
@@ -84,6 +147,11 @@
                 <script>$('#add_server').accordion('close', 0);</script>
             {% endif %}
             <div class="ui {{ request.user.theme }} mini segment">
+                <div class="ui sticky mini fluid pagination menu">
+                    <div class="right item" onClick="$('#filter_table').modal('show');" style="cursor: pointer">
+                            <i class="fa fa-cogs"></i>
+                    </div>
+                </div>
                 {% if servers %}
                     <table class="ui small very compact selectable striped table" id="NAS_LIST_">
                         <thead>
@@ -113,7 +181,7 @@
                         </thead>
                         {% for server in servers %}
                         <tr>
-                            <td><input type='checkbox' name='NAS_ID' value="{{ admin.id }}" id='NAS_ID'></td>
+                            <td><input type='checkbox' name='NAS_ID' value="{{ server.id }}" id='NAS_ID'></td>
                             <td> {{ server.id }} </td>
                             <td> {{ server.name }} </td>
                             <td> {{ server.server_identifier }} </td>

@@ -86,25 +86,25 @@
                 <div class="fields">
                     <div class="field">
                         <div class="ui checkbox">
-                            <input name="columns" value="login" {% checked request.user.id 'login' %} type="checkbox">
+                            <input name="columns" value="login" {% checked request.user.id 'administrators' 'login' %} type="checkbox">
                             <label>{% trans 'Login' %}</label>
                         </div>
                     </div>
                     <div class="field">
                         <div class="ui checkbox">
-                            <input name="columns" value="name" {% checked request.user.id 'name' %}  type="checkbox">
+                            <input name="columns" value="name" {% checked request.user.id 'administrators' 'name' %}  type="checkbox">
                             <label>{% trans 'Name' %}</label>
                         </div>
                     </div>
                     <div class="field">
                         <div class="ui checkbox">
-                            <input name="columns" value="phone" {% checked request.user.id 'phone' %}  type="checkbox">
+                            <input name="columns" value="phone" {% checked request.user.id 'administrators' 'phone' %}  type="checkbox">
                             <label>{% trans 'Phone' %}</label>
                         </div>
                     </div>
                     <div class="field">
                         <div class="ui checkbox">
-                            <input name="columns" value="email" {% checked request.user.id 'email' %}  type="checkbox">
+                            <input name="columns" value="email" {% checked request.user.id 'administrators' 'email' %}  type="checkbox">
                             <label>{% trans 'Email' %}</label>
                         </div>
                     </div>

@@ -110,15 +110,24 @@ class SearchPaymentsForm(forms.Form):
 
 class ClientForm(forms.ModelForm):
     disable = forms.BooleanField(required=False)
-    # gid = forms.ModelChoiceField(
-    #     queryset=Group.objects.all(),required=False,
-    #     empty_label=None,
-    #     widget=forms.Select(
-    #         attrs={
-    #             'class': 'ui search dropdown'
-    #         }
-    #     )
-    # )
+    gid = forms.ModelChoiceField(
+        queryset=Group.objects.all(),required=False,
+        empty_label=None,
+        widget=forms.Select(
+            attrs={
+                'class': 'ui search dropdown'
+            }
+        )
+    )
+    district = forms.ModelChoiceField(required=False,
+        queryset=District.objects.all(),
+        empty_label=None,
+        widget=forms.Select(
+            attrs={
+                'class': 'ui search dropdown'
+            }
+        )
+    )
 
     class Meta:
         model = User

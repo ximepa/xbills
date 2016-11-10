@@ -172,17 +172,17 @@ class Company(models.Model):
 
 class User(models.Model):
 
-    id = models.IntegerField(primary_key=True, unique=True, db_column='uid')
-    login = models.CharField(max_length=20, unique=True, db_column='id')
+    id = models.AutoField(primary_key=True, unique=True, db_column='uid', null=False)
+    login = models.CharField(max_length=20, db_column='id')
     disable = models.BooleanField(default=0, db_column='disable', blank=True)
     company = models.ForeignKey(Company, related_name='clients', blank=True, null=True)
-    credit = models.FloatField(db_column='credit', default='0.00', blank=True, null=False)
-    credit_date = models.DateField(db_column='credit_date', default='0000-00-00', blank=True, null=True)
+    credit = models.FloatField(db_column='credit', default='0.00', blank=True, null=True)
+    credit_date = models.DateField(db_column='credit_date', blank=True, null=True)
     gid = models.ForeignKey('Group', db_column='gid', related_name='user_group', blank=True, null=True)
     reduction = models.FloatField(db_column='reduction', default='0.00', blank=True)
-    reduction_date = models.DateField(db_column='reduction_date', default='0000-00-00', blank=True, null=True)
-    activate = models.DateField(db_column='activate', default='0000-00-00', blank=True, null=True)
-    expire = models.DateField(db_column='expire', default='0000-00-00', blank=True, null=True)
+    reduction_date = models.DateField(db_column='reduction_date', blank=True, null=True)
+    activate = models.DateField(db_column='activate', blank=True, null=True, )
+    expire = models.DateField(db_column='expire', blank=True, null=True)
     deleted = models.BooleanField(db_column='deleted', default=0)
     registration = models.DateField(default=datetime.date.today(), blank=True, null=True)
     bill = models.ForeignKey('Bill', default=0)
@@ -256,7 +256,7 @@ class User(models.Model):
 
 
 class Group(models.Model):
-    id = models.AutoField(primary_key=True, db_column='gid')
+    id = models.SmallIntegerField(primary_key=True, db_column='gid')
     name = models.CharField(max_length=50)
     descr = models.CharField(max_length=200)
 
@@ -502,7 +502,7 @@ class Server(models.Model):
     mng_user = models.CharField(max_length=20, db_column='mng_user')
     rad_pairs = models.TextField(db_column='rad_pairs')
     alive = models.SmallIntegerField(default=0, db_column='alive')
-    disable = models.SmallIntegerField(default=0, db_column='disable')
+    disable = models.BooleanField(default=0, blank=True)
     ext_acct = models.SmallIntegerField(default=0, db_column='ext_acct')
     domain_id = models.SmallIntegerField(default=0, db_column='domain_id')
     address_street = models.CharField(max_length=100, db_column='address_street')
@@ -689,7 +689,7 @@ class Shedule(models.Model):
 class AdminSettings(models.Model):
 
     admin_id = models.IntegerField(db_column='aid', primary_key=True)
-    object = models.CharField(max_length=20, db_column='object')
+    object = models.CharField(max_length=20, db_column='object', primary_key=True)
     setting = models.TextField(max_length=1000, db_column='setting')
 
     def __unicode__(self):

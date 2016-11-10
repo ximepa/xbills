@@ -10,8 +10,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 from core.func import type_f_list, db_filter
-from core.vars import list_db
-from core.vars import type_list
+from core.vars import *
 from dv.helpers import Hangup
 from .auth_backend import AuthBackend
 from .models import User, Payment, Fees, Dv, UserPi, Street, House, District, Dv_calls, Server, ErrorsLog, Dv_log, Admin, num_to_ip, AdminSettings, \
@@ -120,8 +119,13 @@ def servers(request):
         for p in page_range:
             page_list = p
         pre_end = sespage.paginator.num_pages - 2
-    servers = Server.objects.all()
     server_form = ServerForm()
+    if 'filter' in request.POST:
+        print request.user.id
+        filter_table = AdminSettings.objects.get(admin_id=request.user.id, object='server_list')
+        print filter_table
+        filter_table.setting = type_f_list(type_list, request.POST.getlist('columns'))
+        filter_table.save()
     if request.POST:
         edit = None
         if 'add_server' in request.POST:
@@ -130,13 +134,20 @@ def servers(request):
                 server_form.save()
         if 'edit' in request.POST:
             edit = True
-            server_form = ServerForm(instance=servers.get(id=request.POST['edit']))
-            print request.POST['edit']
-            if request.POST['edit'] == 'change':
-                print server_form
+            global server_id
+            server_id = request.POST['edit']
+            server_form = ServerForm(instance=Server.objects.get(id=request.POST['edit']))
+        if 'edit_server' in request.POST:
+            print request.POST
+            server_form = ServerForm(request.POST, instance=Server.objects.get(id=server_id))
+            if server_form.is_valid():
+                server_form.save()
         if 'delete' in request.POST:
-            servers.get(id=request.POST['delete'])
-            servers.delete()
+            print request.POST
+            server = Server.objects.get(id=request.POST['delete'])
+            server.delete()
+    filter_table = AdminSettings.objects.get(admin_id=request.user.id, object='server_list')
+    servers = Server.objects.values(('id'), *tuple(eval(filter_table.setting))).all()
     return render(request, 'servers.html', locals())
 
 @login_required()
@@ -920,8 +931,9 @@ def administrators(request):
     admin_form = AdministratorForm()
     if request.GET:
         if 'filter' in request.GET:
-            filter_table = AdminSettings.objects.get(admin_id=request.user.id)
+            filter_table = AdminSettings.objects.get(admin_id=request.user.id, object='administrators')
             filter_table.setting = type_f_list(type_list, request.GET.getlist('columns'))
+            print filter_table.setting
             filter_table.save()
     if request.method == 'POST':
         if 'admin_remove' in request.POST:
@@ -932,7 +944,7 @@ def administrators(request):
             if admin_form.is_valid():
                 print 'valid'
                 admin_form.save()
-    filter_table = AdminSettings.objects.get(admin_id=request.user.id)
+    filter_table = AdminSettings.objects.get(admin_id=request.user.id, object='administrators')
     admins = Admin.objects.values(('id'), *tuple(eval(filter_table.setting))).all()
     return render(request, 'administrators.html', locals())
 
