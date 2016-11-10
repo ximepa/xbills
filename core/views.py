@@ -90,6 +90,7 @@ def index(request, settings=settings):
         list1.append({'all_opened': claims_list_opened, 'all_closed': claims_list_closed})
     return render(request, 'index.html', locals())
 
+
 @login_required()
 def servers(request):
     if 'sessions' in request.GET:
@@ -121,14 +122,21 @@ def servers(request):
         pre_end = sespage.paginator.num_pages - 2
     servers = Server.objects.all()
     server_form = ServerForm()
-    if request.GET:
-        if 'delete' in request.GET:
-            servers.get(id=request.GET['delete'])
-            servers.delete()
     if request.POST:
+        edit = None
         if 'add_server' in request.POST:
             server_form = ServerForm(request.POST)
-            server_form.save()
+            if server_form.is_valid():
+                server_form.save()
+        if 'edit' in request.POST:
+            edit = True
+            server_form = ServerForm(instance=servers.get(id=request.POST['edit']))
+            print request.POST['edit']
+            if request.POST['edit'] == 'change':
+                print server_form
+        if 'delete' in request.POST:
+            servers.get(id=request.POST['delete'])
+            servers.delete()
     return render(request, 'servers.html', locals())
 
 @login_required()
@@ -858,6 +866,7 @@ def group(request):
         user = User.objects.filter(gid_id=request.GET['user_list'])
         return render(request, 'table_user_liset.html', locals())
     return render(request, 'group.html', locals())
+
 
 def user_login(request):
     context = RequestContext(request)

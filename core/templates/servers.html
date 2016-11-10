@@ -15,14 +15,14 @@
     <div class="row">
         <div class="column">
         {{ server_form.errors }}
-            <div class="ui blue mini segment">
-                <div id="add_panel" class="ui accordion field">
+            <div class="ui {{ request.user.theme }} mini segment">
+                <div id="add_server" class="ui accordion field">
                     <div class="title"><i class="icon dropdown"></i> {% trans 'Add new server' %} </div>
                     <div class="content field">
                         <form class="ui form" method="POST">{% csrf_token %}
                             <div class="ui tiny stacked segment">
                                 {# fields 1 #}
-                                <div class="five fields">
+                                <div class="four fields">
                                     <div class="field">
                                         <label>{% trans 'IP' %}</label>
                                         {{ server_form.ip }}
@@ -39,26 +39,53 @@
                                         <label>{% trans 'Desc' %}</label>
                                         {{ server_form.descr }}
                                     </div>
+                                </div>
+                                <div class="field">
+                                    <label>{% trans 'Nas Type' %}</label>
+                                    {{ server_form.nas_type }}
+                                </div>
+                                <div class="four fields">
                                     <div class="field">
-                                        <label>{% trans 'Nas Type' %}</label>
-                                        {{ server_form.nas_type }}
+                                        <label>{% trans 'Alive' %}</label>
+                                        {{ server_form.alive }}
+                                    </div>
+                                    <div class="field">
+                                        <label>{% trans 'IP:PORT' %}</label>
+                                        {{ server_form.mng_host_port }}
+                                    </div>
+                                    <div class="field">
+                                        <label>{% trans 'Login' %}</label>
+                                        {{ server_form.mng_user }}
+                                    </div>
+                                    <div class="field">
+                                        <label>{% trans 'RADIUS Pair' %}</label>
+                                        {{ server_form.rad_pairs }}
                                     </div>
                                 </div>
                                 <div class="inline field">
                                     <div class="ui checkbox">
-                                        {{ client_form.disable }}
+                                        {{ server_form.disable }}
                                         <label>{% trans 'Disable' %}</label>
                                     </div>
                                 </div>
-                                <button class="tiny ui teal submit button" name="add_server" value="change" type="submit">{% trans 'Change' %}</button>
+                                {% if edit %}
+                                    <button class="tiny ui teal submit button" name="edit1" value="change" type="submit">{% trans 'Change' %}</button>
+                                {% else %}
+                                    <button class="tiny ui teal submit button" name="add_server" value="change" type="submit">{% trans 'Add' %}</button>
+                                {% endif %}
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
-            <div class="ui blue mini segment">
+            {% if edit %}
+                <script>$('#add_server').accordion('open', 0);</script>
+            {% else %}
+                <script>$('#add_server').accordion('close', 0);</script>
+            {% endif %}
+            <div class="ui {{ request.user.theme }} mini segment">
                 {% if servers %}
-                    <table class="ui blue small very compact selectable striped table" id="NAS_LIST_">
+                    <table class="ui small very compact selectable striped table" id="NAS_LIST_">
                         <thead>
                         <tr>
                             <th>
@@ -71,13 +98,13 @@
                                 </script>
                                 <input type='checkbox' id='checkAll'/>
                             </th>
-                            <th class="text-center"><a title="ID" href="" >ID</a></th>
-                            <th class="text-center"><a title="Название" href="" >Название</a></th>
-                            <th class="text-center"><a title="NAS-Identifier" href="" >NAS-Identifier</a></th>
-                            <th class="text-center"><a title="ip" href="" >ip</a></th>
-                            <th class="text-center"><a title="Тип" href="" >Тип</a></th>
-                            <th class="text-center"><a title="Отключено" href="" >Отключено</a></th>
-                            <th class="text-center"><a title="Описание" href="" >Описание</a></th>
+                            <th><a title="ID" href="" >ID</a></th>
+                            <th><a title="Название" href="" >Название</a></th>
+                            <th><a title="NAS-Identifier" href="" >NAS-Identifier</a></th>
+                            <th><a title="ip" href="" >ip</a></th>
+                            <th><a title="Тип" href="" >Тип</a></th>
+                            <th><a title="Отключено" href="" >Отключено</a></th>
+                            <th><a title="Описание" href="" >Описание</a></th>
                             <th>-</th>
                             <th>-</th>
                             <th>-</th>
@@ -100,8 +127,20 @@
                             <td> {{ server.descr }} </td>
                             <td><a title="Пользователи" class='btn btn-default btn-xs' href="?sessions={{ server.id }}" >Пользователи</a></td>
                             <td><a title="IP_Pool" class='btn btn-default btn-xs'>IP_Pool</a></td>
-                            <td><a title="{% trans 'Edit server' %}" class='fa fa-pencil-square-o fa-fw' href="?edit={{ server.id }}" ></a></td>
-                            <td><a title="{% trans 'Delete server' %}" class='fa fa-trash-o fa-fw' href="?delete={{ server.id }}" ></a></td>
+                            <td>
+                                <form method="post">{% csrf_token %}
+                                    <button type="submit" name="edit" value="{{ server.id }}" title="{% trans 'Edit server' %}" class="mini ui orange basic button">
+                                        <i class="fa fa-pencil-square-o fa-fw"></i>
+                                    </button>
+                                </form>
+                            </td>
+                            <td>
+                                <form method="post">{% csrf_token %}
+                                    <button type="submit" name="delete" value="{{ server.id }}" title="{% trans 'Delete server' %}" class="mini ui red basic button">
+                                        <i class="fa fa-trash-o fa-fw"></i>
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                         {% endfor %}
                     </table>

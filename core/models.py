@@ -11,8 +11,6 @@ from django.conf import settings
 __author__ = 'ximepa'
 
 
-def test(test):
-    print test
 
 
 def ip_to_num(ip_addr):
@@ -88,7 +86,7 @@ class Admin(AbstractBaseUser):
     id = models.AutoField(unique=True, primary_key=True, db_column='aid')
     regdate = models.DateField(auto_now_add=True, db_column='regdate')
     disable = models.BooleanField(default=0, db_column='disable')
-    # theme = models.CharField(max_length=40, default='default', choices=[(str(o), str(o)) for o in os.listdir('static') if not o.startswith('custom')])
+    #theme = models.CharField(max_length=40, default='default', choices=[(str(o), str(o)) for o in os.listdir('static') if not o.startswith('custom')])
     theme = models.CharField(max_length=40, default='', choices=THEME_CHOISES, blank=True)
     style = models.CharField(max_length=40, default='', choices=STYLE_CHOISES, blank=True)
     phone = models.CharField(max_length=20, db_column='phone', blank=True)
@@ -209,7 +207,6 @@ class User(models.Model):
     #         return Company.objects.get(bill_id=b.id)
     #     except Company.DoesNotExist:
     #         return None
-
 
     def get_deposit(self):
         try:
@@ -376,7 +373,7 @@ class UserPi(models.Model):
         ordering = ['user_id']
 
     def export(self):
-        data = {'exists':True}
+        data = {'exists': True}
         data.update({'fio': self.fio})
         data.update({'street': self.street.name})
         data.update({'house': self.house.number})
@@ -388,9 +385,9 @@ class Payment(models.Model):
 
     date = models.DateTimeField(default=datetime.datetime.now)
     sum = models.FloatField(default=0)
-    aid = models.ForeignKey(Admin,db_column='aid')
+    aid = models.ForeignKey(Admin, db_column='aid')
     uid = models.ForeignKey('User', db_column='uid')
-    bill = models.ForeignKey(Bill,related_name='payments')
+    bill = models.ForeignKey(Bill, related_name='payments')
     ip = models.IntegerField(default=ip_to_num('127.0.0.1'))
     last_deposit = models.FloatField(default=0)
     dsc = models.CharField(max_length=80, db_column='dsc')
@@ -445,7 +442,7 @@ class Tp(models.Model):
     def iptv_choices(cls):
         res = []
         for obj in cls.objects.filter(module='iptv').order_by('pk'):
-            res.append((obj.pk,"%s: %s" % (obj.pk, obj.name)))
+            res.append((obj.pk, "%s: %s" % (obj.pk, obj.name)))
         return res
 
 
@@ -493,13 +490,12 @@ class ErrorsLog(models.Model):
         return str(self.message)
 
 
-
 class Server(models.Model):
     id = models.AutoField(unique=True, primary_key=True)
-    name = models.CharField(max_length=30, db_column='name')
-    nas_identifier = models.CharField(max_length=20, db_column='nas_identifier')
-    descr = models.CharField(max_length=250, db_column='descr')
-    ip = models.CharField(max_length=15, db_column='ip')
+    name = models.CharField(max_length=30, db_column='name', null=False)
+    nas_identifier = models.CharField(max_length=20, db_column='nas_identifier', blank=True, null=True)
+    descr = models.CharField(max_length=250, db_column='descr', blank=True, null=True)
+    ip = models.GenericIPAddressField(max_length=15, db_column='ip')
     nas_type = models.CharField(max_length=20, db_column='nas_type', blank=True, null=True)
     auth_type = models.SmallIntegerField(default=0, db_column='auth_type')
     mng_host_port = models.CharField(max_length=25, db_column='mng_host_port')
@@ -529,9 +525,10 @@ class Server(models.Model):
 
     @property
     def get_hash_password(self):
-        q = 'SELECT id, DECODE(mng_password, "%s") as pwd FROM %s WHERE id=%s' % (
-        settings.ENCRYPT_KEY, self._meta.db_table, self.id)
+        q = 'SELE CT id, DECODE(mng_password, "%s") as pwd FROM %s WHERE id=%s' % (
+            settings.ENCRYPT_KEY, self._meta.db_table, self.id)
         return self.__class__.objects.raw(q)[0].pwd
+
 
 class Dv_log(models.Model):
     start = models.DateTimeField(default='0000-00-00 00:00:00', primary_key=True)
@@ -548,7 +545,6 @@ class Dv_log(models.Model):
     acct_input_gigawords = models.SmallIntegerField(default=0, db_column='acct_input_gigawords')
     acct_output_gigawords = models.SmallIntegerField(default=0, db_column='acct_output_gigawords')
 
-
     @property
     def nas_info(self):
         try:
@@ -556,13 +552,13 @@ class Dv_log(models.Model):
         except Server.DoesNotExist:
             return None
 
-
     class Meta:
         db_table = 'dv_log'
         ordering = ['duration']
 
     def __unicode__(self):
         return str(self.start)
+
 
 class Dv_calls(models.Model):
     status = models.IntegerField(default=0, db_column='status')
@@ -596,7 +592,6 @@ class Dv_calls(models.Model):
     framed_interface_id = models.BinaryField(db_column='framed_interface_id')
     framed_ipv6_prefix = models.BinaryField(db_column='framed_ipv6_prefix')
 
-
     class Meta:
         db_table = 'dv_calls'
         ordering = ['user_name']
@@ -617,7 +612,6 @@ class TpGroups(models.Model):
         return self.name
 
 
-
 class AdminLog(models.Model):
     actions = models.CharField(max_length=120)
     datetime = models.DateTimeField(default=datetime.datetime.now)
@@ -636,9 +630,9 @@ class Fees(models.Model):
 
     date = models.DateTimeField(default=datetime.datetime.now)
     sum = models.FloatField(default=0)
-    aid = models.ForeignKey(Admin,db_column='aid')
+    aid = models.ForeignKey(Admin, db_column='aid')
     uid = models.ForeignKey('User', db_column='uid')
-    bill = models.ForeignKey(Bill,related_name='fees')
+    bill = models.ForeignKey(Bill, related_name='fees')
     ip = models.IntegerField(default=ip_to_num('127.0.0.1'))
     last_deposit = models.FloatField(default=0)
     #inner_describe = models.CharField(max_length=80, db_column='dsc')
@@ -670,9 +664,11 @@ class Fees(models.Model):
 class FeesTypes(models.Model):
     sum = models.FloatField(db_column='sum')
     name = models.CharField(max_length=100, db_column='name')
+
     class Meta:
         db_table = 'fees_types'
         ordering = ['id']
+
 
 class Shedule(models.Model):
     uid = models.IntegerField(db_column='uid')
@@ -697,7 +693,7 @@ class AdminSettings(models.Model):
     setting = models.TextField(max_length=1000, db_column='setting')
 
     def __unicode__(self):
-        return str(self.admin_id, self.setting)
+        return str(self.admin_id)
 
     class Meta:
         db_table = 'admin_settings'

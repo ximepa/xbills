@@ -37,9 +37,9 @@
     {% block extra_scripts %}
     {% endblock %}
 </head>
-<body id="example" class="index" ontouchstart="">
+<body id="example" class="index">
     {% block wrapper %}
-	<div id="panel_menu" class="ui stackable small menu" style="margin-left: 0.5em; margin-right: 0.5em">
+	<div id="panel_menu" class="ui mini  menu" style="margin-left: 0.5em; margin-right: 0.5em">
         <div class="header item">
             <span style="color: orange">X</span><span style="color: red">Bills </span> {% version %}
         </div>
@@ -92,7 +92,7 @@
                 </div>
             </div>
             <div class="item">
-                <form class="ui mini form" action="{% url 'core:search' %}" method="GET">
+                <form class="ui form" action="{% url 'core:search' %}" method="GET">
                     <div class="ui transparent icon input">
                         <input placeholder="Search..." type="text" name="global_search">
                         <i class="search link icon"></i>

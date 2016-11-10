@@ -222,15 +222,21 @@ class UserPiForm(forms.ModelForm):
 
 
 class ServerForm(forms.ModelForm):
+    disable = forms.BooleanField(required=False)
 
     class Meta:
         model = Server
         fields = [
-            'ip',
             'name',
             'nas_identifier',
             'descr',
+            'ip',
             'nas_type',
+            'mng_host_port',
+            'mng_user',
+            'rad_pairs',
+            'alive',
+            'disable',
             'mac',
         ]
 
@@ -240,5 +246,9 @@ class ServerForm(forms.ModelForm):
             'nas_identifier': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Flat'}),
             'descr': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'descr'}),
             'nas_type': forms.Select(attrs={'class': 'ui dropdown'}),
+            'mng_host_port': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'mac'}),
+            'mng_user': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'mac'}),
             'mac': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'mac'}),
+            'alive': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'mac'}),
+            'rad_pairs': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'mac'}),
         }
