@@ -132,7 +132,8 @@ class Admin(AbstractBaseUser):
 
 class Bill(models.Model):
 
-    deposit = models.FloatField(default=0)
+    id = models.AutoField(primary_key=True)
+    deposit = models.DecimalField(max_digits=5, decimal_places=2, default=0.00, null=True)
     uid = models.IntegerField(blank=True, null=True)
     company_id = models.IntegerField(blank=True, null=True, default=0)
     registration = models.DateField(auto_now_add=True)
@@ -172,7 +173,7 @@ class Company(models.Model):
 
 class User(models.Model):
 
-    id = models.AutoField(primary_key=True, unique=True, db_column='uid', null=False)
+    id = models.AutoField(primary_key=True, db_column='uid')
     login = models.CharField(max_length=20, db_column='id')
     disable = models.BooleanField(default=0, db_column='disable', blank=True)
     company = models.ForeignKey(Company, related_name='clients', blank=True, null=True)
@@ -184,8 +185,8 @@ class User(models.Model):
     activate = models.DateField(db_column='activate', blank=True, null=True, )
     expire = models.DateField(db_column='expire', blank=True, null=True)
     deleted = models.BooleanField(db_column='deleted', default=0)
-    registration = models.DateField(default=datetime.date.today(), blank=True, null=True)
-    bill = models.ForeignKey('Bill', default=0)
+    registration = models.DateField(default='0000-00-00', blank=True, null=True)
+    bill = models.ForeignKey('Bill', blank=True, null=True)
 
     def __unicode__(self):
         return self.login
@@ -416,13 +417,59 @@ class Payment(models.Model):
 
 
 class Tp(models.Model):
-    id = models.AutoField(primary_key=True, db_column='id')
+
+
+    id = models.AutoField(primary_key=True, max_length=5)
+    hourp = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
+    month_fee = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
+    uplimit = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
     name = models.CharField(max_length=120, unique=True)
-    module = models.CharField(max_length=120)
-    tp_id = models.IntegerField()
-    month_fee = models.PositiveIntegerField(db_column='month_fee')
-    day_fee = models.PositiveIntegerField(db_column='day_fee')
-    gid = models.ForeignKey('TpGroups', db_column='gid')
+    day_fee = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
+    logins = models.SmallIntegerField(default=0)
+    day_time_limit = models.IntegerField(default=0)
+    week_time_limit = models.IntegerField(default=0)
+    month_time_limit = models.IntegerField(default=0)
+    day_traf_limit = models.IntegerField(default=0)
+    week_traf_limit = models.IntegerField(default=0)
+    month_traf_limit = models.IntegerField(default=0)
+    prepaid_trafic = models.IntegerField(default=0)
+    change_price = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
+    activate_price = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
+    credit_tresshold = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
+    age = models.SmallIntegerField(default=0)
+    octets_direction = models.SmallIntegerField(default=0)
+    max_session_duration = models.SmallIntegerField(default=0)
+    filter_id = models.CharField(max_length=15, blank=True, null=True)
+    payment_type = models.BooleanField(default=0, blank=True)
+    min_session_cost = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
+    rad_pairs = models.TextField()
+    reduction_fee = models.BooleanField(default=0, blank=True)
+    postpaid_fee = models.BooleanField(default=0, blank=True)
+    module = models.CharField(max_length=12, blank=True)
+    traffic_transfer_period = models.SmallIntegerField(default=0)
+    neg_deposit_filter_id = models.CharField(max_length=150, blank=True, null=True)
+    ext_bill_account = models.BooleanField(default=0, blank=True)
+    credit = models.DecimalField(max_digits=15, decimal_places=2, default= '0.00')
+    ippool = models.IntegerField(default=0)
+    period_alignment = models.BooleanField(default=0, blank=True)
+    min_use = models.DecimalField(max_digits=15, decimal_places=2, default= '0.00')
+    abon_distribution = models.BooleanField(default=0, blank=True)
+    postpaid_daily_fee = models.BooleanField(default=0, blank=True)
+    postpaid_monthly_fee = models.BooleanField(default=0, blank=True)
+    domain_id = models.SmallIntegerField(default=0)
+    total_time_limit = models.IntegerField(default=0)
+    total_traf_limit = models.IntegerField(default=0)
+    priority = models.BooleanField(default=0, blank=True)
+    small_deposit_action = models.SmallIntegerField(default=0, null=True)
+    comments = models.TextField()
+    bills_priority = models.SmallIntegerField(default=0)
+    active_day_fee = models.BooleanField(default=0, blank=True)
+    fine = models.DecimalField(max_digits=15, decimal_places=2, default= '0.00')
+    neg_deposit_ippool = models.SmallIntegerField(default=0)
+    next_tp_id = models.SmallIntegerField(default=0)
+    fees_method = models.SmallIntegerField(default=0)
+    fixed_fees_day = models.BooleanField(default=0, blank=True)
+    gid = models.ForeignKey('TpGroups', db_column='gid', blank=True, null=True)
 
     class Meta:
         db_table = 'tarif_plans'

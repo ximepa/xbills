@@ -14,9 +14,9 @@ from core.vars import *
 from dv.helpers import Hangup
 from .auth_backend import AuthBackend
 from .models import User, Payment, Fees, Dv, UserPi, Street, House, District, Dv_calls, Server, ErrorsLog, Dv_log, Admin, num_to_ip, AdminSettings, \
-    AdminLog, ip_to_num, Group, Company
+    AdminLog, ip_to_num, Group, Company, Bill, Tp
 from .forms import AdministratorForm, SearchForm, SearchFeesForm, SearchPaymentsForm, ClientForm, DvForm, UserPiForm, AdministratorAddForm, \
-    ServerForm
+    ServerForm, TpForm
 from django.contrib import messages
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -508,10 +508,16 @@ def client(request, uid):
         if client_form.is_valid():
             print 'oky'
         print client_form.errors
-    dv = Dv.objects.get(user=uid)
-    dv_form = DvForm(instance=dv, initial={'ip': num_to_ip(dv.ip), 'netmask': num_to_ip(dv.netmask)})
-    user_pi = UserPi.objects.get(user_id=uid)
-    user_pi_form = UserPiForm(instance=user_pi, initial={'district': user_pi.street.district_id})
+    try:
+        dv = Dv.objects.get(user=uid)
+        dv_form = DvForm(instance=dv, initial={'ip': num_to_ip(dv.ip), 'netmask': num_to_ip(dv.netmask)})
+    except:
+        dv_form = DvForm()
+    try:
+        user_pi = UserPi.objects.get(user_id=uid)
+        user_pi_form = UserPiForm(instance=user_pi, initial={'district': user_pi.street.district_id})
+    except:
+        user_pi_form = UserPiForm()
     if 'user_pi' in request.POST:
         user_pi_form = UserPiForm(request.POST, instance=user_pi)
         print user_pi_form
@@ -554,7 +560,6 @@ def client(request, uid):
         user_password = client.get_hash_password
     else:
         user_password = ''
-    dv = Dv.objects.get(user=uid)
     if helpers.module_check('claims'):
         from claims.models import Claims
         claims = Claims.objects.filter(uid=uid, state=1)
@@ -685,7 +690,9 @@ def clients(request):
             if client_form.is_valid():
                 print client_form
                 print 'ok'
-                client_form.save()
+                client = client_form.save()
+                bill = Bill.objects.create(uid=client.pk)
+                print bill.id
             else:
                 print 'no'
     if filter_by == '1':
@@ -1025,4 +1032,14 @@ def monitoring_servers(request):
         dv = Dv_calls.objects.filter(nas_id=request.GET['list'])
         print dv
     return render(request, 'monitoring_servers.html', locals())
+
+
+def tarif_plans(request):
+    tp_form = TpForm()
+    tp = Tp.objects.all()
+    if 'add_server' in request.POST:
+        tp_form = TpForm(request.POST)
+        if tp_form.is_valid():
+            tp_form.save()
+    return render(request, 'tarif_plans.html', locals())
 

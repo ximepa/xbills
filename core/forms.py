@@ -133,7 +133,7 @@ class ClientForm(forms.ModelForm):
         model = User
         fields = [
             'disable',
-            'company',
+            # 'company',
             'credit',
             'login',
             'credit_date',
@@ -157,7 +157,7 @@ class ClientForm(forms.ModelForm):
             'expire': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
             'deleted': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
             'registration': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
-            # 'bill': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
+            # 'bill': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Deposite'}),
         }
 
 
@@ -260,4 +260,94 @@ class ServerForm(forms.ModelForm):
             'mac': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'mac'}),
             'alive': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'mac'}),
             'rad_pairs': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'mac'}),
+        }
+
+
+class TpForm(forms.ModelForm):
+    disable = forms.BooleanField(required=False)
+    active_day_fee = forms.BooleanField(required=False)
+    postpaid_daily_fee = forms.BooleanField(required=False)
+    postpaid_monthly_fee = forms.BooleanField(required=False)
+    period_alignment = forms.BooleanField(required=False)
+    abon_distribution = forms.BooleanField(required=False)
+    fixed_fees_day = forms.BooleanField(required=False)
+
+    class Meta:
+        model = Tp
+        fields = [
+            'name',
+            # 'gid',
+            'uplimit',
+            'logins',
+            'day_fee',
+            'active_day_fee',
+            'postpaid_daily_fee',
+            'month_fee',
+            'postpaid_monthly_fee',
+            'period_alignment',
+            'abon_distribution',
+            'fixed_fees_day',
+            'day_time_limit',
+            'week_time_limit',
+            'month_time_limit',
+            'total_time_limit',
+            # 'small_deposit_action',
+            'day_traf_limit',
+            'week_traf_limit',
+            'month_traf_limit',
+            'total_traf_limit',
+            # 'octets_direction',
+            'activate_price',
+            'change_price',
+            'credit_tresshold',
+            'credit',
+            'max_session_duration',
+            'filter_id',
+            'age',
+            'payment_type',
+            'min_session_cost',
+            'min_use',
+            'traffic_transfer_period',
+            'neg_deposit_filter_id',
+            # 'neg_deposit_ippool',
+            # 'ippool',
+            # 'priority',
+            'fine',
+            # 'next_tp_id',
+        ]
+
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'gid': forms.Select(attrs={'class': 'ui dropdown'}),
+            'uplimit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'logins': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'day_fee': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'month_fee': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'day_time_limit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'week_time_limit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'month_time_limit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'total_time_limit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'small_deposit_action': forms.Select(attrs={'class': 'ui dropdown'}),
+            'day_traf_limit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'week_traf_limit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'month_traf_limit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'total_traf_limit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'octets_direction': forms.Select(attrs={'class': 'ui dropdown'}),
+            'activate_price': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'change_price': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'credit_tresshold': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'credit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'max_session_duration': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'filter_id': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'age': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'payment_type': forms.Select(attrs={'class': 'ui dropdown'}),
+            'min_session_cost': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'min_use': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'traffic_transfer_period': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'neg_deposit_filter_id': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'neg_deposit_ippool': forms.Select(attrs={'class': 'ui dropdown'}),
+            'ippool': forms.Select(attrs={'class': 'ui dropdown'}),
+            'priority': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'fine': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'next_tp_id': forms.Select(attrs={'class': 'ui dropdown'}),
         }
