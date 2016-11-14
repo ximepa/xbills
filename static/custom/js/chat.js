@@ -38,17 +38,35 @@ $(document).ready(function($) {
 	});
 
 	function receiveMessage(msg) {
-		var data = jQuery.parseJSON(msg),
-		comments = $('<div/>').addClass('ui comments'),
-		metadata = $('<div/>').addClass('metadata').append($('<div/>').addClass('date').text(data.date)),
-		comment = $('<div/>').addClass('comment').
-		append($('<a/>').addClass('avatar').
-		append($('<img/>').attr('src', 'http://semantic-ui.com/images/avatar/small/stevie.jpg'))),
-		content = $('<div/>').addClass('content').
-		append($('<div/>').addClass('ui inline dropdown').
-		text(data.login), metadata, $('<div/>').addClass('text').text(data.message));
-		billboard.append(comments.append(comment.append(content)));
-		billboard.scrollTop(billboard.scrollTop() + comments.height() + comments.height());
+		var data = jQuery.parseJSON(msg);
+		if (billboard.length == 0) {
+			noty({
+				text: data.message,
+				type: 'alert',
+				dismissQueue: true,
+				layout: 'bottomRight',
+				theme: 'semantic_ui',
+				buttons: [
+					{
+						addClass: 'mini positive ui button', text: 'Ok', onClick: function ($noty) {
+						$noty.close();
+					}
+					},
+					{
+						addClass: 'mini negative ui button', text: 'Cancel', onClick: function ($noty) {
+						$noty.close();
+					}
+					}
+				]
+			});
+		} else {
+			var comments = $('<div/>').addClass('ui comments'),
+				metadata = $('<div/>').addClass('metadata').append($('<div/>').addClass('date').text(data.date)),
+				comment = $('<div/>').addClass('comment').append($('<a/>').addClass('avatar').append($('<img/>').attr('src', 'http://semantic-ui.com/images/avatar/small/stevie.jpg'))),
+				content = $('<div/>').addClass('content').append($('<div/>').addClass('ui inline dropdown').text(data.login), metadata, $('<div/>').addClass('text').text(data.message));
+			billboard.append(comments.append(comment.append(content)));
+			billboard.scrollTop(billboard.scrollTop() + comments.height() + comments.height());
+		}
 	}
 
 });
