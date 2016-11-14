@@ -219,14 +219,14 @@
                                     <td>{{ user.credit }}</td>
                                 {% endif %}
                                 {% if user.disable %}
-                                    <td><div class="ui red label">{% trans 'Disabled' %}</div></td>
+                                    <td><span style="color: red">{% trans 'Disabled' %}</span></td>
                                 {% else %}
-                                    <td><span class="ui green label">{% trans 'Active' %}</span></td>
+                                    <td><span style="color: green">{% trans 'Active' %}</span></td>
                                 {% endif %}
                                 {% if user.deleted %}
-                                    <td><span class="ui orange label">{% trans 'Yes' %}</span></td>
+                                    <td><span style="color: orange">{% trans 'Yes' %}</span></td>
                                 {% else %}
-                                    <td><span class="ui green label">{% trans 'No' %}</span></td>
+                                    <td><span style="color: green">{% trans 'No' %}</span></td>
                                 {% endif %}
                                 <td><a href="{% url 'core:client_payments' user.id %}"><i class="fa fa-euro"></i></a></td>
                                 <td><a href="{% url 'core:client_fees' user.id %}"><i class="fa fa-remove"></i></a></td>

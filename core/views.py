@@ -29,6 +29,7 @@ import psutil
 import datetime
 from django.core import serializers
 
+
 def custom_redirect(url_name, *args, **kwargs):
     from django.core.urlresolvers import reverse
     import urllib
@@ -126,7 +127,7 @@ def servers(request):
         print filter_table
         filter_table.setting = type_f_list(type_list, request.POST.getlist('columns'))
         filter_table.save()
-    if request.POST:
+    if request.method == 'POST':
         edit = None
         if 'add_server' in request.POST:
             server_form = ServerForm(request.POST)
@@ -149,6 +150,7 @@ def servers(request):
     filter_table = AdminSettings.objects.get(admin_id=request.user.id, object='server_list')
     servers = Server.objects.values(('id'), *tuple(eval(filter_table.setting))).all()
     return render(request, 'servers.html', locals())
+
 
 @login_required()
 def client_errors(request, uid):
@@ -187,6 +189,7 @@ def client_errors(request, uid):
     if 'csv' in request.GET:
         return helpers.export_to_csv(request, errors, fields=('id', 'login'), name='login')
     return render(request, 'user_errors.html', locals())
+
 
 @login_required()
 def client_statistics(request, uid):
@@ -448,7 +451,8 @@ def search(request):
         print request.GET['global_search']
         search = 1
         try:
-            userpi = UserPi.objects.filter(Q(user_id=request.GET['global_search']) | Q(phone2__icontains=request.GET['global_search']))
+            userpi = UserPi.objects.filter(Q(user_id=request.GET['global_search']) |
+                                           Q(phone2__icontains=request.GET['global_search']))
             print userpi
         except:
             userpi = UserPi.objects.filter(Q(user_id__login__icontains=request.GET['global_search']) |
@@ -490,11 +494,22 @@ def search(request):
 
 
 @login_required()
+def client_add(request):
+    client_form = ClientForm()
+    if request.POST:
+        client_form = ClientForm(request.POST)
+        if client_form.is_valid():
+            client_form.save()
+    return render(request, 'user_add.html', locals())
+
+
+@login_required()
 def client(request, uid):
     if 'hangup' in request.GET:
         hangup = Hangup(request.GET['nas_id'], request.GET['port_id'], request.GET['acct_session_id'], request.GET['user_name'])
     try:
         client = User.objects.get(id=uid)
+        print client.bill_id
     except User.DoesNotExist:
         return render(request, '404.html', locals())
     if client.disable == 1:
@@ -684,15 +699,17 @@ def clients(request):
     order_by = request.GET.get('order_by', 'login')
     users_list = User.objects.all().order_by(order_by)
     client_form = ClientForm()
-    if request.POST:
+    if request.method == 'POST':
         if 'add_client' in request.POST:
             client_form = ClientForm(request.POST)
             if client_form.is_valid():
                 print client_form
                 print 'ok'
-                client = client_form.save()
-                bill = Bill.objects.create(uid=client.pk)
-                print bill.id
+                csave = client_form.save()
+                bill = Bill.objects.create(uid=csave.pk)
+                bill_id = User.objects.get(id=csave.pk)
+                bill_id.bill_id = bill.id
+                bill_id.save()
             else:
                 print 'no'
     if filter_by == '1':
@@ -1014,8 +1031,12 @@ def chat(request):
     if request.method == 'POST' and request.POST != '':
         print request.POST
         if request.POST['message']:
-            message = RedisMessage('<span style="">%s(%s): %s</span>' % (request.user.login, datetime.datetime.now().strftime("%H:%M:%S"), request.POST['message']))  # create a welcome message to be sent to everybody
-            RedisPublisher(facility=request.POST['room'], broadcast=True).publish_message(message)
+            message = {"login": request.user.login, "date": datetime.datetime.now().strftime("%H:%M:%S"), "message": request.POST['message']}
+            if request.POST.get('user', None) == 'All':
+                RedisPublisher(facility=request.POST['room'], broadcast=True).publish_message(RedisMessage('%s' % json.dumps(message)))
+            else:
+                RedisPublisher(facility=request.POST['room'], users=[request.POST.get('user')]).publish_message(
+                    RedisMessage('%s' % json.dumps(message)))
         else:
             print 'no message'
     return render(request, 'chat.html', locals())

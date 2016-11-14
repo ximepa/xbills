@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% load url %}
+{% load static %}
 {% load i18n %}
 {% block breadcrumbs %}
     <i class="right angle icon divider"></i>
@@ -19,7 +20,19 @@
                     <div class="field">
                         <div class="fields">
                           <div class="fourteen wide field">
-                            <input id="text_message" placeholder="{% trans 'Endter a message' %}" type="text" autofocus>
+                              <div class="ui input">
+                                  <input id="text_message" placeholder="{% trans 'Endter a message' %}" type="text" autofocus>
+                                  <div class="ui basic floating dropdown button">
+                                      <div id="pm_user" class="text">All</div>
+                                      <i class="dropdown icon"></i>
+                                      <div class="menu">
+                                      <div class="item">All</div>
+                                          {% for admin in admins %}
+                                              <div class="item">{{ admin.login }}</div>
+                                          {% endfor %}
+                                      </div>
+                                  </div>
+                              </div>
                           </div>
                           <div class="two wide field">
                             <button id="send_message" class="fluid ui primary basic button" type="submit">Submit</button>
@@ -36,7 +49,7 @@
                         {% for admin in admins %}
                           <div class="item">
                             <div class="content">
-                              <a class="header">{{ admin.login }}</a>
+                              <a class="header" onclick="pMessage('{{ admin.login }}');">{{ admin.login }}</a>
                             </div>
                           </div>
                         {% endfor %}

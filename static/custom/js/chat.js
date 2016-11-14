@@ -4,34 +4,57 @@ $(document).ready(function($) {
 		receive_message: receiveMessage,
 		heartbeat_msg: '--heartbeat--'
 	});
+    var ws4redis2 = WS4Redis({
+		uri: 'ws://' + document.location.host + '/ws/global_chat?subscribe-user',
+		receive_message: receiveMessage,
+		heartbeat_msg: '--heartbeat--'
+	});
 	var billboard = $('#billboard');
 
 	$("#text_message").keydown(function(event) {
 		if (event.keyCode === 13) {
 			event.preventDefault();
-			get_pc_info();
+            var pm_user = $('#pm_user')[0].innerText;
+            get_pc_info(pm_user);
 			//ws4redis1.send_message($('#text_message').val());
 			$('#text_message').val("")
 		}
 	});
 
-	function get_pc_info() {
+	function get_pc_info(user) {
         $.post('/admin/chat/', {
             room: 'global_chat',
+            user: user,
             action: 'send_msg',
             message: $('#text_message').val()
         });
     }
 
-	$('#send_message').click(function() {
-		get_pc_info();
+	$('#send_message').click(function(e) {
+	    var pm_user = $('#pm_user')[0].innerText;
+		get_pc_info(pm_user);
 		//ws4redis1.send_message($('#text_message').val());
 		$('#text_message').val("")
 	});
 
-	// receive a message though the Websocket from the server
 	function receiveMessage(msg) {
-		billboard.append('<br/>' + msg);
-		billboard.scrollTop(billboard.scrollTop() + 25);
+		var data = jQuery.parseJSON(msg),
+		comments = $('<div/>').addClass('ui comments'),
+		metadata = $('<div/>').addClass('metadata').append($('<div/>').addClass('date').text(data.date)),
+		comment = $('<div/>').addClass('comment').
+		append($('<a/>').addClass('avatar').
+		append($('<img/>').attr('src', 'http://semantic-ui.com/images/avatar/small/stevie.jpg'))),
+		content = $('<div/>').addClass('content').
+		append($('<div/>').addClass('ui inline dropdown').
+		text(data.login), metadata, $('<div/>').addClass('text').text(data.message));
+		billboard.append(comments.append(comment.append(content)));
+		billboard.scrollTop(billboard.scrollTop() + comments.height() + comments.height());
 	}
+
 });
+
+function pMessage(e) {
+    var user = $('#text_message');
+    user.val('');
+    user.val(e + ':');
+}
