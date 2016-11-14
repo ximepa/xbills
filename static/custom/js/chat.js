@@ -41,8 +41,9 @@ $(document).ready(function($) {
 		var data = jQuery.parseJSON(msg);
 		if (billboard.length == 0) {
 			noty({
+				login: data.login,
 				text: data.message,
-				type: 'alert',
+				type: 'warning',
 				dismissQueue: true,
 				layout: 'bottomRight',
 				theme: 'semantic_ui',

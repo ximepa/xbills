@@ -1,4 +1,4 @@
-
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 def type_f_list(list, db):
@@ -10,3 +10,30 @@ def type_f_list(list, db):
 
 def db_filter(db):
     print tuple(eval(db))
+
+
+def pagins(model, request):
+    page_list = None
+    paginator = Paginator(model, 5)
+    page = request.GET.get('page', 1)
+    try:
+        items = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        items = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        items = paginator.page(paginator.num_pages)
+    if int(page) > 5:
+        start = str(int(page)-5)
+    else:
+        start = 1
+    if int(page) < paginator.num_pages-5:
+        end = str(int(page)+5+1)
+    else:
+        end = paginator.num_pages+1
+    page_range = range(int(start), int(end)),
+    for p in page_range:
+        page_list = p
+    pre_end = items.paginator.num_pages - 2
+    return {'page': page, 'items': items, 'start': start, 'end': end, 'pre_end': pre_end, 'page_list': page_list}

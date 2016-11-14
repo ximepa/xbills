@@ -9,7 +9,7 @@ from django.db.models import Sum, Q
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-from core.func import type_f_list, db_filter
+from core.func import *
 from core.vars import *
 from dv.helpers import Hangup
 from .auth_backend import AuthBackend
@@ -43,13 +43,13 @@ def index(request, settings=settings):
     ip_list_r = []
     ip_list_db = []
     sys = platform.platform()
-    if 'pay_now' in request.GET:
-        payments_now = Payment.objects.filter(date__icontains=datetime.datetime.now().date()).last()
-        if payments_now != None:
-            pay_list = {}
-            pay_list['pay_now'] = payments_now.sum, payments_now.dsc, payments_now.uid.login, str(payments_now.uid.id), payments_now.aid.login
-            res_json = json.dumps(pay_list)
-            return HttpResponse(res_json)
+    # if 'pay_now' in request.GET:
+    #     payments_now = Payment.objects.filter(date__icontains=datetime.datetime.now().date()).last()
+    #     if payments_now != None:
+    #         pay_list = {}
+    #         pay_list['pay_now'] = payments_now.sum, payments_now.dsc, payments_now.uid.login, str(payments_now.uid.id), payments_now.aid.login
+    #         res_json = json.dumps(pay_list)
+    #         return HttpResponse(res_json)
     if 'pay' in request.GET:
         pay_list = {}
         result_day_pay = 0
@@ -726,33 +726,12 @@ def clients(request):
     end = users_list.filter(deleted=1).count()
     disabled = users_list.filter(disable=1).count()
     deleted = users_list.filter(deleted=1).count()
-    paginator = Paginator(users_list, 100)
-    page = request.GET.get('page', 1)
-    try:
-        users = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        users = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        users = paginator.page(paginator.num_pages)
-    if int(page) > 5:
-        start = str(int(page)-5)
-    else:
-        start = 1
-    if int(page) < paginator.num_pages-5:
-        end = str(int(page)+5+1)
-    else:
-        end = paginator.num_pages+1
-    page_range = range(int(start), int(end)),
-    for p in page_range:
-        page_list = p
-    pre_end = users.paginator.num_pages - 2
+    pagin = pagins(users_list, request)
     if 'xml' in request.GET:
-        xml_data = serializers.serialize("xml", users)
+        xml_data = serializers.serialize("xml", pagin['users'])
         return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
     if 'csv' in request.GET:
-        return helpers.export_to_csv(request, users, fields=('id', 'login'), name='login')
+        return helpers.export_to_csv(request, pagin['users'], fields=('id', 'login'), name='login')
     return render(request, 'users.html', locals())
 
 
@@ -760,33 +739,13 @@ def clients(request):
 def payments(request):
     order_by = request.GET.get('order_by', '-date')
     payments_list = Payment.objects.all().order_by(order_by)
-    paginator = Paginator(payments_list, settings.PAYMENTS_PER_PAGE)
-    page = request.GET.get('page', 1)
-    try:
-        payments = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        payments = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        payments = paginator.page(paginator.num_pages)
-    if int(page) > 5:
-        start = str(int(page)-5)
-    else:
-        start = 1
-    if int(page) < paginator.num_pages-5:
-        end = str(int(page)+5+1)
-    else:
-        end = paginator.num_pages+1
-    page_range = range(int(start), int(end)),
-    for p in page_range:
-        page_list = p
-    pre_end = payments.paginator.num_pages - 2
+    pagin = pagins(payments_list, request)
+    print pagin
     if 'xml' in request.GET:
-        xml_data = serializers.serialize("xml", payments)
+        xml_data = serializers.serialize("xml", pagin['payments'])
         return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
     if 'csv' in request.GET:
-        return helpers.export_to_csv(request, payments, fields=('id', 'sum'), name='payments')
+        return helpers.export_to_csv(request, pagin['payments'], fields=('id', 'sum'), name='payments')
     return render(request, 'payments.html', locals())
 
 
@@ -795,30 +754,12 @@ def fees(request):
     out_sum = 0
     order_by = request.GET.get('order_by', '-date')
     fees_list = Fees.objects.all().order_by(order_by)
-    paginator = Paginator(fees_list, settings.FEES_PER_PAGE)
-    page = request.GET.get('page', 1)
-    # for ex_fees in fees_list:
-    #     out_sum += ex_fees.sum
-    try:
-        fees = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        fees = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        fees = paginator.page(paginator.num_pages)
-    if int(page) > 5:
-        start = str(int(page)-5)
-    else:
-        start = 1
-    if int(page) < paginator.num_pages-5:
-        end = str(int(page)+5+1)
-    else:
-        end = paginator.num_pages+1
-    page_range = range(int(start), int(end)),
-    for p in page_range:
-        page_list = p
-    pre_end = fees.paginator.num_pages - 2
+    pagin = pagins(fees_list, request)
+    if 'xml' in request.GET:
+        xml_data = serializers.serialize("xml", pagin['fees'])
+        return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
+    if 'csv' in request.GET:
+        return helpers.export_to_csv(request, pagin['fees'], fields=('id', 'sum'), name='fees')
     return render(request, 'fees.html', locals())
 
 
@@ -827,28 +768,7 @@ def company(request):
     r_company = 1
     order_by = request.GET.get('order_by', 'name')
     m_company = Company.objects.all().order_by(order_by)
-    paginator = Paginator(m_company, 50)
-    page = request.GET.get('page', 1)
-    try:
-        company = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        company = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        company = paginator.page(paginator.num_pages)
-    if int(page) > 5:
-        start = str(int(page)-5)
-    else:
-        start = 1
-    if int(page) < paginator.num_pages-5:
-        end = str(int(page)+5+1)
-    else:
-        end = paginator.num_pages+1
-    page_range = range(int(start), int(end)),
-    for p in page_range:
-        page_list = p
-    pre_end = company.paginator.num_pages - 2
+    pagin = pagins(m_company, request)
     if 'xml' in request.GET:
         xml_data = serializers.serialize("xml", company)
         return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
@@ -869,29 +789,7 @@ def company(request):
 def group(request):
     order_by = request.GET.get('order_by', 'id')
     group = Group.objects.all().order_by(order_by)
-    paginator = Paginator(group, 50)
-    page = request.GET.get('page', 1)
-    print request.GET
-    try:
-        group = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        group = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        group = paginator.page(paginator.num_pages)
-    if int(page) > 5:
-        start = str(int(page)-5)
-    else:
-        start = 1
-    if int(page) < paginator.num_pages-5:
-        end = str(int(page)+5+1)
-    else:
-        end = paginator.num_pages+1
-    page_range = range(int(start), int(end)),
-    for p in page_range:
-        page_list = p
-    pre_end = group.paginator.num_pages - 2
+    pagin = pagins(group, request)
     if 'xml' in request.GET:
         xml_data = serializers.serialize("xml", company)
         return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
