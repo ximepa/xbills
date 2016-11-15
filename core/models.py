@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 from django.db import models
+from django.db.models import signals
 import os
 import datetime
 from django.contrib.auth.models import (
@@ -173,7 +174,7 @@ class Company(models.Model):
 
 class User(models.Model):
 
-    id = models.AutoField(primary_key=True, db_column='uid')
+    id = models.AutoField(primary_key=True, db_column='uid', unique=True)
     login = models.CharField(max_length=20, db_column='id')
     disable = models.BooleanField(default=0, db_column='disable', blank=True)
     company = models.ForeignKey(Company, related_name='clients', blank=True, null=True)
@@ -185,8 +186,8 @@ class User(models.Model):
     activate = models.DateField(db_column='activate', blank=True, null=True, )
     expire = models.DateField(db_column='expire', blank=True, null=True)
     deleted = models.BooleanField(db_column='deleted', default=0)
-    registration = models.DateField(default='0000-00-00', blank=True, null=True)
-    bill = models.ForeignKey('Bill', blank=True, null=True)
+    registration = models.DateField(auto_now_add=True)
+    bill = models.OneToOneField('Bill', blank=True, null=True)
 
     def __unicode__(self):
         return self.login
@@ -254,6 +255,19 @@ class User(models.Model):
         cursor.execute(q)
         row = cursor.fetchone()
         self.password = row[0]
+
+    # def save(self, *args, **kwargs):
+    #     print args
+    #     print kwargs
+    #     print self.pk
+    #     # bill = Bill.objects.create(uid=self.id)
+    #     # print bill.uid
+    #     # self.bill_id = bill.id
+    #     # if 'form' in kwargs:
+    #     #     form = kwargs['form']
+    #     # else:
+    #     #     form = None
+    #     # super(User, self).save(*args, **kwargs)
 
 
 class Group(models.Model):
