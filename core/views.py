@@ -703,13 +703,12 @@ def clients(request):
         if 'add_client' in request.POST:
             client_form = ClientForm(request.POST)
             if client_form.is_valid():
-                print client_form
-                print 'ok'
-                csave = client_form.save()
-                bill = Bill.objects.create(uid=csave.pk)
-                bill_id = User.objects.get(id=csave.pk)
-                bill_id.bill_id = bill.id
-                bill_id.save()
+                client = client_form.save(commit=False)
+                csave = client_form.save(*filter_by)
+                # bill = Bill.objects.create(uid=csave.pk)
+                # bill_id = User.objects.get(id=csave.pk)
+                # bill_id.bill_id = bill.id
+                # bill_id.save()
             else:
                 print 'no'
     if filter_by == '1':

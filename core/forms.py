@@ -142,7 +142,7 @@ class ClientForm(forms.ModelForm):
             'activate',
             'expire',
             'deleted',
-            'registration',
+            # 'registration',
             # 'bill',
         ]
         widgets = {
@@ -156,7 +156,7 @@ class ClientForm(forms.ModelForm):
             'activate': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
             'expire': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
             'deleted': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
-            'registration': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
+            # 'registration': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
             # 'bill': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Deposite'}),
         }
 
