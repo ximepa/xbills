@@ -79,6 +79,15 @@
 
             }
 
+            if(this.options.input) {
+                console.log(this.options.input)
+                var $input = $('<div/>').addClass('ui segment');
+                this.$bar.find('.noty_bar').append($input.addClass(this.options.input).append($('<input/>')))
+
+
+
+            }
+
             // Set buttons if available
             if(this.options.buttons) {
 
@@ -106,6 +115,7 @@
 
             // For easy access
             this.$message = this.$bar.find('.noty_message');
+            this.$input = this.$bar.find('input');
             this.$closeButton = this.$bar.find('.noty_close');
             this.$buttons = this.$bar.find('.noty_buttons');
             this.$selects = this.$bar.find('.dropdown');

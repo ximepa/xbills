@@ -43,6 +43,7 @@ $(document).ready(function($) {
 			noty({
 				login: data.login,
 				text: data.message,
+				input: 'ui mini fluid input',
 				type: 'warning',
 				dismissQueue: true,
 				layout: 'bottomRight',
@@ -50,6 +51,12 @@ $(document).ready(function($) {
 				buttons: [
 					{
 						addClass: 'mini positive ui button', text: 'Ok', onClick: function ($noty) {
+						$.post('/admin/chat/', {
+							room: 'global_chat',
+							user: $noty.$message[0].textContent,
+							action: 'send_msg',
+							message: $noty.$input.val()
+						});
 						$noty.close();
 					}
 					},
