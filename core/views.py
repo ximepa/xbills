@@ -538,14 +538,13 @@ def client(request, uid):
     if page == 'user_pi':
         try:
             user_pi = UserPi.objects.get(user_id=uid)
-            print user_pi
-            user_pi_form = UserPiForm(instance=user_pi)
-            if 'user_pi' in request.POST:
-                user_pi_form = UserPiForm(request.POST, instance=user_pi)
-                if user_pi_form.is_valid():
-                    user_pi_form.save()
         except UserPi.DoesNotExist:
-            user_pi = None
+            user_pi = UserPi.objects.create(user_id=uid)
+        user_pi_form = UserPiForm(instance=user_pi)
+        if 'user_pi' in request.POST:
+            user_pi_form = UserPiForm(request.POST, instance=user_pi)
+            if user_pi_form.is_valid():
+                user_pi_form.save()
     # streets = Street.objects.all()
     # houses = House.objects.all()
     # group = Group.objects.all()

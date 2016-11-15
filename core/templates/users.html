@@ -24,7 +24,7 @@
     <div class="row">
         <div class="column">
             <div class="ui {{ request.user.theme }} segment">
-                <div class="ui sticky stackable menu">
+                <div class="ui stackable menu">
                     <div class="header item">{% trans 'Sort By' %}</div>
                     <a href="?{% url_replace request 'users_status' '0' %}" class="item {% if 'users_status=0' in request.get_full_path %}active{% elif not request.GET or 'order_by' in request.GET and not 'users_status' in request.GET %}active{% endif %}">
                         {% trans 'All' %} <div class="floating ui blue label">{{ all }}</div>
@@ -58,7 +58,7 @@
                     </div>
                 </div>
                 {% if pagin.items %}
-                    <table class="ui blue small very compact selectable striped table">
+                    <table class="ui blue very compact selectable striped table">
                         <thead>
                             <tr class="">
                                 <th><a href="?{% url_replace request 'order_by' 'login' %}">{% trans 'Login' %}</a></th>

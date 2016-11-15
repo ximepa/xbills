@@ -167,69 +167,68 @@
             <p>{% trans 'Dv not found' %}</p>
         {% endif %}
     {% else %}
-            <div class="ui bottom attached active tab segment">
-                <form class="ui form" method="post">{% csrf_token %}
-                    <div class="ui tiny stacked segment">
+        <div class="ui bottom attached active tab segment">
+            <form class="ui form" method="post">{% csrf_token %}
+                <div class="ui tiny stacked segment">
 
-                        {# fields 1 #}
-                        <div class="four fields">
-                            <div class="field">
-                                <label>{% trans 'FIO' %}</label>
-                                {{ user_pi_form.fio }}
-                            </div>
-                            <div class="field">
-                                <label>{% trans 'Phone' %}</label>
-                                {{ user_pi_form.phone }}
-                            </div>
-                            <div class="field">
-                                <label>{% trans 'Phone' %} (2)</label>
-                                {{ user_pi_form.phone2   }}
-                            </div>
-                            <div class="field">
-                                <label>{% trans 'Email' %}</label>
-                                {{ user_pi_form.email }}
-                            </div>
+                    {# fields 1 #}
+                    <div class="four fields">
+                        <div class="field">
+                            <label>{% trans 'FIO' %}</label>
+                            {{ user_pi_form.fio }}
                         </div>
-                        {# fields 2 #}
-                        <div class="four fields">
-                            <div class="field">
-                                <label>{% trans 'City' %}</label>
-                                {{ user_pi_form.district }}
-                            </div>
-                            <div class="field">
-                                <label>{% trans 'Street' %}</label>
-                                {{ user_pi_form.street }}
-                            </div>
-                            <div class="field">
-                                <label>{% trans 'Build' %}</label>
-                                {{ user_pi_form.location }}
-                            </div>
-                            <div class="field">
-                                <label>{% trans 'Flat' %}</label>
-                                {{ user_pi_form.kv }}
-                            </div>
+                        <div class="field">
+                            <label>{% trans 'Phone' %}</label>
+                            {{ user_pi_form.phone }}
                         </div>
-                        <div class="four fields">
-                            <div class="field">
-                                <label>{% trans 'Contract Date' %}</label>
-                                {{ user_pi_form.contract_date }}
-                            </div>
-                            <script>
-                                $( function() {
-                                    $( "#id_contract_date" ).datepicker({dateFormat: 'yy-mm-dd'});
-                                } );
-                            </script>
+                        <div class="field">
+                            <label>{% trans 'Phone' %} (2)</label>
+                            {{ user_pi_form.phone2   }}
                         </div>
-                        <div class="inline field">
-                            <div class="ui checkbox">
-        {#                        {{ client_form.disable }}#}
-                                <label>{% trans 'Disable' %}</label>
-                            </div>
+                        <div class="field">
+                            <label>{% trans 'Email' %}</label>
+                            {{ user_pi_form.email }}
                         </div>
-                        <button class="tiny ui teal submit button" name="user_pi" value="change" type="submit">{% trans 'Change' %}</button>
                     </div>
-                </form>
-            </div>
-            <p>{% trans 'User info not found' %}</p>
+                    {# fields 2 #}
+                    <div class="four fields">
+                        <div class="field">
+                            <label>{% trans 'City' %}</label>
+                            {{ user_pi_form.district }}
+                        </div>
+                        <div class="field">
+                            <label>{% trans 'Street' %}</label>
+                            {{ user_pi_form.street }}
+                        </div>
+                        <div class="field">
+                            <label>{% trans 'Build' %}</label>
+                            {{ user_pi_form.location }}
+                        </div>
+                        <div class="field">
+                            <label>{% trans 'Flat' %}</label>
+                            {{ user_pi_form.kv }}
+                        </div>
+                    </div>
+                    <div class="four fields">
+                        <div class="field">
+                            <label>{% trans 'Contract Date' %}</label>
+                            {{ user_pi_form.contract_date }}
+                        </div>
+                        <script>
+                            $( function() {
+                                $( "#id_contract_date" ).datepicker({dateFormat: 'yy-mm-dd'});
+                            } );
+                        </script>
+                    </div>
+                    <div class="inline field">
+                        <div class="ui checkbox">
+    {#                        {{ client_form.disable }}#}
+                            <label>{% trans 'Disable' %}</label>
+                        </div>
+                    </div>
+                    <button class="tiny ui teal submit button" name="user_pi" value="change" type="submit">{% trans 'Change' %}</button>
+                </div>
+            </form>
+        </div>
     {% endif %}
 {% endblock %}
