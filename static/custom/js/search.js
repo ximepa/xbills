@@ -6,6 +6,7 @@ $( document ).ready(function() {
     });
     $('#street').dropdown(
         console.log($('#district').val()),
+
     {
 
         // apiSettings: {
