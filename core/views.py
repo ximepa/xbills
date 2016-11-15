@@ -510,37 +510,42 @@ def client_add(request):
 
 @login_required()
 def client(request, uid):
+    page = request.GET.get('page', None)
     if 'hangup' in request.GET:
         hangup = Hangup(request.GET['nas_id'], request.GET['port_id'], request.GET['acct_session_id'], request.GET['user_name'])
     try:
         client = User.objects.get(id=uid)
-        print client.bill_id
     except User.DoesNotExist:
         return render(request, '404.html', locals())
     if client.disable == 1:
         disable = 0
     else:
         disable = 1
-    client_form = ClientForm(instance=client)
-    if 'client_form' in request.POST:
-        client_form = ClientForm(request.POST, instance=client)
-        print client_form
-        if client_form.is_valid():
-            print 'oky'
-        print client_form.errors
-    try:
-        dv = Dv.objects.get(user=uid)
-        dv_form = DvForm(instance=dv, initial={'ip': num_to_ip(dv.ip), 'netmask': num_to_ip(dv.netmask)})
-    except:
-        dv_form = DvForm()
-    try:
-        user_pi = UserPi.objects.get(user_id=uid)
-        user_pi_form = UserPiForm(instance=user_pi, initial={'district': user_pi.street.district_id})
-    except:
-        user_pi_form = UserPiForm()
-    if 'user_pi' in request.POST:
-        user_pi_form = UserPiForm(request.POST, instance=user_pi)
-        print user_pi_form
+    if page == None:
+        client_form = ClientForm(instance=client)
+        if 'client_form' in request.POST:
+            client_form = ClientForm(request.POST, instance=client)
+            print client_form
+            if client_form.is_valid():
+                print 'oky'
+            print client_form.errors
+    if page == 'dv':
+        try:
+            dv = Dv.objects.get(user=uid)
+            dv_form = DvForm(instance=dv, initial={'ip': num_to_ip(dv.ip), 'netmask': num_to_ip(dv.netmask)})
+        except Dv.DoesNotExist:
+            dv = None
+    if page == 'user_pi':
+        try:
+            user_pi = UserPi.objects.get(user_id=uid)
+            print user_pi
+            user_pi_form = UserPiForm(instance=user_pi)
+            if 'user_pi' in request.POST:
+                user_pi_form = UserPiForm(request.POST, instance=user_pi)
+                if user_pi_form.is_valid():
+                    user_pi_form.save()
+        except UserPi.DoesNotExist:
+            user_pi = None
     # streets = Street.objects.all()
     # houses = House.objects.all()
     # group = Group.objects.all()
