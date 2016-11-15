@@ -131,8 +131,8 @@
     </div>
     <div class="row">
         <div class="column">
-            <div class="ui {{ request.user.theme }} mini segment">
-                <div class="ui sticky mini fluid pagination menu">
+            <div class="ui {{ request.user.theme }} segment">
+                <div class="ui sticky fluid pagination menu">
                     <div class="header item">{% trans 'Export' %}</div>
                     <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
                         <i class="gamepad icon"></i>
@@ -263,7 +263,7 @@
                             <td>
                                 <form method="post" id="admin_remove_form" onsubmit="return confirm('{% trans 'Warning! You can not revert you changes!!!' %}')">{% csrf_token %}
                                     <input type="hidden" name="uid" value="{{ admin.id }}">
-                                    <button name="admin_remove" type="submit" class="negative mini compact ui icon button" onclick="if(!confirm('{% trans 'Remove admin ' %}{{ admin.login }}?')){return false;}">
+                                    <button name="admin_remove" type="submit" class="negative compact ui icon button" onclick="if(!confirm('{% trans 'Remove admin ' %}{{ admin.login }}?')){return false;}">
                                         <i class="fa fa-trash" aria-hidden="true"></i>
                                     </button>
                                 </form>

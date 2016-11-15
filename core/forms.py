@@ -204,7 +204,7 @@ class UserPiForm(forms.ModelForm):
     class Meta:
         model = UserPi
         fields = [
-            'user_id',
+            'user',
             'fio',
             'email',
             'street',
@@ -218,7 +218,7 @@ class UserPiForm(forms.ModelForm):
         ]
 
         widgets = {
-            'user_id': forms.HiddenInput(),
+            'user': forms.HiddenInput(),
             'fio': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'FIO'}),
             'email': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Mail'}),
             'kv': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Flat'}),
@@ -226,7 +226,7 @@ class UserPiForm(forms.ModelForm):
             'phone2': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Phone'}),
             'street': forms.Select(attrs={'class': 'ui dropdown'}),
             'location': forms.Select(attrs={'class': 'ui dropdown'}),
-            'contract_date': forms.TextInput(attrs={'class': 'ui small input', 'value': '0000-00-00', 'placeholder': '0000-00-00'}),
+            # 'contract_date': forms.TextInput(attrs={'class': 'ui small input', 'value': '0000-00-00', 'placeholder': '0000-00-00'}),
         }
 
 

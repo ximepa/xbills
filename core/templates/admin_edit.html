@@ -14,7 +14,7 @@
 {% block content %}
     <div class="row">
         <div class="column">
-            <div class="ui {{ request.user.theme }} mini segment">
+            <div class="ui {{ request.user.theme }} segment">
                 <form class="ui form" method="post" name="admin_edit_form">{% csrf_token %}
                     <div class="four fields">
                         <div class="field">

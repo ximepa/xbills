@@ -11,7 +11,7 @@
 {% block content %}
     <div class="row">
         <div class="column">
-            <div class="ui {{ request.user.theme }} mini segment">
+            <div class="ui {{ request.user.theme }} segment">
                 {% if r_company == 1 %}
                     {% if company %}
                         <div id="company_modal" class="ui modal">
@@ -23,7 +23,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="ui sticky mini fluid pagination menu">
+                        <div class="ui sticky fluid pagination menu">
                             <div class="header item">{% trans 'Export' %}</div>
                             <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
                                 <i class="gamepad icon"></i>
@@ -75,7 +75,7 @@
                 {% endif %}
                 {% if r_company == 2 %}
                     <form class="ui form">
-                        <div class="ui sticky stackable mini menu">
+                        <div class="ui sticky stackable menu">
                             <div class="item">
                                 <label>{% trans 'Financial account' %}: </label>
                                 <label>{{ edit_company.bill_id }}</label>
@@ -94,7 +94,7 @@
                             </div>
                         </div>
                         <div class="ui tiny segment">
-                            <div class="ui sticky stackable mini menu">
+                            <div class="ui sticky stackable menu">
                             </div>
                             <div class="two fields">
                                 <div class="field">
@@ -137,7 +137,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="ui sticky stackable mini menu">
+                            <div class="ui sticky stackable menu">
                             </div>
                             <div class="fields">
                                 <div class="field">

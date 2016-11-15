@@ -12,7 +12,7 @@
     <div class="row">
         <div class="column">
         {{ tp_form.errors }}
-            <div class="ui {{ request.user.theme }} mini segment">
+            <div class="ui {{ request.user.theme }} segment">
                 <div id="add_tp" class="ui accordion field">
                     <div class="title"><i class="icon dropdown"></i> {% trans 'Add new server' %} </div>
                     <div class="content field">
@@ -229,7 +229,7 @@
             <div class="ui {{ request.user.theme }} segment">
                 {% if tp %}
                     <script>$('#add_tp').accordion('close', 0);</script>
-                    <div class="ui sticky mini fluid pagination menu">
+                    <div class="ui sticky fluid pagination menu">
                         <div class="header item">{% trans 'Export' %}</div>
                         <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
                             <i class="gamepad icon"></i>
@@ -274,7 +274,7 @@
                             {% endif %}
                         {% endif %}
                     </div>
-                    <table class="ui blue small very compact selectable striped table">
+                    <table class="ui blue very compact selectable striped table">
                         <thead>
                             <tr>
                                 <th><a href="?{% url_replace request 'order_by' 'id' %}">{% trans 'Number' %}</a></th>

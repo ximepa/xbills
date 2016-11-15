@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^monitoring_servers/$', monitoring_servers, name='monitoring_servers'),
     url(r'^clients/$', views.clients, name='clients'),
     url(r'^clients/(?P<uid>\d+)/$', views.client, name='client'),
+    url(r'^clients/add/$', views.client_add, name='client_add'),
     url(r'^search/$', views.search, name='search'),
     url(r'^test/$', views.test, name='test'),
     url(r'^login/$', views.user_login, name='login'),

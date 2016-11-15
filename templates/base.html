@@ -39,7 +39,7 @@
 </head>
 <body id="example" class="index">
     {% block wrapper %}
-	<div id="panel_menu" class="ui mini  menu" style="margin-left: 0.5em; margin-right: 0.5em">
+	<div id="panel_menu" class="ui stackable menu" style="margin-left: 0.5em; margin-right: 0.5em">
         <div class="header item">
             <span style="color: orange">X</span><span style="color: red">Bills </span> {% version %}
         </div>
@@ -48,64 +48,62 @@
         <a href="{% url 'core:search' %}" class="{% active request 'core:search' %} item popup" data-content="{% trans 'Search user by criteria' %}"><i class="search icon"></i>{% trans 'Search' %}</a>
         <a href="{% url 'core:chat' %}" class="{% active request 'core:chat' %} item popup" data-content="{% trans 'Enter to chat' %}"><i class="comments outline icon"></i>{% trans 'Chat' %}</a>
         <a href="javascript:calltest()" class="blue item popup"><i class="comments outline icon"></i>{% trans 'Test' %}</a>
-        <div class="right menu">
-            <div class="ui dropdown item">
-                {% get_current_language as LANGUAGE_CODE %}
-                {% get_available_languages as LANGUAGES %}
-                {% get_current_language_bidi as LANGUAGE_BIDI %}
-                {% get_language_info for LANGUAGE_CODE as lang %}
-                {% if lang.code == 'en' %}
-                    <i class="us flag"></i>{{ lang.name_local }}<i class="dropdown icon"></i>
-                {% elif lang.code == 'uk' %}
-                    <i class="ua flag"></i>{{ lang.name_local }}<i class="dropdown icon"></i>
-                {% else %}
-                    <i class="ru flag"></i>{{ lang.name_local }}<i class="dropdown icon"></i>
-                {% endif %}
-                <div class="menu">
-                    {% for lang in LANGUAGES %}
-                        <form name="setLang{{ lang.1}}" action="/i18n/setlang/" method="POST">{% csrf_token %}
-                            <input name="next" type="hidden" value="{{ request.get_full_path }}">
-                            <input type="hidden" name="language" value="{{ lang.0 }}">
-                            {% if request.LANGUAGE_CODE == lang.0 %}
-                                <a href="#" onclick="document.setLang{{ lang.1 }}.submit();return false;" class="active item">
-                                    {% if lang.0 == 'uk' %}
-                                        <i class="ua flag"></i> {{ lang.1 }}
-                                    {% elif lang.0 == 'en' %}
-                                        <i class="us flag"></i> {{ lang.1 }}
-                                    {% else %}
-                                        <i class="{{ lang.0 }} flag"></i> {{ lang.1 }}
-                                    {% endif %}
-                                </a>
-                            {% else %}
-                                <a href="#" onclick="document.setLang{{ lang.1 }}.submit();return false;" class="item">
-                                    {% if lang.0 == 'uk' %}
-                                        <i class="ua flag"></i> {{ lang.1 }}
-                                    {% elif lang.0 == 'en' %}
-                                        <i class="us flag"></i> {{ lang.1 }}
-                                    {% else %}
-                                        <i class="{{ lang.0 }} flag"></i> {{ lang.1 }}
-                                    {% endif %}
-                                </a>
-                            {% endif %}
-                        </form>
-                    {% endfor %}
-                </div>
+        <div class="ui right dropdown item">
+            {% get_current_language as LANGUAGE_CODE %}
+            {% get_available_languages as LANGUAGES %}
+            {% get_current_language_bidi as LANGUAGE_BIDI %}
+            {% get_language_info for LANGUAGE_CODE as lang %}
+            {% if lang.code == 'en' %}
+                <i class="us flag"></i>{{ lang.name_local }}<i class="dropdown icon"></i>
+            {% elif lang.code == 'uk' %}
+                <i class="ua flag"></i>{{ lang.name_local }}<i class="dropdown icon"></i>
+            {% else %}
+                <i class="ru flag"></i>{{ lang.name_local }}<i class="dropdown icon"></i>
+            {% endif %}
+            <div class="menu">
+                {% for lang in LANGUAGES %}
+                    <form name="setLang{{ lang.1}}" action="/i18n/setlang/" method="POST">{% csrf_token %}
+                        <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                        <input type="hidden" name="language" value="{{ lang.0 }}">
+                        {% if request.LANGUAGE_CODE == lang.0 %}
+                            <a href="#" onclick="document.setLang{{ lang.1 }}.submit();return false;" class="active item">
+                                {% if lang.0 == 'uk' %}
+                                    <i class="ua flag"></i> {{ lang.1 }}
+                                {% elif lang.0 == 'en' %}
+                                    <i class="us flag"></i> {{ lang.1 }}
+                                {% else %}
+                                    <i class="{{ lang.0 }} flag"></i> {{ lang.1 }}
+                                {% endif %}
+                            </a>
+                        {% else %}
+                            <a href="#" onclick="document.setLang{{ lang.1 }}.submit();return false;" class="item">
+                                {% if lang.0 == 'uk' %}
+                                    <i class="ua flag"></i> {{ lang.1 }}
+                                {% elif lang.0 == 'en' %}
+                                    <i class="us flag"></i> {{ lang.1 }}
+                                {% else %}
+                                    <i class="{{ lang.0 }} flag"></i> {{ lang.1 }}
+                                {% endif %}
+                            </a>
+                        {% endif %}
+                    </form>
+                {% endfor %}
             </div>
-            <div class="item">
-                <form class="ui form" action="{% url 'core:search' %}" method="GET">
-                    <div class="ui transparent icon input">
-                        <input placeholder="Search..." type="text" name="global_search">
-                        <i class="search link icon"></i>
-                    </div>
-                </form>
-            </div>
-            <div class="ui dropdown item">
-                {{ request.user.login }}
-                <i class="dropdown icon"></i>
-                <div class="menu">
-                    <a class="item" href="{% url 'core:administrator_edit' request.user %}">{% trans 'Profile' %}</a>
-                    <a class="item" href="{% url 'core:logout' %}">{% trans 'Logout' %}</a>
+        </div>
+        <div class="item">
+            <form class="ui form" action="{% url 'core:search' %}" method="GET">
+                <div class="ui transparent icon input">
+                    <input placeholder="Search..." type="text" name="global_search">
+                    <i class="search link icon"></i>
                 </div>
+            </form>
+        </div>
+        <div class="ui dropdown item">
+            {{ request.user.login }}
+            <i class="dropdown icon"></i>
+            <div class="menu">
+                <a class="item" href="{% url 'core:administrator_edit' request.user %}">{% trans 'Profile' %}</a>
+                <a class="item" href="{% url 'core:logout' %}">{% trans 'Logout' %}</a>
             </div>
         </div>
     </div>
@@ -263,7 +261,7 @@
                 <div class="ui stackable grid">
                     <div class="row">
                         <div class="column">
-                            <div class="ui {{ request.user.theme }} mini segment">
+                            <div class="ui {{ request.user.theme }} segment">
                                 <h6 class="ui header">
                                     <i class="dashboard icon"></i>
                                     <div class="content">

@@ -23,173 +23,41 @@
 {% block content %}
     <div class="row">
         <div class="column">
-            <div class="ui blue mini segment">
-                <div id="add_panel" class="ui accordion field">
-                    <div class="title"><i class="icon dropdown"></i> {% trans 'Search' %} </div>
-                    <div class="content field">
-                        <form class="ui form" method="POST">{% csrf_token %}
-            <div class="ui tiny stacked segment">
-                {# fields 1 #}
-                <div class="four fields">
-                    <div class="field">
-                        <label>{% trans 'Login' %}</label>
-                        {{ client_form.login }}
-                    </div>
-                    <div class="field">
-                        <label>{% trans 'Reduction' %}</label>
-                        {{ client_form.reduction }}
-                    </div>
-                    <div class="field">
-                        <label>{% trans 'Credit' %}</label>
-                        {{ client_form.credit }}
-                    </div>
-                    <div class="field">
-                        <label>{% trans 'Start credit date' %}</label>
-                        {{ client_form.credit_date }}
-                    </div>
-                    <script>
-                        $( function() {
-                            $( "#id_credit_date" ).datepicker({dateFormat: 'yy-mm-dd'});
-                        } );
-                    </script>
-                </div>
-                {# fields 2 #}
-                <div class="two fields">
-                    <div class="field">
-                        <label>{% trans 'Groups' %}</label>
-                        {{ client_form.gid }}
-                    </div>
-                    <div class="field">
-                        <label>{% trans 'Company' %}</label>
-                        {{ client_form.company }}
+            <div class="ui {{ request.user.theme }} segment">
+                <div class="ui sticky stackable menu">
+                    <div class="header item">{% trans 'Sort By' %}</div>
+                    <a href="?{% url_replace request 'users_status' '0' %}" class="item {% if 'users_status=0' in request.get_full_path %}active{% elif not request.GET or 'order_by' in request.GET and not 'users_status' in request.GET %}active{% endif %}">
+                        {% trans 'All' %} <div class="floating ui blue label">{{ all }}</div>
+                    </a>
+                    <a href="?{% url_replace request 'users_status' '1' %}" class="item {% if 'users_status=1' in request.get_full_path %}active{% endif %}">
+                        {% trans 'Active' %}
+                    </a>
+                    <a href="?{% url_replace request 'users_status' '2' %}" class="item {% if 'users_status=2' in request.get_full_path %}active{% endif %}">
+                        {% trans 'Debtors' %}
+                    </a>
+                    <a href="?{% url_replace request 'users_status' '3' %}" class="item {% if 'users_status=3' in request.get_full_path %}active{% endif %}">
+                        {% trans 'Disabled' %} <div class="floating ui blue label">{{ disabled }}</div>
+                    </a>
+                    <a href="?{% url_replace request 'users_status' '4' %}" class="item {% if 'users_status=4' in request.get_full_path %}active{% endif %}">
+                        {% trans 'Deleted' %} <div class="floating ui blue label">{{ deleted }}</div>
+                    </a>
+                    <a href="?{% url_replace request 'users_status' '5' %}" class="item {% if 'users_status=5' in request.get_full_path %}active{% endif %}">
+                        {% trans 'Credit' %}
+                    </a>
+                    <div class="header item">{% trans 'Export' %}</div>
+                    <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
+                        <i class="gamepad icon"></i>
+                        Xml
+                    </a>
+                    <a href="?{% url_replace request 'csv' '1' %}" class="item">
+                        <i class="video camera icon"></i>
+                        Csv
+                    </a>
+                    <div class="right menu">
+                        <a href="{% url 'core:client_add' %}" class="ui item"><i class="add user icon"></i> {% trans 'Add user' %}</a>
                     </div>
                 </div>
-                {# fields 3 #}
-                <div class="two fields">
-                    <div class="field">
-                        <label>{% trans 'Discount' %} (%)</label>
-                        {{ client_form.reduction }}
-                    </div>
-                    <div class="field">
-                        <label>{% trans 'Start discount date' %}</label>
-                        {{ client_form.reduction_date }}
-                    </div>
-                    <script>
-                        $( function() {
-                            $( "#id_reduction_date" ).datepicker({dateFormat: 'yy-mm-dd'});
-                        } );
-                    </script>
-                </div>
-                {# fields 4 #}
-                <div class="two fields">
-                    <div class="field">
-                        <label>{% trans 'Activation' %}</label>
-                        {{ client_form.activate }}
-                    </div>
-                    <div class="field">
-                        <label>{% trans 'Expired' %}</label>
-                        {{ client_form.expire }}
-                    </div>
-                    <div class="field">
-                        <label>{% trans 'registration' %}</label>
-{#                        {{ client_form.registration }}#}
-                    </div>
-                    <script>
-                        $( function() {
-                            $( "#id_activate" ).datepicker({dateFormat: 'yy-mm-dd'});
-                        } );
-                    </script>
-                    <script>
-                        $( function() {
-                            $( "#id_expire" ).datepicker({dateFormat: 'yy-mm-dd'});
-                        } );
-                    </script>
-                    <script>
-                        $( function() {
-                            $( "#id_registration" ).datepicker({dateFormat: 'yy-mm-dd'});
-                        } );
-                    </script>
-                </div>
-                <div class="inline field">
-                    <div class="ui checkbox">
-                        {{ client_form.disable }}
-                        <label>{% trans 'Disable' %}</label>
-                    </div>
-                </div>
-                <button class="tiny ui teal submit button" name="add_client" value="change" type="submit">{% trans 'Change' %}</button>
-            </div>
-        </form>
-
-                    </div>
-                </div>
-            </div>
-        {{ client_form.errors }}
-            <div class="ui {{ request.user.theme }} mini segment">
                 {% if pagin.items %}
-                    <div class="ui sticky mini fluid pagination menu">
-                        <div class="header item">{% trans 'Sort By' %}</div>
-                        <a href="?{% url_replace request 'users_status' '0' %}" class="item {% if 'users_status=0' in request.get_full_path %}active{% elif not request.GET or 'order_by' in request.GET and not 'users_status' in request.GET %}active{% endif %}">
-                            {% trans 'All' %}
-                        </a>
-                        <a href="?{% url_replace request 'users_status' '1' %}" class="item {% if 'users_status=1' in request.get_full_path %}active{% endif %}">
-                            {% trans 'Active' %}
-                        </a>
-                        <a href="?{% url_replace request 'users_status' '2' %}" class="item {% if 'users_status=2' in request.get_full_path %}active{% endif %}">
-                            {% trans 'Debtors' %}
-                        </a>
-                        <a href="?{% url_replace request 'users_status' '3' %}" class="item {% if 'users_status=3' in request.get_full_path %}active{% endif %}">
-                            {% trans 'Disabled' %}
-                        </a>
-                        <a href="?{% url_replace request 'users_status' '4' %}" class="item {% if 'users_status=4' in request.get_full_path %}active{% endif %}">
-                            {% trans 'Deleted' %}
-                        </a>
-                        <a href="?{% url_replace request 'users_status' '5' %}" class="item {% if 'users_status=5' in request.get_full_path %}active{% endif %}">
-                            {% trans 'Credit' %}
-                        </a>
-                        <div class="header item">{% trans 'Export' %}</div>
-                        <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
-                            <i class="gamepad icon"></i>
-                            Xml
-                        </a>
-                        <a href="?{% url_replace request 'csv' '1' %}" class="item">
-                            <i class="video camera icon"></i>
-                            Csv
-                        </a>
-                        <div class="header right floated item">{% trans 'Pagination' %}</div>
-                        {% if pagin.items.number == 1 %}
-                            <div class="disabled item">
-                                1
-                            </div>
-                        {% endif %}
-                        {% if pagin.items.has_previous %}
-                            <a href="?{% url_replace_page request 'page' '1' %}" class="item">1</a>
-                            {% if pagin.items.number > 7 %}
-                                <div class="disabled item">
-                                    ...
-                                </div>
-                            {% endif %}
-                        {% endif %}
-                        {% for p in pagin.page_list %}
-                            {% if p == 1 %}
-                            {% else %}
-                                {% if pagin.items.number == p %}
-                                    <a class="item active" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                {% else %}
-                                    <a class="item" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                        {% if pagin.items.has_next %}
-                            {% if pagin.items.number < pagin.items.paginator.num_pages|add:"-5" %}
-                                <div class="disabled item">
-                                    ...
-                                </div>
-                                <a class="item" href="?{% url_replace_page request 'page' pagin.items.paginator.num_pages %}" aria-label="Next">
-                                    {{ pagin.items.paginator.num_pages }}
-                                </a>
-                            {% endif %}
-                        {% endif %}
-                    </div>
                     <table class="ui blue small very compact selectable striped table">
                         <thead>
                             <tr class="">
@@ -235,17 +103,56 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <th><div class="ui blue tiny label">{% trans 'All' %} <div class="detail">{{ all }}</div></div></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
-                                <th><div class="ui blue tiny label">{% trans 'Disabled' %}<div class="detail">{{ disabled }}</div></div></th>
-                                <th colspan="3"><div class="ui blue tiny label">{% trans 'Deleted' %}<div class="detail">{{ deleted }}</div></div></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th colspan="2">
+                                    {% if pagin.items.paginator.num_pages > 1 %}
+                                        <div class="ui pagination menu">
+                                            {% if pagin.items.number == 1 %}
+                                                <div class="disabled item">
+                                                    1
+                                                </div>
+                                            {% endif %}
+                                            {% if pagin.items.has_previous %}
+                                                <a href="?{% url_replace_page request 'page' '1' %}" class="item">1</a>
+                                                {% if pagin.items.number > 7 %}
+                                                    <div class="disabled item">
+                                                        ...
+                                                    </div>
+                                                {% endif %}
+                                            {% endif %}
+                                            {% for p in pagin.page_list %}
+                                                {% if p == 1 %}
+                                                {% else %}
+                                                    {% if pagin.items.number == p %}
+                                                        <a class="item active" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                                    {% else %}
+                                                        <a class="item" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if pagin.items.has_next %}
+                                                {% if pagin.items.number < pagin.items.paginator.num_pages|add:"-5" %}
+                                                    <div class="disabled item">
+                                                        ...
+                                                    </div>
+                                                    <a class="item" href="?{% url_replace_page request 'page' pagin.items.paginator.num_pages %}" aria-label="Next">
+                                                        {{ pagin.items.paginator.num_pages }}
+                                                    </a>
+                                                {% endif %}
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </th>
                             </tr>
                         </tfoot>
                     </table>
                 {% else %}
-                    {% trans 'Clients not found' %}
+                    <p>{% trans 'Clients not found' %}</p>
                 {% endif %}
             </div>
         </div>

@@ -11,7 +11,7 @@
 {% block content %}
     <div class="row">
         <div class="column">
-            <div class="ui {{ request.user.theme }} mini segment">
+            <div class="ui {{ request.user.theme }} segment">
                 {% if group %}
                     <div id="test" class="ui modal">
                         <i class="close icon"></i>
@@ -35,7 +35,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="ui sticky mini fluid pagination menu">
+                    <div class="ui sticky fluid pagination menu">
                         <div class="header item">{% trans 'Export' %}</div>
                         <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
                             <i class="gamepad icon"></i>
