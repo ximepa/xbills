@@ -28,7 +28,9 @@
                                       <div class="menu">
                                       <div class="item">All</div>
                                           {% for admin in admins %}
-                                              <div class="item">{{ admin.login }}</div>
+                                              {% if admin.login != request.user.login %}
+                                                  <div class="item">{{ admin.login }}</div>
+                                              {% endif %}
                                           {% endfor %}
                                       </div>
                                   </div>

@@ -14,7 +14,7 @@ def db_filter(db):
 
 def pagins(model, request):
     page_list = None
-    paginator = Paginator(model, 5)
+    paginator = Paginator(model, 15)
     page = request.GET.get('page', 1)
     try:
         items = paginator.page(page)

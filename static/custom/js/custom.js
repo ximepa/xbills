@@ -162,7 +162,6 @@ function comments_add (theLink, Message, CustomMsg) {
 
 
 function calltest() {
-toastr.info('test','test', {timeOut: 0, onclick: null, extendedTimeOut: 0})
 }
 
 function call_incoming(msg) {
