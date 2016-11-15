@@ -10,7 +10,7 @@
 {% block content %}
     <div class="row">
         <div class="four wide column">
-            <div class="ui {{ request.user.theme }} mini segment">
+            <div class="ui {{ request.user.theme }} segment">
                 <div class="ui relaxed divided list">
                     <div class="item">
                         <i class="large info middle aligned icon"></i>
@@ -74,7 +74,7 @@
             </div>
         </div>
         <div class="twelve wide column">
-            <div class="ui {{ request.user.theme }} mini segment">
+            <div class="ui {{ request.user.theme }} segment">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <table class="ui very compact selectable striped table">
@@ -106,7 +106,7 @@
                     </div>
                 </div>
             </div>
-            <div class="ui {{ request.user.theme }} mini segment">
+            <div class="ui {{ request.user.theme }} segment">
                 {% include 'dashboard_claims.html' %}
             </div>
         </div>

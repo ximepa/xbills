@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load url %}
 {% load staticfiles %}
-<table class="ui blue small very compact selectable striped table">
+<table class="ui blue very compact selectable striped table">
     <thead>
         <tr>
             <th><a href="?{% url_replace request 'order_by' 'id' %}">{% trans 'ID' %}</a></th>

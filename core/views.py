@@ -501,46 +501,55 @@ def search(request):
 @login_required()
 def client_add(request):
     client_form = ClientForm()
-    if request.POST:
+    if request.method == 'POST':
         client_form = ClientForm(request.POST)
         if client_form.is_valid():
-            client_form.save()
+            client = client_form.save()
+            bill = Bill.objects.create(uid=client.pk)
+            client.bill_id = bill.pk
+            userpi = UserPi.objects.create(user_id=client.pk)
+            client.save()
+            return redirect(reverse('core:clients'))
     return render(request, 'user_add.html', locals())
 
 
 @login_required()
 def client(request, uid):
+    page = request.GET.get('page', None)
     if 'hangup' in request.GET:
         hangup = Hangup(request.GET['nas_id'], request.GET['port_id'], request.GET['acct_session_id'], request.GET['user_name'])
     try:
         client = User.objects.get(id=uid)
-        print client.bill_id
     except User.DoesNotExist:
         return render(request, '404.html', locals())
     if client.disable == 1:
         disable = 0
     else:
         disable = 1
-    client_form = ClientForm(instance=client)
-    if 'client_form' in request.POST:
-        client_form = ClientForm(request.POST, instance=client)
-        print client_form
-        if client_form.is_valid():
-            print 'oky'
-        print client_form.errors
-    try:
-        dv = Dv.objects.get(user=uid)
-        dv_form = DvForm(instance=dv, initial={'ip': num_to_ip(dv.ip), 'netmask': num_to_ip(dv.netmask)})
-    except:
-        dv_form = DvForm()
-    try:
-        user_pi = UserPi.objects.get(user_id=uid)
-        user_pi_form = UserPiForm(instance=user_pi, initial={'district': user_pi.street.district_id})
-    except:
-        user_pi_form = UserPiForm()
-    if 'user_pi' in request.POST:
-        user_pi_form = UserPiForm(request.POST, instance=user_pi)
-        print user_pi_form
+    if page == None:
+        client_form = ClientForm(instance=client)
+        if 'client_form' in request.POST:
+            client_form = ClientForm(request.POST, instance=client)
+            print client_form
+            if client_form.is_valid():
+                print 'oky'
+            print client_form.errors
+    if page == 'dv':
+        try:
+            dv = Dv.objects.get(user=uid)
+            dv_form = DvForm(instance=dv, initial={'ip': num_to_ip(dv.ip), 'netmask': num_to_ip(dv.netmask)})
+        except Dv.DoesNotExist:
+            dv = None
+    if page == 'user_pi':
+        try:
+            user_pi = UserPi.objects.get(user_id=uid)
+        except UserPi.DoesNotExist:
+            user_pi = UserPi.objects.create(user_id=uid)
+        user_pi_form = UserPiForm(instance=user_pi)
+        if 'user_pi' in request.POST:
+            user_pi_form = UserPiForm(request.POST, instance=user_pi)
+            if user_pi_form.is_valid():
+                user_pi_form.save()
     # streets = Street.objects.all()
     # houses = House.objects.all()
     # group = Group.objects.all()
@@ -704,18 +713,6 @@ def clients(request):
     order_by = request.GET.get('order_by', 'login')
     users_list = User.objects.all().order_by(order_by)
     client_form = ClientForm()
-    if request.method == 'POST':
-        if 'add_client' in request.POST:
-            client_form = ClientForm(request.POST)
-            if client_form.is_valid():
-                client = client_form.save(commit=False)
-                csave = client_form.save(*filter_by)
-                # bill = Bill.objects.create(uid=csave.pk)
-                # bill_id = User.objects.get(id=csave.pk)
-                # bill_id.bill_id = bill.id
-                # bill_id.save()
-            else:
-                print 'no'
     if filter_by == '1':
         users_list = users_list.filter(bill__deposit__gte=0, disable=False, deleted=False,)
     if filter_by == '2':
@@ -726,10 +723,10 @@ def clients(request):
         users_list = users_list.filter(deleted=True)
     if filter_by == '5':
         users_list = users_list.filter(credit__gt=0)
-    all = users_list.count()
-    end = users_list.filter(deleted=1).count()
-    disabled = users_list.filter(disable=1).count()
-    deleted = users_list.filter(deleted=1).count()
+    all = User.objects.all().count()
+    end = User.objects.filter(deleted=1).count()
+    disabled = User.objects.filter(disable=1).count()
+    deleted = User.objects.filter(deleted=1).count()
     pagin = pagins(users_list, request)
     if 'xml' in request.GET:
         xml_data = serializers.serialize("xml", pagin['users'])

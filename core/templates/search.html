@@ -103,7 +103,7 @@
 {% block content %}
     <div class="row">
         <div class="column">
-            <div class="ui blue mini segment">
+            <div class="ui blue segment">
                 <div id="search_panel" class="ui accordion field">
                     <div class="active title"><i class="icon dropdown"></i> {% trans 'Search' %} </div>
                     <div class="active content field">
@@ -113,7 +113,7 @@
                                 <p class="text-center">{{ error }}</p>
                             </div>
                         {% endif %}
-                        <div class="ui four mini item menu">
+                        <div class="ui four item menu">
                             <a href="{% url 'core:search' %}?search_type=1" class="item {% if search_type == '1' %}active{% endif %}">{% trans 'Clients' %}</a>
                             <a href="{% url 'core:search' %}?search_type=2" class="item {% if search_type == '2' %}active{% endif %}">{% trans 'Company' %}</a>
                             <a href="{% url 'core:search' %}?search_type=3" class="item {% if search_type == '3' %}active{% endif %}">{% trans 'Fees' %}</a>
@@ -121,7 +121,7 @@
                         </div>
                         <div class="ui grid">
                             <div class="column">
-                                <form class="ui mini form" method="GET">
+                                <form class="ui form" method="GET">
                                     {% if search_type == '1' %}
                                         <div class="field">
                                             <div class="two fields">
@@ -247,7 +247,7 @@
             <div class="column">
                 <div class="ui tiny stacked segment">
                     {% if search_type == '1' %}
-                        <div class="ui sticky mini fluid pagination menu">
+                        <div class="ui sticky fluid pagination menu">
                             <div class="header item">{% trans 'Export' %}</div>
                             <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
                                 <i class="gamepad icon"></i>
@@ -293,7 +293,7 @@
                             {% endif %}
                         </div>
                     {% elif search_type == '3' %}
-                        <div class="ui sticky mini fluid pagination menu">
+                        <div class="ui sticky fluid pagination menu">
                             <div class="header item">{% trans 'Export' %}</div>
                             <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
                                 <i class="gamepad icon"></i>

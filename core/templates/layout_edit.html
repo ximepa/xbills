@@ -5,7 +5,7 @@
 {% block layout %}
     <div class="row">
         <div class="column">
-            <div class="ui stackable top attached mini tabular menu">
+            <div class="ui stackable top attached tabular menu">
                 <div class="{% active request 'core:client' uid %} {% active request 'core:client_statistics' uid %} item"><a href="{% url 'core:client' uid %}"><i class="fa fa-info" aria-hidden="true"></i> {% trans 'Base' %}</a></div>
                 <div class="{% active request 'core:client_payments' uid %} item"><a href="{% url 'core:client_payments' uid %}">{% trans 'Payments' %}</a></div>
                 <div class="{% active request 'core:client_fees' uid %} item"><a href="{% url 'core:client_fees' uid %}">{% trans 'Fees' %}</a></div>
@@ -23,10 +23,10 @@
                 {% endif %}
             </div>
             <div class="ui bottom attached active tab segment">
-                <div class="ui sticky stackable mini menu">
+                <div class="ui sticky stackable menu">
                     <a class="item" id="session">
                         {% if dv_session %}
-                            <div class="floating ui mini green label">
+                            <div class="floating ui green label">
                                 {{ dv_session.count }}
                             </div>
                             <i class="idea orange icon"></i>
@@ -43,11 +43,11 @@
                         <i class="idea icon"></i>
                         {% trans 'Error' %}
                     </a>
-                    <div id="browse" class="ui flowing mini popup">
+                    <div id="browse" class="ui flowing popup">
                         <div class="ui column stacked grid">
                             <div class="ui segment">
                                 {% if dv_session %}
-                                    <table class="ui {{ request.user.theme }} small selectable striped table">
+                                    <table class="ui {{ request.user.theme }} selectable striped table">
                                         <thead class="">
                                             <tr>
                                                 <th>IP</th>
@@ -124,20 +124,8 @@
                             </div>
                         </form>
                     </div>
-                    <div class="centers menu">
-                        <div class="ui dropdown item" onclick="$('.ui.basic.modal').modal('show')">
-                            <i class="fa fa-comment"></i>
-                        </div>
-                    </div>
-                    <div class="right menu">
-                        <div class="ui dropdown item">
-                            {{ request.user.login }}
-                            <i class="dropdown icon"></i>
-                            <div class="menu">
-                                <a class="item" href="{% url 'core:administrator_edit' request.user %}">{% trans 'Profile' %}</a>
-                                <a class="item" href="{% url 'core:logout' %}">{% trans 'Logout' %}</a>
-                            </div>
-                        </div>
+                    <div class="ui dropdown item" onclick="$('.ui.basic.modal').modal('show')">
+                        <i class="fa fa-comment"></i>
                     </div>
                     {% block client_options %}
                     {% endblock client_options %}

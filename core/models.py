@@ -175,7 +175,7 @@ class Company(models.Model):
 class User(models.Model):
 
     id = models.AutoField(primary_key=True, db_column='uid', unique=True)
-    login = models.CharField(max_length=20, db_column='id')
+    login = models.CharField(max_length=20, db_column='id', unique=True)
     disable = models.BooleanField(default=0, db_column='disable', blank=True)
     company = models.ForeignKey(Company, related_name='clients', blank=True, null=True)
     credit = models.FloatField(db_column='credit', default='0.00', blank=True, null=True)
@@ -255,19 +255,6 @@ class User(models.Model):
         cursor.execute(q)
         row = cursor.fetchone()
         self.password = row[0]
-
-    # def save(self, *args, **kwargs):
-    #     print args
-    #     print kwargs
-    #     print self.pk
-    #     # bill = Bill.objects.create(uid=self.id)
-    #     # print bill.uid
-    #     # self.bill_id = bill.id
-    #     # if 'form' in kwargs:
-    #     #     form = kwargs['form']
-    #     # else:
-    #     #     form = None
-    #     # super(User, self).save(*args, **kwargs)
 
 
 class Group(models.Model):
@@ -360,18 +347,18 @@ class AbonUserList(models.Model):
 
 class UserPi(models.Model):
 
-    user_id = models.OneToOneField('User', related_name="user_pi", primary_key=True, db_column='uid', unique=True)
-    fio = models.CharField(max_length=100, unique=True)
+    user = models.OneToOneField('User', related_name="user_pi", primary_key=True, db_column='uid', unique=True)
+    fio = models.CharField(max_length=100, blank=True, default='')
     #house = models.ForeignKey('House', max_length=100, db_column='address_build', blank=True, default='0')
-    email = models.EmailField(db_column='email')
+    email = models.EmailField(db_column='email', blank=True)
     street = models.ForeignKey('Street', max_length=100, db_column='address_street', blank=True, null=True)
-    kv = models.CharField(max_length=10, db_column='address_flat')
-    phone = models.CharField(max_length=100, db_column='phone')
-    phone2 = models.CharField(max_length=100, db_column='phone2')
-    city = models.CharField(max_length=100, db_column='city')
+    kv = models.CharField(max_length=10, db_column='address_flat', blank=True)
+    phone = models.CharField(max_length=100, db_column='phone', blank=True)
+    phone2 = models.CharField(max_length=100, db_column='phone2', blank=True)
+    city = models.CharField(max_length=100, db_column='city', blank=True)
     location = models.ForeignKey('House', db_column='location_id', related_name='location', blank=True, null=True)
-    contract_date = models.DateField(db_column='contract_date')
-    comments = models.TextField()
+    contract_date = models.DateField(db_column='contract_date', default=datetime.date.today(), blank=True, null=True)
+    comments = models.TextField(blank=True)
 
     @property
     def pi(self):

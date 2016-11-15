@@ -38,14 +38,14 @@ class AdministratorForm(forms.ModelForm):
             'style',
         ]
         widgets = {
-            'login': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
-            'name': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'login': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Login'}),
+            'name': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
             'disable': forms.CheckboxInput(),
             'theme': forms.Select(attrs={'class': ''}),
-            'email': forms.EmailInput(attrs={'class': 'ui small input', 'placeholder': u'Email'}),
-            'address': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Address'}),
-            'cell_phone': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Phone'}),
-            'phone': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Phone'}),
+            'email': forms.EmailInput(attrs={'class': 'ui input', 'placeholder': u'Email'}),
+            'address': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Address'}),
+            'cell_phone': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Phone'}),
+            'phone': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Phone'}),
             'style': forms.Select(attrs={'class': ''}),
         }
 
@@ -68,15 +68,15 @@ class AdministratorAddForm(forms.ModelForm):
             'style',
         ]
         widgets = {
-            'login': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
-            'password': forms.PasswordInput(attrs={'class': 'ui small input', 'placeholder': u'Password'}),
-            'name': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'login': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Login'}),
+            'password': forms.PasswordInput(attrs={'class': 'ui input', 'placeholder': u'Password'}),
+            'name': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
             'disable': forms.CheckboxInput(),
             'theme': forms.Select(attrs={'class': ''}),
-            'email': forms.EmailInput(attrs={'class': 'ui small input', 'placeholder': u'Email'}),
-            'address': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Address'}),
-            'cell_phone': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Phone'}),
-            'phone': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Phone'}),
+            'email': forms.EmailInput(attrs={'class': 'ui input', 'placeholder': u'Email'}),
+            'address': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Address'}),
+            'cell_phone': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Phone'}),
+            'phone': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Phone'}),
             'style': forms.Select(attrs={'class': ''}),
         }
 
@@ -89,22 +89,22 @@ class SearchForm(forms.Form):
        (1, _("Disabled")),
        (2, _("Not Active")),
     )
-    login = forms.CharField(widget=forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}))
-    uid = forms.CharField(widget=forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'UID'}))
+    login = forms.CharField(widget=forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Login'}))
+    uid = forms.CharField(widget=forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'UID'}))
     disabled = forms.ChoiceField(widget=forms.RadioSelect(), choices=DISABLED)
     district = forms.ModelChoiceField(widget=forms.Select(attrs={'class': '', 'placeholder': u'District'}), queryset=District.objects.all(), required=False)
     street = forms.ModelChoiceField(widget=forms.Select(attrs={'class': '', 'placeholder': u'Street'}), queryset=Street.objects.all(), required=False)
     house = forms.ModelChoiceField(widget=forms.Select(attrs={'class': '', 'placeholder': u'House'}), queryset=House.objects.filter(~Q(number="")), required=False,)
-    flat = forms.CharField(widget=forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Flat'}))
+    flat = forms.CharField(widget=forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Flat'}))
 
 
 class SearchFeesForm(forms.Form):
-    login = forms.CharField(widget=forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}))
+    login = forms.CharField(widget=forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Login'}))
     group = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'ui search dropdown', 'placeholder': u'District'}), queryset=Group.objects.all(), required=False)
 
 
 class SearchPaymentsForm(forms.Form):
-    login = forms.CharField(widget=forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}))
+    login = forms.CharField(widget=forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Login'}))
     group = forms.ModelChoiceField(widget=forms.Select(attrs={'class': 'ui search dropdown', 'placeholder': u'District'}), queryset=Group.objects.all(), required=False)
 
 
@@ -148,16 +148,16 @@ class ClientForm(forms.ModelForm):
         widgets = {
             'disable': forms.CheckboxInput(),
             'company': forms.Select(attrs={'class': 'ui search dropdown'}),
-            'credit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Credit'}),
-            'login': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
-            'credit_date': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
-            'reduction': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Reduction'}),
-            'reduction_date': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
-            'activate': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
-            'expire': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
-            'deleted': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
-            # 'registration': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
-            # 'bill': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Deposite'}),
+            'credit': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Credit'}),
+            'login': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Login'}),
+            'credit_date': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'0000-00-00'}),
+            'reduction': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Reduction'}),
+            'reduction_date': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'0000-00-00'}),
+            'activate': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'0000-00-00'}),
+            'expire': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'0000-00-00'}),
+            'deleted': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Login'}),
+            # 'registration': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'0000-00-00'}),
+            # 'bill': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Deposite'}),
         }
 
 
@@ -178,13 +178,13 @@ class DvForm(forms.ModelForm):
         ]
 
         widgets = {
-            'user': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'UID'}),
-            'cid': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Login'}),
-            'speed': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Speed (kb)', 'value': '0'}),
-            'ip': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'IP', 'value': '0.0.0.0'}),
-            'netmask': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Credit'}),
-            'logins': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'0000-00-00'}),
-            'filter_id': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Filter ID'}),
+            'user': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'UID'}),
+            'cid': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Login'}),
+            'speed': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Speed (kb)', 'value': '0'}),
+            'ip': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'IP', 'value': '0.0.0.0'}),
+            'netmask': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Credit'}),
+            'logins': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'0000-00-00'}),
+            'filter_id': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Filter ID'}),
             'tp': forms.Select(attrs={'class': 'ui dropdown'}),
         }
 
@@ -204,7 +204,7 @@ class UserPiForm(forms.ModelForm):
     class Meta:
         model = UserPi
         fields = [
-            'user_id',
+            # 'user',
             'fio',
             'email',
             'street',
@@ -218,15 +218,15 @@ class UserPiForm(forms.ModelForm):
         ]
 
         widgets = {
-            'user_id': forms.HiddenInput(),
-            'fio': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'FIO'}),
-            'email': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Mail'}),
-            'kv': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Flat'}),
-            'phone': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Phone'}),
-            'phone2': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Phone'}),
+            # 'user': forms.HiddenInput(),
+            'fio': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'FIO'}),
+            'email': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Mail'}),
+            'kv': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Flat'}),
+            'phone': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Phone'}),
+            'phone2': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Phone'}),
             'street': forms.Select(attrs={'class': 'ui dropdown'}),
             'location': forms.Select(attrs={'class': 'ui dropdown'}),
-            'contract_date': forms.TextInput(attrs={'class': 'ui small input', 'value': '0000-00-00', 'placeholder': '0000-00-00'}),
+            'contract_date': forms.TextInput(attrs={'class': 'ui input', 'value': '0000-00-00', 'placeholder': '0000-00-00'}),
         }
 
 
@@ -250,16 +250,16 @@ class ServerForm(forms.ModelForm):
         ]
 
         widgets = {
-            'ip': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'IP'}),
-            'name': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
-            'nas_identifier': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Flat'}),
-            'descr': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'descr'}),
+            'ip': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'IP'}),
+            'name': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'nas_identifier': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Flat'}),
+            'descr': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'descr'}),
             'nas_type': forms.Select(attrs={'class': 'ui dropdown'}),
-            'mng_host_port': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'mac'}),
-            'mng_user': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'mac'}),
-            'mac': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'mac'}),
-            'alive': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'mac'}),
-            'rad_pairs': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'mac'}),
+            'mng_host_port': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'mac'}),
+            'mng_user': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'mac'}),
+            'mac': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'mac'}),
+            'alive': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'mac'}),
+            'rad_pairs': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'mac'}),
         }
 
 
@@ -317,37 +317,37 @@ class TpForm(forms.ModelForm):
         ]
 
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'name': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
             'gid': forms.Select(attrs={'class': 'ui dropdown'}),
-            'uplimit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
-            'logins': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
-            'day_fee': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
-            'month_fee': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
-            'day_time_limit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
-            'week_time_limit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
-            'month_time_limit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
-            'total_time_limit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'uplimit': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'logins': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'day_fee': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'month_fee': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'day_time_limit': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'week_time_limit': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'month_time_limit': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'total_time_limit': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
             'small_deposit_action': forms.Select(attrs={'class': 'ui dropdown'}),
-            'day_traf_limit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
-            'week_traf_limit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
-            'month_traf_limit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
-            'total_traf_limit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'day_traf_limit': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'week_traf_limit': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'month_traf_limit': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'total_traf_limit': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
             'octets_direction': forms.Select(attrs={'class': 'ui dropdown'}),
-            'activate_price': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
-            'change_price': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
-            'credit_tresshold': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
-            'credit': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
-            'max_session_duration': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
-            'filter_id': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
-            'age': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'activate_price': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'change_price': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'credit_tresshold': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'credit': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'max_session_duration': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'filter_id': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'age': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
             'payment_type': forms.Select(attrs={'class': 'ui dropdown'}),
-            'min_session_cost': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
-            'min_use': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
-            'traffic_transfer_period': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
-            'neg_deposit_filter_id': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'min_session_cost': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'min_use': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'traffic_transfer_period': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'neg_deposit_filter_id': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
             'neg_deposit_ippool': forms.Select(attrs={'class': 'ui dropdown'}),
             'ippool': forms.Select(attrs={'class': 'ui dropdown'}),
-            'priority': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
-            'fine': forms.TextInput(attrs={'class': 'ui small input', 'placeholder': u'Name'}),
+            'priority': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'fine': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
             'next_tp_id': forms.Select(attrs={'class': 'ui dropdown'}),
         }

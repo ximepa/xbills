@@ -12,7 +12,7 @@
     {% trans 'Edit Servers' %}
 {% endblock %}
 {% block layout %}
-    <div id="filter_table" class="ui small modal">
+    <div id="filter_table" class="ui modal">
         <i class="close icon"></i>
         <div class="header">
             Profile Picture
@@ -78,7 +78,7 @@
     <div class="row">
         <div class="column">
         {{ server_form.errors }}
-            <div class="ui {{ request.user.theme }} mini segment">
+            <div class="ui {{ request.user.theme }} segment">
                 <div id="add_server" class="ui accordion field">
                     <div class="title"><i class="icon dropdown"></i> {% trans 'Add new server' %} </div>
                     <div class="content field">
@@ -146,14 +146,14 @@
             {% else %}
                 <script>$('#add_server').accordion('close', 0);</script>
             {% endif %}
-            <div class="ui {{ request.user.theme }} mini segment">
-                <div class="ui sticky mini fluid pagination menu">
+            <div class="ui {{ request.user.theme }} segment">
+                <div class="ui sticky fluid pagination menu">
                     <div class="right item" onClick="$('#filter_table').modal('show');" style="cursor: pointer">
                             <i class="fa fa-cogs"></i>
                     </div>
                 </div>
                 {% if servers %}
-                    <table class="ui small very compact selectable striped table" id="NAS_LIST_">
+                    <table class="ui very compact selectable striped table" id="NAS_LIST_">
                         <thead>
                         <tr>
                             <th>
@@ -197,14 +197,14 @@
                             <td><a title="IP_Pool" class='btn btn-default btn-xs'>IP_Pool</a></td>
                             <td>
                                 <form method="post">{% csrf_token %}
-                                    <button type="submit" name="edit" value="{{ server.id }}" title="{% trans 'Edit server' %}" class="mini ui orange basic button">
+                                    <button type="submit" name="edit" value="{{ server.id }}" title="{% trans 'Edit server' %}" class="ui orange basic button">
                                         <i class="fa fa-pencil-square-o fa-fw"></i>
                                     </button>
                                 </form>
                             </td>
                             <td>
                                 <form method="post">{% csrf_token %}
-                                    <button type="submit" name="delete" value="{{ server.id }}" title="{% trans 'Delete server' %}" class="mini ui red basic button">
+                                    <button type="submit" name="delete" value="{{ server.id }}" title="{% trans 'Delete server' %}" class="ui red basic button">
                                         <i class="fa fa-trash-o fa-fw"></i>
                                     </button>
                                 </form>
@@ -224,7 +224,7 @@
             <div class="row">
                 <div class="column">
                     <div class="ui tiny stacked segment">
-                        <div class="ui sticky mini fluid pagination menu">
+                        <div class="ui sticky fluid pagination menu">
                             <div class="header item">{% trans 'Export' %}</div>
                             <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
                                 <i class="gamepad icon"></i>
@@ -269,7 +269,7 @@
                                 {% endif %}
                             {% endif %}
                         </div>
-                        <table class="ui blue small very compact selectable striped table">
+                        <table class="ui blue very compact selectable striped table">
                             <thead>
                                 <tr role="row">
                                     <th>{% trans 'Login' %}</th>
