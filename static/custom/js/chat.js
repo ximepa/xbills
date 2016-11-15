@@ -39,6 +39,7 @@ $(document).ready(function($) {
 
 	function receiveMessage(msg) {
 		var data = jQuery.parseJSON(msg);
+
 		if (billboard.length == 0) {
 			noty({
 				login: data.login,

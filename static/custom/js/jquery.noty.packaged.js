@@ -59,7 +59,7 @@
 
             // Generating noty bar
             // var $bar = $('<div class="noty_bar noty_type_' + this.options.type + '"></div>').attr('id', this.options.id);
-            var $bar = $('<div class="ui segment noty_bar"></div>').attr('id', this.options.id);
+            var $bar = $('<div class="ui orange segment noty_bar"></div>').attr('id', this.options.id);
             if (this.options.uid) {
                 $bar.append(this.options.template_uid).find('.noty_uid').html(this.options.uid);
             }

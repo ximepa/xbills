@@ -258,7 +258,12 @@ def search(request):
     search_form = SearchForm()
     search_fees_form = SearchFeesForm()
     search_payments_form = SearchPaymentsForm()
-    districts = District.objects.all()
+    print request.GET
+    if 'district' in request.GET:
+        print 'asdasd'
+        return HttpResponse(helpers.api_search(District))
+
+
     filter_params = {}
     includes = []
     # try:
@@ -928,12 +933,14 @@ def chat(request):
     if request.method == 'POST' and request.POST != '':
         print request.POST
         if request.POST['message']:
+            print request.POST
             message = {"login": request.user.login, "date": datetime.datetime.now().strftime("%H:%M:%S"), "message": request.POST['message']}
             if request.POST.get('user', None) == 'All':
                 RedisPublisher(facility=request.POST['room'], broadcast=True).publish_message(RedisMessage('%s' % json.dumps(message)))
             else:
-                RedisPublisher(facility=request.POST['room'], users=[request.POST.get('user')]).publish_message(
-                    RedisMessage('%s' % json.dumps(message)))
+                if request.user.login != request.POST.get('user'):
+                    RedisPublisher(facility=request.POST['room'], users=[request.POST.get('user')]).publish_message(
+                        RedisMessage('%s' % json.dumps(message)))
         else:
             print 'no message'
     return render(request, 'chat.html', locals())

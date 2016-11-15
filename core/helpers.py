@@ -1,3 +1,4 @@
+import json
 import random
 import csv
 from django.conf import settings
@@ -46,3 +47,15 @@ def export_to_xml(request, queryset):
 def get_online():
     ids = cache.get('online-now')
     return Admin.objects.filter(id__in=ids)
+
+
+def api_search(model):
+    list = []
+    for item in model.objects.all():
+        dict_resp = {}
+        dict_resp['value'] = str(item.id)
+        dict_resp['name'] = item.name
+        list.append(dict_resp)
+    dict_out = {"success": "true", "results": list}
+    jsonFormat = json.dumps(dict_out)
+    return jsonFormat

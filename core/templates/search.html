@@ -4,22 +4,22 @@
 {% load staticfiles %}
 {% block extra_js %}
 {#    <script src="{% static 'djangorpc/js/jquery-1.9.1.min.js' %}"></script>#}
-    <script src="{% static 'djangorpc/js/jquery.util.js' %}"></script>
-    <script src="{% static 'djangorpc/js/jquery.rpc.js' %}"></script>
-    <script src="{% static 'djangorpc/js/jquery.form.js' %}"></script>
-    <script src="{% static 'custom/js/csrf.js' %}"></script>
+{#    <script src="{% static 'djangorpc/js/jquery.util.js' %}"></script>#}
+{#    <script src="{% static 'djangorpc/js/jquery.rpc.js' %}"></script>#}
+{#    <script src="{% static 'djangorpc/js/jquery.form.js' %}"></script>#}
+    <script src="{% static 'custom/js/search.js' %}"></script>
 {% endblock %}
 {% block extra_css %}
 {% endblock %}
 {% block extra_scripts %}
 <script type="application/javascript">
-$(document).ready(function() {
-    if ($('#id_district').val()) {
-        getStreets($('#id_district').val())
-    }
-    if ($('#id_street').val()) {
-        getHouses($('#id_street').val())
-    }
+{#$(document).ready(function() {#}
+{#    if ($('#id_district').val()) {#}
+{#        getStreets($('#id_district').val())#}
+{#    }#}
+{#    if ($('#id_street').val()) {#}
+{#        getHouses($('#id_street').val())#}
+{#    }#}
 {#    if (!$("#id_street").val()) {#}
 {#        $("#id_street option").remove();#}
 {#        $('#id_street').append($("<option></option>").attr("value", '0').text('---------'));#}
@@ -28,70 +28,69 @@ $(document).ready(function() {
 {#        $("#id_house option").remove();#}
 {#        $('#id_house').append($("<option></option>").attr("value", '0').text('---------'));#}
 {#    }#}
-    function getStreets(value){
-        url = "/api/streets/" + "?district=" + value;
-        $.ajax({
-            type: "GET",
-            url: url,
-            datatype: 'json',
-            beforeSend: function() {
-                $('#response').html("<img src='/static/custom/images/ajax-loader.gif' />");
-            },
-            success: function(data){
-                //var parsed_data = $.parseJSON(data);
+{#    function getStreets(value){#}
+{#        url = "/api/streets/" + "?district=" + value;#}
+{#        $.ajax({#}
+{#            type: "GET",#}
+{#            url: url,#}
+{#            datatype: 'json',#}
+{#            beforeSend: function() {#}
+{#                $('#response').html("<img src='/static/custom/images/ajax-loader.gif' />");#}
+{#            },#}
+{#            success: function(data){#}
+{#                //var parsed_data = $.parseJSON(data);#}
 {#                $('#id_street').append($("<option></option>").attr("value", '').text('-----------'));#}
-                $.each(data, function(index, val) {
-                    $('#id_street').append($("<option></option>").attr("value", val.id).text(val.name));
-                });
-            }
-        });
-    }
-    function getHouses(value){
-        url = '/api/houses/' + '?street=' + value;
-        $.ajax({
-            type: "GET",
-            url: url,
-            datatype: 'json',
-            beforeSend: function() {
-                $('#response').html("<img src='/static/custom/images/ajax-loader.gif' />");
-            },
-            success: function(data){
-                //var parsed_data = $.parseJSON(data);
+{#                $.each(data, function(index, val) {#}
+{#                    $('#id_street').append($("<option></option>").attr("value", val.id).text(val.name));#}
+{#                });#}
+{#            }#}
+{#        });#}
+{#    }#}
+{#    function getHouses(value){#}
+{#        url = '/api/houses/' + '?street=' + value;#}
+{#        $.ajax({#}
+{#            type: "GET",#}
+{#            url: url,#}
+{#            datatype: 'json',#}
+{#            beforeSend: function() {#}
+{#                $('#response').html("<img src='/static/custom/images/ajax-loader.gif' />");#}
+{#            },#}
+{#            success: function(data){#}
+{#                //var parsed_data = $.parseJSON(data);#}
 {#                $('#id_house').append($("<option></option>").attr("value", '').text('-----------'));#}
-                $.each(data, function(index, val) {
-                    $('#id_house').append($("<option></option>").attr("value", val.id).text(val.number));
-                });
-            }
-        });
-    }
-    $('#id_district').on('change', function(){
-        if (this.value){
-            $("#id_street option").remove();
-            getStreets(this.value);
-            $('#id_street').append($("<option></option>").attr("value", '0').text('---------'));
-        } else {
-            $("#id_street option").remove();
-            $('#id_street').append($("<option></option>").attr("value", '0').text('---------'));
-        }
-    });
-    $('#id_street').on('change', function(){
-        if (this.value){
-            $("#id_house option").remove();
-            getHouses(this.value);
-            $('#id_house').append($("<option></option>").attr("value", '0').text('---------'));
-        } else {
-            $("#id_house option").remove();
-            $('#id_house').append($("<option></option>").attr("value", '0').text('---------'));
-        }
-    });
-    $(document).ajaxSend(function(event, request, settings) {
-        $('#overlay').show();
-    });
-
-    $(document).ajaxComplete(function(event, request, settings) {
-        $('#overlay').hide();
-    });
-});
+{#                $.each(data, function(index, val) {#}
+{#                    $('#id_house').append($("<option></option>").attr("value", val.id).text(val.number));#}
+{#                });#}
+{#            }#}
+{#        });#}
+{#    }#}
+{#    $('#id_district').on('change', function(){#}
+{#        if (this.value){#}
+{#            $("#id_street option").remove();#}
+{#            getStreets(this.value);#}
+{#            $('#id_street').append($("<option></option>").attr("value", '0').text('---------'));#}
+{#        } else {#}
+{#            $("#id_street option").remove();#}
+{#            $('#id_street').append($("<option></option>").attr("value", '0').text('---------'));#}
+{#        }#}
+{#    });#}
+{#    $('#id_street').on('change', function(){#}
+{#        if (this.value){#}
+{#            $("#id_house option").remove();#}
+{#            getHouses(this.value);#}
+{#            $('#id_house').append($("<option></option>").attr("value", '0').text('---------'));#}
+{#        } else {#}
+{#            $("#id_house option").remove();#}
+{#            $('#id_house').append($("<option></option>").attr("value", '0').text('---------'));#}
+{#        }#}
+{#    });#}
+{#    $(document).ajaxSend(function(event, request, settings) {#}
+{#        $('#overlay').show();#}
+{#    });#}
+{##}
+{#    $(document).ajaxComplete(function(event, request, settings) {#}
+{#        $('#overlay').hide();#}
+{#    });#}
 </script>
 {% endblock %}
 {% block breadcrumbs %}
@@ -151,21 +150,21 @@ $(document).ready(function() {
                                             <div class="two fields">
                                                 <div class="field">
                                                     <label>{% trans 'District' %}</label>
-                                                    {{ search_form.district }}
+                                                    <select id="district" name="district" class="ui search dropdown"></select>
                                                 </div>
                                                 <div class="field">
                                                     <label>{% trans 'Street' %}</label>
-                                                    {{ search_form.street }}
+                                                    <select id="street" name="street" class="ui search dropdown"></select>
                                                 </div>
                                             </div>
                                             <div class="two fields">
                                                 <div class="field">
                                                     <label>{% trans 'House' %}</label>
-                                                    {{ search_form.house }}
+                                                    <select id="house" name="house" class="ui search dropdown"></select>
                                                 </div>
                                                 <div class="field">
                                                     <label>{% trans 'Flat' %}</label>
-                                                    {{ search_form.flat }}
+                                                    <input name="flat">
                                                 </div>
                                             </div>
                                             <input type="hidden" name="search" value="1">
