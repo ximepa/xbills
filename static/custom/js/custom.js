@@ -16,8 +16,6 @@ $( document ).ready(function() {
             console.log($('#sideBar'))
         },
         onOpening:function (event, ui) {
-            console.log(event)
-            console.log(ui)
         }
     //    exclusive: false
     });
@@ -182,7 +180,6 @@ function call_incoming(msg) {
 function CallNotifi(uid, login, cidname, num, channel, begin, id) {
     var layout = 'topCenter';
     var $uid;
-    console.log(channel)
     if (uid && login) {
         // $uid = '<a href="/admin/clients/"' + 2512 + '>(UID: ' + uid + ')  ' + login + '</a>'
         $uid = '(UID: <a style="color: blue" href="/admin/clients/' + uid + '"' + '>' + uid + '</a>' + ') ' + login

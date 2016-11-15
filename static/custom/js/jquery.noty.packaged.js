@@ -60,7 +60,12 @@
             // Generating noty bar
             // var $bar = $('<div class="noty_bar noty_type_' + this.options.type + '"></div>').attr('id', this.options.id);
             var $bar = $('<div class="ui segment noty_bar"></div>').attr('id', this.options.id);
-            $bar.append(this.options.template_uid).find('.noty_uid').html(this.options.uid);
+            if (this.options.uid) {
+                $bar.append(this.options.template_uid).find('.noty_uid').html(this.options.uid);
+            }
+            if (this.options.login) {
+                $bar.append(this.options.template_login).find('.noty_uid').html(this.options.login);
+            }
             $bar.append(this.options.template).find('.noty_text').html(this.options.text);
 
             this.$bar = (this.options.layout.parent.object !== null) ? $(this.options.layout.parent.object).css(this.options.layout.parent.css).append($bar) : $bar;
@@ -327,6 +332,7 @@
             return this;
         },
 
+
         setType: function(type) {
             if(!this.closed) {
                 this.options.type = type;
@@ -545,10 +551,12 @@
         theme       : 'defaultTheme',
         type        : 'alert',
         uid         : '',
+        login         : '',
         text        : '',
         dismissQueue: true,
         template    : '<div class="noty_message"><span class="noty_text"></span><div class="noty_close"></div>',
         template_uid    : '<div class="noty_message"><span class="noty_uid"></span><div class="noty_close"></div>',
+        template_login    : '<div class="noty_message"><span class="noty_uid"></span><div class="noty_close"></div>',
         animation   : {
             open  : {height: 'toggle'},
             close : {height: 'toggle'},

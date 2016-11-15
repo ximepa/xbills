@@ -21,7 +21,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for f in fees %}
+        {% for f in pagin.items %}
         <tr>
             <td>{{ f.id }}</td>
             <td><a href="{% url 'core:index' %}?index=clients&uid={{ f.uid.id }}">{{ f.uid.login }}</a></td>
