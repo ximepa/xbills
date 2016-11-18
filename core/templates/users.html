@@ -24,6 +24,12 @@
     <div class="row">
         <div class="column">
             <div class="ui {{ request.user.theme }} segment">
+            {% for f in get_fields %}
+                <dt>{{f.label|capfirst}}</dt>
+                    <dd>
+                        {{f.value|escape|urlize|linebreaks}}
+                    </dd>
+            {% endfor %}
                 <div class="ui stackable menu">
                     <div class="header item">{% trans 'Sort By' %}</div>
                     <a href="?{% url_replace request 'users_status' '0' %}" class="item {% if 'users_status=0' in request.get_full_path %}active{% elif not request.GET or 'order_by' in request.GET and not 'users_status' in request.GET %}active{% endif %}">

@@ -712,6 +712,12 @@ def clients(request):
     filter_by = request.GET.get('users_status', '0')
     order_by = request.GET.get('order_by', 'login')
     users_list = User.objects.all().order_by(order_by)
+    print [f.name for f in User._meta.get_fields()]
+    print [
+        f.name for f in User._meta.get_fields()
+        if (f.one_to_many or f.one_to_one)
+        and f.auto_created and not f.concrete
+    ]
     client_form = ClientForm()
     if filter_by == '1':
         users_list = users_list.filter(bill__deposit__gte=0, disable=False, deleted=False,)
@@ -729,10 +735,10 @@ def clients(request):
     deleted = User.objects.filter(deleted=1).count()
     pagin = pagins(users_list, request)
     if 'xml' in request.GET:
-        xml_data = serializers.serialize("xml", pagin['users'])
+        xml_data = serializers.serialize("xml", pagin['items'])
         return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
     if 'csv' in request.GET:
-        return helpers.export_to_csv(request, pagin['users'], fields=('id', 'login'), name='login')
+        return helpers.export_to_csv(request, pagin['items'], fields=('id', 'login'), name='login')
     return render(request, 'users.html', locals())
 
 

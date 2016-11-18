@@ -1,0 +1,65 @@
+{% load i18n %}
+{% load url %}
+<a class="item" id="session">
+    {% if dv_session %}
+        <div class="floating ui mini green label">
+            {{ dv_session.count }}
+        </div>
+        <i class="idea orange icon"></i>
+    {% else %}
+        <i class="idea icon"></i>
+    {% endif %}
+    {% trans 'Sessions' %}
+</a>
+<div id="browse" class="ui flowing mini popup">
+    <div class="ui column stacked grid">
+        <div class="ui segment">
+            {% if dv_session %}
+                <table class="ui small selectable striped table">
+                    <thead class="">
+                        <tr>
+                            <th>IP</th>
+                            <th>{% trans 'Time' %}</th>
+                            <th>In</th>
+                            <th>Out</th>
+                            <th>{% trans 'Server' %}</th>
+                            <th>{% trans 'Zap' %}</th>
+                            <th>{% trans 'Hangup' %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for s in dv_session %}
+                            <tr>
+                                <td>
+                                    {% ip_convert s.framed_ip_address %}
+                                </td>
+                                <td>
+                                    {% convert_timestamp_to_time s.started %}
+                                </td>
+                                <td>
+                                    {% convert_bytes s.acct_input_octets s.acct_input_gigawords%}
+                                </td>
+                                <td>
+                                    {% convert_bytes s.acct_output_octets s.acct_output_gigawords%}
+                                </td>
+                                <td>
+                                    {{ s.nas__name }}
+                                </td>
+                                <td>
+                                    <a class="btn btn-xs btn-link" href="#">
+                                        <span class="fa fa-times fa-fw"></span>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="btn btn-xs btn-link" href="?hangup&acct_session_id={{ s.acct_session_id }}&nas_id={{ s.nas__id }}&port_id={{ s.nas_port_id }}&user_name={{ s.user_name }}"><span class="fa fa-power-off fa-fw"></span></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                {% trans 'No Sessions' %}
+            {% endif %}
+        </div>
+    </div>
+</div>

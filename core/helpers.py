@@ -59,3 +59,38 @@ def api_search(model):
     dict_out = {"success": "true", "results": list}
     jsonFormat = json.dumps(dict_out)
     return jsonFormat
+
+
+def get_all_fields(model):
+    """Returns a list of all field names on the instance."""
+    fields = []
+    for f in model._meta.fields:
+
+        fname = f.name
+        # resolve picklists/choices, with get_xyz_display() function
+        get_choice = 'get_'+fname+'_display'
+        if hasattr(model, get_choice):
+            value = getattr(model, get_choice)()
+            print 'hasattr'
+            print value
+            print '====='
+        else:
+            try :
+                value = getattr(model, fname)
+                print 'getattr'
+                print value
+                print '========'
+            except AttributeError:
+                value = None
+
+        # only display fields with values and skip some fields entirely
+        if f.editable and value and f.name not in ('id', 'status', 'workshop', 'user', 'complete') :
+
+            fields.append(
+              {
+               'label':f.verbose_name,
+               'name':f.name,
+               'value':value,
+              }
+            )
+    return fields
