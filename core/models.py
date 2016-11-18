@@ -179,7 +179,7 @@ class User(models.Model):
     login = models.CharField(max_length=20, db_column='id', unique=True)
     disable = models.BooleanField(default=0, db_column='disable', blank=True)
     company = models.ForeignKey(Company, related_name='clients', blank=True, null=True)
-    credit = models.FloatField(db_column='credit', default='0.00', blank=True, null=True)
+    credit = models.FloatField(db_column='credit', default=0, blank=True, null=True)
     credit_date = models.DateField(db_column='credit_date', blank=True, null=True)
     gid = models.ForeignKey('Group', db_column='gid', related_name='user_group', blank=True, null=True)
     reduction = models.FloatField(db_column='reduction', default='0.00', blank=True)
@@ -188,7 +188,7 @@ class User(models.Model):
     expire = models.DateField(db_column='expire', blank=True, null=True)
     deleted = models.BooleanField(db_column='deleted', default=0)
     registration = models.DateField(auto_now_add=True)
-    bill = models.OneToOneField('Bill', blank=True, null=True)
+    bill = models.ForeignKey('Bill', blank=True, null=True)
 
     def __unicode__(self):
         return self.login

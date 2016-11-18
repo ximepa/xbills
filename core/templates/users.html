@@ -24,6 +24,12 @@
     <div class="row">
         <div class="column">
             <div class="ui {{ request.user.theme }} segment">
+            {% for f in get_fields %}
+                <dt>{{f.label|capfirst}}</dt>
+                    <dd>
+                        {{f.value|escape|urlize|linebreaks}}
+                    </dd>
+            {% endfor %}
                 <div class="ui stackable menu">
                     <div class="header item">{% trans 'Sort By' %}</div>
                     <a href="?{% url_replace request 'users_status' '0' %}" class="item {% if 'users_status=0' in request.get_full_path %}active{% elif not request.GET or 'order_by' in request.GET and not 'users_status' in request.GET %}active{% endif %}">
@@ -33,7 +39,7 @@
                         {% trans 'Active' %}
                     </a>
                     <a href="?{% url_replace request 'users_status' '2' %}" class="item {% if 'users_status=2' in request.get_full_path %}active{% endif %}">
-                        {% trans 'Debtors' %}
+                        {% trans 'Debtors' %} <div class="floating ui blue label">{{ debtors }}</div>
                     </a>
                     <a href="?{% url_replace request 'users_status' '3' %}" class="item {% if 'users_status=3' in request.get_full_path %}active{% endif %}">
                         {% trans 'Disabled' %} <div class="floating ui blue label">{{ disabled }}</div>
@@ -42,7 +48,7 @@
                         {% trans 'Deleted' %} <div class="floating ui blue label">{{ deleted }}</div>
                     </a>
                     <a href="?{% url_replace request 'users_status' '5' %}" class="item {% if 'users_status=5' in request.get_full_path %}active{% endif %}">
-                        {% trans 'Credit' %}
+                        {% trans 'Credit' %} <div class="floating ui blue label">{{ users_credit }}</div>
                     </a>
                     <div class="header item">{% trans 'Export' %}</div>
                     <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">

@@ -719,23 +719,25 @@ def clients(request):
     if filter_by == '1':
         users_list = users_list.filter(bill__deposit__gte=0, disable=False, deleted=False,)
     if filter_by == '2':
-        users_list = users_list.filter(bill__deposit__lt=0, credit=0)
+        users_list = users_list.filter(bill__deposit__lt=0, disable=False, deleted=False,)
     if filter_by == '3':
         users_list = users_list.filter(disable=True, deleted=False)
     if filter_by == '4':
         users_list = users_list.filter(deleted=True)
     if filter_by == '5':
-        users_list = users_list.filter(credit__gt=0)
+        users_list = users_list.filter(credit__gt=0, disable=False, deleted=False)
     all = User.objects.all().count()
     end = User.objects.filter(deleted=1).count()
     disabled = User.objects.filter(disable=1).count()
     deleted = User.objects.filter(deleted=1).count()
+    users_credit = User.objects.filter(credit__gt=0, disable=False, deleted=False).count()
+    debtors = User.objects.filter(bill__deposit__lt=0, disable=False, deleted=False).count()
     pagin = pagins(users_list, request)
     if 'xml' in request.GET:
-        xml_data = serializers.serialize("xml", pagin['users'])
+        xml_data = serializers.serialize("xml", pagin['items'])
         return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
     if 'csv' in request.GET:
-        return helpers.export_to_csv(request, pagin['users'], fields=('id', 'login'), name='login')
+        return helpers.export_to_csv(request, pagin['items'], fields=('id', 'login'), name='login')
     return render(request, 'users.html', locals())
 
 
