@@ -150,19 +150,20 @@ class Bill(models.Model):
 
 class Company(models.Model):
 
-    bill = models.ForeignKey(Bill, related_name='companies')
+    id = models.AutoField(primary_key=True, unique=True)
+    bill = models.OneToOneField('Bill', blank=True, null=True)
     name = models.CharField(max_length=100, unique=True)
-    registration = models.DateField(default='0000-00-00')
-    credit = models.FloatField(default=0)
-    credit_date = models.DateField(default='0000-00-00')
+    registration = models.DateField(auto_now=True)
+    credit = models.DecimalField(max_digits=5, decimal_places=2, default=0.00, null=True)
+    credit_date = models.DateField(blank=True, null=True)
     address = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)
     representative = models.CharField(max_length=120)
     disable = models.SmallIntegerField(default=0)
     tax_number = models.CharField(max_length=250)
-    bank_account = models.CharField(max_length=250)
-    bank_name = models.CharField(max_length=150)
-    cor_bank_account = models.CharField(max_length=150)
+    bank_account = models.CharField(max_length=250, blank=True, null=True)
+    bank_name = models.CharField(max_length=150, blank=True, null=True)
+    cor_bank_account = models.CharField(max_length=150, blank=True, null=True)
 
     def __unicode__(self):
         return self.name
@@ -746,3 +747,15 @@ class AdminSettings(models.Model):
     class Meta:
         db_table = 'admin_settings'
         unique_together = ('admin_id', 'object')
+
+
+class Chat(models.Model):
+    id = models.AutoField(unique=True, primary_key=True)
+    datetime = models.DateTimeField(auto_now_add=True)
+    status = models.IntegerField(default=0)
+    message = models.CharField(max_length=550)
+    user_from = models.CharField(max_length=20)
+    user_to = models.CharField(max_length=20)
+
+    class Meta:
+        db_table = 'chat'

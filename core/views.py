@@ -14,9 +14,9 @@ from core.vars import *
 from dv.helpers import Hangup
 from .auth_backend import AuthBackend
 from .models import User, Payment, Fees, Dv, UserPi, Street, House, District, Dv_calls, Server, ErrorsLog, Dv_log, Admin, num_to_ip, AdminSettings, \
-    AdminLog, ip_to_num, Group, Company, Bill, Tp
+    AdminLog, ip_to_num, Group, Company, Bill, Tp, Chat
 from .forms import AdministratorForm, SearchForm, SearchFeesForm, SearchPaymentsForm, ClientForm, DvForm, UserPiForm, AdministratorAddForm, \
-    ServerForm, TpForm
+    ServerForm, TpForm, CompanyForm
 from django.contrib import messages
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -259,9 +259,11 @@ def search(request):
     search_fees_form = SearchFeesForm()
     search_payments_form = SearchPaymentsForm()
     print request.GET
-    if 'district' in request.GET:
-        print 'asdasd'
-        return HttpResponse(helpers.api_search(District))
+    district = District.objects.all()
+    if 'DistrictID' in request.GET:
+        return HttpResponse(helpers.api_search(Street,request))
+    if 'StreetID' in request.GET:
+        return HttpResponse(helpers.api_search(House,request))
 
 
     filter_params = {}
@@ -468,7 +470,8 @@ def search(request):
             error = 'User not found'
         elif userpi.count() == 1:
             for u in userpi:
-                return redirect('core:client', uid=u.user_id.id)
+                print u
+                return redirect('core:client', uid=u.user_id)
         else:
             all = userpi.count()
             disabled = userpi.filter(user_id__disable=1).count()
@@ -766,10 +769,9 @@ def fees(request):
 
 @login_required()
 def company(request):
-    r_company = 1
     order_by = request.GET.get('order_by', 'name')
-    m_company = Company.objects.all().order_by(order_by)
-    pagin = pagins(m_company, request)
+    company = Company.objects.all().order_by(order_by)
+    pagin = pagins(company, request)
     if 'xml' in request.GET:
         xml_data = serializers.serialize("xml", company)
         return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
@@ -784,6 +786,19 @@ def company(request):
         user_js = serializers.serialize('json', user)
         return HttpResponse(user_js)
     return render(request, 'company.html', locals())
+
+
+@login_required()
+def company_add(request):
+    company_form = CompanyForm()
+    if request.POST.get('company_form', None) == 'add':
+        company_form = CompanyForm(request.POST)
+        if company_form.is_valid():
+            company = company_form.save()
+            bill = Bill.objects.create(company_id=company.pk)
+            company.bill_id = bill.pk
+            company.save()
+    return render(request, 'company_add.html', locals())
 
 
 @login_required()
@@ -815,8 +830,8 @@ def user_login(request):
             if not user.disable:
                 user.backend = 'core.auth_backend.AuthBackend'
                 login(request, user)
-                message = RedisMessage('<span style="color: blue; opacity: 0.5;">%s: %s is logged in</span>' % (datetime.datetime.now().strftime("%H:%M:%S"), username))  # create a welcome message to be sent to everybody
-                RedisPublisher(facility='global_chat', broadcast=True).publish_message(message)
+                #message = RedisMessage('<span style="color: blue; opacity: 0.5;">%s: %s is logged in</span>' % (datetime.datetime.now().strftime("%H:%M:%S"), username))  # create a welcome message to be sent to everybody
+                #RedisPublisher(facility='global_chat', broadcast=True).publish_message(message)
                 return HttpResponseRedirect(request.GET['next'])
             else:
                 error = u'Account is locked'
@@ -831,8 +846,8 @@ def user_login(request):
 
 @login_required()
 def logout_view(request):
-    message = RedisMessage('<span style="color: red; opacity: 0.5;">%s: %s is logged out</span>' % (datetime.datetime.now().strftime("%H:%M:%S"), request.user.login))  # create a welcome message to be sent to everybody
-    RedisPublisher(facility='global_chat', broadcast=True).publish_message(message)
+    #message = RedisMessage('<span style="color: red; opacity: 0.5;">%s: %s is logged out</span>' % (datetime.datetime.now().strftime("%H:%M:%S"), request.user.login))  # create a welcome message to be sent to everybody
+    #RedisPublisher(facility='global_chat', broadcast=True).publish_message(message)
     logout(request)
     return redirect('core:index')
 
@@ -938,6 +953,8 @@ def chat(request):
                 if request.user.login != request.POST.get('user'):
                     RedisPublisher(facility=request.POST['room'], users=[request.POST.get('user')]).publish_message(
                         RedisMessage('%s' % json.dumps(message)))
+		    chat = Chat.objects.create(user_from=request.user.login, user_to=request.POST.get('user'), status=1,  message=request.POST['message'])
+		    chat.save()
         else:
             print 'no message'
     return render(request, 'chat.html', locals())

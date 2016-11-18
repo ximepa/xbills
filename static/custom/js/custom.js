@@ -5,7 +5,10 @@ $( document ).ready(function() {
     //    $('.sidebar').sidebar('setting', {dimPage: false}).sidebar('toggle');
     //});
     //$('.sidebar').sidebar('setting', {dimPage: false}).sidebar({context: '.visible.example .bottom.segment'});
-    // $('.ui.dropdown').dropdown();
+    $('.ui.dropdown').dropdown();
+    //$('#street').dropdown('setting',{onChange : showHouse});
+    //$('#district').dropdown('setting',{onChange : showStreet});
+
     $('.menu .item').tab();
     $('.sticky').sticky();
     $('.popup').popup();
@@ -37,6 +40,8 @@ $( document ).ready(function() {
         document.getElementById("services").style.display = getCookie('services');
     }
 
+
+
     $('#table_group td').on('click', function () {
         var dimmer = $('body');
         dimmer.dimmer('show');
@@ -55,7 +60,11 @@ $( document ).ready(function() {
 		receive_message: call_incoming,
 		heartbeat_msg: '--heartbeat--'
 	});
+    // var $themeDropdown       = $('.theme.dropdown');
+    // $themeDropdown.dropdown('set selected', 'GitHub');
+
 });
+
 
 function hideSidebar() {
     var context = $('#main_context');
@@ -66,6 +75,8 @@ function hideSidebar() {
         context.css({'width': '100%'});
     }
 }
+
+
 
 function servicesToggle() {
     $('#services').toggle();
@@ -162,6 +173,11 @@ function comments_add (theLink, Message, CustomMsg) {
 
 
 function calltest() {
+    // var $themeDropdown       = $('.theme.dropdown');
+    // $themeDropdown.dropdown('set selected', 'GitHub');
+    // setCookie('themes', $themeDropdown.dropdown('get value' ))
+    semantic.modal()
+
 }
 
 function call_incoming(msg) {

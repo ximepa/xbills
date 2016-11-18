@@ -150,17 +150,36 @@
                                             <div class="two fields">
                                                 <div class="field">
                                                     <label>{% trans 'District' %}</label>
-                                                    <select id="district" name="district" class="ui search dropdown"></select>
+                                                    <div class="ui dropdown selection" id="district">
+                                                        <input type="hidden" name="Art">
+                                                        <div class="default text">Select street</div>
+                                                        <i class="dropdown icon"></i>
+                                                        <div class="menu" id="districtMenu">
+                                                        {% for d in district %}
+                                                            <div class="item" data-value="{{ d.id }}">{{ d.name }}</div>
+                                                        {% endfor %}
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="field">
                                                     <label>{% trans 'Street' %}</label>
-                                                    <select id="street" name="street" class="ui search dropdown"></select>
+                                                    <div class="ui dropdown selection" id="street">
+                                                        <input type="hidden" name="Art">
+                                                        <div class="default text">Select street</div>
+                                                        <i class="dropdown icon"></i>
+                                                        <div class="menu" id="streetMenu"></div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="two fields">
                                                 <div class="field">
                                                     <label>{% trans 'House' %}</label>
-                                                    <select id="house" name="house" class="ui search dropdown"></select>
+                                                    <div class="ui dropdown selection" id="house">
+                                                        <input type="hidden" name="Art">
+                                                        <div class="default text">Select street</div>
+                                                        <i class="dropdown icon"></i>
+                                                        <div class="menu" id="houseMenu"></div>
+                                                    </div>
                                                 </div>
                                                 <div class="field">
                                                     <label>{% trans 'Flat' %}</label>
@@ -171,6 +190,7 @@
                                             <input type="hidden" name="search_type" value="1">
                                             <hr/>
                                         </div>
+
                                     {% elif search_type == '3' %}
                                         <div class="field">
                                             <label>Name</label>
@@ -397,5 +417,6 @@
                 </div>
             </div>
         </div>
+
     {% endif %}
 {% endblock %}

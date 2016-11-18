@@ -49,9 +49,9 @@ def get_online():
     return Admin.objects.filter(id__in=ids)
 
 
-def api_search(model):
+def api_search(model, request):
     list = []
-    for item in model.objects.all():
+    for item in model.objects.filter(id=request.GET[request.GET['method']]):
         dict_resp = {}
         dict_resp['value'] = str(item.id)
         dict_resp['name'] = item.name

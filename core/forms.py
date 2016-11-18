@@ -133,7 +133,7 @@ class ClientForm(forms.ModelForm):
         model = User
         fields = [
             'disable',
-            # 'company',
+            'company',
             'credit',
             'login',
             'credit_date',
@@ -350,4 +350,34 @@ class TpForm(forms.ModelForm):
             'priority': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
             'fine': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
             'next_tp_id': forms.Select(attrs={'class': 'ui dropdown'}),
+        }
+
+
+class CompanyForm(forms.ModelForm):
+    disable = forms.BooleanField(required=False)
+
+    class Meta:
+        model = Company
+        fields = [
+            'name',
+            'credit',
+            'credit_date',
+            'address',
+            'phone',
+            'disable',
+            'representative',
+            'tax_number',
+
+
+        ]
+
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'credit': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Credit'}),
+            'credit_date': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Credit date'}),
+            'address': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Address'}),
+            'phone': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Phone'}),
+            'representative': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Representative'}),
+            'tax_number': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Tax number'}),
+
         }
