@@ -712,27 +712,23 @@ def clients(request):
     filter_by = request.GET.get('users_status', '0')
     order_by = request.GET.get('order_by', 'login')
     users_list = User.objects.all().order_by(order_by)
-    print [f.name for f in User._meta.get_fields()]
-    print [
-        f.name for f in User._meta.get_fields()
-        if (f.one_to_many or f.one_to_one)
-        and f.auto_created and not f.concrete
-    ]
     client_form = ClientForm()
     if filter_by == '1':
         users_list = users_list.filter(bill__deposit__gte=0, disable=False, deleted=False,)
     if filter_by == '2':
-        users_list = users_list.filter(bill__deposit__lt=0, credit=0)
+        users_list = users_list.filter(bill__deposit__lt=0, disable=False, deleted=False,)
     if filter_by == '3':
         users_list = users_list.filter(disable=True, deleted=False)
     if filter_by == '4':
         users_list = users_list.filter(deleted=True)
     if filter_by == '5':
-        users_list = users_list.filter(credit__gt=0)
+        users_list = users_list.filter(credit__gt=0, disable=False, deleted=False)
     all = User.objects.all().count()
     end = User.objects.filter(deleted=1).count()
     disabled = User.objects.filter(disable=1).count()
     deleted = User.objects.filter(deleted=1).count()
+    users_credit = User.objects.filter(credit__gt=0, disable=False, deleted=False).count()
+    debtors = User.objects.filter(bill__deposit__lt=0, disable=False, deleted=False).count()
     pagin = pagins(users_list, request)
     if 'xml' in request.GET:
         xml_data = serializers.serialize("xml", pagin['items'])
