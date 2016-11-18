@@ -2,6 +2,14 @@
 {% load i18n %}
 {% load url %}
 {% load staticfiles %}
+{% block breadcrumbs %}
+    <i class="right angle icon divider" xmlns="http://www.w3.org/1999/html"></i>
+    <a href="{% url 'core:company' %}" class="section">{% trans 'Company' %}</a>
+    <i class="right angle icon divider"></i>
+{% endblock %}
+{% block breadcrumbs_sub_header %}
+    {% trans 'Company edit' %}
+{% endblock %}
 {% block content %}
     <div class="row">
         <div class="column">
@@ -9,24 +17,24 @@
                 {{ company_form.errors }}
                 <div class="ui blue segment">
                     <form class="ui form" method="POST">{% csrf_token %}
-{#                        <div class="ui sticky stackable menu">#}
-{#                            <div class="item">#}
-{#                                <label>{% trans 'Financial account' %}: </label>#}
-{#                                <label>{{ edit_company.bill_id }}</label>#}
-{#                            </div>#}
-{#                            <div class="item">#}
-{#                                <label>{% trans 'Deposit' %}: </label>#}
-{#                                {% if edit_company.bill.deposit > 0 %}#}
-{#                                    <div class="ui green label">{{ edit_company.bill.deposit }}</div>#}
-{#                                {% else %}#}
-{#                                    <div class="ui red label">{{ edit_company.bill.deposit }}</div>#}
-{#                                {% endif %}#}
-{#                            </div>#}
-{#                            <div class="item">#}
-{#                                <label>{% trans 'Registration' %}: </label>#}
-{#                                <label>{{ edit_company.registration }}</label>#}
-{#                            </div>#}
-{#                        </div>#}
+                        <div class="ui sticky stackable menu">
+                            <div class="item">
+                                <label>{% trans 'Financial account' %}: </label>
+                                <label>{{ company.bill_id }}</label>
+                            </div>
+                            <div class="item">
+                                <label>{% trans 'Deposit' %}: </label>
+                                {% if company.bill.deposit > 0 %}
+                                    <div class="ui green label">{{ company.bill.deposit }}</div>
+                                {% else %}
+                                    <div class="ui red label">{{ company.bill.deposit }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="item">
+                                <label>{% trans 'Registration' %}: </label>
+                                <label>{{ company.registration }}</label>
+                            </div>
+                        </div>
                         <div class="ui tiny segment">
                             <div class="ui sticky stackable menu">
                             </div>
@@ -87,7 +95,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button class="tiny ui teal submit button" name="company_form" value="add" type="submit">{% trans 'Add' %}</button>
+                        <button class="tiny ui teal submit button" name="change" value="{{ company.id }}" type="submit">{% trans 'Change' %}</button>
                     </form>
 {#                    <form class="ui form" method="POST">{% csrf_token %}#}
                         {# fields 1 #}

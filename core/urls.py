@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^fees/$', views.fees, name='fees'),
     url(r'^company/$', views.company, name='company'),
     url(r'^company/add$', views.company_add, name='company_add'),
+    url(r'^company/edit/(?P<id>\d+)/$', views.company_edit, name='company_edit'),
     url(r'^group/$', views.group, name='group'),
     url(r'^settings/administrators/$', views.administrators, name='administrators'),
     url(r'^settings/administrators_add/$', views.administrators_add, name='administrators_add'),

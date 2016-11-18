@@ -367,6 +367,9 @@ class CompanyForm(forms.ModelForm):
             'disable',
             'representative',
             'tax_number',
+            'bank_account',
+            'bank_name',
+            'cor_bank_account',
 
 
         ]
@@ -379,5 +382,8 @@ class CompanyForm(forms.ModelForm):
             'phone': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Phone'}),
             'representative': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Representative'}),
             'tax_number': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Tax number'}),
+            'bank_account': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Account'}),
+            'bank_name': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Bank name'}),
+            'cor_bank_account': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Corr. account'}),
 
         }

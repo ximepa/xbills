@@ -18,8 +18,8 @@
     <tbody>
         {% for c in company %}
         <tr>
-            <td><a href="{% url 'core:company' %}?change={{ c.id }}">{{ c.id }}</a></td>
-            <td id='company-{{c.id}}'><a href=javascript:getCompany({{c.id}})>{{ c.name }}</a></td>
+            <td>{{ c.id }}</td>
+            <td>{{ c.name }}</td>
             {% if c.bill.deposit > 0 and c.credit > 0 or c.bill.deposit > 0 and c.credit == 0 %}
                 <td><span style="color: green">{{ c.bill.deposit }}</span></td>
             {% elif c.bill.deposit < 0 and c.credit < 0 or c.bill.deposit < 0 and c.credit == 0 %}
@@ -35,21 +35,35 @@
             <td>{{ c.registration }}</td>
             <td>{% user_company c.id %}</td>
             <td>{% status c.disable %}</td>
+            <td>
+                <form method="post" action="{% url 'core:company_edit' c.id %}">{% csrf_token %}
+                    <button name="edit" value="{{ c.id }}" type="submit" class="ui orange mini basic button">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form method="post" onsubmit="return confirm('{% trans 'Warning! You can not revert you changes!!!' %}')">{% csrf_token %}
+                    <button name="delete" value="{{ c.id }}" type="submit" class="ui orange mini basic button" onclick="if(!confirm('{% trans 'Remove admin ' %}{{ c.name }}?')){return false;}">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </form>
+            </td>
 
         </tr>
         {% endfor %}
     </tbody>
     <tfoot>
         <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <th colspan="9"></th>
+{#            <th></th>#}
+{#            <th></th>#}
+{#            <th></th>#}
 {#            <th><div class="ui blue tiny label">{% trans 'Sum' %}<div class="detail">{{ out_sum }}</div></div></th>#}
-            <th></th>
-            <th></th>
+{#            <th></th>#}
+{#            <th></th>#}
 {#            <th><div class="ui blue tiny label">{% trans 'All' %} <div class="detail">{{ fees_list.count }}</div></div></th>#}
-            <th></th>
+{#            <th></th>#}
         </tr>
     </tfoot>
 </table>

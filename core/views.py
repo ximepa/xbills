@@ -771,6 +771,7 @@ def fees(request):
 
 @login_required()
 def company(request):
+    print request.POST
     order_by = request.GET.get('order_by', 'name')
     company = Company.objects.all().order_by(order_by)
     pagin = pagins(company, request)
@@ -779,14 +780,10 @@ def company(request):
         return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
     if 'csv' in request.GET:
         return helpers.export_to_csv(request, company, fields=('id', 'bill'), name='bill')
-    if 'change' in request.GET:
-        r_company = 2
-        if request.GET['change'] !='':
-            edit_company= Company.objects.get(id=request.GET['change'])
-    if 'company_id' in request.GET:
-        user = User.objects.filter(company_id=request.GET['company_id'])
-        user_js = serializers.serialize('json', user)
-        return HttpResponse(user_js)
+    if request.method == 'POST':
+        id = request.POST.get('delete', None)
+        if id != None:
+            Company.objects.get(id=id).delete()
     return render(request, 'company.html', locals())
 
 
@@ -800,7 +797,21 @@ def company_add(request):
             bill = Bill.objects.create(company_id=company.pk)
             company.bill_id = bill.pk
             company.save()
+        return redirect(reverse('core:company'))
     return render(request, 'company_add.html', locals())
+
+
+@login_required()
+def company_edit(request, id):
+    print request.POST
+    company = Company.objects.get(id=id)
+    company_form = CompanyForm(instance=company)
+    if request.POST.get('change', None) != None:
+        company_form = CompanyForm(request.POST, instance=company)
+        if company_form.is_valid():
+            company_form.save()
+        return redirect(reverse('core:company'))
+    return render(request, 'company_edit.html', locals())
 
 
 @login_required()
