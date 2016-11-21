@@ -16,7 +16,7 @@ from .auth_backend import AuthBackend
 from .models import User, Payment, Fees, Dv, UserPi, Street, House, District, Dv_calls, Server, ErrorsLog, Dv_log, Admin, num_to_ip, AdminSettings, \
     AdminLog, ip_to_num, Group, Company, Bill, Tp, Chat
 from .forms import AdministratorForm, SearchForm, SearchFeesForm, SearchPaymentsForm, ClientForm, DvForm, UserPiForm, AdministratorAddForm, \
-    ServerForm, TpForm, CompanyForm
+    ServerForm, TpForm, CompanyForm, GroupForm
 from django.contrib import messages
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -160,29 +160,8 @@ def client_errors(request, uid):
         return render(request, '404.html', locals())
     order_by = request.GET.get('order_by', '-date')
     user_errors = ErrorsLog.objects.filter(user=client.login).order_by(order_by)
-    paginator = Paginator(user_errors, settings.USER_ERRORS_PER_PAGE)
-    page = request.GET.get('page', 1)
+    pagin = pagins(user_errors, request)
     dv_session = Dv_calls.objects.filter(uid=uid)
-    try:
-        errors = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        errors = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        errors = paginator.page(paginator.num_pages)
-    if int(page) > 5:
-        start = str(int(page)-5)
-    else:
-        start = 1
-    if int(page) < paginator.num_pages-5:
-        end = str(int(page)+5+1)
-    else:
-        end = paginator.num_pages+1
-    page_range = range(int(start), int(end)),
-    for p in page_range:
-        page_list = p
-    pre_end = errors.paginator.num_pages - 2
     if 'xml' in request.GET:
         xml_data = serializers.serialize("xml", errors)
         return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
@@ -199,29 +178,8 @@ def client_statistics(request, uid):
         return render(request, '404.html', locals())
     order_by = request.GET.get('order_by', '-start')
     user_statistics = Dv_log.objects.filter(uid=uid).order_by(order_by)
-    paginator = Paginator(user_statistics, settings.USER_ERRORS_PER_PAGE)
-    page = request.GET.get('page', 1)
     dv_session = Dv_calls.objects.filter(uid=uid)
-    try:
-        statistics = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        statistics = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        statistics = paginator.page(paginator.num_pages)
-    if int(page) > 5:
-        start = str(int(page)-5)
-    else:
-        start = 1
-    if int(page) < paginator.num_pages-5:
-        end = str(int(page)+5+1)
-    else:
-        end = paginator.num_pages+1
-    page_range = range(int(start), int(end)),
-    for p in page_range:
-        page_list = p
-    pre_end = statistics.paginator.num_pages - 2
+    pagin = pagins(user_statistics, request)
     if 'xml' in request.GET:
         xml_data = serializers.serialize("xml", statistics)
         return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
@@ -608,6 +566,7 @@ def client_payments(request, uid):
     except User.DoesNotExist:
         return render(request, '404.html', locals())
     payments_list = Payment.objects.filter(uid=client.id).order_by(order_by)
+    pagin = pagins(payments_list, request)
     for ex_payments in payments_list:
         out_sum += ex_payments.sum
     paginator = Paginator(payments_list, settings.PAYMENTS_PER_PAGE)
@@ -616,26 +575,6 @@ def client_payments(request, uid):
         olltv_module = True
     else:
         olltv_module = False
-    try:
-        payments = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        payments = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        payments = paginator.page(paginator.num_pages)
-    if int(page) > 5:
-        start = str(int(page)-5)
-    else:
-        start = 1
-    if int(page) < paginator.num_pages-5:
-        end = str(int(page)+5+1)
-    else:
-        end = paginator.num_pages+1
-    page_range = range(int(start), int(end)),
-    for p in page_range:
-        page_list = p
-    pre_end = payments.paginator.num_pages - 2
     if 'del' in request.GET:
         del_payment = Payment.objects.get(id=request.GET['del'])
         print request.GET
@@ -667,30 +606,9 @@ def client_fees(request, uid):
     except User.DoesNotExist:
         return render(request, '404.html', locals())
     fees_list = Fees.objects.filter(uid=client.id).order_by(order_by)
+    pagin = pagins(fees_list, request)
     for ex_fees in fees_list:
         out_sum = out_sum + ex_fees.sum
-    paginator = Paginator(fees_list, settings.FEES_PER_PAGE)
-    page = request.GET.get('page', 1)
-    try:
-        fees = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        fees = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        fees = paginator.page(paginator.num_pages)
-    if int(page) > 5:
-        start = str(int(page)-5)
-    else:
-        start = 1
-    if int(page) < paginator.num_pages-5:
-        end = str(int(page)+5+1)
-    else:
-        end = paginator.num_pages+1
-    page_range = range(int(start), int(end)),
-    for p in page_range:
-        page_list = p
-    pre_end = fees.paginator.num_pages - 2
     if 'del' in request.GET:
         return redirect(request.GET['return_url'])
     if 'export_submit' in request.POST:
@@ -748,7 +666,7 @@ def payments(request):
     pagin = pagins(payments_list, request)
     print pagin
     if 'xml' in request.GET:
-        xml_data = serializers.serialize("xml", pagin['payments'])
+        xml_data = serializers.serialize("xml", pagin['items'])
         return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
     if 'csv' in request.GET:
         return helpers.export_to_csv(request, pagin['payments'], fields=('id', 'sum'), name='payments')
@@ -762,21 +680,20 @@ def fees(request):
     fees_list = Fees.objects.all().order_by(order_by)
     pagin = pagins(fees_list, request)
     if 'xml' in request.GET:
-        xml_data = serializers.serialize("xml", pagin['fees'])
+        xml_data = serializers.serialize("xml", pagin['items'])
         return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
     if 'csv' in request.GET:
-        return helpers.export_to_csv(request, pagin['fees'], fields=('id', 'sum'), name='fees')
+        return helpers.export_to_csv(request, pagin['items'], fields=('id', 'sum'), name='fees')
     return render(request, 'fees.html', locals())
 
 
 @login_required()
 def company(request):
-    print request.POST
     order_by = request.GET.get('order_by', 'name')
     company = Company.objects.all().order_by(order_by)
     pagin = pagins(company, request)
     if 'xml' in request.GET:
-        xml_data = serializers.serialize("xml", company)
+        xml_data = serializers.serialize("xml", pagin['items'])
         return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
     if 'csv' in request.GET:
         return helpers.export_to_csv(request, company, fields=('id', 'bill'), name='bill')
@@ -803,7 +720,6 @@ def company_add(request):
 
 @login_required()
 def company_edit(request, id):
-    print request.POST
     company = Company.objects.get(id=id)
     company_form = CompanyForm(instance=company)
     if request.POST.get('change', None) != None:
@@ -820,14 +736,39 @@ def group(request):
     group = Group.objects.all().order_by(order_by)
     pagin = pagins(group, request)
     if 'xml' in request.GET:
-        xml_data = serializers.serialize("xml", company)
+        xml_data = serializers.serialize("xml", pagin['items'])
         return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
     if 'csv' in request.GET:
-        return helpers.export_to_csv(request, company, fields=('id', 'bill'), name='bill')
-    if 'user_list' in request.GET:
-        user = User.objects.filter(gid_id=request.GET['user_list'])
-        return render(request, 'table_user_liset.html', locals())
+        return helpers.export_to_csv(request, group, fields=('id'), name='group')
+    if request.method == 'POST':
+        id = request.POST.get('delete', None)
+        if id != None:
+            Group.objects.get(id=id).delete()
     return render(request, 'group.html', locals())
+
+
+@login_required()
+def group_add(request):
+    group_form = GroupForm()
+    if request.POST.get('group_form', None) == 'add':
+        group_form = GroupForm(request.POST)
+        if group_form.is_valid():
+            group_form.save()
+        return redirect(reverse('core:group'))
+    return render(request, 'group_add.html', locals())
+
+
+@login_required()
+def group_edit(request, id):
+    print id
+    group = Group.objects.get(id=id)
+    group_form = GroupForm(instance=group)
+    if request.POST.get('change', None) != None:
+        group_form = GroupForm(request.POST, instance=group)
+        if group_form.is_valid():
+            group_form.save()
+        return redirect(reverse('core:group'))
+    return render(request, 'group_edit.html', locals())
 
 
 def user_login(request):

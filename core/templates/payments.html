@@ -11,9 +11,9 @@
 {% block content %}
     <div class="row">
         <div class="column">
-            <div class="ui {{ request.user.theme }} segment">
+            <div class="ui {{ request.user.style }} {{ request.user.theme }} segment">
                 {% if pagin.items %}
-                    <div class="ui sticky fluid pagination menu">
+                    <div class="ui {{ request.user.style }} sticky fluid pagination menu">
                         <div class="header item">{% trans 'Export' %}</div>
                         <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
                             <i class="gamepad icon"></i>

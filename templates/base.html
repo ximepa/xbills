@@ -40,7 +40,7 @@
 </head>
 <body>
 {% block wrapper %}
-	<div id="panel_menu" class="ui stackable menu" style="margin-left: 0.5em; margin-right: 0.5em">
+	<div id="panel_menu" class="ui {{ request.user.style }} stackable menu" style="margin-left: 0.5em; margin-right: 0.5em">
         <div class="header item">
             <span style="color: orange">X</span><span style="color: red">Bills </span> {% version %}
         </div>
@@ -90,7 +90,6 @@
 {##}
 {#        </div>#}
 {#      </div>#}
-        <link href="{% static 'semantic-ui/src/definitions/elements/button.less' %}" rel="stylesheet/less">
 
         <div class="ui right dropdown item">
             <i class="filter icon"></i>
@@ -165,7 +164,7 @@
     </div>
         <div class="ui stackable grid" style="padding: 5px">
             <div id="sideBar" class="two wide column">
-                <div class="ui sticky vertical accordion menu">
+                <div class="ui {{ request.user.style }} vertical accordion menu">
                     <div class="item">
                         <a class="title">
                             <i class="dropdown icon"></i>
@@ -313,11 +312,11 @@
                     </div>
                 </div>
             </div>
-            <div id="main_context" class="column" style="width: 87.5%;">
+            <div id="main_context" class="column" style="width: 85%;">
                 <div class="ui stackable grid">
                     <div class="row">
                         <div class="column">
-                            <div class="ui segment">
+                            <div class="ui {{ request.user.style }} {{ request.user.theme }} segment">
                                 <h6 class="ui header">
                                     <i class="dashboard icon"></i>
                                     <div class="content">

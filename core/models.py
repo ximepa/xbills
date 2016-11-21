@@ -152,7 +152,7 @@ class Company(models.Model):
 
     id = models.AutoField(primary_key=True, unique=True)
     bill = models.OneToOneField('Bill', blank=True, null=True)
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, unique=True, verbose_name='full name')
     registration = models.DateField(auto_now=True)
     credit = models.DecimalField(max_digits=5, decimal_places=2, default=0.00, null=True)
     credit_date = models.DateField(blank=True, null=True)
@@ -259,9 +259,13 @@ class User(models.Model):
 
 
 class Group(models.Model):
-    id = models.SmallIntegerField(primary_key=True, db_column='gid')
+    id = models.AutoField(primary_key=True, unique=True, db_column='gid')
     name = models.CharField(max_length=50)
     descr = models.CharField(max_length=200)
+    domain_id = models.BooleanField(default=0, blank=True)
+    separate_docs = models.BooleanField(default=0, blank=True)
+    allow_credit = models.BooleanField(default=0, blank=True)
+    disable_paysys = models.BooleanField(default=0, blank=True)
 
     def __unicode__(self):
         return str(self.id) + ':' + self.name

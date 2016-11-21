@@ -36,12 +36,13 @@
             {% endfor %}
         </ul>
     {% endif %}
-    <div class="ui top attached tabular menu">
+    <div class="ui {{ request.user.style }} top attached tabular menu">
         <div class="{% active_with_get request 'core:client' '' uid %} item"><a href="{% url 'core:client' uid %}">{% trans 'User bill' %}</a></div>
         <div class="{% active_with_get request 'core:client' '?page=dv' uid %} item"><a href="?page=dv">{% trans 'Network' %}</a></div>
         <div class="{% active_with_get request 'core:client' '?page=user_pi' uid %} item"><a href="?page=user_pi">{% trans 'User Information' %}</a></div>
     </div>
     {% if page == None %}
+        {{ client_form.errors }}
         <div class="ui bottom attached active tab segment">
             <form class="ui form" method="POST">{% csrf_token %}
                 <div class="ui {{ request.user.theme }} mini segment">
@@ -66,6 +67,7 @@
                         <div class="field">
                             <label>{% trans 'Groups' %}</label>
                             {{ client_form.gid }}
+			    <button></button>
                         </div>
                         <div class="field">
                             <label>{% trans 'Company' %}</label>

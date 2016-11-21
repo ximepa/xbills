@@ -1,0 +1,54 @@
+{% extends 'layout.html' %}
+{% load i18n %}
+{% load url %}
+{% load staticfiles %}
+{% block breadcrumbs %}
+    <i class="right angle icon divider" xmlns="http://www.w3.org/1999/html"></i>
+    <a href="{% url 'core:group' %}" class="section">{% trans 'Group' %}</a>
+    <i class="right angle icon divider"></i>
+{% endblock %}
+{% block breadcrumbs_sub_header %}
+    {% trans 'Group edit' %}
+{% endblock %}
+{% block content %}
+    <div class="row">
+        <div class="column">
+            <div class="ui {{ request.user.style }} {{ request.user.theme }} segment">
+                {{ group_form.errors }}
+                    <form class="ui form" method="POST">{% csrf_token %}
+                        <div class="ui tiny segment">
+                            <div class="two fields">
+                                <div class="field">
+                                    <label>{% trans 'Name' %}</label>
+                                    {{ group_form.name }}
+                                </div>
+                                <div class="field">
+                                    <label>{% trans 'Address' %}</label>
+                                    {{ group_form.descr }}
+                                </div>
+                            </div>
+                            <div class="four fields">
+                                <div class="field">
+                                    <label>{% trans 'Allow Credit' %}</label>
+                                    {{ group_form.domain_id }}
+                                </div>
+                                <div class="field">
+                                    <label>{% trans 'Disable PAYSYS' %}</label>
+                                    {{ group_form.separate_docs }}
+                                </div>
+                                <div class="field">
+                                    <label>{% trans 'Disable User change tarif plan' %}</label>
+                                    {{ group_form.allow_credit }}
+                                </div>
+                                <div class="field">
+                                    <label>{% trans 'Separate Docs' %}</label>
+                                    {{ group_form.disable_paysys }}
+                                </div>
+                            </div>
+                        </div>
+                        <button class="tiny ui teal submit button" name="change" value="{{ group.id }}" type="submit">{% trans 'Change' %}</button>
+                    </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

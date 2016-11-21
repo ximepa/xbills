@@ -10,7 +10,7 @@ $( document ).ready(function() {
     //$('#district').dropdown('setting',{onChange : showStreet});
 
     $('.menu .item').tab();
-    $('.sticky').sticky();
+//    $('.sticky').sticky();
     $('.popup').popup();
     $('#search_panel').accordion();
     $('#add_panel').accordion();
@@ -70,7 +70,7 @@ function hideSidebar() {
     var context = $('#main_context');
     $('#sideBar').toggle();
     if ($("#sideBar").is(":visible") == true) {
-        context.css({'width': '87.5%'});
+        context.css({'width': '85%'});
     } else {
         context.css({'width': '100%'});
     }

@@ -6,7 +6,7 @@
 {% block layout %}
     <div class="row">
         <div class="column">
-            <div class="ui stackable top attached tabular menu">
+            <div class="ui {{ request.user.style }} stackable top attached tabular menu">
                 <div class="{% active request 'core:client' uid %} {% active request 'core:client_statistics' uid %} item"><a href="{% url 'core:client' uid %}"><i class="fa fa-info" aria-hidden="true"></i> {% trans 'Base' %}</a></div>
                 <div class="{% active request 'core:client_payments' uid %} item"><a href="{% url 'core:client_payments' uid %}">{% trans 'Payments' %}</a></div>
                 <div class="{% active request 'core:client_fees' uid %} item"><a href="{% url 'core:client_fees' uid %}">{% trans 'Fees' %}</a></div>
@@ -24,7 +24,7 @@
                 {% endif %}
             </div>
             <div class="ui bottom attached active tab segment">
-                <div class="ui sticky stackable menu">
+                <div class="ui {{ request.user.style }} sticky stackable menu">
                     {% session uid %}
                     <a href="{% url 'core:client_statistics' uid %}" class="{% active request 'core:client_statistics' uid %} item">
                         <i class="idea icon"></i>
@@ -72,8 +72,7 @@
                 <div class="ui stackable grid">
 	                <div class="row">
                         <div class="three wide column">
-                            <div class="ui secondary segment">
-                                <div class="ui form">
+                            <div class="ui {{ request.user.style }} secondary segment">
                                     <div class="field">
                                         <a class="ui grey ribbon label">{% trans 'General Information' %}</a>
                                         <div class="ui middle aligned divided list">
@@ -258,11 +257,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                             </div>
                         </div>
                         <div class="thirteen wide column">
-                            <div class="ui secondary segment">
+                            <div class="ui {{ request.user.style }} secondary segment">
                                 {% block content %}
                                 {% endblock %}
                             </div>

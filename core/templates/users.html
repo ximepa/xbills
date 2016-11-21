@@ -23,32 +23,32 @@
 {% block content %}
     <div class="row">
         <div class="column">
-            <div class="ui {{ request.user.theme }} segment">
+            <div class="ui {{ request.user.style }} {{ request.user.theme }} segment">
             {% for f in get_fields %}
                 <dt>{{f.label|capfirst}}</dt>
                     <dd>
                         {{f.value|escape|urlize|linebreaks}}
                     </dd>
             {% endfor %}
-                <div class="ui stackable menu">
+                <div class="ui {{ request.user.style }} stackable menu">
                     <div class="header item">{% trans 'Sort By' %}</div>
                     <a href="?{% url_replace request 'users_status' '0' %}" class="item {% if 'users_status=0' in request.get_full_path %}active{% elif not request.GET or 'order_by' in request.GET and not 'users_status' in request.GET %}active{% endif %}">
-                        {% trans 'All' %} <div class="floating ui blue label">{{ all }}</div>
+                        {% trans 'All' %} <div class="floating ui mini blue label">{{ all }}</div>
                     </a>
                     <a href="?{% url_replace request 'users_status' '1' %}" class="item {% if 'users_status=1' in request.get_full_path %}active{% endif %}">
                         {% trans 'Active' %}
                     </a>
                     <a href="?{% url_replace request 'users_status' '2' %}" class="item {% if 'users_status=2' in request.get_full_path %}active{% endif %}">
-                        {% trans 'Debtors' %} <div class="floating ui blue label">{{ debtors }}</div>
+                        {% trans 'Debtors' %} <div class="floating ui mini blue label">{{ debtors }}</div>
                     </a>
                     <a href="?{% url_replace request 'users_status' '3' %}" class="item {% if 'users_status=3' in request.get_full_path %}active{% endif %}">
-                        {% trans 'Disabled' %} <div class="floating ui blue label">{{ disabled }}</div>
+                        {% trans 'Disabled' %} <div class="floating ui mini blue label">{{ disabled }}</div>
                     </a>
                     <a href="?{% url_replace request 'users_status' '4' %}" class="item {% if 'users_status=4' in request.get_full_path %}active{% endif %}">
-                        {% trans 'Deleted' %} <div class="floating ui blue label">{{ deleted }}</div>
+                        {% trans 'Deleted' %} <div class="floating ui mini blue label">{{ deleted }}</div>
                     </a>
                     <a href="?{% url_replace request 'users_status' '5' %}" class="item {% if 'users_status=5' in request.get_full_path %}active{% endif %}">
-                        {% trans 'Credit' %} <div class="floating ui blue label">{{ users_credit }}</div>
+                        {% trans 'Credit' %} <div class="floating ui mini blue label">{{ users_credit }}</div>
                     </a>
                     <div class="header item">{% trans 'Export' %}</div>
                     <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
@@ -117,7 +117,7 @@
                                 <th></th>
                                 <th colspan="2">
                                     {% if pagin.items.paginator.num_pages > 1 %}
-                                        <div class="ui pagination menu">
+                                        <div class="ui {{ request.user.style }} pagination menu">
                                             {% if pagin.items.number == 1 %}
                                                 <div class="disabled item">
                                                     1

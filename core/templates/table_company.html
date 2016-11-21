@@ -16,7 +16,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for c in company %}
+        {% for c in pagin.items %}
         <tr>
             <td>{{ c.id }}</td>
             <td>{{ c.name }}</td>
@@ -49,7 +49,6 @@
                     </button>
                 </form>
             </td>
-
         </tr>
         {% endfor %}
     </tbody>
@@ -67,3 +66,4 @@
         </tr>
     </tfoot>
 </table>
+

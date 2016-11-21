@@ -78,12 +78,11 @@
     <div class="row">
         <div class="column">
         {{ server_form.errors }}
-            <div class="ui {{ request.user.theme }} segment">
+            <div class="ui {{ request.user.style }} {{ request.user.theme }} segment">
                 <div id="add_server" class="ui accordion field">
                     <div class="title"><i class="icon dropdown"></i> {% trans 'Add new server' %} </div>
                     <div class="content field">
-                        <form class="ui form" method="POST">{% csrf_token %}
-                            <div class="ui tiny stacked segment">
+                        <form class="ui mini form" method="POST">{% csrf_token %}
                                 {# fields 1 #}
                                 <div class="four fields">
                                     <div class="field">
@@ -136,8 +135,8 @@
                                 {% else %}
                                     <button class="tiny ui teal submit button" name="add_server" value="change" type="submit">{% trans 'Add' %}</button>
                                 {% endif %}
-                            </div>
-                        </form>
+                            </form>
+                        
                     </div>
                 </div>
             </div>
@@ -146,7 +145,7 @@
             {% else %}
                 <script>$('#add_server').accordion('close', 0);</script>
             {% endif %}
-            <div class="ui {{ request.user.theme }} segment">
+            <div class="ui {{ request.user.style }} {{ request.user.theme }} segment">
                 <div class="ui sticky fluid pagination menu">
                     <div class="right item" onClick="$('#filter_table').modal('show');" style="cursor: pointer">
                             <i class="fa fa-cogs"></i>
@@ -197,14 +196,14 @@
                             <td><a title="IP_Pool" class='btn btn-default btn-xs'>IP_Pool</a></td>
                             <td>
                                 <form method="post">{% csrf_token %}
-                                    <button type="submit" name="edit" value="{{ server.id }}" title="{% trans 'Edit server' %}" class="ui orange basic button">
+                                    <button type="submit" name="edit" value="{{ server.id }}" title="{% trans 'Edit server' %}" class="ui mini orange basic button">
                                         <i class="fa fa-pencil-square-o fa-fw"></i>
                                     </button>
                                 </form>
                             </td>
                             <td>
                                 <form method="post">{% csrf_token %}
-                                    <button type="submit" name="delete" value="{{ server.id }}" title="{% trans 'Delete server' %}" class="ui red basic button">
+                                    <button type="submit" name="delete" value="{{ server.id }}" title="{% trans 'Delete server' %}" class="ui mini red basic button">
                                         <i class="fa fa-trash-o fa-fw"></i>
                                     </button>
                                 </form>

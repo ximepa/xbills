@@ -6,24 +6,33 @@
         <tr>
             <th><a href="?{% url_replace request 'order_by' 'id' %}">{% trans 'ID' %}</a></th>
             <th><a href="?{% url_replace request 'order_by' 'name' %}">{% trans 'Name' %}</a></th>
-            <th><a href="?{% url_replace request 'order_by' 'bill__deposit' %}">{% trans 'Deposit' %}</a></th>
-            <th><a href="?{% url_replace request 'order_by' 'credit' %}">{% trans 'Credit' %}</a></th>
-            <th><a href="?{% url_replace request 'order_by' 'registration' %}">{% trans 'Registration' %}</a></th>
-            <th>{% trans 'Users' %}</th>
-            <th><a href="?{% url_replace request 'order_by' 'last_deposit' %}">{% trans 'Status' %}</a></th>
+            <th><a href="?{% url_replace request 'order_by' 'bill__deposit' %}">{% trans 'Description' %}</a></th>
+            <th><a href="?{% url_replace request 'order_by' 'credit' %}">{% trans 'Users' %}</a></th>
             <th>-</th>
             <th>-</th>
         </tr>
     </thead>
     <tbody>
-        {% for g in group %}
+        {% for g in pagin.items %}
         <tr>
-            <td><a href="{% url 'core:group' %}?change={{ g.id }}">{{ g.id }}</a></td>
-            <td id='company-{{c.id}}'><a href=javascript:getCompany({{g.id}})>{{ g.name }}</a></td>
+            <td>{{ g.id }}</td>
+            <td>{{ g.name }}</td>
+            <td>{{ g.descr }}</td>
             <td></td>
-            <td></td>
-            <td></td>
-            <td>{% user_group g.id %}</td>
+            <td>
+                <form method="post" action="{% url 'core:group_edit' g.id %}">{% csrf_token %}
+                    <button name="edit" value="{{ g.id }}" type="submit" class="ui orange mini basic button">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                </form>
+            </td>
+            <td>
+                <form method="post" onsubmit="return confirm('{% trans 'Warning! You can not revert you changes!!!' %}')">{% csrf_token %}
+                    <button name="delete" value="{{ g.id }}" type="submit" class="ui orange mini basic button" onclick="if(!confirm('{% trans 'Remove admin ' %}{{ g.name }}?')){return false;}">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </form>
+            </td>
 
         </tr>
         {% endfor %}
@@ -34,10 +43,7 @@
             <th></th>
             <th></th>
             <th></th>
-{#            <th><div class="ui blue tiny label">{% trans 'Sum' %}<div class="detail">{{ out_sum }}</div></div></th>#}
             <th></th>
-            <th></th>
-{#            <th><div class="ui blue tiny label">{% trans 'All' %} <div class="detail">{{ fees_list.count }}</div></div></th>#}
             <th></th>
         </tr>
     </tfoot>

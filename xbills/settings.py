@@ -95,6 +95,7 @@ TEMPLATES = [
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
                 'ws4redis.context_processors.default',
+                'django.template.context_processors.request',
             ],
         },
     },

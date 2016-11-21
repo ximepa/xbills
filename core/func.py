@@ -14,7 +14,7 @@ def db_filter(db):
 
 def pagins(model, request):
     page_list = None
-    paginator = Paginator(model, 15)
+    paginator = Paginator(model, 20)
     page = request.GET.get('page', 1)
     try:
         items = paginator.page(page)
@@ -29,7 +29,7 @@ def pagins(model, request):
     else:
         start = 1
     if int(page) < paginator.num_pages-5:
-        end = str(int(page)+5+1)
+        end = str(int(page)+3)
     else:
         end = paginator.num_pages+1
     page_range = range(int(start), int(end)),

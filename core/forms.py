@@ -110,15 +110,15 @@ class SearchPaymentsForm(forms.Form):
 
 class ClientForm(forms.ModelForm):
     disable = forms.BooleanField(required=False)
-    gid = forms.ModelChoiceField(
-        queryset=Group.objects.all(),required=False,
-        empty_label=None,
-        widget=forms.Select(
-            attrs={
-                'class': 'ui search dropdown'
-            }
-        )
-    )
+    # gid = forms.ModelChoiceField(
+    #     queryset=Group.objects.all(),required=False,
+    #     empty_label=None,
+    #     widget=forms.Select(
+    #         attrs={
+    #             'class': 'ui search dropdown'
+    #         }
+    #     )
+    # )
     district = forms.ModelChoiceField(required=False,
         queryset=District.objects.all(),
         empty_label=None,
@@ -134,6 +134,7 @@ class ClientForm(forms.ModelForm):
         fields = [
             'disable',
             'company',
+            'gid',
             'credit',
             'login',
             'credit_date',
@@ -148,6 +149,7 @@ class ClientForm(forms.ModelForm):
         widgets = {
             'disable': forms.CheckboxInput(),
             'company': forms.Select(attrs={'class': 'ui search dropdown'}),
+            'gid': forms.Select(attrs={'class': 'ui search dropdown'}),
             'credit': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Credit'}),
             'login': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Login'}),
             'credit_date': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'0000-00-00'}),
@@ -385,5 +387,32 @@ class CompanyForm(forms.ModelForm):
             'bank_account': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Account'}),
             'bank_name': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Bank name'}),
             'cor_bank_account': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Corr. account'}),
+
+        }
+
+
+class GroupForm(forms.ModelForm):
+    domain_id = forms.BooleanField(required=False)
+    separate_docs = forms.BooleanField(required=False)
+    allow_credit = forms.BooleanField(required=False)
+    disable_paysys = forms.BooleanField(required=False)
+
+    class Meta:
+        model = Group
+        fields = [
+            'name',
+            'descr',
+            'domain_id',
+            'separate_docs',
+            'allow_credit',
+            'disable_paysys',
+
+
+        ]
+
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Name'}),
+            'descr': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Credit'}),
+
 
         }

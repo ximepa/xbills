@@ -1,0 +1,192 @@
+{% extends 'layout.html' %}
+{% load i18n %}
+{% load url %}
+{% load staticfiles %}
+{% block content %}
+    <div class="row">
+        <div class="column">
+            <div class="ui {{ request.user.theme }} segment">
+                {{ group_form.errors }}
+                <div class="ui blue segment">
+                    <form class="ui form" method="POST">{% csrf_token %}
+                        <div class="ui tiny segment">
+                            <div class="ui sticky stackable menu">
+                            </div>
+                            <div class="two fields">
+                                <div class="field">
+                                    <label>{% trans 'Name' %}</label>
+{#                                    <textarea rows="2" >{{ edit_company.name }}</textarea>#}
+                                    {{ group_form.name }}
+                                </div>
+                                <div class="field">
+                                    <label>{% trans 'Address' %}</label>
+                                    {{ group_form.descr }}
+                                </div>
+                            </div>
+                            <div class="four fields">
+                                <div class="field">
+                                    <label>{% trans 'Allow Credit' %}</label>
+                                    {{ group_form.domain_id }}
+                                </div>
+                                <div class="field">
+                                    <label>{% trans 'Disable PAYSYS' %}</label>
+                                    {{ group_form.separate_docs }}
+                                </div>
+                                <div class="field">
+                                    <label>{% trans 'Disable User change tarif plan' %}</label>
+                                    {{ group_form.allow_credit }}
+                                </div>
+                                <div class="field">
+                                    <label>{% trans 'Separate Docs' %}</label>
+                                    {{ group_form.disable_paysys }}
+                                </div>
+                            </div>
+{#                            <div class="two fields">#}
+{#                                <div class="field">#}
+{#                                    <label>{% trans 'Credit' %}</label>#}
+{#                                    {{ group_form.credit }}#}
+{#                                </div>#}
+{#                                <div class="field">#}
+{#                                    <label>{% trans 'Date' %}</label>#}
+{#                                    {{ group_form.credit_date }}#}
+{#                                    <script>#}
+{#                                        $( "#id_credit_date" ).datepicker({dateFormat: 'yy-mm-dd'});#}
+{#                                    </script>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="three fields">#}
+{#                                <div class="field">#}
+{#                                    <label>{% trans 'Phone' %}</label>#}
+{#                                    {{ group_form.phone }}#}
+{#                                </div>#}
+{#                                <div class="field">#}
+{#                                    <label>{% trans 'Representative' %}</label>#}
+{#                                    {{ group_form.representative }}#}
+{#                                </div>#}
+{#                                <div class="field">#}
+{#                                    <label>{% trans 'Tax number' %}</label>#}
+{#                                    <div class="ui input">#}
+{#                                        {{ group_form.tax_number }}#}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                            <div class="ui sticky stackable menu">#}
+{#                            </div>#}
+{#                            <div class="three fields">#}
+{#                                <div class="field">#}
+{#                                    <label>{% trans 'Account' %}</label>#}
+{#                                    {{ group_form.bank_account }}#}
+{#                                </div>#}
+{#                                <div class="field">#}
+{#                                    <label>{% trans 'Bank name' %}</label>#}
+{#                                    {{ group_form.bank_name }}#}
+{#                                </div>#}
+{#                                <div class="field">#}
+{#                                    <label>{% trans 'Corr. account' %}</label>#}
+{#                                    {{ group_form.cor_bank_account }}#}
+{#                                </div>#}
+{#                            </div>#}
+                        </div>
+                        <button class="tiny ui teal submit button" name="group_form" value="add" type="submit">{% trans 'Add' %}</button>
+                    </form>
+{#                    <form class="ui form" method="POST">{% csrf_token %}#}
+                        {# fields 1 #}
+{#                        <div class="four fields">#}
+{#                            <div class="required field {% if client_form.login.errors %}error{% endif %}">#}
+{#                                <label>{% trans 'Login' %}</label>#}
+{#                                {{ client_form.login }}#}
+{#                                {% if client_form.login.errors %}#}
+{#                                    <div class="ui pointing red basic label">#}
+{#                                        {{ client_form.login.errors }}#}
+{#                                    </div>#}
+{#                                {% endif %}#}
+{#                            </div>#}
+{#                            <div class="field">#}
+{#                                <label>{% trans 'Reduction' %}</label>#}
+{#                                {{ client_form.reduction }}#}
+{#                            </div>#}
+{#                            <div class="field">#}
+{#                                <label>{% trans 'Credit' %}</label>#}
+{#                                {{ client_form.credit }}#}
+{#                            </div>#}
+{#                            <div class="field">#}
+{#                                <label>{% trans 'Start credit date' %}</label>#}
+{#                                {{ client_form.credit_date }}#}
+{#                            </div>#}
+{#                            <script>#}
+{#                                $( function() {#}
+{#                                    $( "#id_credit_date" ).datepicker({dateFormat: 'yy-mm-dd'});#}
+{#                                } );#}
+{#                            </script>#}
+{#                        </div>#}
+                        {# fields 2 #}
+{#                        <div class="two fields">#}
+{#                            <div class="field">#}
+{#                                <label>{% trans 'Groups' %}</label>#}
+{#                                {{ client_form.gid }}#}
+{#                            </div>#}
+{#                            <div class="field">#}
+{#                                <label>{% trans 'Company' %}</label>#}
+{#                                {{ client_form.company }}#}
+{#                            </div>#}
+{#                        </div>#}
+                        {# fields 3 #}
+{#                        <div class="two fields">#}
+{#                            <div class="field">#}
+{#                                <label>{% trans 'Discount' %} (%)</label>#}
+{#                                {{ client_form.reduction }}#}
+{#                            </div>#}
+{#                            <div class="field">#}
+{#                                <label>{% trans 'Start discount date' %}</label>#}
+{#                                {{ client_form.reduction_date }}#}
+{#                            </div>#}
+{#                            <script>#}
+{#                                $( function() {#}
+{#                                    $( "#id_reduction_date" ).datepicker({dateFormat: 'yy-mm-dd'});#}
+{#                                } );#}
+{#                            </script>#}
+{#                        </div>#}
+                        {# fields 4 #}
+{#                        <div class="two fields">#}
+{#                            <div class="field">#}
+{#                                <label>{% trans 'Activation' %}</label>#}
+{#                                {{ client_form.activate }}#}
+{#                            </div>#}
+{#                            <div class="field">#}
+{#                                <label>{% trans 'Expired' %}</label>#}
+{#                                {{ client_form.expire }}#}
+{#                            </div>#}
+{#                            <div class="field">#}
+{#                                <label>{% trans 'registration' %}</label>#}
+        {#                        {{ client_form.registration }}#}
+{#                            </div>#}
+{#                            <script>#}
+{#                                $( function() {#}
+{#                                    $( "#id_activate" ).datepicker({dateFormat: 'yy-mm-dd'});#}
+{#                                } );#}
+{#                            </script>#}
+{#                            <script>#}
+{#                                $( function() {#}
+{#                                    $( "#id_expire" ).datepicker({dateFormat: 'yy-mm-dd'});#}
+{#                                } );#}
+{#                            </script>#}
+{#                            <script>#}
+{#                                $( function() {#}
+{#                                    $( "#id_registration" ).datepicker({dateFormat: 'yy-mm-dd'});#}
+{#                                } );#}
+{#                            </script>#}
+{#                        </div>#}
+{#                        <div class="inline field">#}
+{#                            <div class="ui checkbox">#}
+{#                                {{ client_form.disable }}#}
+{#                                <label>{% trans 'Disable' %}</label>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <button class="tiny ui teal submit button" name="add_client" value="change" type="submit">{% trans 'Change' %}</button>#}
+{#                    </form>#}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
