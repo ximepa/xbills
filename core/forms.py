@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.core.exceptions import NON_FIELD_ERRORS
 from django.utils.translation import gettext as _
 from django import forms
 from .models import Admin, District, Street, House, Group, User, Company, Dv, Tp, UserPi, Server
@@ -119,17 +120,9 @@ class ClientForm(forms.ModelForm):
     #         }
     #     )
     # )
-    district = forms.ModelChoiceField(required=False,
-        queryset=District.objects.all(),
-        empty_label=None,
-        widget=forms.Select(
-            attrs={
-                'class': 'ui search dropdown'
-            }
-        )
-    )
 
     class Meta:
+
         model = User
         fields = [
             'disable',
@@ -193,7 +186,7 @@ class DvForm(forms.ModelForm):
 
 
 class UserPiForm(forms.ModelForm):
-    district = forms.ModelChoiceField(
+    district = forms.ModelChoiceField(required=False,
         queryset=District.objects.all(),
         empty_label=None,
         widget=forms.Select(

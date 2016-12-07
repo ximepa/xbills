@@ -1,6 +1,9 @@
 # -*- encoding: utf-8 -*-
 import csv
 import json
+from io import BytesIO
+from reportlab.pdfgen import canvas
+
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse, render_to_response, redirect
 from django.template import RequestContext
 from django.contrib.auth import login, logout
@@ -8,7 +11,6 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Sum, Q
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-
 from core.func import *
 from core.vars import *
 from dv.helpers import Hangup
@@ -28,6 +30,32 @@ import platform
 import psutil
 import datetime
 from django.core import serializers
+
+
+
+def pdf(request):
+    # Create the HttpResponse object with the appropriate PDF headers.
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
+
+    buffer = BytesIO()
+
+    # Create the PDF object, using the BytesIO object as its "file."
+    p = canvas.Canvas(buffer)
+
+    # Draw things on the PDF. Here's where the PDF generation happens.
+    # See the ReportLab documentation for the full list of functionality.
+    p.drawString(100, 100, "Hello world.")
+
+    # Close the PDF object cleanly.
+    p.showPage()
+    p.save()
+
+    # Get the value of the BytesIO buffer and write it to the response.
+    pdf = buffer.getvalue()
+    buffer.close()
+    response.write(pdf)
+    return response
 
 
 def custom_redirect(url_name, *args, **kwargs):
@@ -460,15 +488,37 @@ def search(request):
 
 
 @login_required()
+def qsearch(request):
+    dict = {}
+    try:
+        userpi = UserPi.objects.filter(Q(user_id=request.GET['q']) |
+                                       Q(phone2__icontains=request.GET['q']) |
+                                       Q(phone__icontains=request.GET['q']))
+
+    except:
+        userpi = UserPi.objects.filter(Q(user_id__login__icontains=request.GET['q']) |
+                                       Q(street__name__icontains=request.GET['q']) |
+                                       Q(city__icontains=request.GET['q']) |
+                                       Q(fio__icontains=request.GET['q']))
+    for u in userpi:
+        dict.update({u.user_id: {'name': u.user_id, 'results' :[{"title": u.user.login, "description": u.street.name}]}, })
+    return HttpResponse(json.dumps({'results':dict}))
+
+
+@login_required()
 def client_add(request):
     client_form = ClientForm()
+    userpiform = UserPiForm()
+    print request.POST
     if request.method == 'POST':
         client_form = ClientForm(request.POST)
+        print client_form.errors
         if client_form.is_valid():
             client = client_form.save()
             bill = Bill.objects.create(uid=client.pk)
             client.bill_id = bill.pk
-            userpi = UserPi.objects.create(user_id=client.pk)
+            userpiform = UserPiForm(request.POST, instance=UserPi.objects.create(user_id=client.pk))
+            userpiform.save()
             client.save()
             return redirect(reverse('core:clients'))
     return render(request, 'user_add.html', locals())

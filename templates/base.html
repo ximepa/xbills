@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <title>{% block title %}Xbills v0.0.7{% endblock %}</title>
     <link rel="shortcut icon" href="{% static 'custom/images/favicon.ico' %}" type="image/x-icon">
-    <link href="{% static 'semantic-ui/semantic.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'semantic-ui/semantic3.css' %}" rel="stylesheet" type="text/css">
 {#    <link href="{% static 'semantic-ui/semantic.css' %}" rel="stylesheet" type="text/css">#}
     <link href="{% static 'custom/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'custom/css/jquery-ui.min.css' %}" rel="stylesheet" type="text/css">
@@ -49,48 +49,6 @@
         <a href="{% url 'core:search' %}" class="{% active request 'core:search' %} item popup" data-content="{% trans 'Search user by criteria' %}"><i class="search icon"></i>{% trans 'Search' %}</a>
         <a href="{% url 'core:chat' %}" class="{% active request 'core:chat' %} item popup" data-content="{% trans 'Enter to chat' %}"><i class="comments outline icon"></i>{% trans 'Chat' %}</a>
         <a href="javascript:calltest()" class="blue item popup"><i class="comments outline icon"></i>{% trans 'Test' %}</a>
-{#    <div class="ui floating scrolling dropdown theme basic button" data-element="button" data-type="element">#}
-{#        <script>#}
-{#            window.less = {#}
-{#                async        : true,#}
-{#                environment  : 'production',#}
-{#                fileAsync    : true,#}
-{#                onReady      : true,#}
-{#                useFileCache : true,#}
-{#                render:function (e, output) {#}
-{#       console.log(output.css);#}
-{#    }#}
-{#            };#}
-{#        </script>#}
-{#        <script src="{% static 'custom/js/less.min.js' %}"></script>#}
-{#        <span class="text">11 Themes</span>#}
-{#        <div class="menu transition hidden">#}
-{##}
-{#            <div class="item" data-value="Default" data-text="Default Theme">Default</div>#}
-{##}
-{#            <div class="item" data-value="Classic" data-text="Classic Theme">Classic</div>#}
-{##}
-{#            <div class="item" data-value="Basic" data-text="Basic Theme">Basic</div>#}
-{##}
-{#            <div class="item" data-value="Bootstrap3" data-text="Bootstrap3 Theme">Bootstrap3</div>#}
-{##}
-{#            <div class="item" data-value="Twitter" data-text="Twitter Theme">Twitter</div>#}
-{##}
-{#            <div class="item" data-value="Raised" data-text="Raised Theme">Raised</div>#}
-{##}
-{#            <div class="item" data-value="Chubby" data-text="Chubby Theme">Chubby</div>#}
-{##}
-{#            <div class="item" data-value="Round" data-text="Round Theme">Round</div>#}
-{##}
-{#            <div class="item" data-value="Amazon" data-text="Amazon Theme">Amazon</div>#}
-{##}
-{#            <div class="item" data-value="Material" data-text="Material Theme">Material</div>#}
-{##}
-{#            <div class="item" data-value="GitHub" data-text="GitHub Theme">GitHub</div>#}
-{##}
-{#        </div>#}
-{#      </div>#}
-
         <div class="ui right dropdown item">
             <i class="filter icon"></i>
             <div class="menu">
@@ -145,11 +103,18 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="item">
-            <form class="ui form" action="{% url 'core:search' %}" method="GET">
-                <div class="ui transparent icon input">
-                    <input placeholder="Search..." type="text" name="global_search">
-                    <i class="search link icon"></i>
+        <div class="item" style="padding: 0;">
+            <form class="ui mini form" action="{% url 'core:search' %}" method="GET">
+{#                <div class="ui transparent icon input">#}
+{#                    <input placeholder="Search..." type="text" name="global_search">#}
+{#                    <i class="search link icon"></i>#}
+{#                </div>#}
+                <div class="ui aligned category search">
+                    <div class="ui icon input">
+                        <input class="prompt" name="global_search" placeholder="Common passwords..." type="text">
+                        <i class="search icon"></i>
+                    </div>
+                    <div class="results"></div>
                 </div>
             </form>
         </div>
@@ -171,15 +136,13 @@
                             {% trans 'Clients' %}
                         </a>
                         <div class="{% active_startwith_multiple request 'core:clients' 'core:company' 'core:group' %} content">
-                            <div class="ui form">
-                                <div class="grouped fields">
-                                    <div class="menu">
-                                        <a href="{% url 'core:clients' %}" class="{% active request 'core:clients' %} item">{% trans 'Logins' %}</a>
-                                        <a href="{% url 'core:company' %}" class="{% active request 'core:company' %} item">{% trans 'Company' %}</a>
-                                        <a href="{% url 'core:group' %}" class="{% active request 'core:group' %} item">{% trans 'Group' %}</a>
-                                        <a class="item">Add</a>
-                                        <a class="item">Remove</a>
-                                    </div>
+                            <div class="grouped fields">
+                                <div class="menu">
+                                    <a href="{% url 'core:clients' %}" class="{% active request 'core:clients' %} item">{% trans 'Logins' %}</a>
+                                    <a href="{% url 'core:company' %}" class="{% active request 'core:company' %} item">{% trans 'Company' %}</a>
+                                    <a href="{% url 'core:group' %}" class="{% active request 'core:group' %} item">{% trans 'Group' %}</a>
+                                    <a class="item">Add</a>
+                                    <a class="item">Remove</a>
                                 </div>
                             </div>
                         </div>

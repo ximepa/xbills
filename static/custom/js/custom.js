@@ -10,6 +10,29 @@ $( document ).ready(function() {
     //$('#district').dropdown('setting',{onChange : showStreet});
 
     $('.menu .item').tab();
+    $('.ui.search').search({
+        type: 'category',
+        apiSettings: {
+            url: '/admin/qsearch/?q={query}'
+            // onResponse : function(githubResponse) {
+            //     var response = {
+            //         results : {}
+            //     };
+            //
+            //     // translate GitHub API response to work with search
+            //     $.each(githubResponse, function(index, item) {
+            //         response.results[index] = {
+            //             title: item.user__login,
+            //             description: item.user
+            //         };
+            //             // description : item.description,
+            //             // url         : item.html_url
+            //
+            //     });
+            //     return response;
+            // }
+        }
+    });
 //    $('.sticky').sticky();
     $('.popup').popup();
     $('#search_panel').accordion();

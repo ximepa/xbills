@@ -188,7 +188,7 @@ class User(models.Model):
     expire = models.DateField(db_column='expire', blank=True, null=True)
     deleted = models.BooleanField(db_column='deleted', default=0)
     registration = models.DateField(auto_now_add=True)
-    bill = models.ForeignKey('Bill', blank=True, null=True)
+    bill = models.ForeignKey(Bill, blank=True, null=True)
 
     def __unicode__(self):
         return self.login

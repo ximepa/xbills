@@ -5,10 +5,10 @@
 {% block content %}
     <div class="row">
         <div class="column">
-                    <form class="ui form" method="POST">{% csrf_token %}
-            <div class="ui {{ request.user.style }} {{ request.user.theme }} segment">
-                        {# fields 1 #}
-                        <div class="four fields">
+            <form class="ui form" method="POST">{% csrf_token %}
+                <div class="ui {{ request.user.style }} {{ request.user.theme }} segment">
+                    <div class="ui {{ request.user.style }} horizontal segments">
+                        <div class="ui segment">
                             <div class="required field {% if client_form.login.errors %}error{% endif %}">
                                 <label>{% trans 'Login' %}</label>
                                 {{ client_form.login }}
@@ -19,26 +19,6 @@
                                 {% endif %}
                             </div>
                             <div class="field">
-                                <label>{% trans 'Reduction' %}</label>
-                                {{ client_form.reduction }}
-                            </div>
-                            <div class="field">
-                                <label>{% trans 'Credit' %}</label>
-                                {{ client_form.credit }}
-                            </div>
-                            <div class="field">
-                                <label>{% trans 'Start credit date' %}</label>
-                                {{ client_form.credit_date }}
-                            </div>
-                            <script>
-                                $( function() {
-                                    $( "#id_credit_date" ).datepicker({dateFormat: 'yy-mm-dd'});
-                                } );
-                            </script>
-                        </div>
-                        {# fields 2 #}
-                        <div class="two fields">
-                            <div class="field">
                                 <label>{% trans 'Groups' %}</label>
                                 {{ client_form.gid }}
                             </div>
@@ -47,60 +27,45 @@
                                 {{ client_form.company }}
                             </div>
                         </div>
-                        {# fields 3 #}
-                        <div class="two fields">
+                        <div class="ui segment">
                             <div class="field">
-                                <label>{% trans 'Discount' %} (%)</label>
-                                {{ client_form.reduction }}
+                                <label>{% trans 'FIO' %}</label>
+                                {{ userpiform.fio }}
                             </div>
                             <div class="field">
-                                <label>{% trans 'Start discount date' %}</label>
-                                {{ client_form.reduction_date }}
-                            </div>
-                            <script>
-                                $( function() {
-                                    $( "#id_reduction_date" ).datepicker({dateFormat: 'yy-mm-dd'});
-                                } );
-                            </script>
-                        </div>
-                        {# fields 4 #}
-                        <div class="two fields">
-                            <div class="field">
-                                <label>{% trans 'Activation' %}</label>
-                                {{ client_form.activate }}
+                                <label>{% trans 'Phone' %}</label>
+                                {{ userpiform.phone }}
                             </div>
                             <div class="field">
-                                <label>{% trans 'Expired' %}</label>
-                                {{ client_form.expire }}
+                                <label>{% trans 'Phone 2' %}</label>
+                                {{ userpiform.phone2 }}
                             </div>
                             <div class="field">
-                                <label>{% trans 'registration' %}</label>
-        {#                        {{ client_form.registration }}#}
+                                <label>{% trans 'FIO' %}</label>
+                                {{ userpiform.district }}
                             </div>
-                            <script>
-                                $( function() {
-                                    $( "#id_activate" ).datepicker({dateFormat: 'yy-mm-dd'});
-                                } );
-                            </script>
-                            <script>
-                                $( function() {
-                                    $( "#id_expire" ).datepicker({dateFormat: 'yy-mm-dd'});
-                                } );
-                            </script>
-                            <script>
-                                $( function() {
-                                    $( "#id_registration" ).datepicker({dateFormat: 'yy-mm-dd'});
-                                } );
-                            </script>
-                        </div>
-                        <div class="inline field">
-                            <div class="ui checkbox">
-                                {{ client_form.disable }}
-                                <label>{% trans 'Disable' %}</label>
+                            <div class="field">
+                                <label>{% trans 'Phone' %}</label>
+                                {{ userpiform.street}}
+                            </div>
+                            <div class="field">
+                                <label>{% trans 'Phone 2' %}</label>
+                                {{ userpiform.location }}
+                            </div>
+                            <div class="field">
+                                <label>{% trans 'Phone 2' %}</label>
+                                {{ userpiform.kv }}
                             </div>
                         </div>
-                        <button class="tiny ui teal submit button" name="add_client" value="change" type="submit">{% trans 'Change' %}</button>
                     </div>
+                    <div class="inline field">
+                        <div class="ui checkbox">
+                            {{ client_form.disable }}
+                            <label>{% trans 'Disable' %}</label>
+                        </div>
+                    </div>
+                    <button class="tiny ui teal submit button" name="add_client" value="add" type="submit">{% trans 'Add' %}</button>
+                </div>
             </form>
         </div>
     </div>
