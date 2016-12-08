@@ -461,7 +461,7 @@ def search(request):
         else:
             all = userpi.count()
             disabled = userpi.filter(user_id__disable=1).count()
-            not_active = userpi.filter(user_id__disable=2).count()
+#            not_active = userpi.filter(user_id__disable=2).count()
             deleted = userpi.filter(user_id__deleted=1).count()
             paginator = Paginator(userpi, 100)
             page = request.GET.get('page', 1)
@@ -542,6 +542,7 @@ def client(request, uid):
         if 'client_form' in request.POST:
             client_form = ClientForm(request.POST, instance=client)
             print client_form
+            print client
             if client_form.is_valid():
                 print 'oky'
             print client_form.errors
