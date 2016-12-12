@@ -7,91 +7,10 @@
 {#    <script src="{% static 'djangorpc/js/jquery.util.js' %}"></script>#}
 {#    <script src="{% static 'djangorpc/js/jquery.rpc.js' %}"></script>#}
 {#    <script src="{% static 'djangorpc/js/jquery.form.js' %}"></script>#}
-    <script src="{% static 'custom/js/search.js' %}"></script>
 {% endblock %}
 {% block extra_css %}
 {% endblock %}
 {% block extra_scripts %}
-<script type="application/javascript">
-{#$(document).ready(function() {#}
-{#    if ($('#id_district').val()) {#}
-{#        getStreets($('#id_district').val())#}
-{#    }#}
-{#    if ($('#id_street').val()) {#}
-{#        getHouses($('#id_street').val())#}
-{#    }#}
-{#    if (!$("#id_street").val()) {#}
-{#        $("#id_street option").remove();#}
-{#        $('#id_street').append($("<option></option>").attr("value", '0').text('---------'));#}
-{#    }#}
-{#    if (!$('#id_house').val()) {#}
-{#        $("#id_house option").remove();#}
-{#        $('#id_house').append($("<option></option>").attr("value", '0').text('---------'));#}
-{#    }#}
-{#    function getStreets(value){#}
-{#        url = "/api/streets/" + "?district=" + value;#}
-{#        $.ajax({#}
-{#            type: "GET",#}
-{#            url: url,#}
-{#            datatype: 'json',#}
-{#            beforeSend: function() {#}
-{#                $('#response').html("<img src='/static/custom/images/ajax-loader.gif' />");#}
-{#            },#}
-{#            success: function(data){#}
-{#                //var parsed_data = $.parseJSON(data);#}
-{#                $('#id_street').append($("<option></option>").attr("value", '').text('-----------'));#}
-{#                $.each(data, function(index, val) {#}
-{#                    $('#id_street').append($("<option></option>").attr("value", val.id).text(val.name));#}
-{#                });#}
-{#            }#}
-{#        });#}
-{#    }#}
-{#    function getHouses(value){#}
-{#        url = '/api/houses/' + '?street=' + value;#}
-{#        $.ajax({#}
-{#            type: "GET",#}
-{#            url: url,#}
-{#            datatype: 'json',#}
-{#            beforeSend: function() {#}
-{#                $('#response').html("<img src='/static/custom/images/ajax-loader.gif' />");#}
-{#            },#}
-{#            success: function(data){#}
-{#                //var parsed_data = $.parseJSON(data);#}
-{#                $('#id_house').append($("<option></option>").attr("value", '').text('-----------'));#}
-{#                $.each(data, function(index, val) {#}
-{#                    $('#id_house').append($("<option></option>").attr("value", val.id).text(val.number));#}
-{#                });#}
-{#            }#}
-{#        });#}
-{#    }#}
-{#    $('#id_district').on('change', function(){#}
-{#        if (this.value){#}
-{#            $("#id_street option").remove();#}
-{#            getStreets(this.value);#}
-{#            $('#id_street').append($("<option></option>").attr("value", '0').text('---------'));#}
-{#        } else {#}
-{#            $("#id_street option").remove();#}
-{#            $('#id_street').append($("<option></option>").attr("value", '0').text('---------'));#}
-{#        }#}
-{#    });#}
-{#    $('#id_street').on('change', function(){#}
-{#        if (this.value){#}
-{#            $("#id_house option").remove();#}
-{#            getHouses(this.value);#}
-{#            $('#id_house').append($("<option></option>").attr("value", '0').text('---------'));#}
-{#        } else {#}
-{#            $("#id_house option").remove();#}
-{#            $('#id_house').append($("<option></option>").attr("value", '0').text('---------'));#}
-{#        }#}
-{#    });#}
-{#    $(document).ajaxSend(function(event, request, settings) {#}
-{#        $('#overlay').show();#}
-{#    });#}
-{##}
-{#    $(document).ajaxComplete(function(event, request, settings) {#}
-{#        $('#overlay').hide();#}
-{#    });#}
-</script>
 {% endblock %}
 {% block breadcrumbs %}
     <i class="right angle icon divider"></i>
@@ -106,8 +25,8 @@
             <div class="ui {{ request.user.style }} {{ request.user.theme }} segment">
                 <div id="search_panel" class="ui accordion field">
                     <div class="active title"><i class="icon dropdown"></i> {% trans 'Search' %} </div>
-                    	<div class="fields">
-			    <div class="field">
+                    <div class="fields">
+                        <div class="field">
                             {% if error %}
                                 <div class="alert alert-danger alert-dismissible" role="alert">
                                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -120,106 +39,103 @@
                                 <a href="{% url 'core:search' %}?search_type=3" class="item {% if search_type == '3' %}active{% endif %}">{% trans 'Fees' %}</a>
                                 <a href="{% url 'core:search' %}?search_type=4" class="item {% if search_type == '4' %}active{% endif %}">{% trans 'Payments' %}</a>
                             </div>
-			</div>
-                        <form class="ui form" method="GET">
-                       <div class="ui {{ request.user.style }} segment">
-                                    {% if search_type == '1' %}
+                        </div>
+                        <form class="ui form {{ request.user.style }} segment" method="GET">
+                            {% if search_type == '1' %}
+                                <div class="field">
+                                    <div class="two fields">
                                         <div class="field">
-                                            <div class="two fields">
-                                                <div class="field">
-                                                    <label>{% trans 'Login' %}</label>
-                                                    {{ search_form.login }}
-                                                </div>
-                                                <div class="field">
-                                                    <label>{% trans 'UID' %}</label>
-                                                    {{ search_form.uid }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="inline fields">
-                                            <label for="fruit">Select your favorite fruit:</label>
-                                            {% for radio in search_form.disabled %}
-                                                <div class="field">
-                                                    <div class="ui radio checkbox">
-                                                        {{ radio.tag }}
-                                                        <label>{{ radio.choice_label }}</label>
-                                                    </div>
-                                                </div>
-                                            {% endfor %}
+                                            <label>{% trans 'Login' %}</label>
+                                            <input class="ui input" id="id_login" name="login" placeholder="{% trans 'Login' %}" type="text">
                                         </div>
                                         <div class="field">
-                                            <div class="two fields">
-                                                <div class="field">
-                                                    <label>{% trans 'District' %}</label>
-                                                    <div class="ui dropdown selection" id="district">
-                                                        <input type="hidden" name="Art">
-                                                        <div class="default text">Select street</div>
-                                                        <i class="dropdown icon"></i>
-                                                        <div class="menu" id="districtMenu">
-                                                        {% for d in district %}
-                                                            <div class="item" data-value="{{ d.id }}">{{ d.name }}</div>
-                                                        {% endfor %}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="field">
-                                                    <label>{% trans 'Street' %}</label>
-                                                    <div class="ui dropdown selection" id="street">
-                                                        <input type="hidden" name="Art">
-                                                        <div class="default text">Select street</div>
-                                                        <i class="dropdown icon"></i>
-                                                        <div class="menu" id="streetMenu"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="two fields">
-                                                <div class="field">
-                                                    <label>{% trans 'House' %}</label>
-                                                    <div class="ui dropdown selection" id="house">
-                                                        <input type="hidden" name="Art">
-                                                        <div class="default text">Select street</div>
-                                                        <i class="dropdown icon"></i>
-                                                        <div class="menu" id="houseMenu"></div>
-                                                    </div>
-                                                </div>
-                                                <div class="field">
-                                                    <label>{% trans 'Flat' %}</label>
-                                                    <input name="flat">
-                                                </div>
-                                            </div>
-                                            <input type="hidden" name="search" value="1">
-                                            <input type="hidden" name="search_type" value="1">
-                                            <hr/>
+                                            <label>{% trans 'UID' %}</label>
+                                            <input class="ui input" id="id_uid" name="uid" placeholder="UID" type="text">
                                         </div>
-
-                                    {% elif search_type == '3' %}
+                                    </div>
+                                </div>
+                                <div class="inline fields">
+                                    <label for="fruit">Select your favorite fruit:</label>
+                                    {% for radio in search_form.disabled %}
                                         <div class="field">
-                                            <label>Name</label>
-                                            <div class="two fields">
-                                                <div class="field">
-                                                    <input name="shipping[first-name]" placeholder="First Name" type="text">
-                                                </div>
-                                                <div class="field">
-                                                    <input name="shipping[last-name]" placeholder="Last Name" type="text">
-                                                </div>
+                                            <div class="ui radio checkbox">
+                                                {{ radio.tag }}
+                                                <label>{{ radio.choice_label }}</label>
                                             </div>
                                         </div>
-                                    {% elif search_type == '4' %}
+                                    {% endfor %}
+                                </div>
+                                <div class="field">
+                                    <div class="two fields">
                                         <div class="field">
-                                            <label>Name</label>
-                                            <div class="two fields">
-                                                <div class="field">
-                                                    <input name="shipping[first-name]" placeholder="First Name" type="text">
-                                                </div>
-                                                <div class="field">
-                                                    <input name="shipping[last-name]" placeholder="Last Name" type="text">
+                                            <label>{% trans 'District' %}</label>
+                                            <div class="ui search dropdown district selection" data-model-name="district" onchange="showStreet()" id="id_district">
+                                                <input type="hidden" name="district">
+                                                <div class="default text">{% trans 'Select district' %}</div>
+                                                <i class="dropdown icon"></i>
+                                                <div class="menu" id="districtMenu">
+                                                {% for d in district %}
+                                                    <div class="item" data-value="{{ d.id }}">{{ d.name }}</div>
+                                                {% endfor %}
                                                 </div>
                                             </div>
                                         </div>
-                                    {% endif %}
-                                    <button class="tiny ui teal submit button" tabindex="0">Submit Order</button>
-			</div>
-                                </form>
+                                        <div class="field">
+                                            <label>{% trans 'Street' %}</label>
+                                            <div class="ui search dropdown street selection" onchange="showHouse()" id="id_street">
+                                                <input type="hidden" name="street">
+                                                <div class="default text">{% trans 'Select street' %}</div>
+                                                <i class="dropdown icon"></i>
+                                                <div class="menu" id="streetMenu"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="two fields">
+                                        <div class="field">
+                                            <label>{% trans 'House' %}</label>
+                                            <div class="ui search dropdown house selection" id="id_house">
+                                                <input type="hidden" name="house">
+                                                <div class="default text">{% trans 'Select house' %}</div>
+                                                <i class="dropdown icon"></i>
+                                                <div class="menu" id="houseMenu"></div>
+                                            </div>
+                                        </div>
+                                        <div class="field">
+                                            <label>{% trans 'Flat' %}</label>
+                                            <input name="flat">
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="search" value="1">
+                                    <input type="hidden" name="search_type" value="1">
+                                    <hr/>
+                                </div>
+                            {% elif search_type == '3' %}
+                                <div class="field">
+                                    <label>Name</label>
+                                    <div class="two fields">
+                                        <div class="field">
+                                            <input name="shipping[first-name]" placeholder="First Name" type="text">
+                                        </div>
+                                        <div class="field">
+                                            <input name="shipping[last-name]" placeholder="Last Name" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                            {% elif search_type == '4' %}
+                                <div class="field">
+                                    <label>Name</label>
+                                    <div class="two fields">
+                                        <div class="field">
+                                            <input name="shipping[first-name]" placeholder="First Name" type="text">
+                                        </div>
+                                        <div class="field">
+                                            <input name="shipping[last-name]" placeholder="Last Name" type="text">
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <button class="tiny ui teal submit button" tabindex="0">Submit Order</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -241,23 +157,23 @@
                         <button type="submit" class="btn btn-default">Submit</button>
                     </div>
                 </div>
-            {% elif search_type == '4' %}
-                <div class="row">
-                    <div class="column">
-                        <label>{% trans 'Login' %}</label>
-                        {{ search_payments_form.login }}
-                        <label>Password</label>
-                        {{ search_payments_form.group }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="column">
-                        <input type="hidden" name="search" value="1">
-                        <input type="hidden" name="search_type" value="4">
-                        <hr/>
-                        <button type="submit" class="btn btn-default">Submit</button>
-                    </div>
-                </div>
+{#            {% elif search_type == '4' %}#}
+{#                <div class="row">#}
+{#                    <div class="column">#}
+{#                        <label>{% trans 'Login' %}</label>#}
+{#                        {{ search_payments_form.login }}#}
+{#                        <label>Password</label>#}
+{#                        {{ search_payments_form.group }}#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="row">#}
+{#                    <div class="column">#}
+{#                        <input type="hidden" name="search" value="1">#}
+{#                        <input type="hidden" name="search_type" value="4">#}
+{#                        <hr/>#}
+{#                        <button type="submit" class="btn btn-default">Submit</button>#}
+{#                    </div>#}
+{#                </div>#}
             {% endif %}
         </div>
     </div>
@@ -267,7 +183,7 @@
             <div class="column">
                 <div class="ui tiny stacked segment">
                     {% if search_type == '1' %}
-                        <div class="ui sticky fluid pagination menu">
+                        <div class="ui {{ request.user.style }} sticky fluid pagination menu">
                             <div class="header item">{% trans 'Export' %}</div>
                             <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
                                 <i class="gamepad icon"></i>
@@ -278,145 +194,146 @@
                                 Csv
                             </a>
                             <div class="header right floated item">{% trans 'Pagination' %}</div>
-                            {% if users.number == 1 %}
+                            {% if pagin.items.number == 1 %}
                                 <div class="disabled item">
                                     1
                                 </div>
                             {% endif %}
-                            {% if users.has_previous %}
+                            {% if pagin.items.has_previous %}
                                 <a href="?{% url_replace_page request 'page' '1' %}" class="item">1</a>
-                                {% if users.number > 7 %}
+                                {% if pagin.items.number > 7 %}
                                     <div class="disabled item">
                                         ...
                                     </div>
                                 {% endif %}
                             {% endif %}
-                            {% for p in page_list %}
+                            {% for p in pagin.page_list %}
                                 {% if p == 1 %}
                                 {% else %}
-                                    {% if users.number == p %}
+                                    {% if pagin.items.number == p %}
                                         <a class="item active" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
                                     {% else %}
                                         <a class="item" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
                                     {% endif %}
                                 {% endif %}
                             {% endfor %}
-                            {% if users.has_next %}
-                                {% if users.number < users.paginator.num_pages|add:"-5" %}
+                            {% if pagin.items.has_next %}
+                                {% if pagin.items.number < pagin.items.paginator.num_pages|add:"-5" %}
                                     <div class="disabled item">
                                         ...
                                     </div>
-                                    <a class="item" href="?{% url_replace_page request 'page' users.paginator.num_pages %}" aria-label="Next">
-                                        {{ users.paginator.num_pages }}
+                                    <a class="item" href="?{% url_replace_page request 'page' pagin.items.paginator.num_pages %}" aria-label="Next">
+                                        {{ pagin.items.paginator.num_pages }}
                                     </a>
                                 {% endif %}
                             {% endif %}
                         </div>
-                    {% elif search_type == '3' %}
-                        <div class="ui sticky fluid pagination menu">
-                            <div class="header item">{% trans 'Export' %}</div>
-                            <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">
-                                <i class="gamepad icon"></i>
-                                Xml
-                            </a>
-                            <a href="?{% url_replace request 'csv' '1' %}" class="item">
-                                <i class="video camera icon"></i>
-                                Csv
-                            </a>
-                            <div class="header right floated item">{% trans 'Pagination' %}</div>
-                            {% if fees.number == 1 %}
-                                <div class="disabled item">
-                                    1
-                                </div>
-                            {% endif %}
-                            {% if fees.has_previous %}
-                                <a href="?{% url_replace_page request 'page' '1' %}" class="item">1</a>
-                                {% if fees.number > 7 %}
-                                    <div class="disabled item">
-                                        ...
-                                    </div>
-                                {% endif %}
-                            {% endif %}
-                            {% for p in page_list %}
-                                {% if p == 1 %}
-                                {% else %}
-                                    {% if fees.number == p %}
-                                        <a class="item active" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                    {% else %}
-                                        <a class="item" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                    {% endif %}
-                                {% endif %}
-                            {% endfor %}
-                            {% if fees.has_next %}
-                                {% if fees.number < fees.paginator.num_pages|add:"-5" %}
-                                    <div class="disabled item">
-                                        ...
-                                    </div>
-                                    <a class="item" href="?{% url_replace_page request 'page' fees.paginator.num_pages %}" aria-label="Next">
-                                        {{ fees.paginator.num_pages }}
-                                    </a>
-                                {% endif %}
-                            {% endif %}
-                        </div>
-                    {% elif search_type == '4' %}
-                        <nav style="float: left">
-                            <ul class="pagination pagination-sm">
-                                {% if payments.has_previous %}
-                                    <li>
-                                        <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">
-                                            <span aria-hidden="true">1</span>
-                                        </a>
-                                    </li>
-                                    {% if payments.number > 2 %}
-                                        <li class="disabled">
-                                            <a href="#" aria-label="Previous">
-                                                <span aria-hidden="true">...</span>
-                                            </a>
-                                        </li>
-                                    {% endif %}
-                                {% endif %}
-                                {% for p in page_list %}
-                                    {% if payments.number == p %}
-                                        <li class="active">
-                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                        </li>
-                                    {% else %}
-                                        <li class="">
-                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>
-                                        </li>
-                                    {% endif %}
-                                {% endfor %}
-                                {% if payments.has_next %}
-                                    <li class="disabled">
-                                        <a href="#" aria-label="Previous">
-                                            <span aria-hidden="true">...</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="?{% url_replace_page request 'page' payments.paginator.num_pages %}" aria-label="Next">
-                                            <span aria-hidden="true">{{ payments.paginator.num_pages }}</span>
-                                        </a>
-                                    </li>
-                                {% else %}
-                                    <li class="disabled">
-                                        <a href="#" aria-label="Next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                        </a>
-                                    </li>
-                                {% endif %}
-                            </ul>
-                        </nav>
-                    {% endif %}
+{#                    {% elif search_type == '3' %}#}
+{#                        <div class="ui sticky fluid pagination menu">#}
+{#                            <div class="header item">{% trans 'Export' %}</div>#}
+{#                            <a href="?{% url_replace request 'xml' '1' %}" target="_blank" class="item popup" data-content="{% trans 'Will be opened in new window' %}">#}
+{#                                <i class="gamepad icon"></i>#}
+{#                                Xml#}
+{#                            </a>#}
+{#                            <a href="?{% url_replace request 'csv' '1' %}" class="item">#}
+{#                                <i class="video camera icon"></i>#}
+{#                                Csv#}
+{#                            </a>#}
+{#                            <div class="header right floated item">{% trans 'Pagination' %}</div>#}
+{#                            {% if fees.number == 1 %}#}
+{#                                <div class="disabled item">#}
+{#                                    1#}
+{#                                </div>#}
+{#                            {% endif %}#}
+{#                            {% if fees.has_previous %}#}
+{#                                <a href="?{% url_replace_page request 'page' '1' %}" class="item">1</a>#}
+{#                                {% if fees.number > 7 %}#}
+{#                                    <div class="disabled item">#}
+{#                                        ...#}
+{#                                    </div>#}
+{#                                {% endif %}#}
+{#                            {% endif %}#}
+{#                            {% for p in page_list %}#}
+{#                                {% if p == 1 %}#}
+{#                                {% else %}#}
+{#                                    {% if fees.number == p %}#}
+{#                                        <a class="item active" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>#}
+{#                                    {% else %}#}
+{#                                        <a class="item" href="?{% url_replace_page request 'page' p %}">{{ p }}</a>#}
+{#                                    {% endif %}#}
+{#                                {% endif %}#}
+{#                            {% endfor %}#}
+{#                            {% if fees.has_next %}#}
+{#                                {% if fees.number < fees.paginator.num_pages|add:"-5" %}#}
+{#                                    <div class="disabled item">#}
+{#                                        ...#}
+{#                                    </div>#}
+{#                                    <a class="item" href="?{% url_replace_page request 'page' fees.paginator.num_pages %}" aria-label="Next">#}
+{#                                        {{ fees.paginator.num_pages }}#}
+{#                                    </a>#}
+{#                                {% endif %}#}
+{#                            {% endif %}#}
+{#                        </div>#}
+{#                    {% elif search_type == '4' %}#}
+{#                        <nav style="float: left">#}
+{#                            <ul class="pagination pagination-sm">#}
+{#                                {% if pagin.items.has_previous %}#}
+{#                                    <li>#}
+{#                                        <a href="?{% url_replace_page request 'page' '1' %}" aria-label="Previous">#}
+{#                                            <span aria-hidden="true">1</span>#}
+{#                                        </a>#}
+{#                                    </li>#}
+{#                                    {% if payments.number > 2 %}#}
+{#                                        <li class="disabled">#}
+{#                                            <a href="#" aria-label="Previous">#}
+{#                                                <span aria-hidden="true">...</span>#}
+{#                                            </a>#}
+{#                                        </li>#}
+{#                                    {% endif %}#}
+{#                                {% endif %}#}
+{#                                {% for p in page_list %}#}
+{#                                    {% if payments.number == p %}#}
+{#                                        <li class="active">#}
+{#                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>#}
+{#                                        </li>#}
+{#                                    {% else %}#}
+{#                                        <li class="">#}
+{#                                            <a href="?{% url_replace_page request 'page' p %}">{{ p }}</a>#}
+{#                                        </li>#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}#}
+{#                                {% if payments.has_next %}#}
+{#                                    <li class="disabled">#}
+{#                                        <a href="#" aria-label="Previous">#}
+{#                                            <span aria-hidden="true">...</span>#}
+{#                                        </a>#}
+{#                                    </li>#}
+{#                                    <li>#}
+{#                                        <a href="?{% url_replace_page request 'page' payments.paginator.num_pages %}" aria-label="Next">#}
+{#                                            <span aria-hidden="true">{{ payments.paginator.num_pages }}</span>#}
+{#                                        </a>#}
+{#                                    </li>#}
+{#                                {% else %}#}
+{#                                    <li class="disabled">#}
+{#                                        <a href="#" aria-label="Next">#}
+{#                                            <span aria-hidden="true">&raquo;</span>#}
+{#                                        </a>#}
+{#                                    </li>#}
+{#                                {% endif %}#}
+{#                            </ul>#}
+{#                        </nav>#}
+{#                    {% endif %}#}
                     {% if search_type == '1' %}
                         {% include 'table.html' %}
-                    {% elif search_type == '3' %}
-                        {% include 'table_fees.html' %}
-                    {% elif search_type == '4' %}
-                        {% include 'table_payments.html' %}
+{#                    {% elif search_type == '3' %}#}
+{#                        {% include 'table_fees.html' %}#}
+{#                    {% elif search_type == '4' %}#}
+{#                        {% include 'table_payments.html' %}#}
                     {% endif %}
                 </div>
             </div>
         </div>
+                        {% endif %}
 
     {% endif %}
 {% endblock %}

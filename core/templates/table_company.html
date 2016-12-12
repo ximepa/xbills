@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load url %}
 {% load staticfiles %}
-<table class="ui blue very compact selectable striped table">
+<table class="ui very compact selectable striped table">
     <thead>
         <tr>
             <th><a href="?{% url_replace request 'order_by' 'id' %}">{% trans 'ID' %}</a></th>
@@ -36,7 +36,7 @@
             <td>{% user_company c.id %}</td>
             <td>{% status c.disable %}</td>
             <td>
-                <form method="post" action="{% url 'core:company_edit' c.id %}">{% csrf_token %}
+                <form class="ui mini form" method="post" action="{% url 'core:company_edit' c.id %}">{% csrf_token %}
                     <button name="edit" value="{{ c.id }}" type="submit" class="ui orange mini basic button">
                         <i class="fa fa-edit"></i>
                     </button>

@@ -191,10 +191,10 @@ def client_errors(request, uid):
     pagin = pagins(user_errors, request)
     dv_session = Dv_calls.objects.filter(uid=uid)
     if 'xml' in request.GET:
-        xml_data = serializers.serialize("xml", errors)
+        xml_data = serializers.serialize("xml", pagin['items'])
         return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
     if 'csv' in request.GET:
-        return helpers.export_to_csv(request, errors, fields=('id', 'login'), name='login')
+        return helpers.export_to_csv(request, pagin['items'], fields=('id', 'login'), name='login')
     return render(request, 'user_errors.html', locals())
 
 
@@ -209,84 +209,30 @@ def client_statistics(request, uid):
     dv_session = Dv_calls.objects.filter(uid=uid)
     pagin = pagins(user_statistics, request)
     if 'xml' in request.GET:
-        xml_data = serializers.serialize("xml", statistics)
+        xml_data = serializers.serialize("xml", pagin['items'])
         return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
     if 'csv' in request.GET:
-        return helpers.export_to_csv(request, statistics, fields=('id', 'login'), name='login')
+        return helpers.export_to_csv(request, pagin['items'], fields=('id', 'login'), name='login')
     return render(request, 'user_statistics.html', locals())
 
 
-@login_required()
+#@login_required()
 # @permission_required('users.can_vote')
 def search(request):
-
-    all_table_choices = [
-        'user_id__id',
-        'user_id__login',
-        'fio',
-        'user_id__bill__deposit',
-        'district',
-        'street',
-        'location',
-        'kv',
-        'user_id__credit',
-        'user_id__disable',
-        'user_id__deleted',
-    ]
-    default_table_choices = [
-        'user_id__login',
-        'fio',
-        'user_id__bill__deposit',
-        'user_id__credit',
-        'user_id__disable',
-        'user_id__deleted',
-    ]
+    print request.GET
     search_form = SearchForm()
     search_fees_form = SearchFeesForm()
     search_payments_form = SearchPaymentsForm()
-    print request.GET
     district = District.objects.all()
+    filter_params = {}
     if 'DistrictID' in request.GET:
         return HttpResponse(helpers.api_search(Street,request))
     if 'StreetID' in request.GET:
         return HttpResponse(helpers.api_search(House,request))
-
-
-    filter_params = {}
-    includes = []
-    # try:
-    #     admin_settings = AdminSettings.objects.get(admin_id=request.user.id, object='USERS_LIST')
-    #     default_table_choices = admin_settings.setting.lower().replace(' ', '').split(',')
-    # except AdminSettings.DoesNotExist:
-    #     admin_settings = AdminSettings.objects.create(
-    #         admin_id=request.user.id,
-    #         object='USERS_LIST',
-    #         setting=', '.join(default_table_choices)
-    #     )
-
-    if request.method == 'POST':
-        includes = [', '.join(request.POST.getlist('includes'))]
-        if any('user_id__login' in s for s in includes):
-            pass
-        else:
-            includes.append('user_id__login')
-        if any('user_id__deleted' in s for s in includes):
-            pass
-        else:
-            includes.append('user_id__deleted')
-        # admin_settings.setting = ', '.join(includes)
-        # admin_settings.admin_id = request.user.id
-        # admin_settings.save()
-        return redirect(request.get_full_path())
-    try:
-        search = request.GET.get('search')
-    except:
-        search = None
     search_type = request.GET.get('search_type', '1')
     if search_type == '1':
         search_form = SearchForm(request.GET, initial=request.GET)
         if request.GET.get('search'):
-            print request.GET
             order_by = request.GET.get('order_by', 'user_id__login')
             if 'uid' in request.GET and request.GET['uid'] != '':
                 try:
@@ -297,20 +243,19 @@ def search(request):
                     return render(request, 'search.html', locals())
             else:
                 if 'login' in request.GET and request.GET['login'] != '':
-                    filter_params.update({'user_id__login__contains': request.GET['login']})
+                    filter_params.update({'user__login__contains': request.GET['login']})
                 if 'district' in request.GET and request.GET['district'] != '':
                     city = District.objects.get(id=request.GET['district'])
-                    if 'street' not in request.GET or request.GET['street'] == '0' or request.GET['street'] == '':
-                        city_street = Street.objects.values('id').filter(district_id=request.GET['district'])
-                        filter_params['street_id__in'] = city_street
-                    else:
-                        street = Street.objects.values_list('id').get(id=request.GET['street'])
-                        filter_params.update({'street_id': street})
-                        if 'house' in request.GET and request.GET['house'] != '' and request.GET['house'] != '0':
-                            house = House.objects.values_list('id').get(id=request.GET['house'])
-                            filter_params.update({'location_id': house})
-                if 'flat' in request.GET and request.GET['flat'] != '':
-                    filter_params.update({'kv': request.GET['flat']})
+                    filter_params['city_id'] = city.id
+                    if request.GET['street'] != '':
+                        city_street = Street.objects.filter(district_id=request.GET['street'])
+                        print city_street
+                        filter_params.update({'street_id': request.GET['street']})
+                        if request.GET['house'] != '':
+                            house = House.objects.filter(id=request.GET['house'])
+                            filter_params.update({'location_id__in': house})
+                            if 'flat' in request.GET and request.GET['flat'] != '':
+                                filter_params.update({'kv': request.GET['flat']})
                 if 'disabled' in request.GET and request.GET['disabled'] != '':
                     filter_params.update({'user_id__disable': 1})
                 try:
@@ -319,127 +264,110 @@ def search(request):
                         error = 'User not found'
                     elif userpi.count() == 1:
                         for u in userpi:
-                            return redirect('core:client', uid=u.user_id.id)
+                            return redirect('core:client', uid=u.user_id)
                     else:
+                        search = 1
                         all = userpi.count()
                         disabled = userpi.filter(user_id__disable=1).count()
-                        not_active = userpi.filter(user_id__disable=2).count()
+                        # not_active = userpi.filter(user_id__disable=2).count()
                         deleted = userpi.filter(user_id__deleted=1).count()
                         paginator = Paginator(userpi, 100)
                         page = request.GET.get('page', 1)
-                        try:
-                            users = paginator.page(page)
-                        except PageNotAnInteger:
-                            users = paginator.page(1)
-                        except EmptyPage:
-                            users = paginator.page(paginator.num_pages)
-                        if int(page) > 5:
-                            start = str(int(page)-5)
-                        else:
-                            start = 1
-                        if int(page) < paginator.num_pages-5:
-                            end = str(int(page)+5+1)
-                        else:
-                            end = paginator.num_pages+1
-                        page_range = range(int(start), int(end)),
-                        for p in page_range:
-                            page_list = p
-                        pre_end = users.paginator.num_pages - 2
-                        print locals()
+                        pagin = pagins(userpi, request)
                     return render(request, 'search.html', locals())
                 except User.DoesNotExist:
                     error = 'User not found'
                     return render(request, 'search.html', locals())
-    elif search_type == '2':
-        print 'company search'
-    elif search_type == '3':
-        search_fees_form = SearchFeesForm(request.GET, initial=request.GET)
-        if request.GET.get('search'):
-            order_by = request.GET.get('order_by', 'uid__login')
-            if 'login' in request.GET and request.GET['login'] != '':
-                filter_params.update({'uid__login__contains': request.GET['login']})
-            if 'group' in request.GET and request.GET['group'] != '':
-                filter_params.update({'uid__gid__id': request.GET['group']})
-            print filter_params
-            try:
-                fees_list = Fees.objects.filter(**filter_params).order_by(order_by)
-                if fees_list.count() == 0:
-                    error = 'Fees not found'
-                # elif userpi.count() == 1:
-                #     for u in userpi:
-                #         return redirect('core:client', uid=u['user_id'])
-                else:
-                    all = fees_list.count()
-                    disabled = fees_list.filter(uid__disabled=1).count()
-                    not_active = fees_list.filter(uid__disabled=2).count()
-                    deleted = fees_list.filter(uid__deleted=1).count()
-                    paginator = Paginator(fees_list, settings.FEES_PER_PAGE)
-                    page = request.GET.get('page', 1)
-                    try:
-                        fees = paginator.page(page)
-                    except PageNotAnInteger:
-                        fees = paginator.page(1)
-                    except EmptyPage:
-                        fees = paginator.page(paginator.num_pages)
-                    if int(page) > 5:
-                        start = str(int(page)-5)
-                    else:
-                        start = 1
-                    if int(page) < paginator.num_pages-5:
-                        end = str(int(page)+5+1)
-                    else:
-                        end = paginator.num_pages+1
-                    page_range = range(int(start), int(end)),
-                    for p in page_range:
-                        page_list = p
-                    pre_end = fees.paginator.num_pages - 2
-                return render(request, 'search.html', locals())
-            except Fees.DoesNotExist:
-                error = 'User not found'
-                return render(request, 'search.html', locals())
-    elif search_type == '4':
-        search_payments_form = SearchPaymentsForm(request.GET, initial=request.GET)
-        order_by = request.GET.get('order_by', 'uid__login')
-        if 'login' in request.GET and request.GET['login'] != '':
-            filter_params.update({'uid__login__contains': request.GET['login']})
-        if 'group' in request.GET and request.GET['group'] != '':
-            filter_params.update({'uid__gid__id': request.GET['group']})
-        try:
-            payments_list = Payment.objects.filter(**filter_params).order_by(order_by)
-            if payments_list.count() == 0:
-                error = 'Payments not found'
-            # elif userpi.count() == 1:
-            #     for u in userpi:
-            #         return redirect('core:client', uid=u['user_id'])
-            else:
-                all = payments_list.count()
-                disabled = payments_list.filter(uid__disable=1).count()
-                not_active = payments_list.filter(uid__disable=2).count()
-                deleted = payments_list.filter(uid__deleted=1).count()
-                paginator = Paginator(payments_list, settings.PAYMENTS_PER_PAGE)
-                page = request.GET.get('page', 1)
-                try:
-                    payments = paginator.page(page)
-                except PageNotAnInteger:
-                    payments = paginator.page(1)
-                except EmptyPage:
-                    payments = paginator.page(paginator.num_pages)
-                if int(page) > 5:
-                    start = str(int(page)-5)
-                else:
-                    start = 1
-                if int(page) < paginator.num_pages-5:
-                    end = str(int(page)+5+1)
-                else:
-                    end = paginator.num_pages+1
-                page_range = range(int(start), int(end)),
-                for p in page_range:
-                    page_list = p
-                pre_end = payments.paginator.num_pages - 2
-            return render(request, 'search.html', locals())
-        except Payment.DoesNotExist:
-            error = 'Payments not found'
-            return render(request, 'search.html', locals())
+    # elif search_type == '2':
+    #     print 'company search'
+    # elif search_type == '3':
+    #     search_fees_form = SearchFeesForm(request.GET, initial=request.GET)
+    #     if request.GET.get('search'):
+    #         order_by = request.GET.get('order_by', 'uid__login')
+    #         if 'login' in request.GET and request.GET['login'] != '':
+    #             filter_params.update({'uid__login__contains': request.GET['login']})
+    #         if 'group' in request.GET and request.GET['group'] != '':
+    #             filter_params.update({'uid__gid__id': request.GET['group']})
+    #         print filter_params
+    #         try:
+    #             fees_list = Fees.objects.filter(**filter_params).order_by(order_by)
+    #             if fees_list.count() == 0:
+    #                 error = 'Fees not found'
+    #             # elif userpi.count() == 1:
+    #             #     for u in userpi:
+    #             #         return redirect('core:client', uid=u['user_id'])
+    #             else:
+    #                 all = fees_list.count()
+    #                 disabled = fees_list.filter(uid__disabled=1).count()
+    #                 not_active = fees_list.filter(uid__disabled=2).count()
+    #                 deleted = fees_list.filter(uid__deleted=1).count()
+    #                 paginator = Paginator(fees_list, settings.FEES_PER_PAGE)
+    #                 page = request.GET.get('page', 1)
+    #                 try:
+    #                     fees = paginator.page(page)
+    #                 except PageNotAnInteger:
+    #                     fees = paginator.page(1)
+    #                 except EmptyPage:
+    #                     fees = paginator.page(paginator.num_pages)
+    #                 if int(page) > 5:
+    #                     start = str(int(page)-5)
+    #                 else:
+    #                     start = 1
+    #                 if int(page) < paginator.num_pages-5:
+    #                     end = str(int(page)+5+1)
+    #                 else:
+    #                     end = paginator.num_pages+1
+    #                 page_range = range(int(start), int(end)),
+    #                 for p in page_range:
+    #                     page_list = p
+    #                 pre_end = fees.paginator.num_pages - 2
+    #             return render(request, 'search.html', locals())
+    #         except Fees.DoesNotExist:
+    #             error = 'User not found'
+    #             return render(request, 'search.html', locals())
+    # elif search_type == '4':
+    #     search_payments_form = SearchPaymentsForm(request.GET, initial=request.GET)
+    #     order_by = request.GET.get('order_by', 'uid__login')
+    #     if 'login' in request.GET and request.GET['login'] != '':
+    #         filter_params.update({'uid__login__contains': request.GET['login']})
+    #     if 'group' in request.GET and request.GET['group'] != '':
+    #         filter_params.update({'uid__gid__id': request.GET['group']})
+    #     try:
+    #         payments_list = Payment.objects.filter(**filter_params).order_by(order_by)
+    #         if payments_list.count() == 0:
+    #             error = 'Payments not found'
+    #         # elif userpi.count() == 1:
+    #         #     for u in userpi:
+    #         #         return redirect('core:client', uid=u['user_id'])
+    #         else:
+    #             all = payments_list.count()
+    #             disabled = payments_list.filter(uid__disable=1).count()
+    #             not_active = payments_list.filter(uid__disable=2).count()
+    #             deleted = payments_list.filter(uid__deleted=1).count()
+    #             paginator = Paginator(payments_list, settings.PAYMENTS_PER_PAGE)
+    #             page = request.GET.get('page', 1)
+    #             try:
+    #                 payments = paginator.page(page)
+    #             except PageNotAnInteger:
+    #                 payments = paginator.page(1)
+    #             except EmptyPage:
+    #                 payments = paginator.page(paginator.num_pages)
+    #             if int(page) > 5:
+    #                 start = str(int(page)-5)
+    #             else:
+    #                 start = 1
+    #             if int(page) < paginator.num_pages-5:
+    #                 end = str(int(page)+5+1)
+    #             else:
+    #                 end = paginator.num_pages+1
+    #             page_range = range(int(start), int(end)),
+    #             for p in page_range:
+    #                 page_list = p
+    #             pre_end = payments.paginator.num_pages - 2
+    #         return render(request, 'search.html', locals())
+    #     except Payment.DoesNotExist:
+    #         error = 'Payments not found'
+    #         return render(request, 'search.html', locals())
     if 'global_search' in request.GET:
         print request.GET['global_search']
         search = 1
@@ -448,10 +376,11 @@ def search(request):
                                            Q(phone2__icontains=request.GET['global_search']))
             print userpi
         except:
-            userpi = UserPi.objects.filter(Q(user_id__login__icontains=request.GET['global_search']) |
+            userpi = UserPi.objects.filter(Q(user__login__icontains=request.GET['global_search']) |
                                            Q(street__name__icontains=request.GET['global_search']) |
-                                           Q(city__icontains=request.GET['global_search']) |
-                                           Q(fio__icontains=request.GET['global_search']))
+                                           Q(city__name__icontains=request.GET['global_search']) |
+                                           Q(fio__icontains=request.GET['global_search'])
+                                           )
         if userpi.count() == 0:
             error = 'User not found'
         elif userpi.count() == 1:
@@ -463,26 +392,7 @@ def search(request):
             disabled = userpi.filter(user_id__disable=1).count()
 #            not_active = userpi.filter(user_id__disable=2).count()
             deleted = userpi.filter(user_id__deleted=1).count()
-            paginator = Paginator(userpi, 100)
-            page = request.GET.get('page', 1)
-            try:
-                users = paginator.page(page)
-            except PageNotAnInteger:
-                users = paginator.page(1)
-            except EmptyPage:
-                users = paginator.page(paginator.num_pages)
-            if int(page) > 5:
-                start = str(int(page) - 5)
-            else:
-                start = 1
-            if int(page) < paginator.num_pages - 5:
-                end = str(int(page) + 5 + 1)
-            else:
-                end = paginator.num_pages + 1
-            page_range = range(int(start), int(end)),
-            for p in page_range:
-                page_list = p
-            pre_end = users.paginator.num_pages - 2
+            pagin = pagins(userpi, request)
         return render(request, 'search.html', locals())
     return render(request, 'search.html', locals())
 
@@ -490,18 +400,25 @@ def search(request):
 @login_required()
 def qsearch(request):
     dict = {}
+    result_dict = {}
     try:
         userpi = UserPi.objects.filter(Q(user_id=request.GET['q']) |
                                        Q(phone2__icontains=request.GET['q']) |
                                        Q(phone__icontains=request.GET['q']))
 
     except:
-        userpi = UserPi.objects.filter(Q(user_id__login__icontains=request.GET['q']) |
+        userpi = UserPi.objects.filter(Q(city__name__icontains=request.GET['q']) |
                                        Q(street__name__icontains=request.GET['q']) |
-                                       Q(city__icontains=request.GET['q']) |
-                                       Q(fio__icontains=request.GET['q']))
+                                       Q(fio__icontains=request.GET['q']) |
+                                       Q(user__login__icontains=request.GET['q']))
     for u in userpi:
-        dict.update({u.user_id: {'name': u.user_id, 'results' :[{"title": u.user.login, "description": u.street.name}]}, })
+        result_dict['title'] = str(u.city)
+        result_dict['subtitle'] = str(u.street)
+        result_dict['price'] = str(u.user.bill.deposit)
+        result_dict['description'] = u.fio
+        result_dict['url'] = reverse('core:client', args=[u.user_id])
+        dict.update({u.user_id: {'name': u.user_id, 'subname': u.user.login, 'results' :[result_dict]},})
+    print dict
     return HttpResponse(json.dumps({'results':dict}))
 
 

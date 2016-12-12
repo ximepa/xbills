@@ -186,15 +186,6 @@ class DvForm(forms.ModelForm):
 
 
 class UserPiForm(forms.ModelForm):
-    district = forms.ModelChoiceField(required=False,
-        queryset=District.objects.all(),
-        empty_label=None,
-        widget=forms.Select(
-            attrs={
-                'class': 'ui search dropdown'
-            }
-        )
-    )
 
     class Meta:
         model = UserPi
@@ -206,7 +197,7 @@ class UserPiForm(forms.ModelForm):
             'kv',
             'phone',
             'phone2',
-            'district',
+            'city',
             'location',
             'contract_date',
 
@@ -219,8 +210,9 @@ class UserPiForm(forms.ModelForm):
             'kv': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Flat'}),
             'phone': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Phone'}),
             'phone2': forms.TextInput(attrs={'class': 'ui input', 'placeholder': u'Phone'}),
-            'street': forms.Select(attrs={'class': 'ui dropdown'}),
-            'location': forms.Select(attrs={'class': 'ui dropdown'}),
+            'city': forms.Select(attrs={'class': 'ui search district dropdown', 'onchange': 'showStreet()'}),
+            'street': forms.Select(attrs={'class': 'ui search street dropdown', 'onchange': 'showHouse()'}),
+            'location': forms.Select(attrs={'class': 'ui search house dropdown'}),
             'contract_date': forms.TextInput(attrs={'class': 'ui input', 'value': '0000-00-00', 'placeholder': '0000-00-00'}),
         }
 

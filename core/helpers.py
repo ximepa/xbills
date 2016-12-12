@@ -51,11 +51,18 @@ def get_online():
 
 def api_search(model, request):
     list = []
-    for item in model.objects.filter(id=request.GET[request.GET['method']]):
-        dict_resp = {}
-        dict_resp['value'] = str(item.id)
-        dict_resp['name'] = item.name
-        list.append(dict_resp)
+    if request.GET['method'] == 'DistrictID':
+        for item in model.objects.filter(district_id=request.GET[request.GET['method']]):
+            dict_resp = {}
+            dict_resp['value'] = str(item.id)
+            dict_resp['name'] = item.name
+            list.append(dict_resp)
+    else:
+        for item in model.objects.filter(street_id=request.GET[request.GET['method']]):
+            dict_resp = {}
+            dict_resp['value'] = str(item.id)
+            dict_resp['name'] = item.number
+            list.append(dict_resp)
     dict_out = {"success": "true", "results": list}
     jsonFormat = json.dumps(dict_out)
     return jsonFormat

@@ -14145,8 +14145,10 @@ $.fn.search.settings = {
   fields: {
     categories      : 'results',     // array of categories (category view)
     categoryName    : 'name',        // name of category (category view)
+    subname         : 'subname',        // name of category (category view)
     categoryResults : 'results',     // array of results (category view)
     description     : 'description', // result description
+    subtitle        : 'subtitle', // result description
     image           : 'image',       // result image
     price           : 'price',       // result price
     results         : 'results',     // array of results (standard)
@@ -14225,7 +14227,7 @@ $.fn.search.settings = {
             html  += '<div class="category">';
 
             if(category[fields.categoryName] !== undefined) {
-              html += '<div class="name">' + category[fields.categoryName] + '</div>';
+              html += '<div class="name">UID: ' + category[fields.categoryName] + '<br\><br\>' + category[fields.subname] + '</div>';
             }
 
             // each item inside category
@@ -14249,6 +14251,9 @@ $.fn.search.settings = {
               }
               if(result[fields.title] !== undefined) {
                 html += '<div class="title">' + result[fields.title] + '</div>';
+              }
+              if(result[fields.subtitle] !== undefined) {
+                html += '<div class="description">' + result[fields.subtitle] + '</div>';
               }
               if(result[fields.description] !== undefined) {
                 html += '<div class="description">' + result[fields.description] + '</div>';
@@ -14300,6 +14305,9 @@ $.fn.search.settings = {
           }
           if(result[fields.title] !== undefined) {
             html += '<div class="title">' + result[fields.title] + '</div>';
+          }
+          if(result[fields.subtitle] !== undefined) {
+              html += '<div class="description">' + result[fields.subtitle] + '</div>';
           }
           if(result[fields.description] !== undefined) {
             html += '<div class="description">' + result[fields.description] + '</div>';

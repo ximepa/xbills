@@ -196,7 +196,7 @@
                     <div class="four fields">
                         <div class="field">
                             <label>{% trans 'City' %}</label>
-                            {{ user_pi_form.district }}
+                            {{ user_pi_form.city }}
                         </div>
                         <div class="field">
                             <label>{% trans 'Street' %}</label>
@@ -211,16 +211,9 @@
                             {{ user_pi_form.kv }}
                         </div>
                     </div>
-                    <div class="four fields">
-                        <div class="field">
-                            <label>{% trans 'Contract Date' %}</label>
-                            {{ user_pi_form.contract_date }}
-                        </div>
-                        <script>
-                            $( function() {
-                                $( "#id_contract_date" ).datepicker({dateFormat: 'yy-mm-dd'});
-                            } );
-                        </script>
+                    <div class="field">
+                        <label>{% trans 'Contract Date' %}</label>
+                        {{ user_pi_form.contract_date }}
                     </div>
                     <div class="inline field">
                         <div class="ui checkbox">

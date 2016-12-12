@@ -30,7 +30,8 @@
     <script src="{% static 'custom/js/jQuery-ZenCoding.js' %}"></script>
     <script src="{% static 'custom/js/custom.js' %}"></script>
     <script src="{% static 'custom/js/jquery.noty.packaged.js' %}"></script>
-    <script src="{% static 'semantic-ui/semantic.min.js' %}"></script>
+    <script src="{% static 'semantic-ui/semantic.js' %}"></script>
+    <script src="{% static 'custom/js/search.js' %}"></script>
 {#    <script src="{% static 'semantic-ui/semantic.min.js' %}"></script>#}
 {#    <script src="{% static 'custom/js/docs.js' %}"></script>#}
     {% block extra_js %}
@@ -45,7 +46,17 @@
             <span style="color: orange">X</span><span style="color: red">Bills </span> {% version %}
         </div>
         <a href="{% url 'core:index' %}" class="{% active request 'core:index' %} item"><i class="fa fa-dashboard fa-fw"></i> {% trans 'Dashboard' %} </a>
-        <a class="blue item menu-toggle-button" onclick="hideSidebar()"><i class="list layout icon"></i>{% trans 'Menu' %}</a>
+        <a id="menu_id" class="item" onclick="toggleSidebar()">
+            <i class="list layout icon"></i>{% trans 'Menu' %}
+            <div class="ui dropdown">
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <div class="item"><i class="edit icon"></i> Edit</div>
+                    <div class="item"><i class="delete icon"></i> Delete</div>
+                    <div class="item"><i class="hide icon"></i> Hide</div>
+                </div>
+            </div>
+        </a>
         <a href="{% url 'core:search' %}" class="{% active request 'core:search' %} item popup" data-content="{% trans 'Search user by criteria' %}"><i class="search icon"></i>{% trans 'Search' %}</a>
         <a href="{% url 'core:chat' %}" class="{% active request 'core:chat' %} item popup" data-content="{% trans 'Enter to chat' %}"><i class="comments outline icon"></i>{% trans 'Chat' %}</a>
         <a href="javascript:calltest()" class="blue item popup"><i class="comments outline icon"></i>{% trans 'Test' %}</a>
@@ -109,7 +120,7 @@
 {#                    <input placeholder="Search..." type="text" name="global_search">#}
 {#                    <i class="search link icon"></i>#}
 {#                </div>#}
-                <div class="ui aligned category search">
+                <div class="ui right aligned category search">
                     <div class="ui icon input">
                         <input class="prompt" name="global_search" placeholder="Common passwords..." type="text">
                         <i class="search icon"></i>

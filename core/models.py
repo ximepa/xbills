@@ -152,7 +152,7 @@ class Company(models.Model):
 
     id = models.AutoField(primary_key=True, unique=True)
     bill = models.OneToOneField('Bill', blank=True, null=True)
-    name = models.CharField(max_length=100, unique=True, verbose_name='full name')
+    name = models.CharField(max_length=100, unique=True)
     registration = models.DateField(auto_now=True)
     credit = models.DecimalField(max_digits=5, decimal_places=2, default=0.00, null=True)
     credit_date = models.DateField(blank=True, null=True)
@@ -295,7 +295,7 @@ class Street(models.Model):
 
     id = models.SmallIntegerField(default=0, db_column='id', primary_key=True)
     district = models.ForeignKey('District')
-    name = models.CharField(max_length=120, unique=True, db_column='name')
+    name = models.CharField(max_length=120, db_column='name')
     # district = models.ForeignKey('District')
 
     def __unicode__(self):
@@ -352,7 +352,7 @@ class AbonUserList(models.Model):
 
 class UserPi(models.Model):
 
-    user = models.OneToOneField('User', related_name="user_pi", primary_key=True, db_column='uid', unique=True)
+    user = models.ForeignKey(User, primary_key=True, db_column='uid', unique=True)
     fio = models.CharField(max_length=100, blank=True, default='')
     #house = models.ForeignKey('House', max_length=100, db_column='address_build', blank=True, default='0')
     email = models.EmailField(db_column='email', blank=True)
@@ -360,7 +360,7 @@ class UserPi(models.Model):
     kv = models.CharField(max_length=10, db_column='address_flat', blank=True)
     phone = models.CharField(max_length=100, db_column='phone', blank=True)
     phone2 = models.CharField(max_length=100, db_column='phone2', blank=True)
-    city = models.CharField(max_length=100, db_column='city', blank=True)
+    city = models.ForeignKey(District,  null=True, blank=True)
     location = models.ForeignKey('House', db_column='location_id', related_name='location', blank=True, null=True)
     contract_date = models.DateField(db_column='contract_date', default=datetime.date.today(), blank=True, null=True)
     comments = models.TextField(blank=True)

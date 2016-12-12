@@ -68,7 +68,7 @@
                         <thead>
                             <tr class="">
                                 <th><a href="?{% url_replace request 'order_by' 'login' %}">{% trans 'Login' %}</a></th>
-                                <th><a href="?{% url_replace request 'order_by' 'user_pi__fio' %}">{% trans 'FIO' %}</a></th>
+                                <th><a href="?{% url_replace request 'order_by' 'userpi__fio' %}">{% trans 'FIO' %}</a></th>
                                 <th><a href="?{% url_replace request 'order_by' 'bill__deposit' %}">{% trans 'Deposit' %}</a></th>
                                 <th><a href="?{% url_replace request 'order_by' 'credit' %}">{% trans 'Credit' %}</a></th>
                                 <th><a href="?{% url_replace request 'order_by' 'disabled' %}">{% trans 'Login status' %}</a></th>
@@ -81,7 +81,7 @@
                             {% for user in pagin.items %}
                             <tr>
                                 <td><a href="{% url 'core:client' user.id %}">{{ user.login }}</a></td>
-                                <td>{{ user.user_pi.fio }}</td>
+                                <td>{{ user.pi.fio }}</td>
                                 {% if user.bill.deposit < 0 %}
                                     <td><span style="color: red">{{ user.bill.deposit }}</span></td>
                                 {% else %}

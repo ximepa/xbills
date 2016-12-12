@@ -15506,11 +15506,11 @@ ol.ui.horizontal.list li:before,
 .ui.segment {
   position: relative;
   background: rgba(58,63,68,0.5);
-  background: -moz-linear-gradient(top, rgba(58,63,68,0.6) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.6) 100%);
-  background: -webkit-linear-gradient(top, rgba(58,63,68,0.6) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.6) 100%);
-  background: -o-linear-gradient(top, rgba(58,63,68,0.6) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.6) 100%);
-  background: -ms-linear-gradient(top, rgba(58,63,68,0.6) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.6) 100%);
-  background: linear-gradient(to bottom, rgba(58,63,68,0.6) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.6) 100%);
+  background: -moz-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: -webkit-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: -o-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: -ms-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: linear-gradient(to bottom, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3a3f44', endColorstr='#3a3f44', GradientType=0 );
   box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
   margin: 1rem 0em;
@@ -15880,11 +15880,11 @@ ol.ui.horizontal.list li:before,
   border-radius: 0px;
   padding: 0em;
   background: rgba(58,63,68,0.5);
-  background: -moz-linear-gradient(top, rgba(58,63,68,0.6) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.6) 100%);
-  background: -webkit-linear-gradient(top, rgba(58,63,68,0.6) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.6) 100%);
-  background: -o-linear-gradient(top, rgba(58,63,68,0.6) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.6) 100%);
-  background: -ms-linear-gradient(top, rgba(58,63,68,0.6) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.6) 100%);
-  background: linear-gradient(to bottom, rgba(58,63,68,0.6) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.6) 100%);
+  background: -moz-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: -webkit-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: -o-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: -ms-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: linear-gradient(to bottom, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
   box-shadow: 0px 1px 2px 0 rgba(34, 36, 38, 0.15);
   margin: 1rem 0em;
   border-radius: 0.28571429rem;
@@ -17333,7 +17333,7 @@ ol.ui.horizontal.list li:before,
   padding: 0.67861429em 1em;
   font-size: 1em;
   background: rgba(255, 255, 255, 0);
-  border: 1px solid rgba(224, 244, 255, 0.91);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   color: rgba(255, 255, 255, 0.9);
   border-radius: 0.28571429rem;
   box-shadow: 0em 0em 0em 0em transparent inset;
@@ -17611,7 +17611,7 @@ ol.ui.horizontal.list li:before,
 .ui.form input[type="text"]:focus,
 .ui.form input[type="url"]:focus {
   color: rgba(255, 255, 255, 0.9);
-  border-color: #85B7D9;
+  border-color:rgba(255, 176, 0, 0.4);
   border-radius: 0.28571429rem;
   background: rgba(255, 255, 255, 0);
   box-shadow: 0px 0em 0em 0em rgba(34, 36, 38, 0.35) inset;
@@ -20722,11 +20722,11 @@ ol.ui.horizontal.list li:before,
   margin: 1rem 0em;
   font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   background: rgba(58,63,68,0.7);
-  background: -moz-linear-gradient(top, rgba(58,63,68,0.6) 0%, rgba(0,0,0,0.7) 51%, rgba(58,63,68,0.6) 100%);
-  background: -webkit-linear-gradient(top, rgba(58,63,68,0.6) 0%, rgba(0,0,0,0.7) 51%, rgba(58,63,68,0.6) 100%);
-  background: -o-linear-gradient(top, rgba(58,63,68,0.6) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.6) 100%);
-  background: -ms-linear-gradient(top, rgba(58,63,68,0.6) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.6) 100%);
-  background: linear-gradient(to bottom, rgba(58,63,68,0.6) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.6) 100%);
+  background: -moz-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 51%, rgba(58,63,68,0.7) 100%);
+  background: -webkit-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 51%, rgba(58,63,68,0.7) 100%);
+  background: -o-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: -ms-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: linear-gradient(to bottom, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3a3f44', endColorstr='#3a3f44', GradientType=0 );
   font-weight: normal;
   border: 1px solid rgba(34, 36, 38, 0.15);
@@ -20803,7 +20803,7 @@ ol.ui.horizontal.list li:before,
   font-weight: normal;
   -webkit-transition: background 0.1s ease, box-shadow 0.1s ease, color 0.1s ease;
   transition: background 0.1s ease, box-shadow 0.1s ease, color 0.1s ease;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0);
   border-radius: 0.28571429rem;
   margin-right: 1px;
 }
@@ -21191,7 +21191,7 @@ ol.ui.horizontal.list li:before,
 .ui.menu .active.item {
   background: rgba(0, 0, 0, 0.05);
   color: rgba(255, 176, 0, 0.9);
-  border: 1px solid rgba(255, 176, 0, 0.1);
+  border: 1px solid rgba(255, 176, 0, 0.4);
   font-weight: normal;
   box-shadow: none;
 }
@@ -21344,11 +21344,11 @@ Floated Menu / Item
 .ui.vertical.menu .item .menu a.item:hover,
 .ui.vertical.menu .item .menu .link.item:hover {
   background: rgba(58,63,68,0.7);
-  background: -moz-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.5) 100%);
-  background: -webkit-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.7) 51%, rgba(58,63,68,0.5) 100%);
-  background: -o-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.5) 100%);
-  background: -ms-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.5) 100%);
-  background: linear-gradient(to bottom, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.5) 100%);
+  background: -moz-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.5) 100%);
+  background: -webkit-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.8) 51%, rgba(58,63,68,0.5) 100%);
+  background: -o-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.5) 100%);
+  background: -ms-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.5) 100%);
+  background: linear-gradient(to bottom, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.5) 100%);
   border: 1px solid rgba(255, 176, 0, 0.4);
   color: rgba(255, 176, 0, 0.9);
   border-radius: 0.28571429rem;
@@ -21362,7 +21362,7 @@ Floated Menu / Item
 
 .ui.vertical.menu .active.item {
   background: rgba(0, 0, 0, 0.05);
-  border-radius: 0em;
+  border-radius: 0.28571429rem;
   box-shadow: none;
 }
 
@@ -26828,7 +26828,7 @@ a.ui.card:hover,
   background: transparent;
   padding: 0em;
   border: none;
-  border-radius: 0rem;
+  border-radius: 0.28571429rem;
   box-shadow: none;
   -webkit-transition: box-shadow 0.1s ease;
   transition: box-shadow 0.1s ease;
@@ -29477,7 +29477,7 @@ body.dimmable > .dimmer {
   padding: 0.78571429em 2.1em 0.78571429em 1em;
   color: rgba(255, 255, 255, 1);
   box-shadow: none;
-  border: 1px solid rgba(232, 243, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 0.28571429rem;
   -webkit-transition: box-shadow 0.1s ease, width 0.1s ease;
   transition: box-shadow 0.1s ease, width 0.1s ease;
@@ -29911,11 +29911,11 @@ select.ui.dropdown {
 
 .ui.dropdown .menu .active.item {
   background: rgba(58,63,68,0.7)!important;
-  background: -moz-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.5) 100%) !important;
-  background: -webkit-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.7) 51%, rgba(58,63,68,0.5) 100%)!important;
-  background: -o-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.5) 100%)!important;
-  background: -ms-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.5) 100%)!important;
-  background: linear-gradient(to bottom, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.5) 100%)!important;
+  background: -moz-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.5) 100%) !important;
+  background: -webkit-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.8) 51%, rgba(58,63,68,0.5) 100%)!important;
+  background: -o-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.5) 100%)!important;
+  background: -ms-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.5) 100%)!important;
+  background: linear-gradient(to bottom, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.5) 100%)!important;
   border: 1px solid rgba(255, 176, 0, 0.4);
   color: rgba(255, 176, 0, 0.9);
   border-radius: 0.28571429rem;
@@ -29933,11 +29933,11 @@ select.ui.dropdown {
 
 .ui.dropdown .menu > .item:hover {
   background: rgba(58,63,68,0.7);
-  background: -moz-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.5) 100%);
-  background: -webkit-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.7) 51%, rgba(58,63,68,0.5) 100%);
-  background: -o-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.5) 100%);
-  background: -ms-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.5) 100%);
-  background: linear-gradient(to bottom, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.7) 50%, rgba(58,63,68,0.5) 100%);
+  background: -moz-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.5) 100%);
+  background: -webkit-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.8) 51%, rgba(58,63,68,0.5) 100%);
+  background: -o-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.5) 100%);
+  background: -ms-linear-gradient(top, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.5) 100%);
+  background: linear-gradient(to bottom, rgba(58,63,68,0.5) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.5) 100%);
   border: 1px solid rgba(255, 176, 0, 0.4);
   color: rgba(255, 176, 0, 0.9);
   border-radius: 0.28571429rem;
@@ -33324,7 +33324,7 @@ a.ui.nag {
   -ms-transform-origin: center top;
   transform-origin: center top;
   white-space: normal;
-  background: #FFFFFF;
+  background: transparent;
   margin-top: 0.5em;
   width: 18em;
   border-radius: 0.28571429rem;
@@ -33390,13 +33390,13 @@ a.ui.nag {
   font-family: 'Lato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
   font-weight: bold;
   font-size: 1em;
-  color: rgba(0, 0, 0, 0.85);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .ui.search > .results .result .description {
   margin-top: 0;
   font-size: 0.92857143em;
-  color: rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .ui.search > .results .result .price {
@@ -33492,7 +33492,14 @@ a.ui.nag {
 
 .ui.search > .results .result:hover,
 .ui.category.search > .results .category .result:hover {
-  background: #F9FAFB;
+  background: rgba(58,63,68,0.7);
+  background: -moz-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: -webkit-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: -o-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: -ms-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: linear-gradient(to bottom, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  border: 1px solid rgba(255, 176, 0, 0.4);
+  border-radius: 0.2em;
 }
 
 .ui.search .action:hover {
@@ -33579,9 +33586,14 @@ a.ui.nag {
 /* Category */
 
 .ui.category.search > .results .category {
-  background: #F3F4F5;
+  background: rgba(58,63,68,0.7);
+  background: -moz-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: -webkit-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: -o-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: -ms-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: linear-gradient(to bottom, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
   box-shadow: none;
-  border-bottom: 1px solid rgba(34, 36, 38, 0.1);
+  border: 1px solid rgba(225, 245, 255, 0.1);
   -webkit-transition: background 0.1s ease, border-color 0.1s ease;
   transition: background 0.1s ease, border-color 0.1s ease;
 }
@@ -33605,13 +33617,18 @@ a.ui.nag {
 /* Category Result */
 
 .ui.category.search > .results .category .result {
-  background: #FFFFFF;
+  background: rgba(58,63,68,0.7);
+  background: -moz-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: -webkit-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: -o-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: -ms-linear-gradient(top, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
+  background: linear-gradient(to bottom, rgba(58,63,68,0.7) 0%, rgba(0,0,0,0.8) 50%, rgba(58,63,68,0.7) 100%);
   margin-left: 100px;
-  border-left: 1px solid rgba(34, 36, 38, 0.15);
-  border-bottom: 1px solid rgba(34, 36, 38, 0.1);
   -webkit-transition: background 0.1s ease, border-color 0.1s ease;
   transition: background 0.1s ease, border-color 0.1s ease;
   padding: 0.85714286em 1.14285714em;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.2em;
 }
 
 .ui.category.search > .results .category:last-child .result:last-child {
@@ -33629,7 +33646,7 @@ a.ui.nag {
   float: left;
   padding: 0.4em 1em;
   font-weight: bold;
-  color: rgba(0, 0, 0, 0.4);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 /*******************************

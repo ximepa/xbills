@@ -14,37 +14,13 @@ $( document ).ready(function() {
         type: 'category',
         apiSettings: {
             url: '/admin/qsearch/?q={query}'
-            // onResponse : function(githubResponse) {
-            //     var response = {
-            //         results : {}
-            //     };
-            //
-            //     // translate GitHub API response to work with search
-            //     $.each(githubResponse, function(index, item) {
-            //         response.results[index] = {
-            //             title: item.user__login,
-            //             description: item.user
-            //         };
-            //             // description : item.description,
-            //             // url         : item.html_url
-            //
-            //     });
-            //     return response;
-            // }
         }
     });
 //    $('.sticky').sticky();
     $('.popup').popup();
     $('#search_panel').accordion();
     $('#add_panel').accordion();
-    $('#sideBar').accordion({
-        onOpen: function () {
-            console.log($('#sideBar'))
-        },
-        onOpening:function (event, ui) {
-        }
-    //    exclusive: false
-    });
+    $('#sideBar').accordion();
     $('#session').popup({
         popup : $('#browse'),
         on    : 'click',
@@ -85,17 +61,40 @@ $( document ).ready(function() {
 	});
     // var $themeDropdown       = $('.theme.dropdown');
     // $themeDropdown.dropdown('set selected', 'GitHub');
-
+if (getCookie('menu') === 'true') {
+    showSideMenu()
+} else {
+    hideSideMenu()
+}
 });
 
 
-function hideSidebar() {
-    var context = $('#main_context');
-    $('#sideBar').toggle();
-    if ($("#sideBar").is(":visible") == true) {
-        context.css({'width': '85%'});
+function showSideMenu () {
+    var sideBar = $('#sideBar'),
+        context = $('#main_context');
+    context.css({'width': '85%'});
+    setCookie('menu', true);
+    $('#menu_id').removeClass('active');
+    sideBar.show();
+
+}
+
+function hideSideMenu () {
+    var sideBar = $('#sideBar'),
+        context = $('#main_context');
+    context.css({'width': '100%'});
+    setCookie('menu', false);
+    $('#menu_id').addClass('active')
+    sideBar.hide();
+
+}
+
+function toggleSidebar() {
+    var sideBar = $('#sideBar');
+    if (sideBar.is(":visible") == true) {
+        hideSideMenu();
     } else {
-        context.css({'width': '100%'});
+        showSideMenu();
     }
 }
 
