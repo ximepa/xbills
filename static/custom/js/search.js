@@ -19,7 +19,7 @@ showHouse = function(){
                var thisArtName = artData[i].name;
                $('.search.house .menu').append('<div class="item" data-value="' + thisArtID + '">' + thisArtName + '</div>');
          }
-               $('.search.house').dropdown('set text',"Select art");
+               $('.search.house').dropdown('set text',"---------");
          }
          else {
              console.log(objSelf)
@@ -55,7 +55,7 @@ showStreet = function(){
                     var thisArtName = artData[i].name;
                     $('.search.street .menu').append('<div class="item" data-value="' + thisArtID + '">' + thisArtName + '</div>');
                 }
-                $('.search.street').dropdown('set text',"Select art");
+                $('.search.street').dropdown('set text',"---------");
             } else {
                 objSelf.ShowErrors(objResponse.ERRORS);
             }
