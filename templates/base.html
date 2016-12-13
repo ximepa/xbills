@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <title>{% block title %}Xbills v0.0.7{% endblock %}</title>
     <link rel="shortcut icon" href="{% static 'custom/images/favicon.ico' %}" type="image/x-icon">
-    <link href="{% static 'semantic-ui/semantic3.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'semantic-ui/semantic4.css' %}" rel="stylesheet" type="text/css">
 {#    <link href="{% static 'semantic-ui/semantic.css' %}" rel="stylesheet" type="text/css">#}
     <link href="{% static 'custom/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'custom/css/jquery-ui.min.css' %}" rel="stylesheet" type="text/css">
@@ -41,7 +41,7 @@
 </head>
 <body>
 {% block wrapper %}
-	<div id="panel_menu" class="ui {{ request.user.style }} stackable menu" style="margin-left: 0.5em; margin-right: 0.5em">
+	<div id="panel_menu" class="ui {{ request.user.style }} horizontal stackable menu" style="margin-left: 0.5em; margin-right: 0.5em">
         <div class="header item">
             <span style="color: orange">X</span><span style="color: red">Bills </span> {% version %}
         </div>

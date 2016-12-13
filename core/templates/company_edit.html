@@ -15,9 +15,8 @@
         <div class="column">
             <div class="ui {{ request.user.theme }} segment">
                 {{ company_form.errors }}
-                <div class="ui blue segment">
-                    <form class="ui form" method="POST">{% csrf_token %}
-                        <div class="ui sticky stackable menu">
+                    <form class="ui {{ request.user.style }} form segment" method="POST">{% csrf_token %}
+                        <div class="ui {{ request.user.style }} stackable menu">
                             <div class="item">
                                 <label>{% trans 'Financial account' %}: </label>
                                 <label>{{ company.bill_id }}</label>
@@ -36,8 +35,6 @@
                             </div>
                         </div>
                         <div class="ui tiny segment">
-                            <div class="ui sticky stackable menu">
-                            </div>
                             <div class="two fields">
                                 <div class="field">
                                     <label>{% trans 'Name' %}</label>
@@ -77,8 +74,6 @@
                                         {{ company_form.tax_number }}
                                     </div>
                                 </div>
-                            </div>
-                            <div class="ui sticky stackable menu">
                             </div>
                             <div class="three fields">
                                 <div class="field">
@@ -192,7 +187,6 @@
 {#                        </div>#}
 {#                        <button class="tiny ui teal submit button" name="add_client" value="change" type="submit">{% trans 'Change' %}</button>#}
 {#                    </form>#}
-                </div>
             </div>
         </div>
     </div>
