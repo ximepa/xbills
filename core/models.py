@@ -134,7 +134,7 @@ class Admin(AbstractBaseUser):
 class Bill(models.Model):
 
     id = models.AutoField(primary_key=True)
-    deposit = models.DecimalField(max_digits=5, decimal_places=2, default=0.00, null=True)
+    deposit = models.FloatField(default=0.00, null=True)
     uid = models.IntegerField(blank=True, null=True)
     company_id = models.IntegerField(blank=True, null=True, default=0)
     registration = models.DateField(auto_now_add=True)
@@ -390,6 +390,7 @@ class UserPi(models.Model):
 
 class Payment(models.Model):
 
+    id = models.AutoField(primary_key=True, unique=True)
     date = models.DateTimeField(default=datetime.datetime.now)
     sum = models.FloatField(default=0)
     aid = models.ForeignKey(Admin, db_column='aid')
@@ -682,7 +683,7 @@ class AdminLog(models.Model):
 class Fees(models.Model):
 
     date = models.DateTimeField(default=datetime.datetime.now)
-    sum = models.FloatField(default=0)
+    sum = models.DecimalField(max_digits=5, decimal_places=2, default=0.00, null=True)
     aid = models.ForeignKey(Admin, db_column='aid')
     uid = models.ForeignKey('User', db_column='uid')
     bill = models.ForeignKey(Bill, related_name='fees')

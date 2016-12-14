@@ -17,12 +17,12 @@
         </tr>
     </thead>
     <tbody>
-        {% for payment in pagin.items %}
+        {% for log in pagin.items %}
         <tr>
-            <td>{{ payment.id }}</td>
-            <td><a href="{% url 'core:clients' %}{{ payment.uid.id }}">{{ payment.uid.login }}</a></td>
-            <td>{{ payment.datetime }}</td>
-            <td>{{ payment.dsc }}</td>
+            <td>{{ log.id }}</td>
+            <td><a href="{% url 'core:clients' %}{{ log.user.id }}">{{ log.user }}</a></td>
+            <td>{{ log.datetime }}</td>
+            <td>{{ log.actions }}</td>
             <td>{{ payment.sum }}</td>
             {% if payment.last_deposit < 0 %}
                 <td><span style="color: red">{{ payment.last_deposit }}</span></td>

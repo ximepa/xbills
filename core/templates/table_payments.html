@@ -5,7 +5,7 @@
     <thead>
         <tr class="">
             <th>{% trans 'Number' %}</th>
-            <th>{% trans 'Login' %}</th>
+            <th><a href="?{% url_replace request 'order_by' 'uid' %}">{% trans 'Login' %}</a></th>
             <th>{% trans 'Date' %}</th>
             <th>{% trans 'Description' %}</th>
             <th>{% trans 'Sum' %}</th>
@@ -20,7 +20,11 @@
         {% for payment in pagin.items %}
         <tr>
             <td>{{ payment.id }}</td>
+            {% if payment.uid.id %}
             <td><a href="{% url 'core:clients' %}{{ payment.uid.id }}">{{ payment.uid.login }}</a></td>
+            {% else %}
+                <td></td>
+            {% endif %}
             <td>{{ payment.date }}</td>
             <td>{{ payment.dsc }}</td>
             <td>{{ payment.sum }}</td>
@@ -32,7 +36,11 @@
             <td>{% pay_type  payment.method %}</td>
             <td>{{ payment.aid.login }}</td>
             <td>{{ payment.uid.id }}</td>
-{#            <td><a href="{% url 'core:client_payments' payment.uid.id %}?del={{ payment.id }}" onclick="return confirm('{% trans 'Delete' %}?');"><i class="fa fa-remove"></i></a></td>#}
+            {% if f.uid.id %}
+                <td><a href="{% url 'core:client_payments' payment.uid.id %}?del={{ payment.id }}" onclick="return confirm('{% trans 'Delete' %}?');"><i class="fa fa-remove"></i></a></td>
+            {% else%}
+                <td></td>
+            {% endif %}
         </tr>
         {% endfor %}
     </tbody>

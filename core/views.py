@@ -527,7 +527,6 @@ def client(request, uid):
 @login_required()
 def client_payments(request, uid):
     dv_session = Dv_calls.objects.filter(uid=uid)
-    out_sum = 0
     order_by = request.GET.get('order_by', '-date')
     try:
         client = User.objects.get(id=uid)
@@ -535,8 +534,6 @@ def client_payments(request, uid):
         return render(request, '404.html', locals())
     payments_list = Payment.objects.filter(uid=client.id).order_by(order_by)
     pagin = pagins(payments_list, request)
-    for ex_payments in payments_list:
-        out_sum += ex_payments.sum
     paginator = Paginator(payments_list, settings.PAYMENTS_PER_PAGE)
     page = request.GET.get('page', 1)
     if helpers.module_check('olltv'):
@@ -545,17 +542,15 @@ def client_payments(request, uid):
         olltv_module = False
     if 'del' in request.GET:
         del_payment = Payment.objects.get(id=request.GET['del'])
-        print request.GET
-        log = AdminLog(
+        AdminLog.objects.create(
             actions='test',
             datetime=datetime.datetime.now(),
-            ip=ip_to_num('127.0.0.1'),
+            ip=ip_to_num(request.META['REMOTE_ADDR']),
             user_id=uid,
-            admin_id=40,
+            admin_id=request.user.pk,
         )
-        #log.save()
         #print log.admin
-        #del_payment.delete()
+        del_payment.delete()
     if 'xml' in request.GET:
         xml_data = serializers.serialize("xml", pagin['items'])
         return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
@@ -575,10 +570,21 @@ def client_fees(request, uid):
         return render(request, '404.html', locals())
     fees_list = Fees.objects.filter(uid=client.id).order_by(order_by)
     pagin = pagins(fees_list, request)
-    for ex_fees in fees_list:
-        out_sum = out_sum + ex_fees.sum
     if 'del' in request.GET:
-        return redirect(request.GET['return_url'])
+        del_fees = Fees.objects.get(id=request.GET['del'])
+        print client.bill
+        sum = del_fees.sum
+        client.bill.deposit += del_fees.sum
+        AdminLog.objects.create(
+            actions='test',
+            datetime=datetime.datetime.now(),
+            ip=ip_to_num(request.META['REMOTE_ADDR']),
+            user_id=uid,
+            admin_id=request.user.pk,
+        )
+        # print log.admin
+        client.save()
+        del_fees.delete()
     if 'export_submit' in request.POST:
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="somefilename.csv"'

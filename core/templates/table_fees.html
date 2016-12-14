@@ -20,7 +20,11 @@
         {% for f in pagin.items %}
         <tr>
             <td>{{ f.id }}</td>
-            <td><a href="{% url 'core:client' f.uid.id %}">{{ f.uid.login }}</a></td>
+            {% if f.uid.id %}
+                <td><a href="{% url 'core:client' f.uid.id %}">{{ f.uid.login }}</a></td>
+            {% else%}
+                <td></td>
+            {% endif %}
             <td>{{ f.date }}</td>
             <td>{{ f.dsc }}</td>
             <td>{{ f.sum }}</td>
@@ -32,7 +36,11 @@
             <td>{{ f.method.name }}</td>
             <td>{{ f.aid.login }}</td>
             <td>{{ f.uid.id }}</td>
-            <td><i class="fa fa-remove"></i></td>
+            {% if f.uid.id %}
+                <td><a href="{% url 'core:client_fees' f.uid.id %}?del={{ f.id }}" onclick="return confirm('{% trans 'Delete' %}?');"><i class="fa fa-remove"></i></a></td>
+            {% else%}
+                <td></td>
+            {% endif %}
         </tr>
         {% endfor %}
     </tbody>
