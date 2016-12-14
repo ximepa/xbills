@@ -891,8 +891,8 @@ def chat(request):
                 if request.user.login != request.POST.get('user'):
                     RedisPublisher(facility=request.POST['room'], users=[request.POST.get('user')]).publish_message(
                         RedisMessage('%s' % json.dumps(message)))
-		    chat = Chat.objects.create(user_from=request.user.login, user_to=request.POST.get('user'), status=1,  message=request.POST['message'])
-		    chat.save()
+            chat = Chat.objects.create(user_from=request.user.login, user_to=request.POST.get('user'), status=1,  message=request.POST['message'])
+            chat.save()
         else:
             print 'no message'
     return render(request, 'chat.html', locals())
