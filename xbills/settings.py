@@ -39,7 +39,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ws4redis',
     'core',
     'config',
     'telephone',
@@ -47,9 +46,8 @@ INSTALLED_APPS = (
     'dv',
     'ipdhcp',
     'claims',
-    'djangorpc',
-    'autotranslate',
     'voip',
+    'ws4redis',
 )
 
 AUTH_USER_MODEL = 'core.Admin'

@@ -202,13 +202,29 @@ function calltest() {
 
 }
 
+
+function play_sound(attr) {
+    var audioElement = document.createElement('audio');
+    audioElement.setAttribute('src', 'http://www.uscis.gov/files/nativedocuments/Track%2093.mp3');
+    if (attr == 'play') {
+        audioElement.play();
+    } else if (attr == 'pause') {
+        audioElement.pause();
+        audioElement.currentTime = 0;
+
+    }
+
+}
+
 function call_incoming(msg) {
     var data = jQuery.parseJSON(msg);
     if (!(data.uni_id in $.noty.store)) {
+
         CallNotifi(data.uid, data.login, data.cidname, data.num, data.channel, data.begin, data.uni_id);
     }
     if (data.uni_id in $.noty.store && data.begin == 'end') {
-        $.noty.close(data.uni_id);
+        play_sound('pause');
+        //$.noty.close(data.uni_id);
     }
 
 
@@ -220,10 +236,12 @@ function CallNotifi(uid, login, cidname, num, channel, begin, id) {
     if (uid && login) {
         // $uid = '<a href="/admin/clients/"' + 2512 + '>(UID: ' + uid + ')  ' + login + '</a>'
         $uid = '(UID: <a style="color: blue" href="/admin/clients/' + uid + '"' + '>' + uid + '</a>' + ') ' + login
+
     } else {
         $uid = cidname
     }
     if (begin == 'begin') {
+        //play_sound('play')
         noty({
             uid: $uid,
             id: id,
@@ -235,6 +253,7 @@ function CallNotifi(uid, login, cidname, num, channel, begin, id) {
             buttons: [
                 {
                     addClass: 'mini positive ui button', text: 'Ok', onClick: function ($noty) {
+                    play_sound('pause');
                     $noty.close();
                 }
                 },
@@ -242,6 +261,7 @@ function CallNotifi(uid, login, cidname, num, channel, begin, id) {
                     addClass: 'mini negative ui button', text: 'Cancel', onClick: function ($noty) {
                     $.get('/admin/hangup/?channel=' + channel, function (request) {
                         console.log(request)
+
                     });
                     $noty.close();
                 }

@@ -2,7 +2,6 @@
 import csv
 import json
 from io import BytesIO
-from reportlab.pdfgen import canvas
 
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse, render_to_response, redirect
 from django.template import RequestContext
