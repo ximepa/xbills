@@ -14,6 +14,7 @@ def db_filter(db):
 
 def pagins(model, request):
     page_list = None
+    out_sum = 0.0
     paginator = Paginator(model, 20)
     page = request.GET.get('page', 1)
     try:
@@ -36,4 +37,9 @@ def pagins(model, request):
     for p in page_range:
         page_list = p
     pre_end = items.paginator.num_pages - 2
-    return {'page': page, 'items': items, 'start': start, 'end': end, 'pre_end': pre_end, 'page_list': page_list}
+    try:
+        for sum in items:
+            out_sum += sum.sum
+    except:
+        pass
+    return {'page': page, 'items': items, 'start': start, 'end': end, 'pre_end': pre_end, 'page_list': page_list, 'out_sum': out_sum}

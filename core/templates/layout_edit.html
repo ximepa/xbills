@@ -34,6 +34,10 @@
                         <i class="idea icon"></i>
                         {% trans 'Error' %}
                     </a>
+                    <a href="{% url 'core:user_logs' uid %}" class="{% active request 'core:user_logs' uid %} item">
+                        <i class="history icon"></i>
+                        {% trans 'History' %}
+                    </a>
                     <div class="ui basic modal">
                         <i class="close icon"></i>
                         <div class="header">

@@ -21,7 +21,7 @@
         <tr>
             <td>{{ payment.id }}</td>
             <td><a href="{% url 'core:clients' %}{{ payment.uid.id }}">{{ payment.uid.login }}</a></td>
-            <td>{{ payment.date }}</td>
+            <td>{{ payment.datetime }}</td>
             <td>{{ payment.dsc }}</td>
             <td>{{ payment.sum }}</td>
             {% if payment.last_deposit < 0 %}

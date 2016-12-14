@@ -4,13 +4,9 @@
 <table class="ui blue very compact selectable striped table">
     <thead>
         <tr>
-            <th>
-                <a href="?{% url_replace request 'order_by' 'id' %}">{% trans 'Number' %}</a>
-            </th>
-            <th>{% trans 'Login' %}</th>
-            <th>
-                <a href="?{% url_replace request 'order_by' 'date' %}">{% trans 'Date' %}</a>
-            </th>
+            <th><a href="?{% url_replace request 'order_by' 'id' %}">{% trans 'Number' %}</a></th>
+            <th><a href="?{% url_replace request 'order_by' 'uid' %}">{% trans 'Login' %}</a></th>
+            <th><a href="?{% url_replace request 'order_by' 'date' %}">{% trans 'Date' %}</a></th>
             <th><a href="?{% url_replace request 'order_by' 'dsc' %}">{% trans 'Description' %}</a></th>
             <th><a href="?{% url_replace request 'order_by' 'sum' %}">{% trans 'Sum' %}</a></th>
             <th><a href="?{% url_replace request 'order_by' 'last_deposit' %}">{% trans 'Deposit' %}</a></th>
@@ -24,7 +20,7 @@
         {% for f in pagin.items %}
         <tr>
             <td>{{ f.id }}</td>
-            <td><a href="{% url 'core:index' %}?index=clients&uid={{ f.uid.id }}">{{ f.uid.login }}</a></td>
+            <td><a href="{% url 'core:client' f.uid.id %}">{{ f.uid.login }}</a></td>
             <td>{{ f.date }}</td>
             <td>{{ f.dsc }}</td>
             <td>{{ f.sum }}</td>
@@ -46,7 +42,7 @@
             <th></th>
             <th></th>
             <th></th>
-            <th><div class="ui blue tiny label">{% trans 'Sum' %}<div class="detail">{{ out_sum }}</div></div></th>
+            <th><div class="ui blue tiny label">{% trans 'Sum' %}<div class="detail">{{ pagin.out_sum }}</div></div></th>
             <th></th>
             <th></th>
             <th></th>

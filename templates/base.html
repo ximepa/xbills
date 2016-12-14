@@ -48,14 +48,6 @@
         <a href="{% url 'core:index' %}" class="{% active request 'core:index' %} item"><i class="fa fa-dashboard fa-fw"></i> {% trans 'Dashboard' %} </a>
         <a id="menu_id" class="item" onclick="toggleSidebar()">
             <i class="list layout icon"></i>{% trans 'Menu' %}
-            <div class="ui dropdown">
-                <i class="dropdown icon"></i>
-                <div class="menu">
-                    <div class="item"><i class="edit icon"></i> Edit</div>
-                    <div class="item"><i class="delete icon"></i> Delete</div>
-                    <div class="item"><i class="hide icon"></i> Hide</div>
-                </div>
-            </div>
         </a>
         <a href="{% url 'core:search' %}" class="{% active request 'core:search' %} item popup" data-content="{% trans 'Search user by criteria' %}"><i class="search icon"></i>{% trans 'Search' %}</a>
         <a href="{% url 'core:chat' %}" class="{% active request 'core:chat' %} item popup" data-content="{% trans 'Enter to chat' %}"><i class="comments outline icon"></i>{% trans 'Chat' %}</a>
@@ -170,12 +162,10 @@
                             {% trans 'Monitoring' %}
                         </a>
                         <div class="{% active_startwith request 'core:monitoring_servers' %} content">
-                            <div class="ui form">
-                                <div class="grouped fields">
-                                    <div class="menu">
-                                        <a href="{% url 'core:monitoring_servers' %}" class="item">{% trans 'Servers' %}</a>
-                                        <a class="item">Remove</a>
-                                    </div>
+                            <div class="grouped fields">
+                                <div class="menu">
+                                    <a href="{% url 'core:monitoring_servers' %}" class="item">{% trans 'Servers' %}</a>
+                                    <a class="item">Remove</a>
                                 </div>
                             </div>
                         </div>
@@ -186,15 +176,13 @@
                             {% trans 'OLLTV' %}
                         </a>
                         <div class="{% active_startwith request 'olltv:index' %} content">
-                            <div class="ui form">
-                                <div class="grouped fields">
-                                    <div class="menu">
-                                        <a href="{% url 'olltv:index' %}" class="{% active request 'olltv:index' %} item">{% trans 'Clients' %}</a>
+                            <div class="grouped fields">
+                                <div class="menu">
+                                    <a href="{% url 'olltv:index' %}" class="{% active request 'olltv:index' %} item">{% trans 'Clients' %}</a>
 {#                                        <a href="{% url 'core:company' %}" class="{% active request 'core:company' %} item">{% trans 'Company' %}</a>#}
 {#                                        <a href="{% url 'core:group' %}" class="{% active request 'core:group' %} item">{% trans 'Group' %}</a>#}
-                                        <a class="item">Add</a>
-                                        <a class="item">Remove</a>
-                                    </div>
+                                    <a class="item">Add</a>
+                                    <a class="item">Remove</a>
                                 </div>
                             </div>
                         </div>
@@ -205,15 +193,13 @@
                             {% trans 'Claims' %}
                         </a>
                         <div class="{% active_startwith request 'claims:claims' %} content">
-                            <div class="ui form">
-                                <div class="grouped fields">
-                                    <div class="menu">
-                                        <a href="{% url 'claims:claims' %}" class="{% active request 'claims:claims' %} item">{% trans 'Claims list' %}</a>
+                            <div class="grouped fields">
+                                <div class="menu">
+                                    <a href="{% url 'claims:claims' %}" class="{% active request 'claims:claims' %} item">{% trans 'Claims list' %}</a>
 {#                                        <a href="{% url 'core:company' %}" class="{% active request 'core:company' %} item">{% trans 'Company' %}</a>#}
 {#                                        <a href="{% url 'core:group' %}" class="{% active request 'core:group' %} item">{% trans 'Group' %}</a>#}
-                                        <a class="item">Add</a>
-                                        <a class="item">Remove</a>
-                                    </div>
+                                    <a class="item">Add</a>
+                                    <a class="item">Remove</a>
                                 </div>
                             </div>
                         </div>
@@ -239,31 +225,29 @@
                             Colors
                         </a>
                         <div class="content">
-                            <div class="ui form">
-                                <div class="grouped fields">
-                                    <div class="field">
-                                        <div class="ui checkbox">
-                                            <input name="small" type="checkbox">
-                                            <label>Red</label>
-                                        </div>
+                            <div class="grouped fields">
+                                <div class="field">
+                                    <div class="ui checkbox">
+                                        <input name="small" type="checkbox">
+                                        <label>Red</label>
                                     </div>
-                                    <div class="field">
-                                        <div class="ui checkbox">
-                                            <input name="medium" type="checkbox">
-                                            <label>Orange</label>
-                                        </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui checkbox">
+                                        <input name="medium" type="checkbox">
+                                        <label>Orange</label>
                                     </div>
-                                    <div class="field">
-                                        <div class="ui checkbox">
-                                            <input name="large" type="checkbox">
-                                            <label>Green</label>
-                                        </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui checkbox">
+                                        <input name="large" type="checkbox">
+                                        <label>Green</label>
                                     </div>
-                                    <div class="field">
-                                        <div class="ui checkbox">
-                                            <input name="x-large" type="checkbox">
-                                            <label>Blue</label>
-                                        </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui checkbox">
+                                        <input name="x-large" type="checkbox">
+                                        <label>Blue</label>
                                     </div>
                                 </div>
                             </div>

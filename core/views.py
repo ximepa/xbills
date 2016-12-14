@@ -557,10 +557,10 @@ def client_payments(request, uid):
         #print log.admin
         #del_payment.delete()
     if 'xml' in request.GET:
-        xml_data = serializers.serialize("xml", payments)
+        xml_data = serializers.serialize("xml", pagin['items'])
         return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
     if 'csv' in request.GET:
-        return helpers.export_to_csv(request, payments, fields=('id', 'uid'), name='login')
+        return helpers.export_to_csv(request,  pagin['items'], fields=('id', 'uid'), name='login')
     return render(request, 'user_payments.html', locals())
 
 
@@ -595,6 +595,23 @@ def client_fees(request, uid):
     if 'csv' in request.GET:
         return helpers.export_to_csv(request, fees, fields=('id', 'uid'), name='login')
     return render(request, 'user_fees.html', locals())
+
+
+@login_required()
+def ulog(request, uid):
+    try:
+        client = User.objects.get(id=uid)
+    except User.DoesNotExist:
+        return render(request, '404.html', locals())
+    order_by = request.GET.get('order_by', '-datetime')
+    user_logs = AdminLog.objects.filter(user_id=uid).order_by(order_by)
+    pagin = pagins(user_logs, request)
+    if 'xml' in request.GET:
+        xml_data = serializers.serialize("xml", pagin['items'])
+        return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")
+    if 'csv' in request.GET:
+        return helpers.export_to_csv(request, pagin['items'], fields=('id', 'sum'), name='logs')
+    return render(request, 'user_logs.html', locals())
 
 
 def clients(request):
@@ -632,7 +649,6 @@ def payments(request):
     order_by = request.GET.get('order_by', '-date')
     payments_list = Payment.objects.all().order_by(order_by)
     pagin = pagins(payments_list, request)
-    print pagin
     if 'xml' in request.GET:
         xml_data = serializers.serialize("xml", pagin['items'])
         return render(request, 'base.xml', {'data': xml_data}, content_type="text/xml")

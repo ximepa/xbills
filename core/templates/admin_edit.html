@@ -14,54 +14,52 @@
 {% block content %}
     <div class="row">
         <div class="column">
-            <div class="ui {{ request.user.theme }} segment">
-                <form class="ui form" method="post" name="admin_edit_form">{% csrf_token %}
-                    <div class="four fields">
-                        <div class="field">
-                            <label>{% trans 'Login' %}</label>
-                            {{ admin_form.login }}
-                        </div>
-                        <div class="field">
-                            <label>{% trans 'Name' %}</label>
-                            {{ admin_form.name }}
-                        </div>
+            <form class="ui {{ request.user.style }} {{ request.user.theme }} form segment" method="post" name="admin_edit_form">{% csrf_token %}
+                <div class="four fields">
+                    <div class="field">
+                        <label>{% trans 'Login' %}</label>
+                        {{ admin_form.login }}
+                    </div>
+                    <div class="field">
+                        <label>{% trans 'Name' %}</label>
+                        {{ admin_form.name }}
+                    </div>
 
-                        <div class="field">
-                            <label>{% trans 'Theme' %}</label>
-                            {{ admin_form.theme }}
-                        </div>
-                        <div class="field">
-                            <label>{% trans 'Style' %}</label>
-                            {{ admin_form.style }}
-                        </div>
+                    <div class="field">
+                        <label>{% trans 'Theme' %}</label>
+                        {{ admin_form.theme }}
                     </div>
-                    <div class="four fields">
-                        <div class="field">
-                            <label>{% trans 'Address' %}</label>
-                            {{ admin_form.address }}
-                        </div>
-                        <div class="field">
-                            <label>{% trans 'Cell phone' %}</label>
-                            {{ admin_form.cell_phone }}
-                        </div>
-                        <div class="field">
-                            <label>{% trans 'Phone' %}</label>
-                            {{ admin_form.phone }}
-                        </div>
-                        <div class="field">
-                            <label>{% trans 'Email' %}</label>
-                            {{ admin_form.email }}
-                        </div>
+                    <div class="field">
+                        <label>{% trans 'Style' %}</label>
+                        {{ admin_form.style }}
                     </div>
-                    <div class="inline field">
-                        <div class="ui checkbox">
-                            {{ admin_form.disable }}
-                            <label>{% trans 'Disable' %}</label>
-                        </div>
+                </div>
+                <div class="four fields">
+                    <div class="field">
+                        <label>{% trans 'Address' %}</label>
+                        {{ admin_form.address }}
                     </div>
-                    <button class="tiny ui teal submit button"name="admin_form_save" type="submit">{% trans 'Change' %}</button>
-                </form>
-            </div>
+                    <div class="field">
+                        <label>{% trans 'Cell phone' %}</label>
+                        {{ admin_form.cell_phone }}
+                    </div>
+                    <div class="field">
+                        <label>{% trans 'Phone' %}</label>
+                        {{ admin_form.phone }}
+                    </div>
+                    <div class="field">
+                        <label>{% trans 'Email' %}</label>
+                        {{ admin_form.email }}
+                    </div>
+                </div>
+                <div class="inline field">
+                    <div class="ui checkbox">
+                        {{ admin_form.disable }}
+                        <label>{% trans 'Disable' %}</label>
+                    </div>
+                </div>
+                <button class="tiny ui teal submit button"name="admin_form_save" type="submit">{% trans 'Change' %}</button>
+            </form>
         </div>
     </div>
 {% endblock %}
